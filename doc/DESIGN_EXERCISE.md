@@ -1,6 +1,9 @@
 # OOGA Lab Discussion
 ## Names and NetIDs
-
+Arjun Peri - ap458
+Noah Besner - nkb13
+Yasser Elmzoudi - ye9
+Christian Welch -  cw356
 
 ## Fluxx
 
@@ -9,21 +12,51 @@
 
 ### CRC Card Classes
 
-This class's purpose or value is to manage something:
+This class's purpose is to handle the end goal of the game, and how it might change
 ```java
- public class Something {
-     public int getTotal (Collection<Integer> data)
-     public Value getValue ()
+ public class Goal {
+     public boolean goalReached(){}
+     public void changeGoal(){}
  }
 ```
 
-This class's purpose or value is to be useful:
+This class's purpose is to handle the rules of the game. It can be abstracted to allow for 
+multiple different subsets of rules
 ```java
- public class Value {
-     public void update (int data)
+ public abstract class Rules {
+     
  }
 ```
 
+This class's purpose is to handle Card objects. It will be abstracted to allow for the different 
+types of cards and their respective actions. 
+```java
+ public abstract class Card {
+    public Card getType(){}
+    abstract void getJob(){}
+ }
+```
+
+This class's purpose is to 
+```java
+ public class Hand {
+     
+ }
+```
+
+This class's purpose is to 
+```java
+ public class Deck {
+     
+ }
+```
+
+This class's purpose is to 
+```java
+ public class Player {
+     
+ }
+```
 ### Use Cases
 
 ### Use Cases
