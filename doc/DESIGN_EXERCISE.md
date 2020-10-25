@@ -71,7 +71,7 @@ This class's purpose is to represent a player of the game.
  }
 ```
 
-This class's purpose is to run the actual gameplay.
+This class's purpose is to run the actual gameplay itself.
 ```java
  public class Game {
      public void runGame(){}
