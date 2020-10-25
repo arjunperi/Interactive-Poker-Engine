@@ -1,8 +1,12 @@
 # OOGA Lab Discussion
 ## Names and NetIDs
+
 Arjun Peri - ap458
+
 Noah Besner - nkb13
+
 Yasser Elmzoudi - ye9
+
 Christian Welch -  cw356
 
 ## Fluxx
