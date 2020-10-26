@@ -15,3 +15,5 @@
  * Preferred method of communication (e.g., e-mail, cell phone, Facebook, Slack, face-to-face, etc.)
  * Decision-making policy (e.g., by consensus? by majority vote?)
  * Method for setting and following meeting agendas (how will items get on each agenda? by when? reminders? keeping meetings on track?)
+ 
+ 
