@@ -105,6 +105,14 @@ Pot
 | Is able to split |  |
 | Gives money out | |
 
+Communal Cards
+
+| Responsibilities      | Collaborators    |
+| :------------- | :----------: |
+|  Holds communal cards |  Dealer |
+|  | Hand Evaluator |
+|  | |
+|  | |
 
 
 
