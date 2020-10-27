@@ -1,6 +1,5 @@
 Card
 
-
 | Responsibilities      | Collaborators    |
 | :------------- | :----------: |
 |  Knows value   | Player  |

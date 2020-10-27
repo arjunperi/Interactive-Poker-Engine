@@ -6,6 +6,9 @@ package engine;
  */
 public abstract class DealerRules {
 
+
+    public void setCommunalCardsDealt(int numCommunalCards){}
+
     /**
      * Handles which players are being dealt to, when, and how many cards
      */
