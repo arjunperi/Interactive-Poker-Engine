@@ -11,13 +11,13 @@ public class WinManager {
      * Returns a map of players with their win amounts based on a List of all players in the game at the end of final round.
      * @return
      */
-    public Map<Player, Integer> winAmounts(List<Player> remainingPlayers){
+    public Map<engine.Player, Integer> winAmounts(List<engine.Player> remainingPlayers){
         return null;
     }
 
     /**
      * Ends the round by paying out the winning players and resetting the game.
      */
-    public void endRound(Map<Player, Integer> winningPlayers){
+    public void endRound(Map<engine.Player, Integer> winningPlayers){
     }
 }

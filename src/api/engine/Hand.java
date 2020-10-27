@@ -1,4 +1,4 @@
-package engine;
+package api.engine;
 
 /**
  * The Hand superclass is responsible for holding the cards of each player. Will likely be instantiated as a list of Card objects.

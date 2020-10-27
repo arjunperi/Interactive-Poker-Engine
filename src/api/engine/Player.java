@@ -1,5 +1,7 @@
 package engine;
 
+import api.engine.Hand;
+
 /**
  * This class will represent a player within the poker game.
  * This class will be abstracted to allow for an interactive player as well as an AI player.

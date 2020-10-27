@@ -1,11 +1,11 @@
 ##USE CASES
 
-1. The human player attempts to bet more money than they have. 
-2. The human player calls the current bet.
+1. User attempts to bet more money than they have. 
+2. User calls the current bet.
 3. Two AI players are left in the round that they have the same hand. 
 4. A human player creates an account. 
 5. A human player logs into an existing account.
-6. An AI player folds.
+6. The user folds.
 7. A human player checks.
 8. The first two players check, then the next player bets.
 9. A player goes all in.
