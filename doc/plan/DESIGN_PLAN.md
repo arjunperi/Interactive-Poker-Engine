@@ -10,6 +10,7 @@ program will support modifications to many aspects of gameplay, such as number o
 the number of community cards, the types of cards used, hand ranks, visibility of cards. 
   
 __Overview__
+
 Overall, the engine of our program will drive the extensibility. We have planned on splitting up 
 the program into modules that handle their own responsibilities, but are also general enough to 
 work for all types of games. An overview of these modules and their responsibilities can be 
@@ -21,6 +22,7 @@ and these will enable a host of different user options that working along the Vi
 move the flow of the game based on user actions and inputs. 
 
 __Design Details__
+
 As discussed, our APIs were planned out while keeping in mind the different variations of possible poker
 games. The engine APIs, which will likely exist within the Model of our code, are the primary
 handlers of poker variability and logic. There are a number of variations present within existing 
