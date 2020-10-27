@@ -30,4 +30,10 @@ public class Card
     public boolean getVisibility(){
         return false;
     }
+
+    /**
+     * Changes the visibility of a card
+     */
+    public void setVisibility(){}
+
 }
