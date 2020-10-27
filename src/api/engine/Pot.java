@@ -1,4 +1,6 @@
-package engine;
+package api.engine;
+
+import engine.Player;
 
 import java.util.List;
 
@@ -40,5 +42,14 @@ public class Pot {
      */
     public void splitSidePot(){
     }
+
+    /**
+     * returns what the current bet is
+     * @return
+     */
+    public double getCurrentBet(){
+        return 0.0;
+    }
+
 
 }
