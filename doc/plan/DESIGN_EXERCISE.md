@@ -14,7 +14,7 @@ Christian Welch -  cw356
 ### High Level Design Ideas
 
 
-### CRC Card Classes
+### CRC engine.Card Classes
 
 This class's purpose is to handle the end goal of the game, and how it might change
 ```java
@@ -41,11 +41,11 @@ multiple different subsets of rules
  }
 ```
 
-This class's purpose is to handle Card objects. It will be abstracted to allow for the different 
+This class's purpose is to handle engine.Card objects. It will be abstracted to allow for the different 
 types of cards and their respective actions. 
 ```java
- public abstract class Card {
-    public Card getType(){}
+ public abstract class engine.Card {
+    public engine.Card getType(){}
     abstract void getJob(){}
  }
 ```
@@ -61,7 +61,7 @@ a certain player.
 This class's purpose is to represent the Deck of remaining cards 
 and get the next cards available. 
 ```java
- public class Deck {
+ import engine.Card;public class Deck {
     public Card getNextCard(){
         return Deck.pop();
  }
@@ -69,7 +69,7 @@ and get the next cards available.
 
 This class's purpose is to represent a player of the game.
 ```java
- public class Player {
+ import engine.Card;public class Player {
      public Card playCard(Card card){}
      public void drawCard(){}
  }

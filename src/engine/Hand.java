@@ -10,5 +10,8 @@ public class Hand {
      * Returns the current size of a hand
      * @return
      */
-    public int getSize(){}
+    public int getSize(){
+        //Will change
+        return 0;
+    }
 }

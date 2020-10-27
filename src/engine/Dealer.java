@@ -1,3 +1,5 @@
+package engine;
+
 public class Dealer {
     /**
      * Deals cards to players and deals community cards

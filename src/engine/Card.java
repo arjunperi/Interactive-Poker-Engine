@@ -1,3 +1,5 @@
+package engine;
+
 public class Card
 {
     /**
@@ -5,7 +7,6 @@ public class Card
      * Visibility determines whether the card can be seen or not on the screen
      *
      */
-
 
     /**
      * returns value of card (in poker, usually two through ace
@@ -29,9 +30,4 @@ public class Card
     public boolean getVisibility(){
         return false;
     }
-
-
-
-
-
 }

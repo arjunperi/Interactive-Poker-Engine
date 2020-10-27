@@ -1,3 +1,5 @@
+package engine;
+
 public class TurnManager {
     /**
      * handles the order of turns in the game
@@ -9,11 +11,9 @@ public class TurnManager {
      * returns player who is up next to act
      */
     public Player getNextPlayer(){
-        return player;
+        //will change
+        return null;
     }
-
-
-
 
 }
 

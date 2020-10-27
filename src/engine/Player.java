@@ -9,12 +9,18 @@ public abstract class Player {
      * Returns a player's current hand
      * @return
      */
-    public Hand getHand(){}
+    public Hand getHand(){
+        //will change
+        return null;
+    }
 
     /**
      * Return's a player's current money count
      */
-    public int getMoneyCount{}
+    public int getMoneyCount() {
+        //wil change
+        return 0;
+    }
 
     /**
      * Bets a certain amount of money from a player's money count if possible. Adds money to the pot and update turn manager.
@@ -22,8 +28,7 @@ public abstract class Player {
      * @param betAmount
      * @return
      */
-    abstract void Bet(int betAmount){
-    }
+    abstract void Bet(int betAmount);
 
     /**
      * Bets a certain amount of money from a player's money count if possible. Adds money to the pot and updates the turn manager.
@@ -31,29 +36,24 @@ public abstract class Player {
      * @param RaiseAmount
      * @return
      */
-    abstract void Raise(int RaiseAmount){}
+    abstract void Raise(int RaiseAmount);
 
     /**
      * Checks on the current hand. Updates turn manager.
      */
-    abstract void Check(){}
+    abstract void Check();
 
     /**
      * Folds on the current hand. Updates turn manager.
      */
-    abstract void Fold(){}
+    abstract void Fold();
 
     /**
      * Returns whether the player is active in a game.
      * @return
      */
-    public boolean isActive(){}
-
-    /**
-     * Returns whether the player is active in a game.
-     * @return
-     */
-    public boolean isActive(){}
-
-
+    public boolean isActive(){
+        //will change
+        return false;
+    }
 }

@@ -62,8 +62,8 @@ Turn Manager
 | :------------- | :----------: |
 |  Knows/ tells players who is up  |  Player |
 | Knows who is in | Dealer |
-|Knows what round it is|  |
-| Knows when round is over | |
+|Knows what round it is| Win Manager|
+| Knows when round is over ||
 | Knows who is active in the game | |
 | Knows when showdown is | |
 
@@ -73,16 +73,6 @@ Win Manager
 | :------------- | :----------: |
 | Compares remaining players after end of final round and see's who won  |  Player |
 | Knows how many cards a hand needs to use for a valid combination|  Turn Manager |
-|   |  Rankings Evaluator |
-
-Rankings Evaluator 
-* The card values and thus the rankings of all possible hands could differ
-
-| Responsibilities      | Collaborators    |
-| :------------- | :----------: |
-| Knows all hand combination rankings |  Hand |
-|  | Card |
-| | Hand rules |
 
 
 Dealer Rules
@@ -91,7 +81,7 @@ Dealer Rules
 
 | Responsibilities      | Collaborators    |
 | :------------- | :----------: |
-| Knows who is being dealt |  Dealer |
+| Knows who is being dealt | Dealer |
 | Knows how many cards to deal|  |
 | Knows how many communal cards to deal|  |
 | Knows when to deal communal cards| |
