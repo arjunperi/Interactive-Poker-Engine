@@ -51,6 +51,9 @@ Clearly these games are different in the amount of cards each player gets, the c
 
 __Design Considerations__
 
-How the rules will flow to the different classes that need them
-to do their job. 
+- How the rules will flow to the different classes that need them to do their job. 
+- Utilizing a Queue for `Deck`
+- Implementing a `Playable` interface that defines the different moves a player has for a given round such as `bet()`, `check()`, and `raise()`
+- Implementing an abstract `Player` class from which `InteractivePlayer` and `ArtificialPlayer` are created
+
 

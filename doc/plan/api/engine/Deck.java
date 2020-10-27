@@ -9,12 +9,12 @@ public class Deck {
     /**
      * Shuffles the deck to randomize all of the cards.
      */
-    public void Shuffle(){}
+    public void shuffle(){}
 
     /**
      * Resets the deck back to it's initial size (after the end of a hand for example).
      */
-    public void Reset(){}
+    public void reset(){}
 
     /**
      * Returns the top Card of from the deck

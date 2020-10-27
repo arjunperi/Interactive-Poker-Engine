@@ -9,14 +9,14 @@ public class DummyPlayer extends Player {
     private int myMoneyAmount = 0;
 
 
-    public void Bet(int betAmount){
+    public void bet(int betAmount){
         myMoneyAmount -= betAmount;
     }
 
-    public void Fold(){
+    public void fold(){
 
     }
-    public void Check(){
+    public void check(){
 
     }
 

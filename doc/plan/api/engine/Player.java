@@ -30,7 +30,7 @@ public abstract class Player {
      * @param betAmount
      * @return
      */
-    abstract void Bet(int betAmount);
+    abstract void bet(int betAmount);
 
     /**
      * Bets a certain amount of money from a player's money count if possible. Adds money to the pot and updates the turn manager.
@@ -38,17 +38,17 @@ public abstract class Player {
      * @param RaiseAmount
      * @return
      */
-    abstract void Raise(int RaiseAmount);
+    abstract void raise(int RaiseAmount);
 
     /**
      * Checks on the current hand. Updates turn manager.
      */
-    abstract void Check();
+    abstract void check();
 
     /**
      * Folds on the current hand. Updates turn manager.
      */
-    abstract void Fold();
+    abstract void fold();
 
     /**
      * Returns whether the player is active in a game.
