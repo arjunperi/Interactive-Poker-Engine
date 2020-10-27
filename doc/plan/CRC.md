@@ -10,13 +10,15 @@ Card
 
 
 Deck
+* Deck size can differ 
+* Number of decks? 
 
 | Responsibilities      | Collaborators    |
 | :------------- | :----------: |
 |  Shuffle   |  Card  |
 | Reset | Dealer |
 | Get top card  |  |
-| Get size | |
+| Knows size | |
 
 Hand
 * Size could differ
@@ -52,9 +54,6 @@ Player
 | Folds | Pot |
 | Calls |  |
 | Knows if it's active in round | |
-| Knows if it's at showdown point | |
-| Knows if it's won | |
-| Card activity | |
 
 Turn Manager
 * Order of players and rounds can differ
@@ -65,6 +64,16 @@ Turn Manager
 | Knows who is in | Dealer |
 |Knows what round it is|  |
 | Knows when round is over | |
+| Knows who is active in the game | |
+| Knows when showdown is | |
+
+Win Manager
+
+| Responsibilities      | Collaborators    |
+| :------------- | :----------: |
+| Compares remaining players after end of final round and see's who won  |  Player |
+| Knows how many cards a hand needs to use for a valid combination|  Turn Manager |
+|   |  Rankings Evaluator |
 
 Rankings Evaluator 
 * The card values and thus the rankings of all possible hands could differ
@@ -74,13 +83,6 @@ Rankings Evaluator
 | Knows all hand combination rankings |  Hand |
 |  | Card |
 | | Hand rules |
-
-Hand Rules
-* Number of cards required from hand to be used could differ
-
-| Responsibilities      | Collaborators    |
-| :------------- | :----------: |
-|  Knows how many cards a hand needs to use for a valid combination   |  Rankings Evaluator |
 
 
 Dealer Rules
