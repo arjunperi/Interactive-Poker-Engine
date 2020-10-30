@@ -17,4 +17,9 @@ public class Deck {
     public Card getTopCard(){
         return (Card) deck.pop();
     }
+
+    //temporary, just for print methods
+    public Card peekTopCard(){
+        return (Card) deck.peek();
+    }
 }

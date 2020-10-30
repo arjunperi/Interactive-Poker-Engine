@@ -2,13 +2,15 @@ package model;
 
 import java.util.*;
 
-//this will need to be abstracted to allow for different betting orders
+//this might need to be abstracted to allow for different betting orders -> might only be needed for stud games
+// where the value of your exposed cards determines who bets first
+
 public class TurnManager {
-    private Player winner;
-    private int currentRound;
-    private boolean roundOver;
-    private Pot pot;
-    private List<Player> activePlayers;
+    protected Player winner;
+    protected int currentRound;
+    protected boolean roundOver;
+    protected Pot pot;
+    protected List<Player> activePlayers;
 
 
     public TurnManager(Pot pot){
@@ -49,12 +51,24 @@ public class TurnManager {
             }
         }
         System.out.println("Winner is: " + winner.toString() + " with a score of " +  maxScore);
+        System.out.println("His winning hand was: ");
+        for (Card card: winner.getHand().getCards()){
+            System.out.println(card.getCardValue());
         }
+        System.exit(0);
+    }
 
+    public int getCurrentRound(){
+        return currentRound;
+    }
 
     public void endGame(){
         pot.dispersePot(winner);
         System.out.println("Winner is: " + winner.toString() + " and he has $" + winner.getBankroll());
+        System.out.println("His winning hand was: ");
+        for (Card card: winner.getHand().getCards()){
+            System.out.println(card.getCardValue());
+        }
         System.exit(0);
     }
 }

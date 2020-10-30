@@ -1,15 +1,15 @@
 package model;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.List;
 
-public class Player {
+public class Player implements CardRecipient, CardDiscarder {
     private String playerName;
     private int moneyCount;
     private boolean hasFolded;
     private Hand playerHand;
-    private Action playerAction;
+    private WagerAction playerAction;
     private Pot pot;
+    private Exchange cardExchange;
 
 
     public Player(String name, int startingAmount, Pot pot){
@@ -50,8 +50,15 @@ public class Player {
         }
     }
 
-    public void addToHand(Card card){
+    @Override
+    public void receiveCard(Card card){
         playerHand.add(card);
+    }
+
+    //once we configure the cards and the deck, we need to make it so that a discarded card ends up back in the deck which is then shuffled
+    @Override
+    public void discard(Card card) {
+        playerHand.getCards().remove(card);
     }
 
     public Hand getHand(){
@@ -63,8 +70,15 @@ public class Player {
         System.out.println(this.toString()  + " has $"  + moneyCount);
     }
 
+    public List<Card> chooseExchangeCards(int exchangeLimit){
+        cardExchange = new Exchange(this, exchangeLimit);
+        return cardExchange.getExchangedCards();
+    }
+
+
     @Override
     public String toString () {
         return playerName;
     }
+
 }

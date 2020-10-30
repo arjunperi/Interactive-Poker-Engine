@@ -1,6 +1,6 @@
 package model;
 
-public class Bet extends Action {
+public class Bet implements WagerAction {
     private int betAmount;
     private Pot pot;
     private Player player;
@@ -10,11 +10,11 @@ public class Bet extends Action {
         betAmount = (int) ((Math.random() * (11 - 1)) + 1);
         System.out.println(player.toString() + " bets: $" +  betAmount);
         this.player = player;
-        performAction();
+        performBetAction();
     }
 
     @Override
-    void performAction() {
+    public void performBetAction() {
         pot.addToPot(betAmount);
         player.updateBankroll(betAmount * -1);
     }
