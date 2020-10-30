@@ -17,8 +17,8 @@ work for all types of games. An overview of these modules and their responsibili
 seen in the file doc/plan/CRC.md, along with notes that demonstrate some of the design considerations
 for each that relate to extensibility. Additionally, we will have data API's that read in properties 
 for a certain poker type, and the rules of the game (i.e the engine API implementation) will 
-be run accordingly. Lastly, we will have an interactive GUI that is driven by a suite of player APIs,
-and these will enable a host of different user options that working along the View and Controller will
+be run accordingly. Lastly, we will have an interactive GUI that is driven by a player API,
+and this will enable a host of different user options that working along the View and Controller will
 move the flow of the game based on user actions and inputs. 
 
 __Design Details__
