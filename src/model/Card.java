@@ -57,6 +57,14 @@ public class Card {
 
     @Override
     public boolean equals (Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
 
+        Card otherCard = (Card) obj;
+        return rank == otherCard.rank && suit == otherCard.suit;
     }
 }
