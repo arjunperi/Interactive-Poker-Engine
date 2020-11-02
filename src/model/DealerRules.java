@@ -12,19 +12,33 @@ public abstract class DealerRules {
     protected TurnManager turnManager;
     protected CommunityCards communityCards;
     protected List<Player> activePlayerList;
+    protected int numberOfCards;
+    protected String recipient;
+    protected int currentRound;
 
 
-
-    public DealerRules(int totalRounds, PlayerList players, TurnManager turnManager){
+    public DealerRules(int totalRounds, PlayerList players, TurnManager turnManager, CommunityCards communityCards, Dealer dealer){
         this.totalRounds = totalRounds;
-        this.communityCards = new CommunityCards();
-        pokerDealer = new Dealer(communityCards);
+        this.communityCards = communityCards;
         pokerPlayerList = players;
         this.turnManager = turnManager;
-        dealFlow();
+        pokerDealer = dealer;
+        currentRound = 1;
     }
 
-    protected abstract void dealFlow();
+
+    public void dealStats(){
+        pokerDealer.checkDeck();
+
+        Properties ruleProperties = getPropertyFile("HoldEm");
+        activePlayerList = pokerPlayerList.updateActivePlayers();
+
+        String[] roundRules = ruleProperties.getProperty(String.valueOf(currentRound)).split(",");
+        numberOfCards = Integer.parseInt(roundRules[0]);
+        recipient = roundRules[1];
+    }
+
+    public abstract void dealFlow(int currentRound);
 
     protected abstract void dealingRound(int numberOfCards, CardRecipient recipient);
 
@@ -37,5 +51,13 @@ public abstract class DealerRules {
             e.printStackTrace();
         }
         return propertyFile;
+    }
+
+    public int getNumberOfCards(){
+        return numberOfCards;
+    }
+
+    public String getRecipient(){
+        return recipient;
     }
 }

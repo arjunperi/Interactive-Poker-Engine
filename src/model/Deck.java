@@ -7,19 +7,24 @@ import java.util.Stack;
 public class Deck {
     private Stack deck;
 
-    public Deck(List<Card> cardsList){
+    public Deck(List<Card> cardsList) {
         deck = new Stack();
-        for (Card card: cardsList){
+        for (Card card : cardsList) {
             deck.add(card);
         }
     }
 
-    public Card getTopCard(){
+    public Card getTopCard() {
         return (Card) deck.pop();
     }
 
     //temporary, just for print methods
-    public Card peekTopCard(){
+    public Card peekTopCard() {
         return (Card) deck.peek();
     }
+
+    public boolean isEmpty(){
+        return deck.isEmpty();
+    }
+
 }

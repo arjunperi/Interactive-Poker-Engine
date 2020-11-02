@@ -2,11 +2,11 @@ package model;
 
 public class StudDealerRules extends DealerRules{
 
-    public StudDealerRules(int totalRounds, PlayerList players, TurnManager turnManager){
-        super(totalRounds, players, turnManager);
+    public StudDealerRules(int totalRounds, PlayerList players, TurnManager turnManager, CommunityCards communityCards, Dealer dealer){
+        super(totalRounds, players, turnManager, communityCards, dealer);
     }
 
-    protected void dealFlow(){}
+    public void dealFlow(int currentRound){}
 
     protected void dealingRound(int numberOfCards, CardRecipient recipient) {
 
