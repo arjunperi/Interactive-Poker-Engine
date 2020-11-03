@@ -18,6 +18,7 @@ public class TurnManager {
         this.pot = pot;
     }
 
+    //concurrent modification exception makes us use all players which seems unecessary
     public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
         List<Player> allPlayers = pokerPlayerList.getAllPlayers();
         for (Player currentPlayer: allPlayers){
