@@ -1,20 +1,20 @@
 package controller;
 
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
 import view.FrontEndCard;
+import view.FrontEndPlayer;
 import view.GameDisplayRecipient;
 import view.GameView;
 
 
 
 import java.awt.desktop.ScreenSleepEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Stack;
+import java.util.*;
 
 public class Controller {
 
@@ -47,6 +47,9 @@ public class Controller {
 
     private Stack<Card> cardsRemoved;
 
+    private Map<Player, FrontEndPlayer> playerMappings;
+    //when we have a back end player
+
     public Controller(Stage stage) {
         roundNumber = 1;
         xOffset = 0;
@@ -60,6 +63,7 @@ public class Controller {
 
         cardsRemoved = new Stack<>();
         view = new GameView();
+        playerMappings = new HashMap<>();
         initializeFrontEndPlayers();
         initializeCommunity();
 
@@ -122,38 +126,37 @@ public class Controller {
 
 
 
-    //might be able to combine these two into one method
-    //should these be in View or Controller?
+//    //might be able to combine these two into one method
+//    //should these be in View or Controller?
+//    private void initializeFrontEndPlayers(){
+//        int playerOffset = 0;
+//        for (Player currentPlayer: playerList.getAllPlayers()){
+//            System.out.println(currentPlayer.toString());
+//            GameDisplayRecipient player = new GameDisplayRecipient(playerOffset,playerOffset);
+//            System.out.println(playerOffset);
+//            frontEndPlayers.add(player);
+//            playerOffset += 20;
+//        }
+//    }
+
     private void initializeFrontEndPlayers(){
-
-        int playerOffset = 0;
         for (Player currentPlayer: playerList.getAllPlayers()){
-            System.out.println(currentPlayer.toString());
-            GameDisplayRecipient player = new GameDisplayRecipient(playerOffset,playerOffset);
-            System.out.println(playerOffset);
-            frontEndPlayers.add(player);
-            playerOffset += 20;
+            FrontEndPlayer newPlayer = new FrontEndPlayer(currentPlayer.toString(), currentPlayer.getBankroll());
 
         }
     }
-
-    private void updateFrontEndPlayers(){
-        frontEndPlayers.clear();
-        for (Player activePlayer : playerList.updateActivePlayers()){
-            GameDisplayRecipient player = new GameDisplayRecipient(100,100);
-            frontEndPlayers.add(player);
-        }
-    }
-
 
     private void bettingRound(){
 
         //just dealt the cards
         //prop
-        updateFrontEndPlayers();
-        for (GameDisplayRecipient player: frontEndPlayers){
-            view.promptAction(player);
+
+        for (Player player : playerList.updateActivePlayers()){
+            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+            EventHandler<ActionEvent> betEvent = e -> indicateBet(player);
+            view.promptAction(foldEvent, betEvent);
         }
+
 
        //for each player in the front end player list
             //pop up an option box allowing them to either bet raise call check fold (if valid)
@@ -184,8 +187,15 @@ public class Controller {
 //        }
 //    }
 
-    private void promptAction(){
-        //once action is selected, update the totals and then call
+    public void indicateFold(Player player){
+        //tell back end player to exit hand
+        player.exitHand();
+        //go into mapping, tell front end player to do display stuff
     }
+
+    public void indicateBet(Player player){
+        //
+    }
+
 
 }

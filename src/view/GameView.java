@@ -1,7 +1,10 @@
 package view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -43,12 +46,32 @@ public class GameView {
         centerGroup.getChildren().add(card);
     }
 
-    public void promptAction(GameDisplayRecipient player){
-        //pop up an option box
+    public void promptAction(EventHandler<ActionEvent> foldEvent,EventHandler<ActionEvent> betEvent){
+        Button foldButton = makeButton("Fold", foldEvent);
+        Button betButton = makeButton("Bet", betEvent);
+
+
+
         //say the player chooses bet
             //player's displayed total decreases by bet amount
             //pot total increases by bet amount
+            //next player goes, knowing what that bet amount is
 
+        //say a player folds
+            //Display some sort of folded indicator
+            //know that that player has been removed from the game
     }
+
+    private Button makeButton(String property, EventHandler<ActionEvent> handler) {
+        Button result = new Button();
+        result.setId(property);
+        result.setText(property);
+        result.setOnAction(handler);
+        return result;
+    }
+
+
+
+
 
 }

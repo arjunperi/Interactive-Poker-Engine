@@ -17,7 +17,7 @@ public class Game {
         pot = new Pot();
         Player player1 = new Player("Arjun", 100, pot);
 
-        Player player2 = new Player("Christian", 100, pot);
+//        Player player2 = new Player("Christian", 100, pot);
 
 //        Player player3 = new Player("Noah", 100, pot);
 
@@ -29,7 +29,7 @@ public class Game {
         dealer = new Dealer(deck);
 
 
-        players = new PlayerList(List.of(player1,player2));
+        players = new PlayerList(List.of(player1));
 
         pokerTurnManager = new TurnManager(pot);
         //we can use factory design pattern here to choose what kind of model to instantiate
