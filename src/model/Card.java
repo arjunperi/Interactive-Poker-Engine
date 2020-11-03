@@ -10,6 +10,7 @@ public class Card {
     private int rank;
     private boolean visible;
     private Map<Integer,String> cardValueMap;
+    private int cardValue;
 
 
     private static final String FILENAME = "CardValueMapping";
@@ -53,9 +54,9 @@ public class Card {
 
     public int getCardValue(){
         return cardValue;
-    }*/
+    }
 
-    public Card (Rank rank, Suit suit) {
+    /*public Card (Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
     }
@@ -66,7 +67,7 @@ public class Card {
 
     public Suit getSuit() {
         return suit;
-    }
+    }*/
 
     @Override
     public String toString() {

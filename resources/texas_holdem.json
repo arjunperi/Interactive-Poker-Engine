@@ -1,0 +1,25 @@
+{
+  "card": {
+    "suits": [
+      "HEARTS",
+      "SPADES",
+      "CLUBS",
+      "DIAMONDS"
+    ],
+    "ranks": [
+      "DEUCE",
+      "THREE",
+      "FOUR",
+      "FIVE",
+      "SIX",
+      "SEVEN",
+      "EIGHT",
+      "NINE",
+      "TEN",
+      "JACK",
+      "QUEEN",
+      "KING",
+      "ACE"
+    ]
+  }
+}
