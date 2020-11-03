@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -21,21 +22,8 @@ public class Game {
 
         this.communityCards = new CommunityCards();
 
-        Card card1 = new Card(2);
-        Card card2 = new Card(3);
-        Card card3 = new Card(4);
-        Card card4 = new Card(5);
-        Card card5 = new Card(6);
-        Card card6 = new Card(7);
-        Card card7 = new Card(8);
-        Card card8 = new Card(9);
-        Card card9 = new Card(10);
-        Card card10 = new Card(11);
-        Card card11 = new Card(12);
-        Card card12 = new Card(13);
-        Card card13 = new Card(14);
-        deck = new Deck(List.of(card1,card2,card3, card4, card5, card6, card7, card8, card9, card10, card11,
-                card12,card13));
+        deck = createDeck();
+
         dealer = new Dealer(deck);
 
         players = new PlayerList(List.of(player1));
@@ -45,6 +33,15 @@ public class Game {
         holdemDealerRules = new CommunityDealerRules(4, players, pokerTurnManager, communityCards, dealer);
     }
 
+    public Deck createDeck(){
+        List<Card> cardsList = new ArrayList<>() ;
+        for (Suit suit : Suit.values()){
+            for (int r = 2; r<15; r++){
+                cardsList.add(new Card(r,suit));
+            }
+        }
+        return new Deck(cardsList);
+    }
     public DealerRules getDealerRules() {
         return holdemDealerRules;
     }

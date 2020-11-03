@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class Card {
     private int cardValue;
-    private String suit;
+    private Suit suit;
     private String cardNumber;
     private int rank;
     private boolean visible;
@@ -23,11 +23,11 @@ public class Card {
     }
 
 
-    public Card(String value, String suit){
-        cardNumber = value;
+    public Card(int rank , Suit suit){
         this.suit = suit;
+        this.rank = rank;
         visible=false;
-        getRank();
+        getCardNumber();
     }
 
 
@@ -35,7 +35,7 @@ public class Card {
         Properties propertyFile = new Properties();
         try {
             propertyFile
-                    .load(CommunityDealerRules.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
+                    .load(Card.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,9 +44,9 @@ public class Card {
 
 
 
-    public void getRank (){
+    public void getCardNumber (){
         Properties mappings = getPropertyFile(FILENAME);
-        rank = Integer.parseInt(mappings.getProperty(cardNumber));
+        cardNumber = mappings.getProperty(String.valueOf(rank));
     }
 
 
@@ -55,11 +55,9 @@ public class Card {
         return cardValue;
     }
 
-    public String getCardNumber(){
-        return cardNumber;
-    }
 
-    public String getCardSuit(){
+
+    public Suit getCardSuit(){
         return suit;
     }
 
