@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.*;
-
 public class GameDisplayRecipient {
     private int xLocation;
     private int yLocation;
@@ -13,10 +11,6 @@ public class GameDisplayRecipient {
 
     public int getX(){
         return xLocation;
-    }
-
-    public int getY(){
-        return yLocation;
     }
 
 }

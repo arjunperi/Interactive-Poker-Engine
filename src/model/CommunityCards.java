@@ -17,6 +17,7 @@ public class CommunityCards implements CardRecipient {
         communityCardsList.add(card);
     }
 
+
     public List<Card> getCommunityCardsList(){
         return communityCardsList;
     }

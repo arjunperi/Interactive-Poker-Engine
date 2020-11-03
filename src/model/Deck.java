@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Deck {
-    private Stack deck;
+    private Stack<Card> deck;
 
     public Deck(List<Card> cardsList) {
         deck = new Stack();
@@ -15,7 +15,11 @@ public class Deck {
     }
 
     public Card getTopCard() {
-        return (Card) deck.pop();
+        return deck.pop();
+    }
+
+    public void replaceTopCard(Card card){
+        deck.push(card);
     }
 
     //temporary, just for print methods
@@ -26,5 +30,7 @@ public class Deck {
     public boolean isEmpty(){
         return deck.isEmpty();
     }
+
+//    public
 
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements CardRecipient, CardDiscarder {
@@ -10,6 +11,7 @@ public class Player implements CardRecipient, CardDiscarder {
     private WagerAction playerAction;
     private Pot pot;
     private Exchange cardExchange;
+
 
 
     public Player(String name, int startingAmount, Pot pot){

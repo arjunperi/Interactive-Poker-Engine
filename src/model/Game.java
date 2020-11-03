@@ -61,6 +61,11 @@ public class Game {
         return players;
     }
 
+    public CommunityCards getCommunityCards(){
+        return communityCards;
+    }
+
+
 
 }
 
