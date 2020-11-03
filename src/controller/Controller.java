@@ -38,7 +38,6 @@ public class Controller {
     private String recipient;
 
     private int xOffset;
-    private int xIndex;
 
     public Controller(Stage stage) {
         roundNumber = 1;
@@ -68,11 +67,10 @@ public class Controller {
         }
     }
 
-    public void dealingRound(){
+    private void dealingRound(){
         numberOfCards = dealerRules.getNumberOfCards();
         recipient = dealerRules.getRecipient();
         Stack<Card> cardsRemoved = new Stack();
-
         for (int i=0; i<numberOfCards; i++){
             Card backendTopCard = deck.getTopCard();
             FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
@@ -87,7 +85,7 @@ public class Controller {
 
 
     //should this be in View or Controller?
-    public FrontEndCard getFrontEndTopCard(Card card){
+    private FrontEndCard getFrontEndTopCard(Card card){
         FrontEndCard topCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit());
         return topCard;
     }
@@ -95,7 +93,7 @@ public class Controller {
 
     //might be able to combine these two into one method
     //should these be in View or Controller?
-    public void initializeFrontEndPlayers(){
+    private void initializeFrontEndPlayers(){
         for (Player currentPlayer: playerList.getAllPlayers()){
             System.out.println(currentPlayer.toString());
             GameDisplayRecipient player = new GameDisplayRecipient(100,100);
@@ -103,7 +101,7 @@ public class Controller {
         }
     }
 
-    public void updateFrontEndPlayers(){
+    private void updateFrontEndPlayers(){
         frontEndPlayers.clear();
         for (Player activePlayer : playerList.updateActivePlayers()){
             GameDisplayRecipient player = new GameDisplayRecipient(100,100);
@@ -112,11 +110,11 @@ public class Controller {
     }
 
 
-    public void bettingRound(){
+    private void bettingRound(){
         //go through all the players and ask for an action
     }
 
-    public void promptAction(){
+    private void promptAction(){
         //once action is selected, update the totals and then call
     }
 

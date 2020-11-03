@@ -13,7 +13,6 @@ public class Player implements CardRecipient, CardDiscarder {
     private Exchange cardExchange;
 
 
-
     public Player(String name, int startingAmount, Pot pot){
         playerName = name;
         moneyCount = startingAmount;

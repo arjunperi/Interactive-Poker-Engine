@@ -9,7 +9,8 @@ public class FrontEndCard extends Text {
 
     //TODO: take the suit and symbol, and get the associated image
     public FrontEndCard(String symbol, Suit suit) {
-        super(10, 10, symbol);
+        super(10, 10, symbol + "\n" + suit.name());
+        this.setId(symbol);
         this.symbol = symbol;
         this.suit = suit;
     }

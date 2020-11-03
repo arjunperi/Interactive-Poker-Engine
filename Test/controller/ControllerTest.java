@@ -3,13 +3,10 @@ package controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javafx.stage.Stage;
-import model.Dealer;
-import model.DealerRules;
-import model.Game;
-import model.TurnManager;
+import model.*;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
-
+import view.FrontEndCard;
 
 
 public class ControllerTest extends DukeApplicationTest {
@@ -21,29 +18,15 @@ public class ControllerTest extends DukeApplicationTest {
 
     public void start(final Stage stage) {
         mainController = new Controller(stage);
-
+        mainController.gameStep();
     }
-
 
     @Test
     public void testGameStep(){
         dealerRules = game.getDealerRules();
         turnManager = game.getTurnManager();
         mainController.gameStep();
-//        assertEquals()
     }
 
-    @Test
-    public void testDealingRound(){
-
-    }
-
-    @Test
-    public void testGetFrontEndTopCard(){}
-
-    @Test
-    public void initializeFrontEndPlayers(){
-
-    }
 
 }

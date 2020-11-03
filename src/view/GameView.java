@@ -18,7 +18,6 @@ public class GameView {
     private Group bottomGroup;
     private GameDisplayRecipient community;
 
-
     public GameView(){
         topGroup = new Group();
         centerGroup = new Group();
