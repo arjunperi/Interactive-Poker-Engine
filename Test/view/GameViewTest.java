@@ -13,26 +13,13 @@ public class GameViewTest extends DukeApplicationTest {
 
 
     @Test
-    public void testDealToCommunity(){
+    public void testDealToGameDisplayRecipient(){
         gameView = new GameView();
         FrontEndCard frontEndQueen = new FrontEndCard("Q", Suit.CLUBS);
-        String recipient = "Community";
+        GameDisplayRecipient recipient = new GameDisplayRecipient(10,10);
         int xOffset = 50;
-        GameDisplayRecipient player = new GameDisplayRecipient(10,10);
-        List<GameDisplayRecipient> frontEndPlayers = List.of(player);
-        gameView.deal(frontEndQueen,recipient,xOffset,frontEndPlayers);
-        assertEquals(frontEndQueen.getX(), 100);
+        gameView.deal(frontEndQueen, recipient, xOffset);
+        assertEquals(60, frontEndQueen.getX());
     }
 
-    @Test
-    public void testDealToPlayer(){
-        gameView = new GameView();
-        FrontEndCard frontEndQueen = new FrontEndCard("Q", Suit.CLUBS);
-        String recipient = "Players";
-        int xOffset = 50;
-        GameDisplayRecipient player = new GameDisplayRecipient(10,10);
-        List<GameDisplayRecipient> frontEndPlayers = List.of(player);
-        gameView.deal(frontEndQueen,recipient,xOffset,frontEndPlayers);
-        assertEquals(frontEndQueen.getX(), 60);
-    }
 }

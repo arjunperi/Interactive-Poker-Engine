@@ -21,12 +21,12 @@ public class ControllerTest extends DukeApplicationTest {
         mainController.gameStep();
     }
 
-    @Test
-    public void testGameStep(){
-        dealerRules = game.getDealerRules();
-        turnManager = game.getTurnManager();
-        mainController.gameStep();
-    }
+//    @Test
+//    public void testGameStep(){
+//        dealerRules = game.getDealerRules();
+//        turnManager = game.getTurnManager();
+//        mainController.gameStep();
+//    }
 
 
 }
