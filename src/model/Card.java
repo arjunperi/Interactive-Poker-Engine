@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Card {
-    private int cardValue;
 
     private Suit suit;
     private String cardSymbol;
@@ -54,6 +53,37 @@ public class Card {
 
     public int getCardValue(){
         return cardValue;
+    }*/
+
+    public Card (Rank rank, Suit suit) {
+        this.rank = rank;
+        this.suit = suit;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public Suit getSuit() {
+        return suit;
+    }
+
+    @Override
+    public String toString() {
+        return (suit + " " + rank);
+    }
+
+    @Override
+    public boolean equals (Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Card otherCard = (Card) obj;
+        return rank == otherCard.rank && suit == otherCard.suit;
     }
 
     public Suit getCardSuit(){
