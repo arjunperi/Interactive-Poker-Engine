@@ -10,7 +10,6 @@ public class Card {
     private String cardSymbol;
     private int rank;
     private boolean visible;
-    private Map<Integer,String> cardValueMap;
 
 
     private static final String FILENAME = "CardValueMapping";
@@ -60,11 +59,13 @@ public class Card {
         return suit;
     }
 
+    public int getCardRank(){return rank;}
+
     public boolean getCardVisibility(){
         return visible;
     }
 
-    public void makeVisible(Card card){
+    public void makeVisible(){
         visible=true;
     }
 }
