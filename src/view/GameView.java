@@ -16,7 +16,8 @@ public class GameView {
     private Group topGroup;
     private Group centerGroup;
     private Group bottomGroup;
-    private GameDisplayRecipient community;
+
+
 
     public GameView(){
         topGroup = new Group();
@@ -26,7 +27,7 @@ public class GameView {
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
-        community = new GameDisplayRecipient(50,50);
+
     }
 
     public Scene setupScene() {
@@ -35,17 +36,19 @@ public class GameView {
         return this.scene;
     }
 
-    public void deal(FrontEndCard card, String recipient, int xOffset, List<GameDisplayRecipient> frontEndPlayers){
-        if (recipient.equals("Community")){
-            card.setX(community.getX() + xOffset);
-            System.out.println("\n" + card.getX());
-            centerGroup.getChildren().add(card);
-        }
-        else{
-            for (GameDisplayRecipient player: frontEndPlayers){
-                card.setX(player.getX() + xOffset);
-                bottomGroup.getChildren().add(card);
-            }
-        }
+    //want a way for this to specify top or bottom group based on the recipient
+    public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xOffset) {
+        card.setX(displayRecipient.getX() + xOffset);
+        System.out.println("\n" + card.getX());
+        centerGroup.getChildren().add(card);
     }
+
+    public void promptAction(GameDisplayRecipient player){
+        //pop up an option box
+        //say the player chooses bet
+            //player's displayed total decreases by bet amount
+            //pot total increases by bet amount
+
+    }
+
 }

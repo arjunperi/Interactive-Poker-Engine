@@ -9,6 +9,8 @@ import view.GameDisplayRecipient;
 import view.GameView;
 
 
+
+import java.awt.desktop.ScreenSleepEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,6 +32,9 @@ public class Controller {
     private List<GameDisplayRecipient> frontEndPlayers;
     private CommunityCards communityCards;
 
+    private GameDisplayRecipient community;
+
+
     private GameView view;
     private Stage stage;
 
@@ -38,6 +43,9 @@ public class Controller {
     private String recipient;
 
     private int xOffset;
+
+
+    private Stack<Card> cardsRemoved;
 
     public Controller(Stage stage) {
         roundNumber = 1;
@@ -49,8 +57,12 @@ public class Controller {
         playerList = game.getPlayers();
         frontEndPlayers = new ArrayList<>();
         communityCards = game.getCommunityCards();
+
+        cardsRemoved = new Stack<>();
         view = new GameView();
         initializeFrontEndPlayers();
+        initializeCommunity();
+
         this.stage = stage;
     }
 
@@ -67,22 +79,35 @@ public class Controller {
         }
     }
 
+
+    //don't like this conditional
     private void dealingRound(){
-        numberOfCards = dealerRules.getNumberOfCards();
         recipient = dealerRules.getRecipient();
-        Stack<Card> cardsRemoved = new Stack();
-        for (int i=0; i<numberOfCards; i++){
-            Card backendTopCard = deck.getTopCard();
-            FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
-            cardsRemoved.add(backendTopCard);
-            view.deal(topCard, recipient, xOffset, frontEndPlayers);
-            xOffset += 70;
+        if (recipient.equals("Community")){
+            dealFrontEndCards(community);
+        }
+        else {
+            for (GameDisplayRecipient player : frontEndPlayers){
+                dealFrontEndCards(player);
+            }
         }
         for (Card card: cardsRemoved){
             deck.replaceTopCard(card);
         }
     }
 
+    private void dealFrontEndCards(GameDisplayRecipient recipient){
+        numberOfCards = dealerRules.getNumberOfCards();
+
+        for (int i=0; i<numberOfCards; i++){
+            Card backendTopCard = deck.getTopCard();
+            FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
+            cardsRemoved.add(backendTopCard);
+
+            view.deal(topCard, recipient, xOffset);
+            xOffset += 70;
+        }
+    }
 
     //should this be in View or Controller?
     private FrontEndCard getFrontEndTopCard(Card card){
@@ -91,13 +116,24 @@ public class Controller {
     }
 
 
+    private void initializeCommunity(){
+        community = new GameDisplayRecipient(50,50);
+    }
+
+
+
     //might be able to combine these two into one method
     //should these be in View or Controller?
     private void initializeFrontEndPlayers(){
+
+        int playerOffset = 0;
         for (Player currentPlayer: playerList.getAllPlayers()){
             System.out.println(currentPlayer.toString());
-            GameDisplayRecipient player = new GameDisplayRecipient(100,100);
+            GameDisplayRecipient player = new GameDisplayRecipient(playerOffset,playerOffset);
+            System.out.println(playerOffset);
             frontEndPlayers.add(player);
+            playerOffset += 20;
+
         }
     }
 
@@ -111,8 +147,42 @@ public class Controller {
 
 
     private void bettingRound(){
-        //go through all the players and ask for an action
+
+        //just dealt the cards
+        //prop
+        updateFrontEndPlayers();
+        for (GameDisplayRecipient player: frontEndPlayers){
+            view.promptAction(player);
+        }
+
+       //for each player in the front end player list
+            //pop up an option box allowing them to either bet raise call check fold (if valid)
+            //send this information back to the backend
+            //the backend updates the pot, player totals, and decides who's turn it is
+                    //or if the round is over
+                    //or if it is showdown time
+                    //or if the game is over?
     }
+
+//
+//    public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
+//        List<Player> allPlayers = pokerPlayerList.getAllPlayers();
+//        for (Player currentPlayer: allPlayers){
+//            System.out.println("\n" + currentPlayer.toString() + " is up");
+//            if (currentPlayer.isActive()){
+//                currentPlayer.performAction();
+//            }
+//            activePlayers = pokerPlayerList.updateActivePlayers();
+//            if (activePlayers.size() == 1 ){
+//                winner = activePlayers.get(0);
+//                endGame();
+//            }
+//        }
+//        currentRound ++;
+//        if (currentRound == totalRounds){
+//            showDown(activePlayers);
+//        }
+//    }
 
     private void promptAction(){
         //once action is selected, update the totals and then call
