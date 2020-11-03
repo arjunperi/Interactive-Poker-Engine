@@ -12,6 +12,7 @@ import view.GameView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 public class Controller {
 
@@ -27,7 +28,7 @@ public class Controller {
     private Deck deck;
     private PlayerList playerList;
     private List<GameDisplayRecipient> frontEndPlayers;
-
+    private CommunityCards communityCards;
 
     private GameView view;
     private Stage stage;
@@ -48,6 +49,7 @@ public class Controller {
         deck = game.getDeck();
         playerList = game.getPlayers();
         frontEndPlayers = new ArrayList<>();
+        communityCards = game.getCommunityCards();
         view = new GameView();
         initializeFrontEndPlayers();
         this.stage = stage;
@@ -57,34 +59,9 @@ public class Controller {
         return view.setupScene();
     }
 
-    //right now at each round:
-        //updates the active list of players
-            //from Model
-        //checks the properties file for who to deal to and how many
-            //from model
-        //deals the cards
-            //in Controller
-        //betting progression
-            //in controller
-        //repeat
-
-
-
-    //how to handle differences in dealing flows?
-        //for stud:  deal, bet, exchange, bet
-        //where are we going see whether or not do  an exchange or not?
-        //probably abstract dealing rules within Controller
-
-    //what does model need to know after Controller does work
-        //what the player actions were
-            //update the pot and such
-            //update the active players
-        //what the player's hands are after cards have been dealt
-        //what the communal cards are after cards have been dealt
-
     public void gameStep(){
-        if (roundNumber < 5){
-            dealerRules.dealStats();
+        if (roundNumber < 5) {
+            dealerRules.dealStats(roundNumber);
             dealingRound();
             dealerRules.dealFlow(roundNumber);
             roundNumber++;
@@ -94,13 +71,20 @@ public class Controller {
     public void dealingRound(){
         numberOfCards = dealerRules.getNumberOfCards();
         recipient = dealerRules.getRecipient();
+        Stack<Card> cardsRemoved = new Stack();
 
         for (int i=0; i<numberOfCards; i++){
-            FrontEndCard topCard = getFrontEndTopCard(deck.peekTopCard());
+            Card backendTopCard = deck.getTopCard();
+            FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
+            cardsRemoved.add(backendTopCard);
             view.deal(topCard, recipient, xOffset, frontEndPlayers);
             xOffset += 70;
         }
+        for (Card card: cardsRemoved){
+            deck.replaceTopCard(card);
+        }
     }
+
 
     //should this be in View or Controller?
     public FrontEndCard getFrontEndTopCard(Card card){
@@ -113,6 +97,7 @@ public class Controller {
     //should these be in View or Controller?
     public void initializeFrontEndPlayers(){
         for (Player currentPlayer: playerList.getAllPlayers()){
+            System.out.println(currentPlayer.toString());
             GameDisplayRecipient player = new GameDisplayRecipient(100,100);
             frontEndPlayers.add(player);
         }

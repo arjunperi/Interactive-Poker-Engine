@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Dealer {
     public Deck dealerDeck;
-    public CommunityCards communityCards;
 
     public Dealer(Deck deck){
         dealerDeck = deck;
@@ -12,7 +11,8 @@ public class Dealer {
 
     public void dealCards(CardRecipient recipient, int numberToDeal){
         for (int i=0; i< numberToDeal; i++){
-            recipient.receiveCard(dealerDeck.getTopCard());
+            Card cardDealt = dealerDeck.getTopCard();
+            recipient.receiveCard(cardDealt);
         }
     }
 

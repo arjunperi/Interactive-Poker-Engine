@@ -11,7 +11,6 @@ public class CommunityDealerRules extends DealerRules{
 
 
     public void dealFlow(int currentRound){
-
         //later, use reflection for this
         if (recipient.equals("Community")){
             dealingRound(numberOfCards,communityCards);

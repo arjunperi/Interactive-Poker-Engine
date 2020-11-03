@@ -23,11 +23,10 @@ public abstract class DealerRules {
         pokerPlayerList = players;
         this.turnManager = turnManager;
         pokerDealer = dealer;
-        currentRound = 1;
     }
 
 
-    public void dealStats(){
+    public void dealStats(int currentRound){
         pokerDealer.checkDeck();
 
         Properties ruleProperties = getPropertyFile("HoldEm");
@@ -60,4 +59,5 @@ public abstract class DealerRules {
     public String getRecipient(){
         return recipient;
     }
+
 }
