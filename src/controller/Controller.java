@@ -88,7 +88,7 @@ public class Controller {
 
     //should this be in View or Controller?
     public FrontEndCard getFrontEndTopCard(Card card){
-        FrontEndCard topCard = new FrontEndCard(card.getCardValue());
+        FrontEndCard topCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit());
         return topCard;
     }
 
@@ -112,7 +112,6 @@ public class Controller {
     }
 
 
-
     public void bettingRound(){
         //go through all the players and ask for an action
     }
@@ -120,12 +119,5 @@ public class Controller {
     public void promptAction(){
         //once action is selected, update the totals and then call
     }
-
-    //with this one player version
-        //model step gives the
-
-
-
-
 
 }

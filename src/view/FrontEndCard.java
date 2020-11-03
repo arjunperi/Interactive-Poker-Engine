@@ -1,9 +1,16 @@
 package view;
 import javafx.scene.text.Text;
+//violation? Maybe pass in the string
+import model.Suit;
 
 public class FrontEndCard extends Text {
+    private String symbol;
+    private Suit suit;
 
-    public FrontEndCard(int value) {
-        super(10, 10, String.valueOf(value));
+    //TODO: take the suit and symbol, and get the associated image
+    public FrontEndCard(String symbol, Suit suit) {
+        super(10, 10, symbol);
+        this.symbol = symbol;
+        this.suit = suit;
     }
 }

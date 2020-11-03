@@ -1,15 +1,13 @@
 package model;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
 
 public class Card {
     private int cardValue;
+
     private Suit suit;
-    private String cardNumber;
+    private String cardSymbol;
     private int rank;
     private boolean visible;
     private Map<Integer,String> cardValueMap;
@@ -27,7 +25,7 @@ public class Card {
         this.suit = suit;
         this.rank = rank;
         visible=false;
-        getCardNumber();
+        initializeCardNumber();
     }
 
 
@@ -44,18 +42,19 @@ public class Card {
 
 
 
-    public void getCardNumber (){
+    public void initializeCardNumber(){
         Properties mappings = getPropertyFile(FILENAME);
-        cardNumber = mappings.getProperty(String.valueOf(rank));
+        cardSymbol = mappings.getProperty(String.valueOf(rank));
     }
 
+    public String getCardSymbol(){
+        return cardSymbol;
+    }
 
 
     public int getCardValue(){
         return cardValue;
     }
-
-
 
     public Suit getCardSuit(){
         return suit;
