@@ -1,37 +1,55 @@
 package model;
 
+import java.util.Map;
+import java.util.Properties;
+
 public class Card {
 
-    public enum Rank {
-        DEUCE,
-        THREE,
-        FOUR,
-        FIVE,
-        SIX,
-        SEVEN,
-        EIGHT,
-        NINE,
-        TEN,
-        JACK,
-        QUEEN,
-        KING,
-        ACE
-    }
+    private Suit suit;
+    private String cardSymbol;
+    private int rank;
+    private boolean visible;
+    private Map<Integer,String> cardValueMap;
 
-    public enum Suit {
-        CLUBS,
-        DIAMONDS,
-        HEARTS,
-        SPADES
-    }
 
-    private final Rank rank;
-    private final Suit suit;
-    //private int cardValue;
+    private static final String FILENAME = "CardValueMapping";
 
-    /*public Card(int value){
+
+    public Card(int value){
         cardValue = value;
     }
+
+
+    public Card(int rank , Suit suit){
+        this.suit = suit;
+        this.rank = rank;
+        visible=false;
+        initializeCardNumber();
+    }
+
+
+    public Properties getPropertyFile(String fileName) {
+        Properties propertyFile = new Properties();
+        try {
+            propertyFile
+                    .load(Card.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return propertyFile;
+    }
+
+
+
+    public void initializeCardNumber(){
+        Properties mappings = getPropertyFile(FILENAME);
+        cardSymbol = mappings.getProperty(String.valueOf(rank));
+    }
+
+    public String getCardSymbol(){
+        return cardSymbol;
+    }
+
 
     public int getCardValue(){
         return cardValue;
@@ -66,5 +84,17 @@ public class Card {
 
         Card otherCard = (Card) obj;
         return rank == otherCard.rank && suit == otherCard.suit;
+    }
+
+    public Suit getCardSuit(){
+        return suit;
+    }
+
+    public boolean getCardVisibility(){
+        return visible;
+    }
+
+    public void makeVisible(Card card){
+        visible=true;
     }
 }

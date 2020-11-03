@@ -6,11 +6,11 @@ import java.util.Properties;
 public class DrawDealerRules extends DealerRules {
 
 
-    public DrawDealerRules(int totalRounds, PlayerList players, TurnManager turnManager){
-        super(totalRounds, players, turnManager);
+    public DrawDealerRules(int totalRounds, PlayerList players, TurnManager turnManager, CommunityCards communityCards, Dealer dealer){
+        super(totalRounds, players, turnManager, communityCards, dealer);
     }
 
-    public void dealFlow(){
+    public void dealFlow(int currentRound){
         Properties ruleProperties = getPropertyFile("FiveCardDraw");
         for (int i=1; i<=totalRounds; i++){
             activePlayerList = pokerPlayerList.updateActivePlayers();
