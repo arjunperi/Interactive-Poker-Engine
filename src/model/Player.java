@@ -14,6 +14,13 @@ public class Player implements CardRecipient, CardDiscarder {
 
 
 
+    public Player(){
+        playerName = "Noah";
+        moneyCount = 10000000;
+        playerHand = new Hand();
+        pot = new Pot();
+
+    }
     public Player(String name, int startingAmount, Pot pot){
         playerName = name;
         moneyCount = startingAmount;
