@@ -63,13 +63,7 @@ public class GameView {
     }
 
 
-//    public void makeOptionScreen(EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> betEvent){
-//        Button foldButton = makeButton("fold", foldEvent);
-//        Button betButton = makeButton("bet", betEvent);
-//        HBox options = new HBox();
-//        options.getChildren().addAll(foldButton,betButton);
-//        topGroup.getChildren().add(options);
-//    }
+
 
     public Dialog makeOptionScreen(TextField betInput) {
         bottomGroup.getChildren().clear();

@@ -45,22 +45,6 @@ public class Card {
     }
 
 
-    public int getCardValue(){
-        return cardValue;
-    }
-
-    /*public Card (Rank rank, Suit suit) {
-        this.rank = rank;
-        this.suit = suit;
-    }
-
-    public Rank getRank() {
-        return rank;
-    }
-
-    public Suit getSuit() {
-        return suit;
-    }*/
 
     @Override
     public String toString() {
@@ -84,7 +68,7 @@ public class Card {
         return suit;
     }
 
-    public int getCardRank(){return rank;}
+    public int getRank(){return rank;}
 
     public boolean getCardVisibility(){
         return visible;

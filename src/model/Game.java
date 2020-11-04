@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Game {
     private TurnManager pokerTurnManager;
-    private DealerRules holdemDealerRules;
-    private DealerRules drawDealerRules;
+    private Model holdemModel;
+    private Model drawModel;
     private PlayerList players;
     private Pot pot;
     private Deck deck;
@@ -22,7 +22,7 @@ public class Game {
 
         this.communityCards = new CommunityCards();
 
-        deck = createDeck();
+        deck = new Deck();
 
         dealer = new Dealer(deck);
 
@@ -30,22 +30,12 @@ public class Game {
         pokerTurnManager = new TurnManager(pot);
         //we can use factory design pattern here to choose what kind of model to instantiate
 
-        holdemDealerRules = new CommunityDealerRules(4, players, pokerTurnManager, communityCards, dealer);
+        holdemModel = new CommunityModel(4, players, communityCards, dealer);
     }
 
-    public Deck createDeck(){
-        List<Card> cardsList = new ArrayList<>();
-        for (Suit suit : Suit.values()){
-            for (int r = 2; r<15; r++){
-                Card card = new Card(r,suit);
-                cardsList.add(card);
-            }
-        }
-        return new Deck(cardsList);
-    }
 
-    public DealerRules getDealerRules() {
-        return holdemDealerRules;
+    public Model getDealerRules() {
+        return holdemModel;
     }
 
     public TurnManager getTurnManager(){

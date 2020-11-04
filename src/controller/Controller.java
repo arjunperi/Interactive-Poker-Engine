@@ -1,20 +1,17 @@
 package controller;
 
 
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import model.*;
 import view.*;
 
 
-import java.awt.desktop.ScreenSleepEvent;
 import java.util.*;
 
 public class Controller {
@@ -26,13 +23,13 @@ public class Controller {
     private ResourceBundle projectTextResources;
 
     private Game game;
-    private DealerRules dealerRules;
+    private Model model;
     private TurnManager turnManager;
     private Deck deck;
     private PlayerList playerList;
     private List<GameDisplayRecipient> frontEndPlayers;
     private CommunityCards communityCards;
-    private GameDisplayRecipient community;
+    private GameDisplayRecipient displayCommunity;
     private Pot pot;
 
     private GameView view;
@@ -47,17 +44,11 @@ public class Controller {
     private Stack<Card> cardsRemoved;
     private Map<Player, FrontEndPlayer> playerMappings;
 
-    private boolean gamePaused = false;
-
-    private Timeline animation;
-
-    private int playerIndex;
-
     public Controller(Stage stage) {
         roundNumber = 1;
         xOffset = 0;
         game = new Game();
-        dealerRules = game.getDealerRules();
+        model = game.getDealerRules();
         turnManager = game.getTurnManager();
         deck = game.getDeck();
         playerList = game.getPlayers();
@@ -73,7 +64,6 @@ public class Controller {
 
         this.stage = stage;
 
-
         initializeSplashMenu();
 
     }
@@ -84,19 +74,17 @@ public class Controller {
     public void initializeSplashMenu(){
         EventHandler<ActionEvent> startEvent = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
+                model.dealFlow(roundNumber);
                 dealingRound();
-                initializeBettingMenu();
             }
         };
         view.createStartScreen(startEvent);
     }
 
-
-
     //TODO: maintain player that raised last
     public void initializeBettingMenu(){
         playerList.updateActivePlayers();
-        for (Player player : playerList.getPlayers()) {
+        for (Player player : playerList.getActivePlayers()) {
             EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
 
             TextField betInput = new TextField();
@@ -105,43 +93,36 @@ public class Controller {
             if (betBoxResult.isPresent()) {
                 indicateBet(player,betInput.getText());
             }
-            turnManager.checkOnePlayerRemains(playerList.getPlayers());
+            turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
         }
-        turnManager.checkShowDown(playerList.getPlayers(),roundNumber,5);
+        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,5);
         if (roundNumber < 5){
+            model.dealFlow(roundNumber);
             dealingRound();
         }
     }
 
-
     //don't like this conditional
     private void dealingRound(){
-        dealerRules.dealStats(roundNumber);
-        recipient = dealerRules.getRecipient();
+        recipient = model.getRecipient();
         if (recipient.equals("Community")){
-            dealFrontEndCards(community);
+            dealFrontEndCards(communityCards, displayCommunity);
         }
         else {
-            for (GameDisplayRecipient player : frontEndPlayers){
-                dealFrontEndCards(player);
+            playerList.updateActivePlayers();
+            for (Player player : playerList.getActivePlayers()){
+                dealFrontEndCards(player,playerMappings.get(player));
             }
         }
-        for (Card card: cardsRemoved){
-            deck.replaceTopCard(card);
-        }
-        cardsRemoved.clear();
-        dealerRules.dealFlow(roundNumber);
         roundNumber++;
         initializeBettingMenu();
     }
 
-    private void dealFrontEndCards(GameDisplayRecipient recipient){
-        numberOfCards = dealerRules.getNumberOfCards();
-        for (int i=0; i<numberOfCards; i++){
-            Card backendTopCard = deck.getTopCard();
-            FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
-            cardsRemoved.add(backendTopCard);
-            view.deal(topCard, recipient, xOffset);
+    private void dealFrontEndCards(CardRecipient recipient, GameDisplayRecipient displayRecipient){
+        numberOfCards = model.getNumberOfCards();
+        for (Card newCard: recipient.getNewCards()){
+            FrontEndCard displayCard = getFrontEndTopCard(newCard);
+            view.deal(displayCard, displayRecipient, xOffset);
             xOffset += 70;
         }
     }
@@ -153,19 +134,18 @@ public class Controller {
     }
 
     private void initializeCommunity(){
-        community = new FrontEndCommunity(50,50);
+        displayCommunity = new FrontEndCommunity(50,50);
     }
 
 
     private void initializeFrontEndPlayers(){
         int offset = 20;
-        for (Player currentPlayer: playerList.getPlayers()){
+        for (Player currentPlayer: playerList.getActivePlayers()){
             FrontEndPlayer newPlayer = new FrontEndPlayer(offset, offset, currentPlayer.toString(), currentPlayer.getBankroll());
             playerMappings.put(currentPlayer, newPlayer);
             frontEndPlayers.add(newPlayer);
         }
     }
-
 
     public void indicateFold(Player player){
         player.exitHand();
