@@ -9,6 +9,8 @@ public class Card {
     private String cardSymbol;
     private int rank;
     private boolean visible;
+    private Map<Integer,String> cardValueMap;
+    private int cardValue;
 
 
     private static final String FILENAME = "CardValueMapping";
@@ -42,13 +44,23 @@ public class Card {
         return cardSymbol;
     }
 
-    public int getRank() {
+
+    public int getCardValue(){
+        return cardValue;
+    }
+
+    /*public Card (Rank rank, Suit suit) {
+        this.rank = rank;
+        this.suit = suit;
+    }
+
+    public Rank getRank() {
         return rank;
     }
 
     public Suit getSuit() {
         return suit;
-    }
+    }*/
 
     @Override
     public String toString() {
