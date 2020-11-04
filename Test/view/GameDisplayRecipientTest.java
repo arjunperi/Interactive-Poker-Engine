@@ -7,11 +7,11 @@ import util.DukeApplicationTest;
 
 public class GameDisplayRecipientTest extends DukeApplicationTest {
 
-    @Test
-    public void testGameDisplayRecipientCreation(){
-        GameDisplayRecipient player = new GameDisplayRecipient(10,10);
-        assertEquals(player.getX(), 10);
-    }
+//    @Test
+//    public void testGameDisplayRecipientCreation(){
+//        GameDisplayRecipient player = new GameDisplayRecipient(10,10);
+//        assertEquals(player.getX(), 10);
+//    }
 
 
 

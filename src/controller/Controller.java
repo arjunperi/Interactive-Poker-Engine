@@ -1,19 +1,20 @@
 package controller;
 
 
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.*;
-import view.FrontEndCard;
-import view.GameDisplayRecipient;
-import view.GameView;
+import view.*;
 
 
 import java.awt.desktop.ScreenSleepEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Stack;
+import java.util.*;
 
 public class Controller {
 
@@ -31,6 +32,7 @@ public class Controller {
     private List<GameDisplayRecipient> frontEndPlayers;
     private CommunityCards communityCards;
     private GameDisplayRecipient community;
+    private Pot pot;
 
     private GameView view;
     private Stage stage;
@@ -42,8 +44,13 @@ public class Controller {
     private int xOffset;
 
     private Stack<Card> cardsRemoved;
+    private Map<Player, FrontEndPlayer> playerMappings;
 
-    public Controller(Stage stage) {
+    private boolean pauseGame = false;
+
+    private Timeline animation;
+
+    public Controller(Stage stage, Timeline animation) {
         roundNumber = 1;
         xOffset = 0;
         game = new Game();
@@ -53,11 +60,17 @@ public class Controller {
         playerList = game.getPlayers();
         frontEndPlayers = new ArrayList<>();
         communityCards = game.getCommunityCards();
+        pot = game.getPot();
+        turnManager = game.getTurnManager();
         cardsRemoved = new Stack<>();
         view = new GameView();
+        playerMappings = new HashMap<>();
         initializeFrontEndPlayers();
         initializeCommunity();
+
         this.stage = stage;
+
+        this.animation = animation;
     }
 
     public Scene setupScene() {
@@ -69,6 +82,7 @@ public class Controller {
             dealerRules.dealStats(roundNumber);
             dealingRound();
             dealerRules.dealFlow(roundNumber);
+//            bettingRound();
             roundNumber++;
         }
     }
@@ -87,12 +101,14 @@ public class Controller {
         for (Card card: cardsRemoved){
             deck.replaceTopCard(card);
         }
+        cardsRemoved.clear();
     }
 
     private void dealFrontEndCards(GameDisplayRecipient recipient){
         numberOfCards = dealerRules.getNumberOfCards();
         for (int i=0; i<numberOfCards; i++){
             Card backendTopCard = deck.getTopCard();
+            System.out.println("backend rank:" + backendTopCard.getRank());
             FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
             cardsRemoved.add(backendTopCard);
             view.deal(topCard, recipient, xOffset);
@@ -107,71 +123,51 @@ public class Controller {
     }
 
     private void initializeCommunity(){
-        community = new GameDisplayRecipient(50,50);
+        community = new FrontEndCommunity(50,50);
     }
 
 
-    //might be able to combine these two into one method
-    //should these be in View or Controller?
     private void initializeFrontEndPlayers(){
-        int playerOffset = 0;
-        for (Player currentPlayer: playerList.getAllPlayers()){
-            System.out.println(currentPlayer.toString());
-            GameDisplayRecipient player = new GameDisplayRecipient(playerOffset,playerOffset);
-            System.out.println(playerOffset);
-            frontEndPlayers.add(player);
-            playerOffset += 20;
+        int offset = 20;
+        for (Player currentPlayer: playerList.getPlayers()){
+            FrontEndPlayer newPlayer = new FrontEndPlayer(offset, offset, currentPlayer.toString(), currentPlayer.getBankroll());
+            playerMappings.put(currentPlayer, newPlayer);
+            frontEndPlayers.add(newPlayer);
         }
     }
 
-    private void updateFrontEndPlayers(){
-        frontEndPlayers.clear();
-        for (Player activePlayer : playerList.updateActivePlayers()){
-            GameDisplayRecipient player = new GameDisplayRecipient(100,100);
-            frontEndPlayers.add(player);
-        }
-    }
+    //TODO: Fix the issues with pausing the game to allow for user inputs, then resuming game
 
-
-    private void bettingRound(){
-        //just dealt the cards
-        //prop
-        updateFrontEndPlayers();
-        for (GameDisplayRecipient player: frontEndPlayers){
-            view.promptAction(player);
-        }
-
-       //for each player in the front end player list
-            //pop up an option box allowing them to either bet raise call check fold (if valid)
-            //send this information back to the backend
-            //the backend updates the pot, player totals, and decides who's turn it is
-                    //or if the round is over
-                    //or if it is showdown time
-                    //or if the game is over?
-    }
-
-//
-//    public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
-//        List<Player> allPlayers = pokerPlayerList.getAllPlayers();
-//        for (Player currentPlayer: allPlayers){
-//            System.out.println("\n" + currentPlayer.toString() + " is up");
-//            if (currentPlayer.isActive()){
-//                currentPlayer.performAction();
+//    private void bettingRound(){
+//        //need to pause and allow for each player to put in inputs
+//        playerList.updateActivePlayers();
+//        for (Player player : playerList.getPlayers()){
+//            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+//            TextField betInput = new TextField();
+//            Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
+//            Optional<ButtonType> betBoxResult = betBox.showAndWait();
+//            if (betBoxResult.isPresent()) {
+//                indicateBet(player,betInput.getText());
 //            }
-//            activePlayers = pokerPlayerList.updateActivePlayers();
-//            if (activePlayers.size() == 1 ){
-//                winner = activePlayers.get(0);
-//                endGame();
-//            }
-//        }
-//        currentRound ++;
-//        if (currentRound == totalRounds){
-//            showDown(activePlayers);
+//            turnManager.checkGameOver(playerList.getPlayers(),5);
 //        }
 //    }
-
-    private void promptAction(){
-        //once action is selected, update the totals and then call
-    }
-
+//
+//    public void indicateFold(Player player){
+//        player.exitHand();
+//
+//        FrontEndPlayer displayPlayer = playerMappings.get(player);
+//        displayPlayer.foldDisplay();
+//        //resume
+//    }
+//
+//    public void indicateBet(Player player, String betInput){
+//        int betAmount = Integer.parseInt(betInput);
+//        pot.addToPot(betAmount);
+//        player.updateBankroll(betAmount * -1);
+//
+//        FrontEndPlayer displayPlayer = playerMappings.get(player);
+//        displayPlayer.betDisplay(betAmount * -1);
+//        //resume
+//    }
 }

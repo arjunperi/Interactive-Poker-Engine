@@ -41,15 +41,15 @@ public class Player implements CardRecipient, CardDiscarder {
         }
     }
 
-    public void performAction(){
-        int randomAction = (int) ((Math.random() * (5 - 1)) + 1);
-        if (randomAction == 1){
-            playerAction = new Fold(this);
-        }
-        else{
-            playerAction =  new Bet(this, pot);
-        }
-    }
+//    public void performAction(){
+//        int randomAction = (int) ((Math.random() * (5 - 1)) + 1);
+//        if (randomAction == 1){
+//            playerAction = new Fold(this);
+//        }
+//        else{
+//            playerAction =  new Bet(this, pot);
+//        }
+//    }
 
     @Override
     public void receiveCard(Card card){

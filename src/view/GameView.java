@@ -1,8 +1,15 @@
 package view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import model.Game;
@@ -40,12 +47,28 @@ public class GameView {
         centerGroup.getChildren().add(card);
     }
 
-    public void promptAction(GameDisplayRecipient player){
-        //pop up an option box
-        //say the player chooses bet
-            //player's displayed total decreases by bet amount
-            //pot total increases by bet amount
 
+    public Button makeButton(String property, EventHandler<ActionEvent> handler) {
+        Button result = new Button();
+        result.setId(property);
+        result.setText(property);
+        result.setOnAction(handler);
+        return result;
     }
 
+
+    public Dialog makeOptionScreen(TextField betInput, EventHandler<ActionEvent> foldEvent){
+        Dialog betBox = new TextInputDialog();
+        betInput.setId("betBox");
+        GridPane grid = new GridPane();
+        betInput.setPromptText("Enter Bet Amount");
+        GridPane.setConstraints(betInput, 0, 0);
+        grid.getChildren().add(betInput);
+        betBox.getDialogPane().setContent(grid);
+
+        Button foldButton = makeButton("fold", foldEvent);
+        grid.getChildren().add(foldButton);
+        topGroup.getChildren().add(grid);
+        return betBox;
+    }
 }

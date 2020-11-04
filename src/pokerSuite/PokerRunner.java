@@ -19,19 +19,22 @@ public class PokerRunner extends Application {
     public static final double SCENE_HEIGHT = 800;
     private Controller mainController;
 
+    private Timeline animation;
+
 
     @Override
     public void start(final Stage stage) {
-        mainController = new Controller(stage);
+        initializeAnimation();
+        mainController = new Controller(stage, animation);
         stage.setScene(mainController.setupScene());
         stage.setTitle(TITLE);
         stage.show();
-        initializeAnimation();
     }
 
     private void initializeAnimation() {
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> gameStep());
-        Timeline animation = new Timeline();
+//        Timeline animation = new Timeline();
+        animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();

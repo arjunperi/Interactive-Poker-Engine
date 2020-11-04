@@ -22,7 +22,7 @@ public class CommunityDealerRules extends DealerRules{
         }
         System.out.println("Community cards: ");
         for (Card card : communityCards.getCommunityCardsList()){
-            System.out.println(card.getCardValue());
+            System.out.println(card.getRank());
         }
 //        turnManager.startBettingRound(pokerPlayerList, totalRounds);
     }

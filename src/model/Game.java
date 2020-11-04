@@ -26,7 +26,7 @@ public class Game {
 
         dealer = new Dealer(deck);
 
-        players = new PlayerList(List.of(player1,player2));
+        players = new PlayerList(List.of(player1, player2));
         pokerTurnManager = new TurnManager(pot);
         //we can use factory design pattern here to choose what kind of model to instantiate
 
@@ -34,10 +34,11 @@ public class Game {
     }
 
     public Deck createDeck(){
-        List<Card> cardsList = new ArrayList<>() ;
+        List<Card> cardsList = new ArrayList<>();
         for (Suit suit : Suit.values()){
             for (int r = 2; r<15; r++){
-                cardsList.add(new Card(r,suit));
+                Card card = new Card(r,suit);
+                cardsList.add(card);
             }
         }
         return new Deck(cardsList);
@@ -61,6 +62,10 @@ public class Game {
 
     public CommunityCards getCommunityCards(){
         return communityCards;
+    }
+
+    public Pot getPot(){
+        return pot;
     }
 
 

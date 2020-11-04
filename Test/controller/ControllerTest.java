@@ -16,10 +16,10 @@ public class ControllerTest extends DukeApplicationTest {
     private TurnManager turnManager;
     private Game game;
 
-    public void start(final Stage stage) {
-        mainController = new Controller(stage);
-        mainController.gameStep();
-    }
+//    public void start(final Stage stage) {
+//        mainController = new Controller(stage);
+//        mainController.gameStep();
+//    }
 
 //    @Test
 //    public void testGameStep(){

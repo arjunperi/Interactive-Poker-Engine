@@ -5,25 +5,21 @@ import java.util.List;
 
 //This class is kinda busted
 public class PlayerList {
-    private List<Player> allPlayers;
-    private List<Player> activePlayers;
+    private List<Player> players;
 
     public PlayerList(List<Player> players){
-        allPlayers = players;
-        activePlayers = new ArrayList<>();
+        this.players = players;
     }
 
-    public List<Player> getAllPlayers(){
-        return allPlayers;
-    }
-
-    public List<Player> updateActivePlayers(){
-        activePlayers.clear();
-        for (Player player : allPlayers){
-            if (player.isActive()){
-                activePlayers.add(player);
+    public void updateActivePlayers(){
+        for (Player player : players){
+            if (!player.isActive()){
+                players.remove(player);
             }
         }
-        return activePlayers;
+    }
+
+    public List<Player> getPlayers(){
+        return players;
     }
 }

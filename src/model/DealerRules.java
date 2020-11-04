@@ -30,7 +30,8 @@ public abstract class DealerRules {
         pokerDealer.checkDeck();
 
         Properties ruleProperties = getPropertyFile("HoldEm");
-        activePlayerList = pokerPlayerList.updateActivePlayers();
+        pokerPlayerList.updateActivePlayers();
+        activePlayerList = pokerPlayerList.getPlayers();
 
         String[] roundRules = ruleProperties.getProperty(String.valueOf(currentRound)).split(",");
         numberOfCards = Integer.parseInt(roundRules[0]);

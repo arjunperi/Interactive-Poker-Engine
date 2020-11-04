@@ -15,12 +15,6 @@ public class Card {
 
     private static final String FILENAME = "CardValueMapping";
 
-
-    public Card(int value){
-        cardValue = value;
-    }
-
-
     public Card(int rank , Suit suit){
         this.suit = suit;
         this.rank = rank;
@@ -39,7 +33,6 @@ public class Card {
         }
         return propertyFile;
     }
-
 
 
     public void initializeCardNumber(){
@@ -91,11 +84,13 @@ public class Card {
         return suit;
     }
 
+    public int getCardRank(){return rank;}
+
     public boolean getCardVisibility(){
         return visible;
     }
 
-    public void makeVisible(Card card){
+    public void makeVisible(){
         visible=true;
     }
 }
