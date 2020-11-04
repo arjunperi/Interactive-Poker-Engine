@@ -19,7 +19,7 @@ public class Dealer {
     public void exchangeCards(Player player, List<Card> exchangeCards){
         for (Card card: exchangeCards) {
             player.discard(card);
-            System.out.println(player.toString() + " gets: " + dealerDeck.peekTopCard().getCardValue());
+            System.out.println(player.toString() + " gets: " + dealerDeck.peekTopCard().getRank());
             dealCards(player,1);
         }
     }

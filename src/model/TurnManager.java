@@ -18,19 +18,31 @@ public class TurnManager {
         this.pot = pot;
     }
 
-    //concurrent modification exception makes us use all players which seems unecessary
-    public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
-        List<Player> allPlayers = pokerPlayerList.getAllPlayers();
-        for (Player currentPlayer: allPlayers){
-            System.out.println("\n" + currentPlayer.toString() + " is up");
-            if (currentPlayer.isActive()){
-                currentPlayer.performAction();
-            }
-            activePlayers = pokerPlayerList.updateActivePlayers();
-            if (activePlayers.size() == 1 ){
-                winner = activePlayers.get(0);
-                endGame();
-            }
+//    //concurrent modification exception makes us use all players which seems unecessary
+//    public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
+//        List<Player> allPlayers = pokerPlayerList.getAllPlayers();
+//        for (Player currentPlayer: allPlayers){
+//            System.out.println("\n" + currentPlayer.toString() + " is up");
+//            if (currentPlayer.isActive()){
+//                currentPlayer.performAction();
+//            }
+//            activePlayers = pokerPlayerList.updateActivePlayers();
+//            if (activePlayers.size() == 1 ){
+//                winner = activePlayers.get(0);
+//                endGame();
+//            }
+//        }
+//        currentRound ++;
+//        if (currentRound == totalRounds){
+//            showDown(activePlayers);
+//        }
+//    }
+
+
+    public void checkGameOver(List<Player> activePlayers, int totalRounds){
+        if (activePlayers.size() == 1 ){
+            winner = activePlayers.get(0);
+            endGame();
         }
         currentRound ++;
         if (currentRound == totalRounds){
@@ -54,7 +66,7 @@ public class TurnManager {
         System.out.println("Winner is: " + winner.toString() + " with a score of " +  maxScore);
         System.out.println("His winning hand was: ");
         for (Card card: winner.getHand().getCards()){
-            System.out.println(card.getCardValue());
+            System.out.println(card.getRank());
         }
         System.exit(0);
     }
@@ -68,7 +80,7 @@ public class TurnManager {
         System.out.println("Winner is: " + winner.toString() + " and he has $" + winner.getBankroll());
         System.out.println("His winning hand was: ");
         for (Card card: winner.getHand().getCards()){
-            System.out.println(card.getCardValue());
+            System.out.println(card.getRank());
         }
         System.exit(0);
     }

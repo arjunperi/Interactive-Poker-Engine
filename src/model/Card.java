@@ -14,12 +14,6 @@ public class Card {
 
     private static final String FILENAME = "CardValueMapping";
 
-
-    public Card(int value){
-        cardValue = value;
-    }
-
-
     public Card(int rank , Suit suit){
         this.suit = suit;
         this.rank = rank;
@@ -40,7 +34,6 @@ public class Card {
     }
 
 
-
     public void initializeCardNumber(){
         Properties mappings = getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));
@@ -50,17 +43,7 @@ public class Card {
         return cardSymbol;
     }
 
-
-    public int getCardValue(){
-        return cardValue;
-    }*/
-
-    public Card (Rank rank, Suit suit) {
-        this.rank = rank;
-        this.suit = suit;
-    }
-
-    public Rank getRank() {
+    public int getRank() {
         return rank;
     }
 

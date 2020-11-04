@@ -31,6 +31,4 @@ public class Deck {
         return deck.isEmpty();
     }
 
-//    public
-
 }
