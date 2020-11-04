@@ -26,7 +26,7 @@ public class Game {
 
         dealer = new Dealer(deck);
 
-        players = new PlayerList(List.of(player1, player2));
+        players = new PlayerList(new ArrayList<>(List.of(player1, player2)));
         pokerTurnManager = new TurnManager(pot);
         //we can use factory design pattern here to choose what kind of model to instantiate
 

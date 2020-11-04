@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import model.*;
 import view.*;
@@ -46,11 +47,13 @@ public class Controller {
     private Stack<Card> cardsRemoved;
     private Map<Player, FrontEndPlayer> playerMappings;
 
-    private boolean pauseGame = false;
+    private boolean gamePaused = false;
 
     private Timeline animation;
 
-    public Controller(Stage stage, Timeline animation) {
+    private int playerIndex;
+
+    public Controller(Stage stage) {
         roundNumber = 1;
         xOffset = 0;
         game = new Game();
@@ -70,25 +73,50 @@ public class Controller {
 
         this.stage = stage;
 
-        this.animation = animation;
-    }
 
+        initializeSplashMenu();
+
+    }
     public Scene setupScene() {
         return view.setupScene();
     }
 
-    public void gameStep(){
-        if (roundNumber < 5) {
-            dealerRules.dealStats(roundNumber);
+    public void initializeSplashMenu(){
+        EventHandler<ActionEvent> startEvent = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                dealingRound();
+                initializeBettingMenu();
+            }
+        };
+        view.createStartScreen(startEvent);
+    }
+
+
+
+    //TODO: maintain player that raised last
+    public void initializeBettingMenu(){
+        playerList.updateActivePlayers();
+        for (Player player : playerList.getPlayers()) {
+            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+
+            TextField betInput = new TextField();
+            Dialog betBox = view.makeOptionScreen(betInput);
+            Optional<ButtonType> betBoxResult = betBox.showAndWait();
+            if (betBoxResult.isPresent()) {
+                indicateBet(player,betInput.getText());
+            }
+            turnManager.checkOnePlayerRemains(playerList.getPlayers());
+        }
+        turnManager.checkShowDown(playerList.getPlayers(),roundNumber,5);
+        if (roundNumber < 5){
             dealingRound();
-            dealerRules.dealFlow(roundNumber);
-//            bettingRound();
-            roundNumber++;
         }
     }
 
+
     //don't like this conditional
     private void dealingRound(){
+        dealerRules.dealStats(roundNumber);
         recipient = dealerRules.getRecipient();
         if (recipient.equals("Community")){
             dealFrontEndCards(community);
@@ -102,13 +130,15 @@ public class Controller {
             deck.replaceTopCard(card);
         }
         cardsRemoved.clear();
+        dealerRules.dealFlow(roundNumber);
+        roundNumber++;
+        initializeBettingMenu();
     }
 
     private void dealFrontEndCards(GameDisplayRecipient recipient){
         numberOfCards = dealerRules.getNumberOfCards();
         for (int i=0; i<numberOfCards; i++){
             Card backendTopCard = deck.getTopCard();
-            System.out.println("backend rank:" + backendTopCard.getRank());
             FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
             cardsRemoved.add(backendTopCard);
             view.deal(topCard, recipient, xOffset);
@@ -136,38 +166,19 @@ public class Controller {
         }
     }
 
-    //TODO: Fix the issues with pausing the game to allow for user inputs, then resuming game
 
-//    private void bettingRound(){
-//        //need to pause and allow for each player to put in inputs
-//        playerList.updateActivePlayers();
-//        for (Player player : playerList.getPlayers()){
-//            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
-//            TextField betInput = new TextField();
-//            Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
-//            Optional<ButtonType> betBoxResult = betBox.showAndWait();
-//            if (betBoxResult.isPresent()) {
-//                indicateBet(player,betInput.getText());
-//            }
-//            turnManager.checkGameOver(playerList.getPlayers(),5);
-//        }
-//    }
-//
-//    public void indicateFold(Player player){
-//        player.exitHand();
-//
-//        FrontEndPlayer displayPlayer = playerMappings.get(player);
-//        displayPlayer.foldDisplay();
-//        //resume
-//    }
-//
-//    public void indicateBet(Player player, String betInput){
-//        int betAmount = Integer.parseInt(betInput);
-//        pot.addToPot(betAmount);
-//        player.updateBankroll(betAmount * -1);
-//
-//        FrontEndPlayer displayPlayer = playerMappings.get(player);
-//        displayPlayer.betDisplay(betAmount * -1);
-//        //resume
-//    }
+    public void indicateFold(Player player){
+        player.exitHand();
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.foldDisplay();
+    }
+
+    public void indicateBet(Player player, String betInput){
+        int betAmount = Integer.parseInt(betInput);
+        pot.addToPot(betAmount);
+        player.updateBankroll(betAmount * -1);
+
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.betDisplay(betAmount * -1);
+    }
 }

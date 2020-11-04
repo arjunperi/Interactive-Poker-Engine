@@ -38,6 +38,9 @@ public abstract class DealerRules {
         recipient = roundRules[1];
     }
 
+    //if we're paused, then we don't want to do dealflow
+    //we don;t w
+
     public abstract void dealFlow(int currentRound);
 
     protected abstract void dealingRound(int numberOfCards, CardRecipient recipient);

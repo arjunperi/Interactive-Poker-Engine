@@ -24,25 +24,26 @@ public class PokerRunner extends Application {
 
     @Override
     public void start(final Stage stage) {
-        initializeAnimation();
-        mainController = new Controller(stage, animation);
+//        initializeAnimation();
+//        mainController = new Controller(stage, animation);
+        mainController = new Controller(stage);
         stage.setScene(mainController.setupScene());
         stage.setTitle(TITLE);
         stage.show();
     }
 
-    private void initializeAnimation() {
-        KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> gameStep());
-//        Timeline animation = new Timeline();
-        animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-    }
-
-    private void gameStep() {
-        mainController.gameStep();
-    }
+//    private void initializeAnimation() {
+//        KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), e -> gameStep());
+////        Timeline animation = new Timeline();
+//        animation = new Timeline();
+//        animation.setCycleCount(Timeline.INDEFINITE);
+//        animation.getKeyFrames().add(frame);
+//        animation.play();
+//    }
+//
+//    private void gameStep() {
+//        mainController.gameStep();
+//    }
 
 
     public static void main (String[] args) {
