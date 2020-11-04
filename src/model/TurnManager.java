@@ -18,33 +18,14 @@ public class TurnManager {
         this.pot = pot;
     }
 
-//    //concurrent modification exception makes us use all players which seems unecessary
-//    public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
-//        List<Player> allPlayers = pokerPlayerList.getAllPlayers();
-//        for (Player currentPlayer: allPlayers){
-//            System.out.println("\n" + currentPlayer.toString() + " is up");
-//            if (currentPlayer.isActive()){
-//                currentPlayer.performAction();
-//            }
-//            activePlayers = pokerPlayerList.updateActivePlayers();
-//            if (activePlayers.size() == 1 ){
-//                winner = activePlayers.get(0);
-//                endGame();
-//            }
-//        }
-//        currentRound ++;
-//        if (currentRound == totalRounds){
-//            showDown(activePlayers);
-//        }
-//    }
-
-
-    public void checkGameOver(List<Player> activePlayers, int totalRounds){
+    public void checkOnePlayerRemains(List<Player> activePlayers){
         if (activePlayers.size() == 1 ){
             winner = activePlayers.get(0);
             endGame();
         }
-        currentRound ++;
+    }
+
+    public void checkShowDown(List<Player> activePlayers, int currentRound, int totalRounds){
         if (currentRound == totalRounds){
             showDown(activePlayers);
         }

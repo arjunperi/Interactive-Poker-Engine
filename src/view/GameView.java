@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import model.Game;
@@ -40,10 +41,15 @@ public class GameView {
         return this.scene;
     }
 
+    public void createStartScreen(EventHandler<ActionEvent> startEvent){
+        Button startButton = makeButton("Start Game", startEvent);
+        bottomGroup.getChildren().add(startButton);
+    }
+
+
     //want a way for this to specify top or bottom group based on the recipient
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xOffset) {
         card.setX(displayRecipient.getX() + xOffset);
-        System.out.println("\n" + card.getX());
         centerGroup.getChildren().add(card);
     }
 
@@ -57,18 +63,27 @@ public class GameView {
     }
 
 
-    public Dialog makeOptionScreen(TextField betInput, EventHandler<ActionEvent> foldEvent){
+//    public void makeOptionScreen(EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> betEvent){
+//        Button foldButton = makeButton("fold", foldEvent);
+//        Button betButton = makeButton("bet", betEvent);
+//        HBox options = new HBox();
+//        options.getChildren().addAll(foldButton,betButton);
+//        topGroup.getChildren().add(options);
+//    }
+
+    public Dialog makeOptionScreen(TextField betInput) {
+        bottomGroup.getChildren().clear();
+
         Dialog betBox = new TextInputDialog();
-        betInput.setId("betBox");
         GridPane grid = new GridPane();
-        betInput.setPromptText("Enter Bet Amount");
-        GridPane.setConstraints(betInput, 0, 0);
+        betInput.setPromptText("Enter a bet");
+        GridPane.setConstraints(betInput, 0,0);
         grid.getChildren().add(betInput);
         betBox.getDialogPane().setContent(grid);
 
-        Button foldButton = makeButton("fold", foldEvent);
-        grid.getChildren().add(foldButton);
-        topGroup.getChildren().add(grid);
+//        Button foldButton = makeButton("Fold", foldEvent);
+//        grid.getChildren().add(foldButton);
+//        topGroup.getChildren().add(grid);
         return betBox;
     }
 }
