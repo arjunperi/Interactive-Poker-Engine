@@ -16,7 +16,7 @@ public class DeckTest {
         deck.replaceTopCard(card1);
         deck.replaceTopCard(card2);
         deck.replaceTopCard(card3);
-        assertEquals(2, deck.getTopCard().getCardRank());
+        assertEquals(2, deck.getTopCard().getRank());
         assertEquals(Suit.DIAMONDS, deck.getTopCard().getCardSuit());
         assertEquals("J", deck.getTopCard().getCardSymbol());
     }

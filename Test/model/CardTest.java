@@ -10,7 +10,7 @@ public class CardTest {
     @Test
     void testCardValue() {
         Card card = new Card(2, Suit.CLUBS);
-        assertEquals(2, card.getCardRank());
+        assertEquals(2, card.getRank());
     }
 
     @Test

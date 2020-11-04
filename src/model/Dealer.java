@@ -10,6 +10,7 @@ public class Dealer {
     }
 
     public void dealCards(CardRecipient recipient, int numberToDeal){
+        recipient.clearNewCards();
         for (int i=0; i< numberToDeal; i++){
             Card cardDealt = dealerDeck.getTopCard();
             recipient.receiveCard(cardDealt);
