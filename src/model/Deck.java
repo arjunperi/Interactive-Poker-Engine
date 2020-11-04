@@ -7,6 +7,10 @@ import java.util.Stack;
 public class Deck {
     private Stack<Card> deck;
 
+
+    public Deck(){
+        deck = new Stack<>();
+    }
     public Deck(List<Card> cardsList) {
         deck = new Stack();
         for (Card card : cardsList) {
