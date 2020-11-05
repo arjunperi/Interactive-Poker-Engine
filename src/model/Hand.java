@@ -31,7 +31,7 @@ public class Hand {
 
     public int getHandTotal(){
         for (Card card: hand){
-            handTotal += card.getCardValue();
+            handTotal += card.getRank();
         }
         return handTotal;
     }

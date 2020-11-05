@@ -5,7 +5,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import model.Game;
@@ -39,30 +44,20 @@ public class GameView {
         return this.scene;
     }
 
+    public void createStartScreen(EventHandler<ActionEvent> startEvent){
+        Button startButton = makeButton("Start Game", startEvent);
+        bottomGroup.getChildren().add(startButton);
+    }
+
+
     //want a way for this to specify top or bottom group based on the recipient
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xOffset) {
         card.setX(displayRecipient.getX() + xOffset);
-        System.out.println("\n" + card.getX());
         centerGroup.getChildren().add(card);
     }
 
-    public void promptAction(EventHandler<ActionEvent> foldEvent,EventHandler<ActionEvent> betEvent){
-        Button foldButton = makeButton("Fold", foldEvent);
-        Button betButton = makeButton("Bet", betEvent);
 
-
-
-        //say the player chooses bet
-            //player's displayed total decreases by bet amount
-            //pot total increases by bet amount
-            //next player goes, knowing what that bet amount is
-
-        //say a player folds
-            //Display some sort of folded indicator
-            //know that that player has been removed from the game
-    }
-
-    private Button makeButton(String property, EventHandler<ActionEvent> handler) {
+    public Button makeButton(String property, EventHandler<ActionEvent> handler) {
         Button result = new Button();
         result.setId(property);
         result.setText(property);
@@ -73,5 +68,19 @@ public class GameView {
 
 
 
+    public Dialog makeOptionScreen(TextField betInput) {
+        bottomGroup.getChildren().clear();
 
+        Dialog betBox = new TextInputDialog();
+        GridPane grid = new GridPane();
+        betInput.setPromptText("Enter a bet");
+        GridPane.setConstraints(betInput, 0,0);
+        grid.getChildren().add(betInput);
+        betBox.getDialogPane().setContent(grid);
+
+//        Button foldButton = makeButton("Fold", foldEvent);
+//        grid.getChildren().add(foldButton);
+//        topGroup.getChildren().add(grid);
+        return betBox;
+    }
 }

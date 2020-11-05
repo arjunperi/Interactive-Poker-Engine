@@ -4,16 +4,15 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.*;
-import view.FrontEndCard;
-import view.FrontEndPlayer;
-import view.GameDisplayRecipient;
-import view.GameView;
+import view.*;
 
 
 
-import java.awt.desktop.ScreenSleepEvent;
 import java.util.*;
 
 public class Controller {
@@ -25,14 +24,16 @@ public class Controller {
     private ResourceBundle projectTextResources;
 
     private Game game;
-    private DealerRules dealerRules;
+    private Model model;
     private TurnManager turnManager;
     private Deck deck;
     private PlayerList playerList;
     private List<GameDisplayRecipient> frontEndPlayers;
     private CommunityCards communityCards;
 
-    private GameDisplayRecipient community;
+    private GameDisplayRecipient displayCommunity;
+    private Pot pot;
+
 
 
     private GameView view;
@@ -46,20 +47,21 @@ public class Controller {
 
 
     private Stack<Card> cardsRemoved;
-
     private Map<Player, FrontEndPlayer> playerMappings;
-    //when we have a back end player
 
     public Controller(Stage stage) {
         roundNumber = 1;
         xOffset = 0;
         game = new Game();
-        dealerRules = game.getDealerRules();
+        model = game.getDealerRules();
         turnManager = game.getTurnManager();
         deck = game.getDeck();
         playerList = game.getPlayers();
         frontEndPlayers = new ArrayList<>();
         communityCards = game.getCommunityCards();
+
+        pot = game.getPot();
+        turnManager = game.getTurnManager();
 
         cardsRemoved = new Stack<>();
         view = new GameView();
@@ -68,47 +70,68 @@ public class Controller {
         initializeCommunity();
 
         this.stage = stage;
-    }
 
+        initializeSplashMenu();
+
+    }
     public Scene setupScene() {
         return view.setupScene();
     }
 
-    public void gameStep(){
-        if (roundNumber < 5) {
-            dealerRules.dealStats(roundNumber);
+    public void initializeSplashMenu(){
+        EventHandler<ActionEvent> startEvent = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                model.dealFlow(roundNumber);
+                dealingRound();
+            }
+        };
+        view.createStartScreen(startEvent);
+    }
+
+    //TODO: maintain player that raised last
+    public void initializeBettingMenu(){
+        playerList.updateActivePlayers();
+        for (Player player : playerList.getActivePlayers()) {
+            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+
+            TextField betInput = new TextField();
+            Dialog betBox = view.makeOptionScreen(betInput);
+            Optional<ButtonType> betBoxResult = betBox.showAndWait();
+            if (betBoxResult.isPresent()) {
+                indicateBet(player,betInput.getText());
+            }
+            turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
+        }
+        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,5);
+        if (roundNumber < 5){
+            model.dealFlow(roundNumber);
             dealingRound();
-            dealerRules.dealFlow(roundNumber);
-            roundNumber++;
         }
     }
 
 
     //don't like this conditional
     private void dealingRound(){
-        recipient = dealerRules.getRecipient();
+        recipient = model.getRecipient();
         if (recipient.equals("Community")){
-            dealFrontEndCards(community);
+            dealFrontEndCards(communityCards, displayCommunity);
         }
         else {
-            for (GameDisplayRecipient player : frontEndPlayers){
-                dealFrontEndCards(player);
+            playerList.updateActivePlayers();
+            for (Player player : playerList.getActivePlayers()){
+                dealFrontEndCards(player,playerMappings.get(player));
             }
         }
-        for (Card card: cardsRemoved){
-            deck.replaceTopCard(card);
-        }
+        roundNumber++;
+        initializeBettingMenu();
     }
 
-    private void dealFrontEndCards(GameDisplayRecipient recipient){
-        numberOfCards = dealerRules.getNumberOfCards();
 
-        for (int i=0; i<numberOfCards; i++){
-            Card backendTopCard = deck.getTopCard();
-            FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
-            cardsRemoved.add(backendTopCard);
-
-            view.deal(topCard, recipient, xOffset);
+    private void dealFrontEndCards(CardRecipient recipient, GameDisplayRecipient displayRecipient){
+        numberOfCards = model.getNumberOfCards();
+        for (Card newCard: recipient.getNewCards()){
+            FrontEndCard displayCard = getFrontEndTopCard(newCard);
+            view.deal(displayCard, displayRecipient, xOffset);
             xOffset += 70;
         }
     }
@@ -121,81 +144,31 @@ public class Controller {
 
 
     private void initializeCommunity(){
-        community = new GameDisplayRecipient(50,50);
+        displayCommunity = new FrontEndCommunity(50,50);
     }
 
-
-
-//    //might be able to combine these two into one method
-//    //should these be in View or Controller?
-//    private void initializeFrontEndPlayers(){
-//        int playerOffset = 0;
-//        for (Player currentPlayer: playerList.getAllPlayers()){
-//            System.out.println(currentPlayer.toString());
-//            GameDisplayRecipient player = new GameDisplayRecipient(playerOffset,playerOffset);
-//            System.out.println(playerOffset);
-//            frontEndPlayers.add(player);
-//            playerOffset += 20;
-//        }
-//    }
 
     private void initializeFrontEndPlayers(){
-        for (Player currentPlayer: playerList.getAllPlayers()){
-            FrontEndPlayer newPlayer = new FrontEndPlayer(currentPlayer.toString(), currentPlayer.getBankroll());
-
+        int offset = 20;
+        for (Player currentPlayer: playerList.getActivePlayers()){
+            FrontEndPlayer newPlayer = new FrontEndPlayer(offset, offset, currentPlayer.toString(), currentPlayer.getBankroll());
+            playerMappings.put(currentPlayer, newPlayer);
+            frontEndPlayers.add(newPlayer);
         }
     }
-
-    private void bettingRound(){
-
-        //just dealt the cards
-        //prop
-
-        for (Player player : playerList.updateActivePlayers()){
-            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
-            EventHandler<ActionEvent> betEvent = e -> indicateBet(player);
-            view.promptAction(foldEvent, betEvent);
-        }
-
-
-       //for each player in the front end player list
-            //pop up an option box allowing them to either bet raise call check fold (if valid)
-            //send this information back to the backend
-            //the backend updates the pot, player totals, and decides who's turn it is
-                    //or if the round is over
-                    //or if it is showdown time
-                    //or if the game is over?
-    }
-
-//
-//    public void startBettingRound(PlayerList pokerPlayerList, int totalRounds){
-//        List<Player> allPlayers = pokerPlayerList.getAllPlayers();
-//        for (Player currentPlayer: allPlayers){
-//            System.out.println("\n" + currentPlayer.toString() + " is up");
-//            if (currentPlayer.isActive()){
-//                currentPlayer.performAction();
-//            }
-//            activePlayers = pokerPlayerList.updateActivePlayers();
-//            if (activePlayers.size() == 1 ){
-//                winner = activePlayers.get(0);
-//                endGame();
-//            }
-//        }
-//        currentRound ++;
-//        if (currentRound == totalRounds){
-//            showDown(activePlayers);
-//        }
-//    }
 
     public void indicateFold(Player player){
-        //tell back end player to exit hand
         player.exitHand();
-        //go into mapping, tell front end player to do display stuff
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.foldDisplay();
     }
 
-    public void indicateBet(Player player){
-        //
+    public void indicateBet(Player player, String betInput){
+        int betAmount = Integer.parseInt(betInput);
+        pot.addToPot(betAmount);
+        player.updateBankroll(betAmount * -1);
+
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.betDisplay(betAmount * -1);
     }
-
-
 }

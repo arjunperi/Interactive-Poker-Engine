@@ -1,29 +1,24 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //This class is kinda busted
 public class PlayerList {
-    private List<Player> allPlayers;
     private List<Player> activePlayers;
 
     public PlayerList(List<Player> players){
-        allPlayers = players;
-        activePlayers = new ArrayList<>();
+        this.activePlayers = players;
     }
 
-    public List<Player> getAllPlayers(){
-        return allPlayers;
+    public void updateActivePlayers(){
+        List<Player> filtered = activePlayers.stream()
+                .filter(b -> !b.isActive())
+                .collect(Collectors.toList());
+        activePlayers.removeAll(filtered);
     }
 
-    public List<Player> updateActivePlayers(){
-        activePlayers.clear();
-        for (Player player : allPlayers){
-            if (player.isActive()){
-                activePlayers.add(player);
-            }
-        }
+    public List<Player> getActivePlayers(){
         return activePlayers;
     }
 }

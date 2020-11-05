@@ -14,5 +14,10 @@ public class Pot {
 
     public void dispersePot(Player player){
         player.updateBankroll(potTotal);
+        potTotal = 0;
+    }
+
+    public int getPotTotal(){
+        return potTotal;
     }
 }

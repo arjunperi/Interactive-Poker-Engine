@@ -1,21 +1,33 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Deck {
     private Stack<Card> deck;
 
-    public Deck(List<Card> cardsList) {
+
+    public Deck() {
         deck = new Stack();
-        for (Card card : cardsList) {
-            deck.add(card);
-        }
+        createDeck();
     }
 
     public Card getTopCard() {
         return deck.pop();
+    }
+
+    public void createDeck(){
+        List<Card> cardsList = new ArrayList<>();
+        for (Suit suit : Suit.values()){
+            for (int r = 2; r<15; r++){
+                Card card = new Card(r,suit);
+                cardsList.add(card);
+            }
+        }
+        for (Card card : cardsList) {
+            deck.add(card);
+        }
     }
 
     public void replaceTopCard(Card card){
@@ -30,7 +42,5 @@ public class Deck {
     public boolean isEmpty(){
         return deck.isEmpty();
     }
-
-//    public
 
 }

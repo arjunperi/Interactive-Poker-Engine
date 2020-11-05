@@ -19,7 +19,7 @@ public class Exchange {
 
             System.out.println(player.toString() + "'s current hand is: ");
             for (Card card: player.getHand().getCards()){
-                System.out.println(card.getCardValue());
+                System.out.println(card.getRank());
             }
             cardsToExchange = new ArrayList<>();
             System.out.println(player.toString() + " will exchange " +  exchangeAmount + " cards");
@@ -30,7 +30,7 @@ public class Exchange {
 
                 //just exchange in order for now
                 Card exchangeCard = playerHand.getCards().get(i);
-                System.out.println(exchangeCard.getCardValue());
+                System.out.println(exchangeCard.getRank());
                 cardsToExchange.add(exchangeCard);
             }
         }

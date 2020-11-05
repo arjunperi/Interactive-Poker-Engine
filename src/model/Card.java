@@ -10,15 +10,10 @@ public class Card {
     private int rank;
     private boolean visible;
     private Map<Integer,String> cardValueMap;
+    private int cardValue;
 
 
     private static final String FILENAME = "CardValueMapping";
-
-
-    public Card(int value){
-        cardValue = value;
-    }
-
 
     public Card(int rank , Suit suit){
         this.suit = suit;
@@ -40,7 +35,6 @@ public class Card {
     }
 
 
-
     public void initializeCardNumber(){
         Properties mappings = getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));
@@ -51,22 +45,6 @@ public class Card {
     }
 
 
-    public int getCardValue(){
-        return cardValue;
-    }*/
-
-    public Card (Rank rank, Suit suit) {
-        this.rank = rank;
-        this.suit = suit;
-    }
-
-    public Rank getRank() {
-        return rank;
-    }
-
-    public Suit getSuit() {
-        return suit;
-    }
 
     @Override
     public String toString() {
@@ -90,11 +68,13 @@ public class Card {
         return suit;
     }
 
+    public int getRank(){return rank;}
+
     public boolean getCardVisibility(){
         return visible;
     }
 
-    public void makeVisible(Card card){
+    public void makeVisible(){
         visible=true;
     }
 }
