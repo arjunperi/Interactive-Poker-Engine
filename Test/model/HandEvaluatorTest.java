@@ -2,6 +2,7 @@ package model;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HandEvaluatorTest {
@@ -389,5 +390,22 @@ public class HandEvaluatorTest {
         assertTrue(false==evaluator.isPair(hand1));
     }
 
-
+    @Test
+    void testHandStrength() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card1 = new Card(8,Suit.CLUBS);
+        Card card2 = new Card(9,Suit.CLUBS);
+        Card card3 = new Card(3,Suit.CLUBS);
+        Card card4 = new Card(4,Suit.CLUBS);
+        Card card5 = new Card(10,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        int [] ret = evaluator.handStrength(hand1);
+        assertEquals(5, ret[0]);
+    }
 }

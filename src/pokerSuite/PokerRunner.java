@@ -1,13 +1,15 @@
 package pokerSuite;
 
 import controller.Controller;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+import model.Card;
+import model.Hand;
+import model.HandEvaluator;
+import model.Suit;
 
 public class PokerRunner extends Application {
 
@@ -48,5 +50,22 @@ public class PokerRunner extends Application {
 
     public static void main (String[] args) {
         launch(args);
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card1 = new Card(14, Suit.CLUBS);
+        Card card2 = new Card(2,Suit.CLUBS);
+        Card card3 = new Card(3,Suit.CLUBS);
+        Card card4 = new Card(4,Suit.CLUBS);
+        Card card5 = new Card(5,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        int[] ret = evaluator.handStrength(hand1);
+        for(int num : ret){
+            System.out.print(num + " ");
+        }
     }
 }
