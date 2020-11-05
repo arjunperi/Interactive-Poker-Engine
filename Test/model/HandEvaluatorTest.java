@@ -109,4 +109,285 @@ public class HandEvaluatorTest {
         assertTrue(true==evaluator.isStraightFlush(hand3));
     }
 
+    @Test
+    void testIsFourOfAKind(){
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card7 = new Card(14,Suit.CLUBS);
+        Card card8 = new Card(14,Suit.DIAMONDS);
+        Card card9 = new Card(14,Suit.SPADES);
+        Card card10 = new Card(14,Suit.HEARTS);
+        Card card11 = new Card(10,Suit.CLUBS);
+        Hand hand3 = new Hand();
+        hand3.add(card7);
+        hand3.add(card8);
+        hand3.add(card9);
+        hand3.add(card10);
+        hand3.add(card11);
+        hand3 = hand3.sortHand();
+        assertTrue(true==evaluator.isFourOfAKind(hand3));
+
+        Card card1 = new Card(14,Suit.CLUBS);
+        Card card2 = new Card(10,Suit.DIAMONDS);
+        Card card3 = new Card(10,Suit.SPADES);
+        Card card4 = new Card(10,Suit.HEARTS);
+        Card card5 = new Card(10,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(true==evaluator.isFourOfAKind(hand1));
+
+
+        card1 = new Card(8,Suit.CLUBS);
+         card2 = new Card(9,Suit.CLUBS);
+         card3 = new Card(2,Suit.CLUBS);
+         card4 = new Card(4,Suit.CLUBS);
+         card5 = new Card(10,Suit.CLUBS);
+        hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isFourOfAKind(hand1));
+    }
+
+    @Test
+    void testIsFullHouse() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card7 = new Card(14, Suit.CLUBS);
+        Card card8 = new Card(14, Suit.DIAMONDS);
+        Card card9 = new Card(14, Suit.SPADES);
+        Card card10 = new Card(10, Suit.HEARTS);
+        Card card11 = new Card(10, Suit.CLUBS);
+        Hand hand3 = new Hand();
+        hand3.add(card7);
+        hand3.add(card8);
+        hand3.add(card9);
+        hand3.add(card10);
+        hand3.add(card11);
+        hand3 = hand3.sortHand();
+        assertTrue(true == evaluator.isFullHouse(hand3));
+
+        Card card1 = new Card(14,Suit.CLUBS);
+        Card card2 = new Card(14,Suit.DIAMONDS);
+        Card card3 = new Card(10,Suit.SPADES);
+        Card card4 = new Card(10,Suit.HEARTS);
+        Card card5 = new Card(10,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(true==evaluator.isFullHouse(hand1));
+
+        card1 = new Card(8,Suit.CLUBS);
+        card2 = new Card(9,Suit.CLUBS);
+        card3 = new Card(2,Suit.CLUBS);
+        card4 = new Card(4,Suit.CLUBS);
+        card5 = new Card(10,Suit.CLUBS);
+        hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isFullHouse(hand1));
+    }
+
+
+    @Test
+    void testIsThreeOfAKind() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card7 = new Card(14, Suit.CLUBS);
+        Card card8 = new Card(14, Suit.DIAMONDS);
+        Card card9 = new Card(14, Suit.SPADES);
+        Card card10 = new Card(10, Suit.HEARTS);
+        Card card11 = new Card(9, Suit.CLUBS);
+        Hand hand3 = new Hand();
+        hand3.add(card7);
+        hand3.add(card8);
+        hand3.add(card9);
+        hand3.add(card10);
+        hand3.add(card11);
+        hand3 = hand3.sortHand();
+        assertTrue(true == evaluator.isThreeOfAKind(hand3));
+
+        Card card1 = new Card(14,Suit.CLUBS);
+        Card card2 = new Card(12,Suit.DIAMONDS);
+        Card card3 = new Card(10,Suit.SPADES);
+        Card card4 = new Card(10,Suit.HEARTS);
+        Card card5 = new Card(10,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(true==evaluator.isThreeOfAKind(hand1));
+
+        card1 = new Card(8,Suit.CLUBS);
+        card2 = new Card(9,Suit.CLUBS);
+        card3 = new Card(2,Suit.CLUBS);
+        card4 = new Card(4,Suit.CLUBS);
+        card5 = new Card(10,Suit.CLUBS);
+        hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isThreeOfAKind(hand1));
+    }
+
+
+
+    @Test
+    void testIsTwoPair() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card7 = new Card(14, Suit.CLUBS);
+        Card card8 = new Card(14, Suit.DIAMONDS);
+        Card card9 = new Card(1, Suit.SPADES);
+        Card card10 = new Card(10, Suit.HEARTS);
+        Card card11 = new Card(10, Suit.CLUBS);
+        Hand hand3 = new Hand();
+        hand3.add(card7);
+        hand3.add(card8);
+        hand3.add(card9);
+        hand3.add(card10);
+        hand3.add(card11);
+        hand3 = hand3.sortHand();
+        assertTrue(true == evaluator.isTwoPair(hand3));
+
+        Card card1 = new Card(14,Suit.CLUBS);
+        Card card2 = new Card(14,Suit.DIAMONDS);
+        Card card3 = new Card(10,Suit.SPADES);
+        Card card4 = new Card(10,Suit.HEARTS);
+        Card card5 = new Card(3,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(true==evaluator.isTwoPair(hand1));
+
+        card1 = new Card(8,Suit.CLUBS);
+        card2 = new Card(9,Suit.CLUBS);
+        card3 = new Card(2,Suit.CLUBS);
+        card4 = new Card(4,Suit.CLUBS);
+        card5 = new Card(10,Suit.CLUBS);
+        hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isTwoPair(hand1));
+    }
+
+    @Test
+    void testIsPair() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card7 = new Card(14, Suit.CLUBS);
+        Card card8 = new Card(14, Suit.DIAMONDS);
+        Card card9 = new Card(1, Suit.SPADES);
+        Card card10 = new Card(10, Suit.HEARTS);
+        Card card11 = new Card(9, Suit.CLUBS);
+        Hand hand3 = new Hand();
+        hand3.add(card7);
+        hand3.add(card8);
+        hand3.add(card9);
+        hand3.add(card10);
+        hand3.add(card11);
+        hand3 = hand3.sortHand();
+        assertTrue(true == evaluator.isPair(hand3));
+
+        Card card1 = new Card(14,Suit.CLUBS);
+        Card card2 = new Card(12,Suit.DIAMONDS);
+        Card card3 = new Card(10,Suit.SPADES);
+        Card card4 = new Card(10,Suit.HEARTS);
+        Card card5 = new Card(1,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(true==evaluator.isPair(hand1));
+
+        card1 = new Card(8,Suit.CLUBS);
+        card2 = new Card(9,Suit.CLUBS);
+        card3 = new Card(2,Suit.CLUBS);
+        card4 = new Card(4,Suit.CLUBS);
+        card5 = new Card(10,Suit.HEARTS);
+        hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isPair(hand1));
+    }
+
+    @Test
+    void testIsHighCard() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card7 = new Card(14, Suit.CLUBS);
+        Card card8 = new Card(12, Suit.DIAMONDS);
+        Card card9 = new Card(4, Suit.SPADES);
+        Card card10 = new Card(10, Suit.HEARTS);
+        Card card11 = new Card(1, Suit.CLUBS);
+        Hand hand3 = new Hand();
+        hand3.add(card7);
+        hand3.add(card8);
+        hand3.add(card9);
+        hand3.add(card10);
+        hand3.add(card11);
+        hand3 = hand3.sortHand();
+        assertTrue(true == evaluator.isHighCard(hand3));
+
+        Card card1 = new Card(14,Suit.CLUBS);
+        Card card2 = new Card(12,Suit.DIAMONDS);
+        Card card3 = new Card(10,Suit.SPADES);
+        Card card4 = new Card(4,Suit.HEARTS);
+        Card card5 = new Card(5,Suit.CLUBS);
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(true==evaluator.isHighCard(hand1));
+
+        card1 = new Card(8,Suit.CLUBS);
+        card2 = new Card(9,Suit.CLUBS);
+        card3 = new Card(2,Suit.CLUBS);
+        card4 = new Card(4,Suit.CLUBS);
+        card5 = new Card(10,Suit.CLUBS);
+        hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isPair(hand1));
+    }
+
+
 }

@@ -82,4 +82,14 @@ public class Hand {
         }
         return sortedHand;
     }
+
+    public Hand copyHand() {
+        Hand copyHand = new Hand();
+        for(Card card: this.getCards()){
+            copyHand.add(card);
+        }
+        copyHand = copyHand.sortHand();
+        return copyHand;
+    }
+
 }
