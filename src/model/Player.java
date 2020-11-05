@@ -3,17 +3,17 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player implements CardRecipient, CardDiscarder {
+public class Player extends CardRecipient{
     private String playerName;
     private int moneyCount;
     private boolean hasFolded;
     private Hand playerHand;
-    private WagerAction playerAction;
     private Pot pot;
     private Exchange cardExchange;
 
 
     public Player(String name, int startingAmount, Pot pot){
+        super();
         playerName = name;
         moneyCount = startingAmount;
         playerHand = new Hand();
@@ -41,30 +41,15 @@ public class Player implements CardRecipient, CardDiscarder {
         }
     }
 
-//    public void performAction(){
-//        int randomAction = (int) ((Math.random() * (5 - 1)) + 1);
-//        if (randomAction == 1){
-//            playerAction = new Fold(this);
-//        }
-//        else{
-//            playerAction =  new Bet(this, pot);
-//        }
-//    }
-
-    @Override
-    public void receiveCard(Card card){
-        playerHand.add(card);
-    }
-
-    //once we configure the cards and the deck, we need to make it so that a discarded card ends up back in the deck which is then shuffled
-    @Override
     public void discard(Card card) {
         playerHand.getCards().remove(card);
     }
 
+
     public Hand getHand(){
         return playerHand;
     }
+
 
     public void updateBankroll(int amount){
         moneyCount += amount;
@@ -82,4 +67,10 @@ public class Player implements CardRecipient, CardDiscarder {
         return playerName;
     }
 
+
+    @Override
+    void receiveCard(Card card) {
+        playerHand.add(card);
+        addNewCards(card);
+    }
 }

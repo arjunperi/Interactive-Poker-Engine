@@ -1,7 +1,29 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface CardRecipient {
-    public void receiveCard(Card card);
+public abstract class CardRecipient {
+    protected List<Card> cardsList;
+    protected List<Card> newCardList;
+
+    public CardRecipient(){
+        cardsList = new ArrayList<>();
+        newCardList = new ArrayList<>();
+    }
+
+    abstract void receiveCard(Card card);
+
+    protected void clearNewCards() {
+        newCardList.clear();
+    }
+
+    protected void addNewCards(Card card) {
+        newCardList.add(card);
+    }
+
+    public List<Card> getNewCards(){
+        return newCardList;
+    }
+
 }

@@ -23,7 +23,7 @@ public class Card {
     }
 
 
-    public Properties getPropertyFile(String fileName) {
+    private Properties getPropertyFile(String fileName) {
         Properties propertyFile = new Properties();
         try {
             propertyFile
@@ -35,7 +35,7 @@ public class Card {
     }
 
 
-    public void initializeCardNumber(){
+    private void initializeCardNumber(){
         Properties mappings = getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));
     }
@@ -43,24 +43,6 @@ public class Card {
     public String getCardSymbol(){
         return cardSymbol;
     }
-
-
-    public int getCardValue(){
-        return cardValue;
-    }
-
-    /*public Card (Rank rank, Suit suit) {
-        this.rank = rank;
-        this.suit = suit;
-    }
-
-    public Rank getRank() {
-        return rank;
-    }
-
-    public Suit getSuit() {
-        return suit;
-    }*/
 
     @Override
     public String toString() {
@@ -84,7 +66,7 @@ public class Card {
         return suit;
     }
 
-    public int getCardRank(){return rank;}
+    public int getRank(){return rank;}
 
     public boolean getCardVisibility(){
         return visible;

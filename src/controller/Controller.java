@@ -1,7 +1,6 @@
 package controller;
 
 
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,7 +12,6 @@ import model.*;
 import view.*;
 
 
-import java.awt.desktop.ScreenSleepEvent;
 import java.util.*;
 
 public class Controller {
@@ -25,13 +23,13 @@ public class Controller {
     private ResourceBundle projectTextResources;
 
     private Game game;
-    private DealerRules dealerRules;
+    private Model model;
     private TurnManager turnManager;
     private Deck deck;
     private PlayerList playerList;
     private List<GameDisplayRecipient> frontEndPlayers;
     private CommunityCards communityCards;
-    private GameDisplayRecipient community;
+    private GameDisplayRecipient displayCommunity;
     private Pot pot;
 
     private GameView view;
@@ -46,15 +44,11 @@ public class Controller {
     private Stack<Card> cardsRemoved;
     private Map<Player, FrontEndPlayer> playerMappings;
 
-    private boolean pauseGame = false;
-
-    private Timeline animation;
-
-    public Controller(Stage stage, Timeline animation) {
+    public Controller(Stage stage) {
         roundNumber = 1;
         xOffset = 0;
         game = new Game();
-        dealerRules = game.getDealerRules();
+        model = game.getModel();
         turnManager = game.getTurnManager();
         deck = game.getDeck();
         playerList = game.getPlayers();
@@ -70,48 +64,65 @@ public class Controller {
 
         this.stage = stage;
 
-        this.animation = animation;
-    }
+        initializeSplashMenu();
 
+    }
     public Scene setupScene() {
         return view.setupScene();
     }
 
-    public void gameStep(){
-        if (roundNumber < 5) {
-            dealerRules.dealStats(roundNumber);
+    public void initializeSplashMenu(){
+        EventHandler<ActionEvent> startEvent = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                model.dealFlow(roundNumber);
+                dealingRound();
+            }
+        };
+        view.createStartScreen(startEvent);
+    }
+
+    //TODO: maintain player that raised last
+    private void initializeBettingMenu(){
+        playerList.updateActivePlayers();
+        for (Player player : playerList.getActivePlayers()) {
+            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+
+            TextField betInput = new TextField();
+            Dialog betBox = view.makeOptionScreen(betInput);
+            Optional<ButtonType> betBoxResult = betBox.showAndWait();
+            if (betBoxResult.isPresent()) {
+                indicateBet(player,betInput.getText());
+            }
+            turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
+        }
+        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,5);
+        if (roundNumber < 5){
+            model.dealFlow(roundNumber);
             dealingRound();
-            dealerRules.dealFlow(roundNumber);
-//            bettingRound();
-            roundNumber++;
         }
     }
 
     //don't like this conditional
     private void dealingRound(){
-        recipient = dealerRules.getRecipient();
+        recipient = model.getRecipient();
         if (recipient.equals("Community")){
-            dealFrontEndCards(community);
+            dealFrontEndCards(communityCards, displayCommunity);
         }
         else {
-            for (GameDisplayRecipient player : frontEndPlayers){
-                dealFrontEndCards(player);
+            playerList.updateActivePlayers();
+            for (Player player : playerList.getActivePlayers()){
+                dealFrontEndCards(player,playerMappings.get(player));
             }
         }
-        for (Card card: cardsRemoved){
-            deck.replaceTopCard(card);
-        }
-        cardsRemoved.clear();
+        roundNumber++;
+        initializeBettingMenu();
     }
 
-    private void dealFrontEndCards(GameDisplayRecipient recipient){
-        numberOfCards = dealerRules.getNumberOfCards();
-        for (int i=0; i<numberOfCards; i++){
-            Card backendTopCard = deck.getTopCard();
-            System.out.println("backend rank:" + backendTopCard.getRank());
-            FrontEndCard topCard = getFrontEndTopCard(backendTopCard);
-            cardsRemoved.add(backendTopCard);
-            view.deal(topCard, recipient, xOffset);
+    private void dealFrontEndCards(CardRecipient recipient, GameDisplayRecipient displayRecipient){
+        numberOfCards = model.getNumberOfCards();
+        for (Card newCard: recipient.getNewCards()){
+            FrontEndCard displayCard = getFrontEndTopCard(newCard);
+            view.deal(displayCard, displayRecipient, xOffset);
             xOffset += 70;
         }
     }
@@ -123,51 +134,32 @@ public class Controller {
     }
 
     private void initializeCommunity(){
-        community = new FrontEndCommunity(50,50);
+        displayCommunity = new FrontEndCommunity(50,50);
     }
 
 
     private void initializeFrontEndPlayers(){
         int offset = 20;
-        for (Player currentPlayer: playerList.getPlayers()){
+        for (Player currentPlayer: playerList.getActivePlayers()){
             FrontEndPlayer newPlayer = new FrontEndPlayer(offset, offset, currentPlayer.toString(), currentPlayer.getBankroll());
             playerMappings.put(currentPlayer, newPlayer);
             frontEndPlayers.add(newPlayer);
         }
     }
 
-    //TODO: Fix the issues with pausing the game to allow for user inputs, then resuming game
+    private void indicateFold(Player player){
+        player.exitHand();
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.foldDisplay();
+    }
 
-//    private void bettingRound(){
-//        //need to pause and allow for each player to put in inputs
-//        playerList.updateActivePlayers();
-//        for (Player player : playerList.getPlayers()){
-//            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
-//            TextField betInput = new TextField();
-//            Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
-//            Optional<ButtonType> betBoxResult = betBox.showAndWait();
-//            if (betBoxResult.isPresent()) {
-//                indicateBet(player,betInput.getText());
-//            }
-//            turnManager.checkGameOver(playerList.getPlayers(),5);
-//        }
-//    }
-//
-//    public void indicateFold(Player player){
-//        player.exitHand();
-//
-//        FrontEndPlayer displayPlayer = playerMappings.get(player);
-//        displayPlayer.foldDisplay();
-//        //resume
-//    }
-//
-//    public void indicateBet(Player player, String betInput){
-//        int betAmount = Integer.parseInt(betInput);
-//        pot.addToPot(betAmount);
-//        player.updateBankroll(betAmount * -1);
-//
-//        FrontEndPlayer displayPlayer = playerMappings.get(player);
-//        displayPlayer.betDisplay(betAmount * -1);
-//        //resume
-//    }
+    private void indicateBet(Player player, String betInput){
+        int betAmount = Integer.parseInt(betInput);
+        pot.addToPot(betAmount);
+        player.updateBankroll(betAmount * -1);
+
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.betDisplay(betAmount * -1);
+    }
 }
+
