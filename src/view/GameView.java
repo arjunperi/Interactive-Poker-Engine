@@ -42,7 +42,7 @@ public class GameView {
     }
 
     public void createStartScreen(EventHandler<ActionEvent> startEvent){
-        Button startButton = makeButton("Start Game", startEvent);
+        Button startButton = makeButton("Start", startEvent);
         bottomGroup.getChildren().add(startButton);
     }
 
@@ -71,6 +71,7 @@ public class GameView {
         Dialog betBox = new TextInputDialog();
         GridPane grid = new GridPane();
         betInput.setPromptText("Enter a bet");
+        betInput.setId("Bet");
         GridPane.setConstraints(betInput, 0,0);
         grid.getChildren().add(betInput);
         betBox.getDialogPane().setContent(grid);

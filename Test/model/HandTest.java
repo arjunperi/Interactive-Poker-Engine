@@ -17,6 +17,5 @@ public class HandTest {
         hand.add(card2);
         hand.add(card3);
         assertEquals(3, hand.getCards().size());
-
     }
 }

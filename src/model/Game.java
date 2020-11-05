@@ -34,7 +34,7 @@ public class Game {
     }
 
 
-    public Model getDealerRules() {
+    public Model getModel() {
         return holdemModel;
     }
 
