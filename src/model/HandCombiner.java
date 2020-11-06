@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class HandCombiner {
 
 
-        public static ArrayList<Hand> combinationUtil(Hand hand, Card data[], int start,
+        public ArrayList<Hand> combinationUtil(Hand hand, Card data[], int start,
                                                       int end, int index)
         {
             // Current combination is ready to be printed, print it
@@ -22,7 +22,16 @@ public class HandCombiner {
                     System.out.print(data[j].getRank()+" ");
                 }
                 allHands.add(tempHand);
-                System.out.println("");
+                System.out.println("c");
+
+                for (Hand hand1 : allHands) {
+                    for (Card card : hand1.getCards()) {
+
+                        System.out.print(card.getRank() + " ");
+                    }
+                    System.out.println("x");
+                }
+                System.out.println("W");
                 return allHands;
             }
 
@@ -48,7 +57,7 @@ public class HandCombiner {
 
         // The main function that prints all combinations of size r
         // in arr[] of size n. This function mainly uses combinationUtil()
-        public static void printCombination(Hand hand, int n)
+        public  void printCombination(Hand hand, int n)
         {
             int r = 5;
             // A temporary array to store all combination one by one
@@ -81,7 +90,6 @@ public class HandCombiner {
             hand = hand.sortHand();
 
             int n = hand.getHandSize();
-            printCombination(hand, n);
 
 
 
