@@ -53,7 +53,7 @@ public class Controller {
         roundNumber = 1;
         xOffset = 0;
         game = new Game();
-        model = game.getDealerRules();
+        model = game.getModel();
         turnManager = game.getTurnManager();
         deck = game.getDeck();
         playerList = game.getPlayers();
@@ -89,7 +89,7 @@ public class Controller {
     }
 
     //TODO: maintain player that raised last
-    public void initializeBettingMenu(){
+    private void initializeBettingMenu(){
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
             EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
@@ -157,13 +157,13 @@ public class Controller {
         }
     }
 
-    public void indicateFold(Player player){
+    private void indicateFold(Player player){
         player.exitHand();
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.foldDisplay();
     }
 
-    public void indicateBet(Player player, String betInput){
+    private void indicateBet(Player player, String betInput){
         int betAmount = Integer.parseInt(betInput);
         pot.addToPot(betAmount);
         player.updateBankroll(betAmount * -1);
@@ -172,3 +172,4 @@ public class Controller {
         displayPlayer.betDisplay(betAmount * -1);
     }
 }
+
