@@ -11,7 +11,6 @@ public class FrontEndCard extends Text {
     public FrontEndCard(String symbol, Suit suit) {
         super(10, 10, symbol + "\n" + suit);
         this.setId(symbol+suit.toString());
-        System.out.println(symbol+suit.toString());
         this.symbol = symbol;
         this.suit = suit;
     }

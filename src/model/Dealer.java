@@ -17,12 +17,11 @@ public class Dealer {
         }
     }
 
-    public void exchangeCards(Player player, List<Card> exchangeCards){
-        for (Card card: exchangeCards) {
-            player.discard(card);
-            System.out.println(player.toString() + " gets: " + dealerDeck.peekTopCard().getRank());
-            dealCards(player,1);
-        }
+    public void exchangeCards(Player player, Card exchangeCard){
+        player.discardCard(exchangeCard);
+        System.out.println(player.toString() + " gets: " + dealerDeck.peekTopCard().getRank());
+        Card cardDealt = dealerDeck.getTopCard();
+        player.receiveCard(cardDealt);
     }
 
     public void checkDeck(){
@@ -33,6 +32,5 @@ public class Dealer {
 
     public void burnCards(int numberToBurn){}
 
-    public void exchangeCards(Player player, int numberToExchange){}
 
 }

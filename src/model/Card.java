@@ -72,6 +72,7 @@ public class Card {
         return visible;
     }
 
+
     public void makeVisible(){
         visible=true;
     }
