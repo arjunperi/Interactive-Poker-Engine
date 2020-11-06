@@ -32,11 +32,11 @@ public class GameViewTest extends DukeApplicationTest {
         testCard = lookup("#ADIAMONDS").query();
         assertEquals(20, testCard.getX());
         testCard = lookup("#KDIAMONDS").query();
-        assertEquals(90, testCard.getX());
+        assertEquals(100, testCard.getX());
         testCard = lookup("#QDIAMONDS").query();
-        assertEquals(160, testCard.getX());
+        assertEquals(180, testCard.getX());
         testCard = lookup("#JDIAMONDS").query();
-        assertEquals(230, testCard.getX());
+        assertEquals(20, testCard.getX());
 //        betInput = lookup("#Bet").query();
 //        betInput.setText("10");
 //        sleep(1000);

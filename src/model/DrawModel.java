@@ -1,5 +1,6 @@
 package model;
 
+import java.util.List;
 import java.util.Properties;
 
 public class DrawModel extends Model {
@@ -11,8 +12,9 @@ public class DrawModel extends Model {
 
     public void dealFlow(int currentRound){
         //later, use reflection for this
+        dealStats(currentRound);
         if (recipient.equals("Community")){
-            //We're going to want to throw an exception here
+            //TODO: Throw an exception here
             System.out.println("No community cards in a Draw game");
         }
         else{
@@ -20,16 +22,29 @@ public class DrawModel extends Model {
                 pokerDealer.dealCards(player,numberOfCards);
             }
         }
-        startExchangeRound(2);
     }
 
-    public void startExchangeRound(int exchangeLimit) {
-        for (Player currentPlayer : activePlayerList) {
-            System.out.println("\n" + currentPlayer.toString() + " is up for exchange");
-            pokerDealer.exchangeCards(currentPlayer, currentPlayer.chooseExchangeCards(exchangeLimit));
+    public String getAction(int currentRound){
+        Properties ruleProperties = getPropertyFile("FiveCardDraw");
+        String action  = ruleProperties.getProperty("action" + currentRound);
+        return action;
+    }
+
+    //should it be in this class?
+    public Card stringToCard(String cardString){
+        int spaceIndex = cardString.indexOf(" ");
+        Suit suit = Suit.valueOf(cardString.substring(0,spaceIndex));
+        int rank = Integer.parseInt(cardString.substring(spaceIndex + 1, cardString.length()));
+        return new Card(rank, suit);
+    }
+
+    public void exchangeCards(Player player, List<String> exchangeCards) {
+        player.discardedCardList.clear();
+        player.newCardList.clear();
+        for (String exchangeCard: exchangeCards){
+            Card card = stringToCard(exchangeCard);
+            pokerDealer.exchangeCards(player, card);
         }
-//        turnManager.startBettingRound(pokerPlayerList, totalRounds);
     }
-
     }
 

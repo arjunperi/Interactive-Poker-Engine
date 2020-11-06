@@ -1,5 +1,8 @@
 package model;
 
+import java.util.List;
+import java.util.Properties;
+
 public class CommunityModel extends Model {
 
     public CommunityModel(int totalRounds, PlayerList players,CommunityCards communityCards, Dealer dealer){
@@ -23,5 +26,18 @@ public class CommunityModel extends Model {
         for (Card card : communityCards.getCommunityCardsList()){
             System.out.println(card.getRank());
         }
+    }
+
+
+    //want this to be a non abstract method once we can get the fileName without hardcoding
+    public String getAction(int currentRound){
+        Properties ruleProperties = getPropertyFile("HoldEm");
+        String action  = ruleProperties.getProperty("action" + currentRound);
+        return action;
+    }
+
+    @Override
+    public void exchangeCards(Player player, List<String> exchangeCards) {
+
     }
 }

@@ -9,8 +9,6 @@ public class Player extends CardRecipient{
     private boolean hasFolded;
     private Hand playerHand;
     private Pot pot;
-    private Exchange cardExchange;
-
 
     public Player(String name, int startingAmount, Pot pot){
         super();
@@ -41,8 +39,9 @@ public class Player extends CardRecipient{
         }
     }
 
-    public void discard(Card card) {
+    public void discardCard(Card card) {
         playerHand.getCards().remove(card);
+        addDiscardedCard(card);
     }
 
 
@@ -54,11 +53,6 @@ public class Player extends CardRecipient{
     public void updateBankroll(int amount){
         moneyCount += amount;
         System.out.println(this.toString()  + " has $"  + moneyCount);
-    }
-
-    public List<Card> chooseExchangeCards(int exchangeLimit){
-        cardExchange = new Exchange(this, exchangeLimit);
-        return cardExchange.getExchangedCards();
     }
 
 

@@ -59,7 +59,7 @@ public class PlayerTest extends DukeApplicationTest {
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
-        player.discard(testCard);
+        player.discardCard(testCard);
         assertEquals(0, player.getHand().getCards().size());
     }
 
