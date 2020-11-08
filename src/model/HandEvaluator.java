@@ -304,7 +304,7 @@ public class HandEvaluator {
         for (Hand hand : hands) {
             index = 0;
             isSame = true;
-            while (isSame || index < 5) {
+            while (isSame && index < 5) {
                 int[] handStrength = handStrength(hand);
                 if (handStrength[index] > bestHand[index]) {
                     bestHand = handStrength;

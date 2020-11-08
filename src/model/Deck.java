@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -30,6 +31,7 @@ public class Deck {
         }
     }
 
+
     public void replaceTopCard(Card card){
         deck.push(card);
     }
@@ -43,4 +45,7 @@ public class Deck {
         return deck.isEmpty();
     }
 
+    public void shuffle(){
+        Collections.shuffle(deck);
+    }
 }
