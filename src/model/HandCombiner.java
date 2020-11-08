@@ -4,14 +4,21 @@ import java.util.ArrayList;
 
 public class HandCombiner {
 
+    private ArrayList<Hand> allHands;
 
-        public ArrayList<Hand> combinationUtil(Hand hand, Card data[], int start,
-                                                      int end, int index)
+    public ArrayList<Hand> getAllHands(){
+        return allHands;
+    }
+
+    public void clearAllHands(){
+        allHands = new ArrayList<>();
+    }
+        public void combinationUtil(Hand hand, Card[] data, int start,
+                                    int end, int index, ArrayList<Hand> ret)
         {
             // Current combination is ready to be printed, print it
 
 
-            ArrayList<Hand> allHands = new ArrayList<>();
 
             int r = 5;
             if (index == r)
@@ -19,40 +26,22 @@ public class HandCombiner {
                 Hand tempHand = new Hand();
                 for (int j=0; j<r; j++){
                     tempHand.add(data[j]);
-                    System.out.print(data[j].getRank()+" ");
                 }
-                allHands.add(tempHand);
-                System.out.println("c");
+                ret.add(tempHand);
 
-                for (Hand hand1 : allHands) {
-                    for (Card card : hand1.getCards()) {
-
-                        System.out.print(card.getRank() + " ");
-                    }
-                    System.out.println("x");
-                }
-                System.out.println("W");
-                return allHands;
             }
 
             // replace index with all possible elements. The condition
             // "end-i+1 >= r-index" makes sure that including one element
             // at index will make a combination with remaining elements
             // at remaining positions
-            for (int i=start; i<=end && end-i+1 >= r-index; i++)
-            {
-                data[index] = hand.get(i);
-                combinationUtil(hand, data, i+1, end, index+1);
-            }
-
-            for(Hand view : allHands){
-                for(Card card : view.getCards()){
-                    System.out.println(card.getRank()+"");
-
+            if(index<r){
+                for (int i=start; i<=end && end-i+1 >= r-index; i++)
+                {
+                    data[index] = hand.get(i);
+                    combinationUtil(hand, data, i+1, end, index+1,ret);
                 }
-                System.out.println("");
             }
-            return allHands;
         }
 
         // The main function that prints all combinations of size r
@@ -64,7 +53,7 @@ public class HandCombiner {
             Card data[]=new Card[r];
 
             // Print all combination using temprary array 'data[]'
-            combinationUtil(hand, data, 0, n-1, 0);
+            combinationUtil(hand, data, 0, n-1, 0,allHands);
         }
 
         /*Driver function to check for above function*/
