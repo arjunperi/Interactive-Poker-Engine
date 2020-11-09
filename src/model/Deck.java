@@ -32,11 +32,11 @@ public class Deck {
         }
     }
 
-    public void createDeck2() {
+    /*public void createDeck2() {
         for (String suit: suits) {
             for (int i = 2; i < )
         }
-    }
+    }*/
 
     public void replaceTopCard(Card card){
         deck.push(card);

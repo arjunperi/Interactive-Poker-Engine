@@ -18,13 +18,13 @@ import org.json.simple.parser.ParseException;
 public class JSONReader {
   private Map<String, Integer> cardTypes;
   private List<String> suits;
-  private List<String> ranks;
+  private Map<String, Integer> ranks;
   private JSONObject jo;
 
   public JSONReader(){
     cardTypes = new HashMap<>();
     suits = new ArrayList<>();
-    ranks = new ArrayList<>();
+    ranks = new HashMap<>();
   }
 
   public void parse(String directory) {
@@ -46,17 +46,15 @@ public class JSONReader {
   }
 
   private void parseCardRanks() {
-    JSONArray jsonArray = (JSONArray) jo.get("ranks");
-    for (String rank : (Iterable<String>) jsonArray) {
-      ranks.add(rank);
-    }
+    ranks = (Map) jo.get("ranks");
+
   }
 
   public List<String> getSuits() {
     return suits;
   }
 
-  public List<String> getRanks() {
-    return ranks;
+  public Map<String, Integer> getRanks() {
+    return Map.copyOf(ranks);
   }
 }
