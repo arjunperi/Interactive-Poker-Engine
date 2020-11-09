@@ -80,18 +80,21 @@ public class GameView {
         return result;
     }
 
-    public Dialog makeOptionScreen(TextField betInput) {
+    public Dialog makeOptionScreen(TextField betInput, EventHandler<ActionEvent> foldEvent) {
         bottomGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();
+//        Button button = new Button("Fold");
+//        button.setId("Fold");
+
         GridPane grid = new GridPane();
         betInput.setPromptText("Enter a bet");
         betInput.setId("Bet");
-        GridPane.setConstraints(betInput, 0,0);
+        GridPane.setConstraints(betInput, 0,2);
         grid.getChildren().add(betInput);
         betBox.getDialogPane().setContent(grid);
 
-//        Button foldButton = makeButton("Fold", foldEvent);
+
 //        grid.getChildren().add(foldButton);
 //        topGroup.getChildren().add(grid);
         return betBox;

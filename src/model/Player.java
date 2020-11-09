@@ -3,12 +3,14 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends CardRecipient{
-    private String playerName;
+public abstract class Player extends CardRecipient{
+    private final String playerName;
     private int moneyCount;
     private boolean hasFolded;
-    private Hand playerHand;
+    private final Hand playerHand;
     private Pot pot;
+    protected boolean isInteractive;
+
 
     public Player(String name, int startingAmount, Pot pot){
         super();
@@ -16,6 +18,8 @@ public class Player extends CardRecipient{
         moneyCount = startingAmount;
         playerHand = new Hand();
         this.pot = pot;
+
+
     }
 
     public int getBankroll(){
@@ -26,9 +30,7 @@ public class Player extends CardRecipient{
         return moneyCount > 0;
     }
 
-    public void exitHand(){
-        hasFolded = true;
-    }
+
 
     public boolean isActive(){
         if (hasFolded){
@@ -67,4 +69,18 @@ public class Player extends CardRecipient{
         playerHand.add(card);
         addNewCards(card);
     }
+
+    public void bet(int amountToBet){
+        pot.addToPot(amountToBet);
+        updateBankroll(amountToBet * -1);
+    }
+    public void fold(){
+        hasFolded = true;
+    }
+
+    public boolean isInteractive(){
+        return isInteractive;
+    }
+
 }
+

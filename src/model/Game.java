@@ -16,9 +16,9 @@ public class Game {
     public Game(){
         pot = new Pot();
         //TODO: create players based on properties files / user inputs
-        Player player1 = new Player("Arjun", 100, pot);
+        Player player1 = new InteractivePlayer("Arjun", 100, pot);
 
-        Player player2 = new Player("Christian", 100, pot);
+        Player player2 = new AutoPlayer("Christian", 100, pot);
 
 //        Player player3 = new Player("Noah", 100, pot);
 

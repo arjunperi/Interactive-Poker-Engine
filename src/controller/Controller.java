@@ -138,16 +138,54 @@ public class Controller {
 
     //TODO: maintain player that raised last
     //once the order is read in from the backend, this should be the same
+//    private void initializeBettingMenu(){
+//        playerList.updateActivePlayers();
+//        for (Player player : playerList.getActivePlayers()) {
+//            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+//
+//            TextField betInput = new TextField();
+//            Dialog betBox = view.makeOptionScreen(betInput);
+//            Optional<ButtonType> betBoxResult = betBox.showAndWait();
+//            if (betBoxResult.isPresent()) {
+//                indicateBet(player,betInput.getText());
+//            }
+//            turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
+//        }
+//        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,5);
+//        if (roundNumber < 5){
+//            model.dealFlow(roundNumber);
+//            nextAction(model.getAction(roundNumber));
+//        }
+//    }
+
+    //TODO: maintain player that raised last
+    //once the order is read in from the backend, this should be the same
     private void initializeBettingMenu(){
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
-            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+            // if auto player
+            // decide which action is best using algorithm (where is algorithm??) player??
+            if (!player.isInteractive()) {
+                AutoPlayer autoPlayer = (AutoPlayer) player;
+                autoPlayer.decideAction();
+            }
+            else {
+                // if interactive player
+                // prompt player for input using stuff below
+                //
+                // how to access button presses within dialog box????
+                EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
 
-            TextField betInput = new TextField();
-            Dialog betBox = view.makeOptionScreen(betInput);
-            Optional<ButtonType> betBoxResult = betBox.showAndWait();
-            if (betBoxResult.isPresent()) {
-                indicateBet(player,betInput.getText());
+                TextField betInput = new TextField();
+                Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
+                Optional<ButtonType> betBoxResult = betBox.showAndWait();
+                if (betBoxResult.isPresent()) {
+                    indicateBet(player, betInput.getText());
+                }
+
+
+
+
             }
             turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
         }
@@ -157,6 +195,7 @@ public class Controller {
             nextAction(model.getAction(roundNumber));
         }
     }
+
 
 
 
@@ -304,15 +343,14 @@ public class Controller {
     }
 
     private void indicateFold(Player player){
-        player.exitHand();
+        player.fold();
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.foldDisplay();
     }
 
     private void indicateBet(Player player, String betInput){
         int betAmount = Integer.parseInt(betInput);
-        pot.addToPot(betAmount);
-        player.updateBankroll(betAmount * -1);
+        player.bet(betAmount);
 
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.betDisplay(betAmount * -1);
