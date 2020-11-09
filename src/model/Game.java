@@ -12,6 +12,8 @@ public class Game {
     private Deck deck;
     private Dealer dealer;
     private CommunityCards communityCards;
+    private List<String> suits;
+    private List<String> ranks;
 
     public Game(){
         pot = new Pot();

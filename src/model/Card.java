@@ -6,6 +6,7 @@ import java.util.Properties;
 public class Card {
 
     private Suit suit;
+    private String stringSuit;
     private String cardSymbol;
     private int rank;
     private boolean visible;
@@ -15,8 +16,15 @@ public class Card {
 
     private static final String FILENAME = "CardValueMapping";
 
-    public Card(int rank , Suit suit){
+    public Card(int rank, Suit suit) {
         this.suit = suit;
+        this.rank = rank;
+        visible=false;
+        initializeCardNumber();
+    }
+
+    public Card(int rank, String suit) {
+        this.stringSuit = suit;
         this.rank = rank;
         visible=false;
         initializeCardNumber();

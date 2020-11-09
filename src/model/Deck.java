@@ -6,11 +6,17 @@ import java.util.Stack;
 
 public class Deck {
     private Stack<Card> deck;
-
+    private List<String> suits;
+    private List<String> ranks;
 
     public Deck() {
         deck = new Stack();
         createDeck();
+    }
+
+    public Deck(List<String> suits, List<String> ranks) {
+        this.suits = suits;
+        this.ranks = ranks;
     }
 
     public Card getTopCard() {
@@ -18,15 +24,17 @@ public class Deck {
     }
 
     public void createDeck(){
-        List<Card> cardsList = new ArrayList<>();
         for (Suit suit : Suit.values()){
             for (int r = 2; r<15; r++){
                 Card card = new Card(r,suit);
-                cardsList.add(card);
+                deck.add(card);
             }
         }
-        for (Card card : cardsList) {
-            deck.add(card);
+    }
+
+    public void createDeck2() {
+        for (String suit: suits) {
+            for (int i = 2; i < )
         }
     }
 
