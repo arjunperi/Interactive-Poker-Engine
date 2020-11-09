@@ -15,7 +15,7 @@ class JSONReaderTest {
   @BeforeAll
   static void setUp() {
     reader = new JSONReader();
-    reader.parse("resources/texas_holdem.json");
+    reader.parse("/texas_holdem.json");
   }
   @Test
   void getSuits() {
@@ -61,6 +61,6 @@ class JSONReaderTest {
 
 
     Map<String, Integer> actualRanks = reader.getRanks();
-    assertEquals(Map.copyOf(expectedRanks), actualRanks);
+    assertEquals(expectedRanks, actualRanks);
   }
 }

@@ -1,18 +1,15 @@
 package controller;
 
 import controller.exceptions.SetUpException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 
 public class JSONReader {
@@ -29,25 +26,31 @@ public class JSONReader {
 
   public void parse(String directory) {
     try {
-      Object obj = new JSONParser().parse(new FileReader(directory));
-      jo = (JSONObject) obj;
+      InputStream is = JSONReader.class.getResourceAsStream(directory);
+      JSONTokener tokener = new JSONTokener(is);
+      jo = new JSONObject(tokener);
       parseCardSuits();
       parseCardRanks();
-    } catch (ParseException | IOException e) {
+
+    } catch (Exception e) {
       throw new SetUpException();
     }
   }
 
   private void parseCardSuits() {
-    JSONArray jsonArray = (JSONArray) jo.get("suits");
-    for (String suit : (Iterable<String>) jsonArray) {
+    JSONArray jsonArray = jo.getJSONArray("suits");
+    for (Iterator<Object> it = jsonArray.iterator(); it.hasNext(); ) {
+      String suit = (String) it.next();
       suits.add(suit);
     }
   }
 
   private void parseCardRanks() {
-    ranks = (Map) jo.get("ranks");
-
+    JSONObject jObject = jo.getJSONObject("ranks");
+    for (Iterator<String> it = jObject.keys(); it.hasNext(); ) {
+      String rank = it.next();
+      ranks.put(rank, (Integer) jObject.get(rank));
+    }
   }
 
   public List<String> getSuits() {
@@ -55,6 +58,6 @@ public class JSONReader {
   }
 
   public Map<String, Integer> getRanks() {
-    return Map.copyOf(ranks);
+    return ranks;
   }
 }
