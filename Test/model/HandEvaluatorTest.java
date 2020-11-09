@@ -440,7 +440,7 @@ public class HandEvaluatorTest {
         // Print all combination using temprary array 'data[]'
         comb.clearAllHands();
 
-        comb.combinationUtil(hand1, data, 0, n - 1, 0, comb.getAllHands());
+        comb.makeAllPossibleHands(hand1, data, 0, n - 1, 0, comb.getAllHands());
         ArrayList<Hand> hands = comb.getAllHands();
 
         ArrayList<Hand> bestHands = evaluator.getBestHands(hands);

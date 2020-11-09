@@ -18,4 +18,21 @@ public class PotTest {
         pot.dispersePot(player);
         assertEquals(0,pot.getPotTotal());
     }
+
+    @Test
+    public void dispersePot(){
+        Pot pot = new Pot();
+        Player player = new Player("Arjun",100,pot);
+        pot.addToPot(10);
+        pot.dispersePot(player);
+        assertEquals(110,player.getBankroll());
+    }
+
+    @Test
+    public void getPotTotal(){
+        Pot pot = new Pot();
+        Player player = new Player("Arjun",100,pot);
+        pot.addToPot(10);
+        assertEquals(10,pot.getPotTotal());
+    }
 }

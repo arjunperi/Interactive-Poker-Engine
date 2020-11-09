@@ -25,7 +25,9 @@ public abstract class Model {
     public void dealStats(int currentRound){
         pokerDealer.checkDeck();
 
-        Properties ruleProperties = getPropertyFile("HoldEm");
+        //TODO: Figure out a way to get the property file of the associated Model without hardcoded string
+//        Properties ruleProperties = getPropertyFile("FiveCardDraw");
+        Properties ruleProperties = getPropertyFile("Holdem");
         pokerPlayerList.updateActivePlayers();
         activePlayerList = pokerPlayerList.getActivePlayers();
 
@@ -35,6 +37,10 @@ public abstract class Model {
     }
 
     public abstract void dealFlow(int currentRound);
+
+    public abstract String getAction(int currentRound);
+
+    public abstract void exchangeCards(Player player, List<String> exchangeCards);
 
     public Properties getPropertyFile(String fileName) {
         Properties propertyFile = new Properties();

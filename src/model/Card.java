@@ -23,7 +23,7 @@ public class Card {
     }
 
 
-    public Properties getPropertyFile(String fileName) {
+    private Properties getPropertyFile(String fileName) {
         Properties propertyFile = new Properties();
         try {
             propertyFile
@@ -35,7 +35,7 @@ public class Card {
     }
 
 
-    public void initializeCardNumber(){
+    private void initializeCardNumber(){
         Properties mappings = getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));
     }
@@ -43,8 +43,6 @@ public class Card {
     public String getCardSymbol(){
         return cardSymbol;
     }
-
-
 
     @Override
     public String toString() {
@@ -73,6 +71,7 @@ public class Card {
     public boolean getCardVisibility(){
         return visible;
     }
+
 
     public void makeVisible(){
         visible=true;

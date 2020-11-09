@@ -42,15 +42,30 @@ public class GameView {
     }
 
     public void createStartScreen(EventHandler<ActionEvent> startEvent){
-        Button startButton = makeButton("Start Game", startEvent);
+        Button startButton = makeButton("Start", startEvent);
         bottomGroup.getChildren().add(startButton);
     }
 
 
+//    //want a way for this to specify top or bottom group based on the recipient
+//    public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int cardOffset) {
+//        int xLocation = displayRecipient.getX() + cardOffset;
+//        card.setX(xLocation);
+//        displayRecipient.updateFrontEndCards(card, xLocation);
+//        card.setY(displayRecipient.getY());
+//        root.getChildren().add(card);
+//    }
+
     //want a way for this to specify top or bottom group based on the recipient
-    public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xOffset) {
-        card.setX(displayRecipient.getX() + xOffset);
-        centerGroup.getChildren().add(card);
+    public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
+        card.setX(xLocation);
+        displayRecipient.updateFrontEndCards(card, xLocation);
+        card.setY(displayRecipient.getY());
+        root.getChildren().add(card);
+    }
+
+    public void remove(FrontEndCard card){
+        root.getChildren().remove(card);
     }
 
 
@@ -62,15 +77,13 @@ public class GameView {
         return result;
     }
 
-
-
-
     public Dialog makeOptionScreen(TextField betInput) {
         bottomGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();
         GridPane grid = new GridPane();
         betInput.setPromptText("Enter a bet");
+        betInput.setId("Bet");
         GridPane.setConstraints(betInput, 0,0);
         grid.getChildren().add(betInput);
         betBox.getDialogPane().setContent(grid);
@@ -79,5 +92,26 @@ public class GameView {
 //        grid.getChildren().add(foldButton);
 //        topGroup.getChildren().add(grid);
         return betBox;
+    }
+
+    public Dialog makeExchangeScreen(TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
+        Dialog exchangeBox = new TextInputDialog();
+        GridPane grid = new GridPane();
+
+        exchangeCardInput1.setPromptText("First card to exchange");
+        exchangeCardInput1.setId("ExchangeCard1");
+        GridPane.setConstraints(exchangeCardInput1, 0,0);
+
+        exchangeCardInput2.setPromptText("Second card to exchange");
+        exchangeCardInput2.setId("ExchangeCard2");
+        GridPane.setConstraints(exchangeCardInput2, 0,1);
+
+        exchangeCardInput3.setPromptText("Third card to exchange");
+        exchangeCardInput3.setId("ExchangeCard3");
+        GridPane.setConstraints(exchangeCardInput3, 0,2);
+
+        grid.getChildren().addAll(exchangeCardInput1,exchangeCardInput2,exchangeCardInput3);
+        exchangeBox.getDialogPane().setContent(grid);
+        return exchangeBox;
     }
 }

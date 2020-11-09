@@ -8,6 +8,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CardTest {
 
     @Test
+    public void testToString(){
+        Card card = new Card(2, Suit.CLUBS);
+        assertEquals("CLUBS 2", card.toString());
+    }
+
+    @Test
+    public void testCardRank(){
+        Card card = new Card(2, Suit.CLUBS);
+        assertEquals(2, card.getRank());
+    }
+
+
+    @Test
     void testCardValue() {
         Card card = new Card(2, Suit.CLUBS);
         assertEquals(2, card.getRank());

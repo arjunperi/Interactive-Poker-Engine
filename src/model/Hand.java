@@ -31,6 +31,7 @@ public class Hand {
         return hand;
     }
 
+<<<<<<< HEAD
     //community cards more of a hand then a player
 
     //need a class that combines cards with player hand and cards from community
@@ -40,6 +41,10 @@ public class Hand {
 
     public int getHandTotal() {
         for (Card card : hand) {
+=======
+    public int getHandTotal(){
+        for (Card card: hand){
+>>>>>>> ade3614f322fdc3bfdba66e7deae57c446095f69
             handTotal += card.getRank();
         }
         return handTotal;
