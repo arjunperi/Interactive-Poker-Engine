@@ -2,12 +2,12 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Game {
-    private TurnManager pokerTurnManager;
-    private Model holdemModel;
-    private Model drawModel;
-    private PlayerList players;
+    private TurnManager turnManager;
+    private Model model;
+    private PlayerList playerList;
     private Pot pot;
     private Deck deck;
     private Dealer dealer;
@@ -16,41 +16,32 @@ public class Game {
     public Game(){
         pot = new Pot();
         //TODO: create players based on properties files / user inputs
-        Player player1 = new Player("Arjun", 100, pot);
-        Player player2 = new Player("Christian", 100, pot);
 //        Player player3 = new Player("Noah", 100, pot);
 
-
         this.communityCards = new CommunityCards();
-
+        Player player1 = new Player("Arjun", 100, communityCards);
+        Player player2 = new Player("Christian", 100, communityCards);
         deck = new Deck();
-
         dealer = new Dealer(deck);
-
-        players = new PlayerList(new ArrayList<>(List.of(player1, player2)));
-        pokerTurnManager = new TurnManager(pot);
-
-        //TODO: use factory design pattern here to choose what kind of model to instantiate
-        holdemModel = new CommunityModel(4, players, communityCards, dealer);
-//        drawModel = new DrawModel(2, players, communityCards, dealer);
+        playerList = new PlayerList(new ArrayList<>(List.of(player1, player2)));
+        turnManager = new TurnManager(pot);
     }
 
 
     public Model getModel() {
-        return holdemModel;
-//        return drawModel;
+        return model;
     }
 
     public TurnManager getTurnManager(){
-        return pokerTurnManager;
+        return turnManager;
     }
 
     public Deck getDeck(){
         return deck;
     }
 
-    public PlayerList getPlayers(){
-        return players;
+    public PlayerList getPlayerList(){
+        return playerList;
     }
 
     public CommunityCards getCommunityCards(){
@@ -61,6 +52,9 @@ public class Game {
         return pot;
     }
 
+    public Dealer getDealer(){
+        return dealer;
+    }
 
 
 }

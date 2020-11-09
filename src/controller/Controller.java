@@ -25,9 +25,7 @@ public class Controller {
     private ResourceBundle projectTextResources;
 
     private Game game;
-
     private Model model;
-
     private TurnManager turnManager;
     private Deck deck;
     private PlayerList playerList;
@@ -35,91 +33,58 @@ public class Controller {
     private CommunityCards communityCards;
     private GameDisplayRecipient displayCommunity;
     private Pot pot;
-
+    private Dealer dealer;
     private GameView view;
     private Stage stage;
-
     private int roundNumber;
+    private int totalRounds;
     private String recipient;
-
-
-    private Stack<Card> cardsRemoved;
     private Map<Player, FrontEndPlayer> playerMappings;
     private Map<String, FrontEndCard> frontEndCardMapppings;
+    private FileReader reader;
 
-    //TODO: Use reflection to see what kind of model we want to create
     public Controller(Stage stage) {
         roundNumber = 1;
         game = new Game();
-
-        model = game.getModel();
-
+//        model = game.getModel();
         turnManager = game.getTurnManager();
         deck = game.getDeck();
-        playerList = game.getPlayers();
+        playerList = game.getPlayerList();
         frontEndPlayers = new ArrayList<>();
         communityCards = game.getCommunityCards();
         pot = game.getPot();
+        dealer = game.getDealer();
         turnManager = game.getTurnManager();
-        cardsRemoved = new Stack<>();
+        reader = new FileReader();
         view = new GameView();
         playerMappings = new HashMap<>();
-
         frontEndCardMapppings = new HashMap<>();
         initializeFrontEndPlayers();
         initializeCommunity();
-
         this.stage = stage;
-
         initializeSplashMenu();
-
+        initializeModel("SevenCardStud");
     }
+
     public Scene setupScene() {
         return view.setupScene();
     }
 
-    //if community
-        //deal backend
-        //deal frontend
-        //bet frontend
-        //etx
-        //CURRENT FLOW:
-            //Start button
-            //dealFlow()
-            //dealingRound()
-            //bettingMenu()
-
-    //if draw
-        //deal backend
-        //deal frontend
-        //bet frontend
-        //exchange backend
-        //exchange frontend
-        //bet
-        //NECESSARY FLOW:
-            //Start button
-            //dealFlow()
-            //dealingRound()
-            //bettingMenu()
-            //exchange (backend)
-            //exchange (frontend)
-
-    //what is really an exchange on the frontend
-        //for a player -> take their cards rn, remove ones that are being exchanged, deal new cards
-        //still called dealing round, but we need to know to remove
-
-    //if stud
-        //deal backend
-            //2 face up one face down
-        //deal frontend
-        //bet frontend
-        //etc
-            //visibility is variable
-                //that will happen on backend, and frontend will simply read if the card dealt needs to be visible or not
-            //betting order based on strength of face up cards
-                //need to have backend logic that tells the frontend who to bet to
-                    //for all games -> rather than just looping through active players, loop through an ordered list of players
-
+    //using this for testing purposes so we can switch the properties file being used
+    public void initializeModel(String fileName){
+        //TODO: use factory design pattern here to choose what kind of model to instantiate
+        try {
+            Properties modelProperties = reader.getPropertyFile(fileName);
+            String modelType = modelProperties.getProperty("type");
+            totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
+            Class<?> cl = Class.forName("model." + modelType + "Model");
+            model = (Model) cl.getConstructor(int.class, PlayerList.class, CommunityCards.class, Dealer.class, Properties.class)
+                    .newInstance(totalRounds, playerList, communityCards, dealer, modelProperties);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void initializeSplashMenu(){
         EventHandler<ActionEvent> startEvent = new EventHandler<ActionEvent>() {
@@ -132,8 +97,12 @@ public class Controller {
     }
 
     //TODO: maintain player that raised last
-    //once the order is read in from the backend, this should be the same
-    private void initializeBettingMenu(){
+    public void initializeBettingMenu(){
+        //if we're in a stud game -> loop through the ordered list of active players (based on hand strength)
+        //if it's not a stud game -> loop through active players that is ordered based on dealer chip
+            //goes around, big blind checks
+            //person to the left of big is first
+            //so -> update the dealer chip after a game has gone
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
             EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
@@ -146,14 +115,13 @@ public class Controller {
             }
             turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
         }
-        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,5);
-        if (roundNumber < 5){
+        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,totalRounds + 1);
+        if (roundNumber < totalRounds + 1 ){
             model.dealFlow(roundNumber);
+            System.out.println(roundNumber);
             nextAction(model.getAction(roundNumber));
         }
     }
-
-
 
     public void nextAction(String action){
         try{
@@ -166,10 +134,11 @@ public class Controller {
         }
     }
 
-    private void exchangeRound(){
+    public void exchangeRound(){
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
+            //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed as specified by user
             TextField exchangeCardInput1 = new TextField();
             TextField exchangeCardInput2 = new TextField();
             TextField exchangeCardInput3 = new TextField();
@@ -182,74 +151,38 @@ public class Controller {
                         .filter(b -> b.equals(""))
                         .collect(Collectors.toList());
                 exchangeCards.removeAll(filtered);
-
-                model.exchangeCards(player, exchangeCards);
+                dealer.exchangeCards(player, exchangeCards);
                 exchangeFrontEndCards(player, playerMappings.get(player));
-//                dealFrontEndCards(player,playerMappings.get(player));
-
             }
         }
         roundNumber++;
         initializeBettingMenu();
     }
 
-
-
     //don't like this conditional
-
-    //what happens when it's draw game with no community cards?
-            //other than that, should be the same -> deal to whoever is up (does the order of dealing change for stud?)
-
-    //for draw: prompt user on front end to choose cards to exchange
-        //take those cards and send to backend
-        //remove and deal
-
-    //read in from the backend an action?
-        //know when to do either dealing round or exchange round
-
     private void dealingRound(){
         recipient = model.getRecipient();
         if (recipient.equals("Community")){
-            dealFrontEndCards(communityCards, displayCommunity);
+            dealFrontEndCardsInRound(communityCards, displayCommunity);
         }
         else {
             playerList.updateActivePlayers();
             for (Player player : playerList.getActivePlayers()){
-                dealFrontEndCards(player,playerMappings.get(player));
-                //get the new cards
-                //start dealing at position of last card, increment with offset
-                    //knowing the positon of last card is not too bad, could be a state of FEP
+                dealFrontEndCardsInRound(player,playerMappings.get(player));
             }
         }
         roundNumber++;
         initializeBettingMenu();
     }
 
-    //deal cards in a dealing round
-        //get the player's new cards
-        //deal starting from last card location
-
-    //deal card in exchange round
-        //get the players' new card
-        //deal at place of card that was just removed
-
-    //to deal
-        //new card(s)
-        //location of where to deal to
-            //how would we get this
-            //keep a map of front end cards -> locations
-            //get that location
-            //deal to that location
-
-
-    private void dealFrontEndCards(CardRecipient recipient, GameDisplayRecipient displayRecipient){
+    private void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
         for (Card newCard: recipient.getNewCards()){
             FrontEndCard displayCard = getFrontEndCard(newCard);
-            int numberOfFrontEndCards = displayRecipient.getFrontEndCards().size();
+            int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();
 
             if (numberOfFrontEndCards!= 0){
                 FrontEndCard lastCard = displayRecipient.getLastCard();
-                int lastCardLocation = displayRecipient.getFrontEndCards().get(lastCard);
+                int lastCardLocation = displayRecipient.getFrontEndCardLocations().get(lastCard);
                 view.deal(displayCard, displayRecipient, lastCardLocation + 80);
             }
             else{
@@ -258,16 +191,15 @@ public class Controller {
         }
     }
 
-
-    private void exchangeFrontEndCards(CardRecipient recipient, GameDisplayRecipient displayRecipient){
+    public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
         int dealLocation = 0;
         int cardIndex = 0;
-        for (Card discardedCard: recipient.getDiscardedCardList()){
+        for (Card discardedCard: player.getDiscardedCards()){
             FrontEndCard discardedFrontEndCard = frontEndCardMapppings.get(discardedCard.toString());
             view.remove(discardedFrontEndCard);
 
-            dealLocation = displayRecipient.getFrontEndCards().get(discardedFrontEndCard);
-            Card newCard = recipient.getNewCards().get(cardIndex);
+            dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
+            Card newCard = player.getNewCards().get(cardIndex);
             FrontEndCard displayCard = getFrontEndCard(newCard);
             view.deal(displayCard, displayRecipient, dealLocation);
             cardIndex ++;
@@ -277,7 +209,7 @@ public class Controller {
 
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit());
+        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.getCardVisibility());
         frontEndCardMapppings.put(card.toString(), frontEndCard);
         return frontEndCard;
     }

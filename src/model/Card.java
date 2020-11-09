@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Properties;
 
@@ -9,8 +10,7 @@ public class Card {
     private String cardSymbol;
     private int rank;
     private boolean visible;
-    private Map<Integer,String> cardValueMap;
-    private int cardValue;
+    private FileReader reader;
 
 
     private static final String FILENAME = "CardValueMapping";
@@ -19,24 +19,13 @@ public class Card {
         this.suit = suit;
         this.rank = rank;
         visible=false;
+        reader = new FileReader();
         initializeCardNumber();
     }
 
 
-    private Properties getPropertyFile(String fileName) {
-        Properties propertyFile = new Properties();
-        try {
-            propertyFile
-                    .load(Card.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return propertyFile;
-    }
-
-
     private void initializeCardNumber(){
-        Properties mappings = getPropertyFile(FILENAME);
+        Properties mappings = reader.getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));
     }
 

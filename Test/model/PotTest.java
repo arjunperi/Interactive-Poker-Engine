@@ -9,7 +9,7 @@ public class PotTest {
     @Test
     void testAddToPot(){
         Pot pot = new Pot();
-        Player player = new Player("Arjun",100,pot);
+        Player player = new Player("Arjun",100);
         assertEquals(0,pot.getPotTotal());
         pot.addToPot(10);
         assertEquals(10,pot.getPotTotal());
@@ -22,7 +22,7 @@ public class PotTest {
     @Test
     public void dispersePot(){
         Pot pot = new Pot();
-        Player player = new Player("Arjun",100,pot);
+        Player player = new Player("Arjun",100);
         pot.addToPot(10);
         pot.dispersePot(player);
         assertEquals(110,player.getBankroll());
@@ -31,7 +31,7 @@ public class PotTest {
     @Test
     public void getPotTotal(){
         Pot pot = new Pot();
-        Player player = new Player("Arjun",100,pot);
+        Player player = new Player("Arjun",100);
         pot.addToPot(10);
         assertEquals(10,pot.getPotTotal());
     }

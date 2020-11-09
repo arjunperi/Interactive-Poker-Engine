@@ -10,13 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import model.Game;
 import pokerSuite.PokerRunner;
 
-import java.util.List;
 
 public class GameView {
     private Scene scene;
@@ -46,17 +41,6 @@ public class GameView {
         bottomGroup.getChildren().add(startButton);
     }
 
-
-//    //want a way for this to specify top or bottom group based on the recipient
-//    public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int cardOffset) {
-//        int xLocation = displayRecipient.getX() + cardOffset;
-//        card.setX(xLocation);
-//        displayRecipient.updateFrontEndCards(card, xLocation);
-//        card.setY(displayRecipient.getY());
-//        root.getChildren().add(card);
-//    }
-
-    //want a way for this to specify top or bottom group based on the recipient
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
         card.setX(xLocation);
         displayRecipient.updateFrontEndCards(card, xLocation);
@@ -67,8 +51,7 @@ public class GameView {
     public void remove(FrontEndCard card){
         root.getChildren().remove(card);
     }
-
-
+    
     public Button makeButton(String property, EventHandler<ActionEvent> handler) {
         Button result = new Button();
         result.setId(property);

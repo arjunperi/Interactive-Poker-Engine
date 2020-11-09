@@ -10,31 +10,27 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testGetBankroll(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         assertEquals(100, player.getBankroll());
     }
 
     @Test
     public void testUpdateBankroll(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         player.updateBankroll(-100);
         assertEquals(0, player.getBankroll());
     }
 
     @Test
     public void testIsSolvent(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         player.updateBankroll(-100);
         assertFalse(player.isSolvent());
     }
 
     @Test
     public void testFold(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         assertTrue(player.isActive());
         player.exitHand();
         assertFalse(player.isActive());
@@ -45,8 +41,7 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testAddingToHand(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
@@ -54,8 +49,7 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testDiscard(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
@@ -65,12 +59,8 @@ public class PlayerTest extends DukeApplicationTest {
 
 
     @Test
-    public void testChooseExchangeCards(){}
-
-    @Test
     public void testToString(){
-        Pot pot = new Pot();
-        player = new Player("Player", 100, pot);
+        player = new Player("Player", 100);
         assertEquals("Player", player.toString());
     }
 
