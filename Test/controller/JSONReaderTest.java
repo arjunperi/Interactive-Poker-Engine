@@ -19,32 +19,19 @@ class JSONReaderTest {
   }
   @Test
   void getSuits() {
-    List<String> expectedSuits = List.of(
-        "HEARTS",
-        "SPADES",
-        "CLUBS",
-        "DIAMONDS");
-    List<String> actualSuits = reader.getSuits();
+    Map<String, String> expectedSuits = new HashMap<>();
+    expectedSuits.put("HEARTS", "hearts.png");
+    expectedSuits.put("SPADES", "spades.png");
+    expectedSuits.put("CLUBS", "clubs.png");
+    expectedSuits.put("DIAMONDS", "diamonds.png");
+
+    Map<String, String> actualSuits = reader.getSuits();
     assertEquals(expectedSuits, actualSuits);
   }
 
   @Test
   void getRanks() {
     Map<String, Integer> expectedRanks = new HashMap<>();
-    /*List<String> expectedRanks = List.of(
-        "DEUCE",
-        "THREE",
-        "FOUR",
-        "FIVE",
-        "SIX",
-        "SEVEN",
-        "EIGHT",
-        "NINE",
-        "TEN",
-        "JACK",
-        "QUEEN",
-        "KING",
-        "ACE");*/
     expectedRanks.put("DEUCE", 2);
     expectedRanks.put("THREE", 3);
     expectedRanks.put("FOUR", 4);

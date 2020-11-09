@@ -1,10 +1,10 @@
 {
-  "suits": [
-    "HEARTS",
-    "SPADES",
-    "CLUBS",
-    "DIAMONDS"
-  ],
+  "suits": {
+    "HEARTS": "hearts.png",
+    "SPADES": "spades.png",
+    "CLUBS": "clubs.png",
+    "DIAMONDS": "diamonds.png"
+  },
   "ranks": {
     "DEUCE": 2,
     "THREE": 3,

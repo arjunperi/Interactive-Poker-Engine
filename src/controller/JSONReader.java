@@ -13,14 +13,12 @@ import org.json.JSONTokener;
 
 
 public class JSONReader {
-  private Map<String, Integer> cardTypes;
-  private List<String> suits;
+  private Map<String, String> suits;
   private Map<String, Integer> ranks;
   private JSONObject jo;
 
   public JSONReader(){
-    cardTypes = new HashMap<>();
-    suits = new ArrayList<>();
+    suits = new HashMap<>();
     ranks = new HashMap<>();
   }
 
@@ -38,10 +36,10 @@ public class JSONReader {
   }
 
   private void parseCardSuits() {
-    JSONArray jsonArray = jo.getJSONArray("suits");
-    for (Iterator<Object> it = jsonArray.iterator(); it.hasNext(); ) {
-      String suit = (String) it.next();
-      suits.add(suit);
+    JSONObject jObject = jo.getJSONObject("suits");
+    for (Iterator<String> it = jObject.keys(); it.hasNext(); ) {
+      String suit = it.next();
+      suits.put(suit, (String) jObject.get(suit));
     }
   }
 
@@ -53,7 +51,7 @@ public class JSONReader {
     }
   }
 
-  public List<String> getSuits() {
+  public Map<String, String> getSuits() {
     return suits;
   }
 
