@@ -5,12 +5,11 @@ import java.util.stream.Collectors;
 
 public class StandardPlayerList extends PlayerList{
 
-    public StandardPlayerList(List<Player> players){
-        super(players);
+    public StandardPlayerList(List<Player> players, HandEvaluator handEvaluator){
+        super(players, handEvaluator);
     }
 
-    @Override
-    void updateActivePlayers() {
+    public void updateActivePlayers() {
         removeFoldedPlayers();
     }
 }

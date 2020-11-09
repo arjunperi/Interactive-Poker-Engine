@@ -1,7 +1,5 @@
 package model;
 
-import java.io.File;
-import java.util.Map;
 import java.util.Properties;
 
 public class Card {
@@ -9,7 +7,7 @@ public class Card {
     private Suit suit;
     private String cardSymbol;
     private int rank;
-    private boolean visible;
+    private boolean isVisible;
     private FileReader reader;
 
 
@@ -18,7 +16,7 @@ public class Card {
     public Card(int rank , Suit suit){
         this.suit = suit;
         this.rank = rank;
-        visible=false;
+        isVisible =false;
         reader = new FileReader();
         initializeCardNumber();
     }
@@ -57,12 +55,12 @@ public class Card {
 
     public int getRank(){return rank;}
 
-    public boolean getCardVisibility(){
-        return visible;
+    public boolean isVisible(){
+        return isVisible;
     }
 
 
     public void makeVisible(){
-        visible=true;
+        isVisible =true;
     }
 }

@@ -10,38 +10,40 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testGetBankroll(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         assertEquals(100, player.getBankroll());
     }
 
     @Test
     public void testUpdateBankroll(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         player.updateBankroll(-100);
         assertEquals(0, player.getBankroll());
     }
 
     @Test
     public void testIsSolvent(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         player.updateBankroll(-100);
         assertFalse(player.isSolvent());
     }
 
     @Test
     public void testFold(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         assertTrue(player.isActive());
         player.exitHand();
         assertFalse(player.isActive());
     }
 
     @Test
-    public void testPerformAction(){}
-
-    @Test
     public void testAddingToHand(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
@@ -49,7 +51,8 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testDiscard(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
@@ -60,7 +63,8 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testToString(){
-        player = new Player("Player", 100);
+        CommunityCards communityCards = new CommunityCards();
+        player = new Player("Player", 100, communityCards);
         assertEquals("Player", player.toString());
     }
 

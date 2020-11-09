@@ -42,35 +42,57 @@ public class Controller {
     private Map<Player, FrontEndPlayer> playerMappings;
     private Map<String, FrontEndCard> frontEndCardMapppings;
     private FileReader reader;
+    private HandEvaluator handEvaluator;
+
 
     public Controller(Stage stage) {
+        reader = new FileReader();
         roundNumber = 1;
+
         game = new Game();
-//        model = game.getModel();
+        handEvaluator = game.getHandEvaluator();
+        communityCards = game.getCommunityCards();
+        initializePlayerList("HoldEm");
+
         turnManager = game.getTurnManager();
         deck = game.getDeck();
-        playerList = game.getPlayerList();
-        frontEndPlayers = new ArrayList<>();
-        communityCards = game.getCommunityCards();
         pot = game.getPot();
         dealer = game.getDealer();
         turnManager = game.getTurnManager();
-        reader = new FileReader();
+
         view = new GameView();
         playerMappings = new HashMap<>();
         frontEndCardMapppings = new HashMap<>();
+
+        frontEndPlayers = new ArrayList<>();
         initializeFrontEndPlayers();
         initializeCommunity();
+
         this.stage = stage;
         initializeSplashMenu();
-        initializeModel("SevenCardStud");
+        initializeModel("HoldEm");
     }
 
     public Scene setupScene() {
         return view.setupScene();
     }
 
-    //using this for testing purposes so we can switch the properties file being used
+    public void initializePlayerList(String fileName){
+        //TODO: use factory design pattern here to choose what kind of playerList to instantiate
+        try {
+            Properties modelProperties = reader.getPropertyFile(fileName);
+            String playerListType = modelProperties.getProperty("playerListType");
+            Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
+            Player player1 = new Player("Arjun", 100, communityCards);
+            Player player2 = new Player("Christian", 100, communityCards);
+            playerList = (PlayerList) cl.getConstructor(List.class, HandEvaluator.class)
+                    .newInstance(new ArrayList<>(List.of(player1,player2)), handEvaluator);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void initializeModel(String fileName){
         //TODO: use factory design pattern here to choose what kind of model to instantiate
         try {
@@ -98,11 +120,6 @@ public class Controller {
 
     //TODO: maintain player that raised last
     public void initializeBettingMenu(){
-        //if we're in a stud game -> loop through the ordered list of active players (based on hand strength)
-        //if it's not a stud game -> loop through active players that is ordered based on dealer chip
-            //goes around, big blind checks
-            //person to the left of big is first
-            //so -> update the dealer chip after a game has gone
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
             EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
@@ -166,7 +183,7 @@ public class Controller {
             dealFrontEndCardsInRound(communityCards, displayCommunity);
         }
         else {
-            playerList.updateActivePlayers();
+//            playerList.updateActivePlayers();
             for (Player player : playerList.getActivePlayers()){
                 dealFrontEndCardsInRound(player,playerMappings.get(player));
             }
@@ -209,7 +226,7 @@ public class Controller {
 
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.getCardVisibility());
+        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
         frontEndCardMapppings.put(card.toString(), frontEndCard);
         return frontEndCard;
     }

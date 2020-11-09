@@ -11,6 +11,7 @@ public class Player extends CardRecipient{
     private List<Card> discardedCardList;
     private CommunityCards communityCards;
     private Hand totalHand;
+    private Hand totalVisibleHand;
     //have a player's hand strength
     //update it after every deal
 
@@ -21,6 +22,7 @@ public class Player extends CardRecipient{
         playerHand = new Hand();
         this.communityCards = communityCards;
         totalHand = new Hand();
+        totalVisibleHand = new Hand();
         discardedCardList = new ArrayList<>();
     }
 
@@ -70,18 +72,41 @@ public class Player extends CardRecipient{
 
     //use sets of cards instead of lists?
     public void updateTotalHand(){
-        totalHand.getCards().clear();
+        totalHand.clear();
         for (Card playerCard: playerHand.getCards()){
             totalHand.add(playerCard);
         }
         for (Card communityCard : communityCards.getCommunityCardsList()){
             totalHand.add(communityCard);
         }
+        addDummyCards(totalHand);
+//        totalHand.sortHand();
     }
 
-    //send in total hand to the hand evaluator, get the strength
-    public int getTotalHandStrength(){
-        return 0;
+    public Hand getTotalVisibleHand(){
+        totalVisibleHand.clear();
+        for (Card card: totalHand.getCards()){
+            if (card.isVisible()){
+                totalVisibleHand.add(card);
+            }
+        }
+        addDummyCards(totalVisibleHand);
+        return totalVisibleHand;
+    }
+
+    private void addDummyCards(Hand hand){
+        int handSize = hand.getHandSize();
+        if (handSize < 5){
+            int fiveCardHandDifference = 5 - handSize;
+            for (int i=0; i<fiveCardHandDifference; i++){
+                Card dummyCard = new Card(0, Suit.CLUBS);
+                hand.add(dummyCard);
+            }
+        }
+    }
+
+    public Hand getTotalHand(){
+        return totalHand;
     }
 
 
@@ -96,5 +121,6 @@ public class Player extends CardRecipient{
     void receiveCard(Card card) {
         playerHand.add(card);
         addNewCards(card);
+        updateTotalHand();
     }
 }

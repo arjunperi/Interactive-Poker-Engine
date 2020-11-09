@@ -19,9 +19,6 @@ public class CommunityModel extends Model {
                 dealer.dealCards(player, visibilityList);
             }
         }
-        System.out.println("Community cards: ");
-        for (Card card : communityCards.getCommunityCardsList()){
-            System.out.println(card.getRank());
-        }
     }
+
 }

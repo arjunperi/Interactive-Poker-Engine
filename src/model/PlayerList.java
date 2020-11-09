@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 //Encapsulaton problems?
-abstract class PlayerList {
+public abstract class PlayerList {
     protected List<Player> activePlayers;
+    protected HandEvaluator handEvaluator;
 
-    public PlayerList(List<Player> players){
+    public PlayerList(List<Player> players, HandEvaluator handEvaluator){
         this.activePlayers = players;
+        this.handEvaluator = handEvaluator;
     }
 
     public void removeFoldedPlayers(){
@@ -18,9 +20,8 @@ abstract class PlayerList {
         activePlayers.removeAll(filtered);
     }
 
-    abstract void updateActivePlayers();
+    public abstract void updateActivePlayers();
 
-    //ONLY Stud would implement this differently
 
     public List<Player> getActivePlayers(){
         return activePlayers;
