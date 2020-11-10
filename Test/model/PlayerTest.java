@@ -47,7 +47,7 @@ public class PlayerTest extends DukeApplicationTest {
     public void testAddingToHand(){
         Pot pot = new Pot();
         player = new Player("Player", 100, pot);
-        Card testCard = new Card(2,Suit.CLUBS);
+        Card testCard = new Card(2,"CLUBS");
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
     }
@@ -56,7 +56,7 @@ public class PlayerTest extends DukeApplicationTest {
     public void testDiscard(){
         Pot pot = new Pot();
         player = new Player("Player", 100, pot);
-        Card testCard = new Card(2,Suit.CLUBS);
+        Card testCard = new Card(2,"CLUBS");
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
         player.discardCard(testCard);

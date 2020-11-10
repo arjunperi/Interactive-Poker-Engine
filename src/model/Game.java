@@ -1,5 +1,6 @@
 package model;
 
+import controller.JSONReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Game {
     private CommunityCards communityCards;
     private List<String> suits;
     private List<String> ranks;
+    private JSONReader reader;
 
     public Game(){
         pot = new Pot();
@@ -25,7 +27,14 @@ public class Game {
 
         this.communityCards = new CommunityCards();
 
-        deck = new Deck();
+        reader = new JSONReader();
+        reader.parse("/texas_holdem.json");
+        List<Integer> rankValues = new ArrayList<>(reader.getRanks().values());
+        List<String> suitNames = new ArrayList<>(reader.getSuits().keySet());
+
+        //deck = new Deck();
+        deck = new Deck(suitNames, rankValues);
+
 
         dealer = new Dealer(deck);
 

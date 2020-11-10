@@ -1,42 +1,50 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
 public class Deck {
     private Stack<Card> deck;
     private List<String> suits;
-    private List<String> ranks;
+    private List<Integer> ranks;
 
-    public Deck() {
+    /*public Deck() {
         deck = new Stack();
         createDeck();
-    }
+    }*/
 
-    public Deck(List<String> suits, List<String> ranks) {
+    public Deck(List<String> suits, List<Integer> ranks) {
         this.suits = suits;
         this.ranks = ranks;
+        deck = new Stack<>();
+        Collections.sort(ranks);
+        Collections.sort(suits);
+        createDeck2();
     }
 
     public Card getTopCard() {
         return deck.pop();
     }
 
-    public void createDeck(){
+    /*public void createDeck(){
         for (Suit suit : Suit.values()){
             for (int r = 2; r<15; r++){
                 Card card = new Card(r,suit);
                 deck.add(card);
             }
         }
-    }
-
-    /*public void createDeck2() {
-        for (String suit: suits) {
-            for (int i = 2; i < )
-        }
     }*/
+
+    public void createDeck2() {
+        for (String suit: suits) {
+            for (int rank: ranks) {
+                Card card = new Card(rank, suit);
+                deck.add(card);
+            }
+        }
+    }
 
     public void replaceTopCard(Card card){
         deck.push(card);
