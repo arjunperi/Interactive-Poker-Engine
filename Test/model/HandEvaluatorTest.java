@@ -3,6 +3,7 @@ package model;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -432,6 +433,7 @@ public class HandEvaluatorTest {
         hand1.add(card7);
         hand1 = hand1.sortHand();
 
+
         int n = hand1.getHandSize();
         int r = 5;
         // A temporary array to store all combination one by one
@@ -440,13 +442,12 @@ public class HandEvaluatorTest {
         // Print all combination using temprary array 'data[]'
         comb.clearAllHands();
 
-        comb.makeAllPossibleHands(hand1, data, 0, n - 1, 0, comb.getAllHands());
-        ArrayList<Hand> hands = comb.getAllHands();
+        comb.makeAllPossibleHands(hand1, data, 0, n - 1, 0);
+        ArrayList<Hand> hands = comb.getAllHands(hand1);
 
-        ArrayList<Hand> bestHands = evaluator.getBestHands(hands);
+        List<Hand> bestHands = evaluator.getBestHands(hands);
         assertTrue(true == evaluator.isFlush(bestHands.get(0)));
         assertEquals(4,bestHands.get(0).get(4).getRank());
-
     }
 
     }
