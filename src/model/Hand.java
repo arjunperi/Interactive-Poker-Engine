@@ -31,10 +31,7 @@ public class Hand {
         return hand;
     }
 
-<<<<<<<<< Temporary merge branch 1
-    public int getHandTotal(){
-        for (Card card: hand){
-=========
+
     //community cards more of a hand then a player
 
     //need a class that combines cards with player hand and cards from community
@@ -44,7 +41,6 @@ public class Hand {
 
     public int getHandTotal() {
         for (Card card : hand) {
->>>>>>>>> Temporary merge branch 2
             handTotal += card.getRank();
         }
         return handTotal;

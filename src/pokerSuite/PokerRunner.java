@@ -1,7 +1,6 @@
 package pokerSuite;
 
 import controller.Controller;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -30,4 +29,3 @@ public class PokerRunner extends Application {
         launch(args);
     }
 }
-
