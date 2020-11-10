@@ -3,6 +3,7 @@ package controller;
 import controller.exceptions.SetUpException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -69,20 +70,15 @@ public class JSONReader {
   }*/
 
   public List<String> getSuitNames() {
-    return new ArrayList<>(getSuits().keySet());
-
-  }
-
-  public List<String> getSuitImages() {
-    return new ArrayList<>(getSuits().values());
-  }
-
-  public List<String> getRankNames() {
-    return new ArrayList<>(getRanks().keySet());
-
+    List<String> suitNames = new ArrayList<>(getSuits().keySet());
+    Collections.sort(suitNames);
+    return suitNames;
   }
 
   public List<Integer> getRankValues() {
-    return new ArrayList<>(getRanks().values());
+    List<Integer> rankValues = new ArrayList<>(getRanks().values());
+    Collections.sort(rankValues);
+    return rankValues;
   }
+
 }

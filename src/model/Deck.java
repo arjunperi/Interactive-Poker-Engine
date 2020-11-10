@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,8 +17,6 @@ public class Deck {
         this.suits = suits;
         this.ranks = ranks;
         deck = new Stack<>();
-        Collections.sort(ranks);
-        Collections.sort(suits);
         createDeck2();
     }
 
