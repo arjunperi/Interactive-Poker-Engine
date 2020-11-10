@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import model.*;
 import view.*;
 
@@ -24,53 +23,45 @@ public class Controller {
     public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES.replace("/", ".");
     private ResourceBundle projectTextResources;
 
-    private Game game;
     private Model model;
     private TurnManager turnManager;
-    private Deck deck;
     private PlayerList playerList;
-    private List<GameDisplayRecipient> frontEndPlayers;
-    private CommunityCards communityCards;
+    private final List<GameDisplayRecipient> frontEndPlayers;
+    private final CommunityCards communityCards;
     private GameDisplayRecipient displayCommunity;
-    private Pot pot;
-    private Dealer dealer;
-    private GameView view;
-    private Stage stage;
+    private final Pot pot;
+    private final Dealer dealer;
+    private final GameView view;
     private int roundNumber;
     private int totalRounds;
-    private String recipient;
-    private Map<Player, FrontEndPlayer> playerMappings;
-    private Map<String, FrontEndCard> frontEndCardMapppings;
-    private FileReader reader;
-    private HandEvaluator handEvaluator;
+    private final Map<Player, FrontEndPlayer> playerMappings;
+    private final Map<String, FrontEndCard> frontEndCardMappings;
+    private final FileReader reader;
 
 
-    public Controller(Stage stage) {
+    public Controller() {
         reader = new FileReader();
         roundNumber = 1;
 
-        game = new Game();
-        handEvaluator = game.getHandEvaluator();
+        Game game = new Game();
         communityCards = game.getCommunityCards();
         pot = game.getPot();
-        initializePlayerList("Holdem");
+        initializePlayerList("FiveCardDraw");
 
         turnManager = game.getTurnManager();
-        deck = game.getDeck();
         dealer = game.getDealer();
         turnManager = game.getTurnManager();
 
         view = new GameView();
         playerMappings = new HashMap<>();
-        frontEndCardMapppings = new HashMap<>();
+        frontEndCardMappings = new HashMap<>();
 
         frontEndPlayers = new ArrayList<>();
         initializeFrontEndPlayers();
         initializeCommunity();
 
-        this.stage = stage;
         initializeSplashMenu();
-        initializeModel("Holdem");
+        initializeModel("FiveCardDraw");
     }
 
     public Scene setupScene() {
@@ -85,9 +76,10 @@ public class Controller {
             String playerListType = modelProperties.getProperty("playerListType");
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
             Player player1 = new InteractivePlayer("Arjun", 100, communityCards, pot);
-            Player player2 = new InteractivePlayer("Christian", 100, communityCards, pot);
+            Player player2 = new AutoPlayer("Christian", 100, communityCards, pot);
+            Player player3 = new InteractivePlayer("Noah", 100, communityCards, pot);
             playerList = (PlayerList) cl.getConstructor(List.class)
-                    .newInstance(new ArrayList<>(List.of(player1,player2)));
+                    .newInstance(new ArrayList<>(List.of(player1,player2, player3)));
         }
         catch(Exception e){
             e.printStackTrace();
@@ -110,23 +102,20 @@ public class Controller {
     }
 
     public void initializeSplashMenu(){
-        EventHandler<ActionEvent> startEvent = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                model.dealFlow(roundNumber);
-                nextAction(model.getAction(roundNumber));
-            }
+        EventHandler<ActionEvent> startEvent = e -> {
+            model.dealFlow(roundNumber);
+            nextAction(model.getAction(roundNumber));
         };
         view.createStartScreen(startEvent);
     }
 
 
-
     //TODO: maintain player that raised last
     public void initializeBettingMenu() {
         playerList.updateActivePlayers();
-        Iterator<Player> players = playerList.getActivePlayers().iterator();
-        while (players.hasNext()) {
-            Player player = players.next();
+        List<Player> players = playerList.getActivePlayers();
+        List<Player> playersCopy = new ArrayList<>(players);
+        for (Player player : playersCopy) {
             if (!player.isInteractive()) {
                 AutoPlayer autoPlayer = (AutoPlayer) player;
                 autoPlayer.decideAction();
@@ -143,6 +132,7 @@ public class Controller {
             }
             turnManager.checkOnePlayerRemains(playerList);
         }
+        playerList.updateActivePlayers();
         turnManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
         if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
@@ -151,34 +141,6 @@ public class Controller {
         }
     }
 
-
-//    //TODO: maintain player that raised last
-//    public void initializeBettingMenu() {
-//        playerList.updateActivePlayers();
-//        for (Player player : playerList.getActivePlayers()) {
-//            if (!player.isInteractive()) {
-//                AutoPlayer autoPlayer = (AutoPlayer) player;
-//                autoPlayer.decideAction();
-//            }
-//            else {
-//                EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
-//
-//                TextField betInput = new TextField();
-//                Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
-//                Optional<ButtonType> betBoxResult = betBox.showAndWait();
-//                if (betBoxResult.isPresent()) {
-//                    indicateBet(player, betInput.getText());
-//                }
-//            }
-//            turnManager.checkOnePlayerRemains(playerList);
-//        }
-//        turnManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
-//        if (roundNumber < totalRounds + 1) {
-//            model.dealFlow(roundNumber);
-//            System.out.println(roundNumber);
-//            nextAction(model.getAction(roundNumber));
-//        }
-//    }
 
 
     public void nextAction(String action){
@@ -214,22 +176,23 @@ public class Controller {
             }
         }
         roundNumber++;
+        playerList.updateActivePlayers();
         initializeBettingMenu();
     }
 
     //don't like this conditional
     private void dealingRound(){
-        recipient = model.getRecipient();
+        String recipient = model.getRecipient();
         if (recipient.equals("Community")){
             dealFrontEndCardsInRound(communityCards, displayCommunity);
         }
         else {
-//            playerList.updateActivePlayers();
             for (Player player : playerList.getActivePlayers()){
                 dealFrontEndCardsInRound(player,playerMappings.get(player));
             }
         }
         roundNumber++;
+        playerList.updateActivePlayers();
         initializeBettingMenu();
     }
 
@@ -253,7 +216,7 @@ public class Controller {
         int dealLocation = 0;
         int cardIndex = 0;
         for (Card discardedCard: player.getDiscardedCards()){
-            FrontEndCard discardedFrontEndCard = frontEndCardMapppings.get(discardedCard.toString());
+            FrontEndCard discardedFrontEndCard = frontEndCardMappings.get(discardedCard.toString());
             view.remove(discardedFrontEndCard);
 
             dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
@@ -268,7 +231,7 @@ public class Controller {
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
         FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
-        frontEndCardMapppings.put(card.toString(), frontEndCard);
+        frontEndCardMappings.put(card.toString(), frontEndCard);
         return frontEndCard;
     }
 

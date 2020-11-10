@@ -19,7 +19,7 @@ public class ControllerTest extends DukeApplicationTest {
     private FrontEndCard testCard;
 
     public void start(final Stage stage) {
-        controller = new Controller(stage);
+        controller = new Controller();
         stage.setScene(controller.setupScene());
         stage.show();
     }

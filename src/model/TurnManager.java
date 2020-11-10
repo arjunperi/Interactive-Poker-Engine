@@ -2,9 +2,6 @@ package model;
 
 import java.util.*;
 
-//this might need to be abstracted to allow for different betting orders -> might only be needed for stud games
-// where the value of your exposed cards determines who bets first
-
 public class TurnManager {
     private Player winner;
     private int currentRound;
@@ -19,15 +16,17 @@ public class TurnManager {
     }
 
     public void checkOnePlayerRemains(PlayerList playerList){
-        playerList.removeFoldedPlayers();
+        playerList.updateActivePlayers();
         List<Player> activePlayers = playerList.getActivePlayers();
-        if (activePlayers.size() == 1 ){
+        if (activePlayers.size() == 1){
+            System.out.print("hit");
             winner = activePlayers.get(0);
             pot.dispersePot(winner,pot.getPotTotal());
             pot.clearPot();
             System.exit(0);
         }
     }
+
 
     public void checkShowDown(PlayerList playerList, int currentRound, int totalRounds){
         if (currentRound == totalRounds){

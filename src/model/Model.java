@@ -30,7 +30,7 @@ public abstract class Model {
     public void dealStats(int currentRound){
         dealer.checkDeck();
 
-        playerList.removeFoldedPlayers();
+        playerList.updateActivePlayers();
         activePlayerList = playerList.getActivePlayers();
 
         String[] roundRules = modelProperties.getProperty(String.valueOf(currentRound)).split(",");
