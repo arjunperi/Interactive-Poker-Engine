@@ -18,7 +18,6 @@ public abstract class Model {
     protected Properties modelProperties;
 
 
-
     public Model(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer, Properties modelProperties){
         this.totalRounds = totalRounds;
         this.communityCards = communityCards;

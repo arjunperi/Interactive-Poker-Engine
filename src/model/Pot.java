@@ -1,5 +1,9 @@
 package model;
 
+import org.w3c.dom.ls.LSInput;
+
+import java.util.List;
+
 public class Pot {
     private int potTotal;
 
@@ -12,8 +16,12 @@ public class Pot {
         System.out.println("Pot total is: $" + potTotal);
     }
 
-    public void dispersePot(Player player){
-        player.updateBankroll(potTotal);
+    //error checking of some sort needed here
+    public void dispersePot(Player winner, int potAmount){
+        winner.updateBankroll(potAmount);
+    }
+
+    public void clearPot(){
         potTotal = 0;
     }
 

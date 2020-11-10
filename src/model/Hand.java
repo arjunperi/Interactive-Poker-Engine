@@ -7,12 +7,10 @@ public class Hand {
     private List<Card> hand;
 
     //for temporary hand evaluation logic -> won't exist later
-    private int handTotal;
     private int handSize;
 
     public Hand() {
         hand = new ArrayList<>();
-        handTotal = 0;
         handSize = 0;
     }
 
@@ -34,14 +32,6 @@ public class Hand {
         return hand;
     }
 
-
-    public int getHandTotal() {
-        for (Card card : hand) {
-            handTotal += card.getRank();
-        }
-        return handTotal;
-    }
-
     public int getHandSize() {
         return handSize;
     }
@@ -56,13 +46,13 @@ public class Hand {
                 i++;
             }
         }
-    return null;
+        return null;
     }
 
     public Hand sortHand() {
         Hand sortedHand = new Hand();
         while (this.getHandSize() > 0) {
-            int max = 0;
+            int max = -2;
             Card maxCard = null;
             for (Card card : this.getCards()) {
                 if (card.getRank() > max) {

@@ -14,7 +14,6 @@ public abstract class CardRecipient {
 
     abstract void receiveCard(Card card);
 
-
     protected void clearNewCards() {
         newCardList.clear();
     }

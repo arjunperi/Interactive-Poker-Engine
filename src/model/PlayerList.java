@@ -6,11 +6,9 @@ import java.util.stream.Collectors;
 //Encapsulaton problems?
 public abstract class PlayerList {
     protected List<Player> activePlayers;
-    protected HandEvaluator handEvaluator;
 
-    public PlayerList(List<Player> players, HandEvaluator handEvaluator){
+    public PlayerList(List<Player> players){
         this.activePlayers = players;
-        this.handEvaluator = handEvaluator;
     }
 
     public void removeFoldedPlayers(){

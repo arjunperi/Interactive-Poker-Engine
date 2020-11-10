@@ -12,11 +12,14 @@ public class Player extends CardRecipient{
     private CommunityCards communityCards;
     private Hand totalHand;
     private Hand totalVisibleHand;
+    private Pot pot;
+    protected boolean isInteractive;
     //have a player's hand strength
     //update it after every deal
 
-    public Player(String name, int startingAmount, CommunityCards communityCards){
+    public Player(String name, int startingAmount, CommunityCards communityCards, Pot pot){
         super();
+        this.pot = pot;
         playerName = name;
         moneyCount = startingAmount;
         playerHand = new Hand();
@@ -80,7 +83,7 @@ public class Player extends CardRecipient{
             totalHand.add(communityCard);
         }
         addDummyCards(totalHand);
-//        totalHand.sortHand();
+        totalHand = totalHand.sortHand();
     }
 
     public Hand getTotalVisibleHand(){
@@ -91,6 +94,7 @@ public class Player extends CardRecipient{
             }
         }
         addDummyCards(totalVisibleHand);
+        totalVisibleHand = totalVisibleHand.sortHand();
         return totalVisibleHand;
     }
 
@@ -99,7 +103,7 @@ public class Player extends CardRecipient{
         if (handSize < 5){
             int fiveCardHandDifference = 5 - handSize;
             for (int i=0; i<fiveCardHandDifference; i++){
-                Card dummyCard = new Card(0, Suit.CLUBS);
+                Card dummyCard = new Card(-1, Suit.CLUBS);
                 hand.add(dummyCard);
             }
         }
@@ -109,6 +113,18 @@ public class Player extends CardRecipient{
         return totalHand;
     }
 
+    public void bet(int amountToBet){
+        pot.addToPot(amountToBet);
+        updateBankroll(amountToBet * -1);
+    }
+
+    public void fold(){
+        hasFolded = true;
+    }
+
+    public boolean isInteractive(){
+        return isInteractive;
+    }
 
 
     @Override

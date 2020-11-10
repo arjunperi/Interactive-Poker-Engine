@@ -14,6 +14,15 @@ public class HandEvaluator {
         bestHandMapping = new HashMap<>();
     }
 
+    public boolean isFiveCardHand(Hand hand){
+        for(Card card : hand.getCards()){
+            if(card.getRank()<1){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isFlush(Hand hand) {
         Suit flushSuit = hand.get(0).getCardSuit();
         for (Card card : hand.getCards()) {
@@ -21,7 +30,8 @@ public class HandEvaluator {
                 return false;
             }
         }
-        return true;
+
+        return isFiveCardHand( hand);
     }
 
 
@@ -39,7 +49,7 @@ public class HandEvaluator {
             }
 
         }
-        return true;
+         return isFiveCardHand( hand);
     }
 
     public boolean isStraightFlush(Hand hand) {
@@ -47,29 +57,32 @@ public class HandEvaluator {
     }
 
     public boolean isFourOfAKind(Hand hand) {
+        if(rankCount(hand,-1)==4){ return false;}
+
         if (rankCount(hand, hand.get(0).getRank()) == 4 || rankCount(hand, hand.get(1).getRank()) == 4) {
-            return true;
-        }
+            return true;        }
         return false;
     }
 
 
     public boolean isFullHouse(Hand hand) {
         if ((rankCount(hand, hand.get(0).getRank()) == 3 && rankCount(hand, hand.get(3).getRank()) == 2) || (rankCount(hand, hand.get(0).getRank()) == 2 && rankCount(hand, hand.get(2).getRank()) == 3)) {
-            return true;
-        }
+            return isFiveCardHand( hand);        }
         return false;
     }
 
     public boolean isThreeOfAKind(Hand hand) {
+        if(rankCount(hand,-1)==3){ return false;}
         if ((rankCount(hand, hand.get(0).getRank()) == 3) || (rankCount(hand, hand.get(1).getRank()) == 3) || (rankCount(hand, hand.get(2).getRank()) == 3)) {
             return true;
         }
+
         return false;
     }
 
 
     public boolean isTwoPair(Hand hand) {
+        if(rankCount(hand,-1)==2){ return false;}
         if ((rankCount(hand, hand.get(1).getRank()) == 2 && rankCount(hand, hand.get(3).getRank()) == 2)) {
             return true;
         }
@@ -77,8 +90,9 @@ public class HandEvaluator {
     }
 
     public boolean isPair(Hand hand) {
+
         for (Card card : hand.getCards()) {
-            if ((rankCount(hand, card.getRank())) == 2) {
+            if ((rankCount(hand, card.getRank())) == 2 && card.getRank()!=-1){
                 return true;
             }
         }
@@ -86,14 +100,7 @@ public class HandEvaluator {
     }
 
     public boolean isHighCard(Hand hand) {
-        if (isStraight(hand) || isFlush(hand)) {
-            return false;
-        }
-        for (Card card : hand.getCards()) {
-            if ((rankCount(hand, card.getRank())) > 1) {
-                return false;
-            }
-        }
+
         return true;
     }
 
@@ -306,7 +313,7 @@ public class HandEvaluator {
         return handRank;
     }
 
-    public List<Hand> getBestHands(List <Hand> hands) {
+    public List<Hand> getBestHands(List<Hand> hands) {
         int[] bestHand = new int[6];
         boolean isSame;
         int index;
@@ -314,7 +321,7 @@ public class HandEvaluator {
         for (Hand hand : hands) {
             index = 0;
             isSame = true;
-            while (isSame && index < 5) {
+            while (isSame && index < 6) {
                 int[] handStrength = handStrength(hand);
                 if (handStrength[index] > bestHand[index]) {
                     bestHand = handStrength;
@@ -341,21 +348,36 @@ public class HandEvaluator {
         return bestHands;
     }
 
-    public List<Player> getBestPlayers(PlayerList playerList) {
-       List<Player> bestPlayers = new ArrayList<>();
-       bestHandMapping.clear();
-       for (Player player : playerList.getActivePlayers()){
-           combiner.clearAllHands();
-           Hand playerHand = getBestHands(combiner.getAllHands(player)).get(0);
-           bestHandMapping.put(playerHand, player);
-       }
-       List<Hand> bestHands = getBestHands (new ArrayList<>(bestHandMapping.keySet()));
-       for (Card bestCards: bestHands.get(0).getCards()){
-           System.out.print(bestCards.toString());
-       }
-       for (Hand bestHand : bestHands){
-           bestPlayers.add(bestHandMapping.get(bestHand));
-       }
-       return bestPlayers;
+
+    //maybe sort here instead of when updating the total hands
+    public List<Player> getBestPlayers(PlayerList playerList, boolean isVisibleHand) {
+        List<Player> bestPlayers = new ArrayList<>();
+        bestHandMapping.clear();
+        for (Player player : playerList.getActivePlayers()){
+            combiner.clearAllHands();
+            Hand playerHand;
+            if (isVisibleHand){
+                playerHand = getBestHands(combiner.getAllHands(player.getTotalVisibleHand())).get(0);
+            }
+            else{
+                playerHand = getBestHands(combiner.getAllHands(player.getTotalHand())).get(0);
+            }
+            bestHandMapping.put(playerHand, player);
+        }
+        List<Hand> bestHands = getBestHands (new ArrayList<>(bestHandMapping.keySet()));
+
+        for (Card bestCard: bestHands.get(0).getCards()){
+            System.out.print(bestCard.toString());
+        }
+
+        for (Hand bestHand : bestHands){
+            bestPlayers.add(bestHandMapping.get(bestHand));
+        }
+
+        System.out.println("total: ");
+        for (Card card: bestPlayers.get(0).getTotalHand().getCards()){
+            System.out.println(card.toString());
+        }
+        return bestPlayers;
     }
-    }
+}

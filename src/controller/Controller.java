@@ -52,11 +52,11 @@ public class Controller {
         game = new Game();
         handEvaluator = game.getHandEvaluator();
         communityCards = game.getCommunityCards();
-        initializePlayerList("SevenCardStud");
+        pot = game.getPot();
+        initializePlayerList("Holdem");
 
         turnManager = game.getTurnManager();
         deck = game.getDeck();
-        pot = game.getPot();
         dealer = game.getDealer();
         turnManager = game.getTurnManager();
 
@@ -70,7 +70,7 @@ public class Controller {
 
         this.stage = stage;
         initializeSplashMenu();
-        initializeModel("SevenCardStud");
+        initializeModel("Holdem");
     }
 
     public Scene setupScene() {
@@ -79,14 +79,15 @@ public class Controller {
 
     public void initializePlayerList(String fileName){
         //TODO: use factory design pattern here to choose what kind of playerList to instantiate
+        //TODO: use configuration files to instantiate the players
         try {
             Properties modelProperties = reader.getPropertyFile(fileName);
             String playerListType = modelProperties.getProperty("playerListType");
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
-            Player player1 = new Player("Arjun", 100, communityCards);
-            Player player2 = new Player("Christian", 100, communityCards);
-            playerList = (PlayerList) cl.getConstructor(List.class, HandEvaluator.class)
-                    .newInstance(new ArrayList<>(List.of(player1,player2)), handEvaluator);
+            Player player1 = new InteractivePlayer("Arjun", 100, communityCards, pot);
+            Player player2 = new InteractivePlayer("Christian", 100, communityCards, pot);
+            playerList = (PlayerList) cl.getConstructor(List.class)
+                    .newInstance(new ArrayList<>(List.of(player1,player2)));
         }
         catch(Exception e){
             e.printStackTrace();
@@ -118,27 +119,67 @@ public class Controller {
         view.createStartScreen(startEvent);
     }
 
-    //TODO: maintain player that raised last
-    public void initializeBettingMenu(){
-        playerList.updateActivePlayers();
-        for (Player player : playerList.getActivePlayers()) {
-            EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
 
-            TextField betInput = new TextField();
-            Dialog betBox = view.makeOptionScreen(betInput);
-            Optional betBoxResult = betBox.showAndWait();
-            if (betBoxResult.isPresent()) {
-                indicateBet(player,betInput.getText());
+
+    //TODO: maintain player that raised last
+    public void initializeBettingMenu() {
+        playerList.updateActivePlayers();
+        Iterator<Player> players = playerList.getActivePlayers().iterator();
+        while (players.hasNext()) {
+            Player player = players.next();
+            if (!player.isInteractive()) {
+                AutoPlayer autoPlayer = (AutoPlayer) player;
+                autoPlayer.decideAction();
             }
-            turnManager.checkOnePlayerRemains(playerList.getActivePlayers());
+            else {
+                EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+
+                TextField betInput = new TextField();
+                Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
+                Optional<ButtonType> betBoxResult = betBox.showAndWait();
+                if (betBoxResult.isPresent()) {
+                    indicateBet(player, betInput.getText());
+                }
+            }
+            turnManager.checkOnePlayerRemains(playerList);
         }
-        turnManager.checkShowDown(playerList.getActivePlayers(),roundNumber,totalRounds + 1);
-        if (roundNumber < totalRounds + 1 ){
+        turnManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
+        if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
             System.out.println(roundNumber);
             nextAction(model.getAction(roundNumber));
         }
     }
+
+
+//    //TODO: maintain player that raised last
+//    public void initializeBettingMenu() {
+//        playerList.updateActivePlayers();
+//        for (Player player : playerList.getActivePlayers()) {
+//            if (!player.isInteractive()) {
+//                AutoPlayer autoPlayer = (AutoPlayer) player;
+//                autoPlayer.decideAction();
+//            }
+//            else {
+//                EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+//
+//                TextField betInput = new TextField();
+//                Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
+//                Optional<ButtonType> betBoxResult = betBox.showAndWait();
+//                if (betBoxResult.isPresent()) {
+//                    indicateBet(player, betInput.getText());
+//                }
+//            }
+//            turnManager.checkOnePlayerRemains(playerList);
+//        }
+//        turnManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
+//        if (roundNumber < totalRounds + 1) {
+//            model.dealFlow(roundNumber);
+//            System.out.println(roundNumber);
+//            nextAction(model.getAction(roundNumber));
+//        }
+//    }
+
 
     public void nextAction(String action){
         try{
@@ -232,7 +273,7 @@ public class Controller {
     }
 
     private void initializeCommunity(){
-        displayCommunity = new FrontEndCommunity(200,200);
+        displayCommunity = new FrontEndCommunity(200,400);
     }
 
 

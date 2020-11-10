@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommunityCards extends CardRecipient {
@@ -17,4 +16,6 @@ public class CommunityCards extends CardRecipient {
     public List<Card> getCommunityCardsList(){
         return cardsList;
     }
+
+
 }

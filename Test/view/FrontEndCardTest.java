@@ -13,7 +13,9 @@ public class FrontEndCardTest extends DukeApplicationTest {
     @Test
     public void testFrontEndCardCreation(){
         FrontEndCard frontEndQueen = new FrontEndCard("Q", Suit.CLUBS, false);
-        assertEquals(frontEndQueen.getText(), "Q\nCLUBS");
+        assertEquals(frontEndQueen.getText(), "Q\n" +
+                "CLUBS\n" +
+                "NON VISIBLE");
     }
 
 }

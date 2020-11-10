@@ -6,63 +6,56 @@ import java.util.*;
 // where the value of your exposed cards determines who bets first
 
 public class TurnManager {
-    protected Player winner;
-    protected int currentRound;
-    protected boolean roundOver;
-    protected Pot pot;
-    protected List<Player> activePlayers;
+    private Player winner;
+    private int currentRound;
+    private Pot pot;
+    private HandEvaluator handEvaluator;
 
 
     public TurnManager(Pot pot){
         currentRound = 0;
         this.pot = pot;
+        handEvaluator = new HandEvaluator();
     }
 
-    public void checkOnePlayerRemains(List<Player> activePlayers){
+    public void checkOnePlayerRemains(PlayerList playerList){
+        playerList.removeFoldedPlayers();
+        List<Player> activePlayers = playerList.getActivePlayers();
         if (activePlayers.size() == 1 ){
             winner = activePlayers.get(0);
-            endGame();
+            pot.dispersePot(winner,pot.getPotTotal());
+            pot.clearPot();
+            System.exit(0);
         }
     }
 
-    public void checkShowDown(List<Player> activePlayers, int currentRound, int totalRounds){
+    public void checkShowDown(PlayerList playerList, int currentRound, int totalRounds){
         if (currentRound == totalRounds){
-            showDown(activePlayers);
+            showDown(playerList);
         }
     }
 
-    public void showDown(List<Player> activePlayers){
-        Map<Player, Integer> scoreMap = new HashMap<>();
-        int maxScore = 0;
-        for (Player player: activePlayers){
-            scoreMap.put(player, player.getHand().getHandTotal());
+    private int splitAmount(int numberOfWinners){
+        return pot.getPotTotal()/numberOfWinners;
+    }
+
+    //should we be updating the players' total hands in a better way/ different place?
+    //AI updating?
+    public void showDown(PlayerList activePlayers){
+        for (Player player: activePlayers.getActivePlayers()){
+            player.updateTotalHand();
         }
-        for (Player player: scoreMap.keySet()){
-            System.out.println(player.toString() + " " + scoreMap.get(player));
-            if (scoreMap.get(player) > maxScore){
-                maxScore = scoreMap.get(player);
-                winner = player;
-            }
+        List<Player> bestPlayers =  handEvaluator.getBestPlayers(activePlayers, false);
+        int winningAmount = splitAmount(bestPlayers.size());
+        for (Player player : bestPlayers){
+            System.out.println("\n" + player.toString() + " won and received $" + winningAmount);
+            pot.dispersePot(player, winningAmount);
         }
-        System.out.println("Winner is: " + winner.toString() + " with a score of " +  maxScore);
-        System.out.println("His winning hand was: ");
-        for (Card card: winner.getHand().getCards()){
-            System.out.println(card.getRank());
-        }
+        pot.clearPot();
         System.exit(0);
     }
 
     public int getCurrentRound(){
         return currentRound;
-    }
-
-    public void endGame(){
-        pot.dispersePot(winner);
-        System.out.println("Winner is: " + winner.toString() + " and he has $" + winner.getBankroll());
-        System.out.println("His winning hand was: ");
-        for (Card card: winner.getHand().getCards()){
-            System.out.println(card.getRank());
-        }
-        System.exit(0);
     }
 }

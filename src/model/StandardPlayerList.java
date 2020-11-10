@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 public class StandardPlayerList extends PlayerList{
 
-    public StandardPlayerList(List<Player> players, HandEvaluator handEvaluator){
-        super(players, handEvaluator);
+    public StandardPlayerList(List<Player> players){
+        super(players);
     }
 
     public void updateActivePlayers() {
