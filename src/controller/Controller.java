@@ -52,7 +52,7 @@ public class Controller {
         game = new Game();
         handEvaluator = game.getHandEvaluator();
         communityCards = game.getCommunityCards();
-        initializePlayerList("HoldEm");
+        initializePlayerList("SevenCardStud");
 
         turnManager = game.getTurnManager();
         deck = game.getDeck();
@@ -70,7 +70,7 @@ public class Controller {
 
         this.stage = stage;
         initializeSplashMenu();
-        initializeModel("HoldEm");
+        initializeModel("SevenCardStud");
     }
 
     public Scene setupScene() {
@@ -126,7 +126,7 @@ public class Controller {
 
             TextField betInput = new TextField();
             Dialog betBox = view.makeOptionScreen(betInput);
-            Optional<ButtonType> betBoxResult = betBox.showAndWait();
+            Optional betBoxResult = betBox.showAndWait();
             if (betBoxResult.isPresent()) {
                 indicateBet(player,betInput.getText());
             }
