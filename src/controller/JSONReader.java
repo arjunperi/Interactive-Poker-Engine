@@ -35,6 +35,7 @@ public class JSONReader {
     }
   }
 
+  //TODO Refactor all parse methods into one that uses Generics
   private void parseCardSuits() {
     JSONObject jObject = jo.getJSONObject("suits");
     for (Iterator<String> it = jObject.keys(); it.hasNext(); ) {
@@ -57,5 +58,31 @@ public class JSONReader {
 
   public Map<String, Integer> getRanks() {
     return ranks;
+  }
+
+  /*public <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
+    try {
+      return clazz.cast(o);
+    } catch(ClassCastException e) {
+      return null;
+    }
+  }*/
+
+  public List<String> getSuitNames() {
+    return new ArrayList<>(getSuits().keySet());
+
+  }
+
+  public List<String> getSuitImages() {
+    return new ArrayList<>(getSuits().values());
+  }
+
+  public List<String> getRankNames() {
+    return new ArrayList<>(getRanks().keySet());
+
+  }
+
+  public List<Integer> getRankValues() {
+    return new ArrayList<>(getRanks().values());
   }
 }

@@ -17,6 +17,7 @@ public class Game {
     private List<String> ranks;
     private JSONReader reader;
 
+    //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
     public Game(){
         pot = new Pot();
         //TODO: create players based on properties files / user inputs
@@ -29,11 +30,9 @@ public class Game {
 
         reader = new JSONReader();
         reader.parse("/texas_holdem.json");
-        List<Integer> rankValues = new ArrayList<>(reader.getRanks().values());
-        List<String> suitNames = new ArrayList<>(reader.getSuits().keySet());
 
         //deck = new Deck();
-        deck = new Deck(suitNames, rankValues);
+        deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 
 
         dealer = new Dealer(deck);
