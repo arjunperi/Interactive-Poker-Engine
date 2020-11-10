@@ -367,17 +367,13 @@ public class HandEvaluator {
         List<Hand> bestHands = getBestHands (new ArrayList<>(bestHandMapping.keySet()));
 
         for (Card bestCard: bestHands.get(0).getCards()){
-            System.out.print(bestCard.toString());
+            System.out.print(bestCard.toString() + " " );
         }
 
         for (Hand bestHand : bestHands){
             bestPlayers.add(bestHandMapping.get(bestHand));
         }
 
-        System.out.println("total: ");
-        for (Card card: bestPlayers.get(0).getTotalHand().getCards()){
-            System.out.println(card.toString());
-        }
         return bestPlayers;
     }
 }

@@ -119,6 +119,7 @@ public class Player extends CardRecipient{
     }
 
     public void fold(){
+        System.out.println(this.toString() + " has folded");
         hasFolded = true;
     }
 
