@@ -16,4 +16,6 @@ public class CommunityCards extends CardRecipient {
     public List<Card> getCommunityCardsList(){
         return cardsList;
     }
+
+
 }

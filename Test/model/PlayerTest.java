@@ -11,14 +11,16 @@ public class PlayerTest extends DukeApplicationTest {
     @Test
     public void testGetBankroll(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         assertEquals(100, player.getBankroll());
     }
 
     @Test
     public void testUpdateBankroll(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         player.updateBankroll(-100);
         assertEquals(0, player.getBankroll());
     }
@@ -26,7 +28,8 @@ public class PlayerTest extends DukeApplicationTest {
     @Test
     public void testIsSolvent(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         player.updateBankroll(-100);
         assertFalse(player.isSolvent());
     }
@@ -34,7 +37,8 @@ public class PlayerTest extends DukeApplicationTest {
     @Test
     public void testFold(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         assertTrue(player.isActive());
         player.exitHand();
         assertFalse(player.isActive());
@@ -43,7 +47,8 @@ public class PlayerTest extends DukeApplicationTest {
     @Test
     public void testAddingToHand(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
@@ -52,7 +57,8 @@ public class PlayerTest extends DukeApplicationTest {
     @Test
     public void testDiscard(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         Card testCard = new Card(2,Suit.CLUBS);
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
@@ -64,7 +70,8 @@ public class PlayerTest extends DukeApplicationTest {
     @Test
     public void testToString(){
         CommunityCards communityCards = new CommunityCards();
-        player = new Player("Player", 100, communityCards);
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
         assertEquals("Player", player.toString());
     }
 

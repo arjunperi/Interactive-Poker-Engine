@@ -10,13 +10,14 @@ public class PotTest {
     void testAddToPot(){
         Pot pot = new Pot();
         CommunityCards communityCards = new CommunityCards();
-        Player player = new Player("Arjun",100, communityCards);
+        Player player = new Player("Arjun",100, communityCards, pot);
         assertEquals(0,pot.getPotTotal());
         pot.addToPot(10);
         assertEquals(10,pot.getPotTotal());
         pot.addToPot(10);
         assertEquals(20,pot.getPotTotal());
-        pot.dispersePot(player);
+        pot.dispersePot(player, pot.getPotTotal());
+        pot.clearPot();
         assertEquals(0,pot.getPotTotal());
     }
 
@@ -24,9 +25,9 @@ public class PotTest {
     public void dispersePot(){
         Pot pot = new Pot();
         CommunityCards communityCards = new CommunityCards();
-        Player player = new Player("Arjun",100, communityCards);
+        Player player = new Player("Arjun",100, communityCards, pot);
         pot.addToPot(10);
-        pot.dispersePot(player);
+        pot.dispersePot(player, pot.getPotTotal());
         assertEquals(110,player.getBankroll());
     }
 
