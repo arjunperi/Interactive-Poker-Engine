@@ -1,17 +1,16 @@
 package model;
 
-import java.util.List;
 import java.util.Properties;
 
 public class DrawModel extends Model {
 
 
-    public DrawModel(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer){
-        super(totalRounds, players, communityCards, dealer);
+    public DrawModel(int totalRounds, PlayerList players,CommunityCards communityCards, Dealer dealer, Properties modelProperties){
+        super(totalRounds, players, communityCards, dealer, modelProperties);
     }
 
     public void dealFlow(int currentRound){
-        //later, use reflection for this
+        //TODO: find a way around this conditional
         dealStats(currentRound);
         if (recipient.equals("Community")){
             //TODO: Throw an exception here
@@ -19,31 +18,8 @@ public class DrawModel extends Model {
         }
         else{
             for (Player player: activePlayerList){
-                pokerDealer.dealCards(player,numberOfCards);
+                dealer.dealCards(player, visibilityList);
             }
-        }
-    }
-
-    public String getAction(int currentRound){
-        Properties ruleProperties = getPropertyFile("FiveCardDraw");
-        String action  = ruleProperties.getProperty("action" + currentRound);
-        return action;
-    }
-
-    //should it be in this class?
-    public Card stringToCard(String cardString){
-        int spaceIndex = cardString.indexOf(" ");
-        Suit suit = Suit.valueOf(cardString.substring(0,spaceIndex));
-        int rank = Integer.parseInt(cardString.substring(spaceIndex + 1, cardString.length()));
-        return new Card(rank, suit);
-    }
-
-    public void exchangeCards(Player player, List<String> exchangeCards) {
-        player.discardedCardList.clear();
-        player.newCardList.clear();
-        for (String exchangeCard: exchangeCards){
-            Card card = stringToCard(exchangeCard);
-            pokerDealer.exchangeCards(player, card);
         }
     }
     }

@@ -12,6 +12,7 @@ public class Deck {
     public Deck() {
         deck = new Stack();
         createDeck();
+        Collections.shuffle(deck);
     }
 
     public Card getTopCard() {

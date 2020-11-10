@@ -35,9 +35,9 @@ public class CardTest {
     @Test
     void testCardVisibility() {
         Card card = new Card(2, Suit.CLUBS);
-        assertTrue(false == card.getCardVisibility());
+        assertTrue(false == card.isVisible());
         card.makeVisible();
-        assertTrue(true == card.getCardVisibility());
+        assertTrue(true == card.isVisible());
 
     }
 

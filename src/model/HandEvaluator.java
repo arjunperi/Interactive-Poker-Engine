@@ -1,8 +1,18 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class HandEvaluator {
+    private HandCombiner combiner;
+    private Map<Hand, Player> bestHandMapping;
+
+    public HandEvaluator(){
+        combiner = new HandCombiner();
+        bestHandMapping = new HashMap<>();
+    }
 
     public boolean isFlush(Hand hand) {
         Suit flushSuit = hand.get(0).getCardSuit();
@@ -296,7 +306,7 @@ public class HandEvaluator {
         return handRank;
     }
 
-    public ArrayList<Hand> getBestHands(ArrayList<Hand> hands) {
+    public List<Hand> getBestHands(List <Hand> hands) {
         int[] bestHand = new int[6];
         boolean isSame;
         int index;
@@ -330,4 +340,22 @@ public class HandEvaluator {
         }
         return bestHands;
     }
-}
+
+    public List<Player> getBestPlayers(PlayerList playerList) {
+       List<Player> bestPlayers = new ArrayList<>();
+       bestHandMapping.clear();
+       for (Player player : playerList.getActivePlayers()){
+           combiner.clearAllHands();
+           Hand playerHand = getBestHands(combiner.getAllHands(player)).get(0);
+           bestHandMapping.put(playerHand, player);
+       }
+       List<Hand> bestHands = getBestHands (new ArrayList<>(bestHandMapping.keySet()));
+       for (Card bestCards: bestHands.get(0).getCards()){
+           System.out.print(bestCards.toString());
+       }
+       for (Hand bestHand : bestHands){
+           bestPlayers.add(bestHandMapping.get(bestHand));
+       }
+       return bestPlayers;
+    }
+    }

@@ -9,15 +9,9 @@ public class CommunityCards extends CardRecipient {
        super();
     }
 
-    @Override
     void receiveCard(Card card) {
         cardsList.add(card);
         addNewCards(card);
-    }
-
-    @Override
-    void discardCard(Card card) {
-
     }
 
     public List<Card> getCommunityCardsList(){

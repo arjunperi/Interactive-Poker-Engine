@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Map;
 import java.util.Properties;
 
 public class Card {
@@ -8,9 +7,8 @@ public class Card {
     private Suit suit;
     private String cardSymbol;
     private int rank;
-    private boolean visible;
-    private Map<Integer,String> cardValueMap;
-    private int cardValue;
+    private boolean isVisible;
+    private FileReader reader;
 
 
     private static final String FILENAME = "CardValueMapping";
@@ -18,25 +16,14 @@ public class Card {
     public Card(int rank , Suit suit){
         this.suit = suit;
         this.rank = rank;
-        visible=false;
+        isVisible =false;
+        reader = new FileReader();
         initializeCardNumber();
     }
 
 
-    private Properties getPropertyFile(String fileName) {
-        Properties propertyFile = new Properties();
-        try {
-            propertyFile
-                    .load(Card.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return propertyFile;
-    }
-
-
     private void initializeCardNumber(){
-        Properties mappings = getPropertyFile(FILENAME);
+        Properties mappings = reader.getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));
     }
 
@@ -68,12 +55,12 @@ public class Card {
 
     public int getRank(){return rank;}
 
-    public boolean getCardVisibility(){
-        return visible;
+    public boolean isVisible(){
+        return isVisible;
     }
 
 
     public void makeVisible(){
-        visible=true;
+        isVisible =true;
     }
 }

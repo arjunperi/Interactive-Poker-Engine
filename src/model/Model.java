@@ -2,56 +2,63 @@ package model;
 
 //not sure if abstract class is the best way to handle this hierarchy
 
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public abstract class Model {
     protected int totalRounds;
-    protected Dealer pokerDealer;
-    protected PlayerList pokerPlayerList;
+    protected Dealer dealer;
+    protected PlayerList playerList;
     protected CommunityCards communityCards;
     protected List<Player> activePlayerList;
     protected int numberOfCards;
     protected String recipient;
+    protected int faceUpCards;
+    protected int faceDownCards;
+    protected List<Boolean> visibilityList;
+    protected Properties modelProperties;
 
 
-    public Model(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer){
+
+    public Model(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer, Properties modelProperties){
         this.totalRounds = totalRounds;
         this.communityCards = communityCards;
-        pokerPlayerList = players;
-        pokerDealer = dealer;
+        playerList = players;
+        this.dealer = dealer;
+        this.modelProperties = modelProperties;
+        visibilityList = new ArrayList<>();
     }
 
     public void dealStats(int currentRound){
-        pokerDealer.checkDeck();
+        dealer.checkDeck();
 
-        //TODO: Figure out a way to get the property file of the associated Model without hardcoded string
-//        Properties ruleProperties = getPropertyFile("FiveCardDraw");
-        Properties ruleProperties = getPropertyFile("Holdem");
-        pokerPlayerList.updateActivePlayers();
-        activePlayerList = pokerPlayerList.getActivePlayers();
+        playerList.removeFoldedPlayers();
+        activePlayerList = playerList.getActivePlayers();
 
-        String[] roundRules = ruleProperties.getProperty(String.valueOf(currentRound)).split(",");
+        String[] roundRules = modelProperties.getProperty(String.valueOf(currentRound)).split(",");
         numberOfCards = Integer.parseInt(roundRules[0]);
         recipient = roundRules[1];
+
+        String[] roundVisibility = modelProperties.getProperty("visibility" + currentRound).split(",");
+        visibilityList.clear();
+        faceDownCards = Integer.parseInt(roundVisibility[0]);
+        populateVisibilityList(faceDownCards, false);
+        faceUpCards = Integer.parseInt(roundVisibility[1]);
+        populateVisibilityList(faceUpCards, true);
+    }
+
+
+    public String getAction(int roundNumber){
+        String action = modelProperties.getProperty("action" + roundNumber);
+        return action;
+    }
+
+    private void populateVisibilityList(int numberOfCards, boolean isVisible){
+        for (int i=0; i < numberOfCards; i++){
+            visibilityList.add(isVisible);
+        }
     }
 
     public abstract void dealFlow(int currentRound);
-
-    public abstract String getAction(int currentRound);
-
-    public abstract void exchangeCards(Player player, List<String> exchangeCards);
-
-    public Properties getPropertyFile(String fileName) {
-        Properties propertyFile = new Properties();
-        try {
-            propertyFile
-                    .load(CommunityModel.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return propertyFile;
-    }
 
     public int getNumberOfCards(){
         return numberOfCards;

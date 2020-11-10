@@ -12,7 +12,7 @@ public class FrontEndCardTest extends DukeApplicationTest {
 
     @Test
     public void testFrontEndCardCreation(){
-        FrontEndCard frontEndQueen = new FrontEndCard("Q", Suit.CLUBS);
+        FrontEndCard frontEndQueen = new FrontEndCard("Q", Suit.CLUBS, false);
         assertEquals(frontEndQueen.getText(), "Q\nCLUBS");
     }
 
