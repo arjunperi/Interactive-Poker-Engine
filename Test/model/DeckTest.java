@@ -22,20 +22,10 @@ public class DeckTest {
         assertEquals("J", deck.getTopCard().getCardSymbol());
     }
 
-    @Test
-    public void testGetTopCard(){
-        Deck deck = new Deck();
-        assertEquals(14, deck.getTopCard().getRank());
-        assertEquals(Suit.DIAMONDS, deck.getTopCard().getCardSuit());
-        assertEquals("Q", deck.getTopCard().getCardSymbol());
-    }
 
     @Test
-    public void testReplaceTopCard(){
+    public void testTopCard(){
         Deck deck = new Deck();
-        assertEquals(14, deck.getTopCard().getRank());
-        assertEquals(Suit.DIAMONDS, deck.getTopCard().getCardSuit());
-        assertEquals("Q", deck.getTopCard().getCardSymbol());
         Card card1 = new Card(11,Suit.CLUBS);
         Card card2 = new Card(4,Suit.DIAMONDS);
         Card card3 = new Card(2,Suit.SPADES);

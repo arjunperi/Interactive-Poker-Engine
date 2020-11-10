@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommunityCards extends CardRecipient {
@@ -9,7 +8,6 @@ public class CommunityCards extends CardRecipient {
        super();
     }
 
-    @Override
     void receiveCard(Card card) {
         cardsList.add(card);
         addNewCards(card);
@@ -18,4 +16,6 @@ public class CommunityCards extends CardRecipient {
     public List<Card> getCommunityCardsList(){
         return cardsList;
     }
+
+
 }

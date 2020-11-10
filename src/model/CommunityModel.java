@@ -1,27 +1,24 @@
 package model;
 
+import java.util.Properties;
+
 public class CommunityModel extends Model {
 
-    public CommunityModel(int totalRounds, PlayerList players,CommunityCards communityCards, Dealer dealer){
-        super(totalRounds, players, communityCards, dealer);
+    public CommunityModel(int totalRounds, PlayerList players,CommunityCards communityCards, Dealer dealer, Properties modelProperties){
+        super(totalRounds, players, communityCards, dealer, modelProperties);
     }
-
 
     public void dealFlow(int currentRound){
         dealStats(currentRound);
-        //remove conditionals?
-        //use reflection?
+        //TODO: Find a way around these conditionals
         if (recipient.equals("Community")){
-            pokerDealer.dealCards(communityCards, numberOfCards);
+            dealer.dealCards(communityCards, visibilityList);
         }
         else{
             for (Player player: activePlayerList){
-                pokerDealer.dealCards(player,numberOfCards);
+                dealer.dealCards(player, visibilityList);
             }
         }
-        System.out.println("Community cards: ");
-        for (Card card : communityCards.getCommunityCardsList()){
-            System.out.println(card.getRank());
-        }
     }
+
 }

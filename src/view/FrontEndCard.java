@@ -6,13 +6,24 @@ import model.Suit;
 public class FrontEndCard extends Text {
     private String symbol;
     private Suit suit;
+    private boolean isVisible;
 
-    //TODO: take the suit and symbol, and get the associated image
-    public FrontEndCard(String symbol, Suit suit) {
-        super(10, 10, symbol + "\n" + suit);
+
+    //TODO: take the suit, symbol, and visiblity, and get the associated image
+    public FrontEndCard(String symbol, Suit suit, boolean isVisible) {
+        super(10, 10, "");
+        this.isVisible = isVisible;
+        this.setText(symbol + "\n" + suit + "\n" + getVisibilityDisplay());
         this.setId(symbol+suit.toString());
-        System.out.println(symbol+suit.toString());
         this.symbol = symbol;
         this.suit = suit;
     }
+
+    private String getVisibilityDisplay(){
+        if (isVisible){
+            return "VISIBLE";
+        }
+        return "NON VISIBLE";
+    }
+
 }

@@ -12,6 +12,7 @@ import view.FrontEndCard;
 
 
 public class ControllerTest extends DukeApplicationTest {
+
     private Controller controller;
     private Stage stage;
     private TextField betInput;
@@ -22,4 +23,5 @@ public class ControllerTest extends DukeApplicationTest {
         stage.setScene(controller.setupScene());
         stage.show();
     }
+
 }

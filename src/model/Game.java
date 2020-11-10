@@ -1,53 +1,28 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
-    private TurnManager pokerTurnManager;
-    private Model holdemModel;
-    private Model drawModel;
-    private PlayerList players;
+    private TurnManager turnManager;
     private Pot pot;
     private Deck deck;
     private Dealer dealer;
     private CommunityCards communityCards;
+    private HandEvaluator handEvaluator;
 
     public Game(){
         pot = new Pot();
-        Player player1 = new Player("Arjun", 100, pot);
-        Player player2 = new Player("Christian", 100, pot);
-//        Player player3 = new Player("Noah", 100, pot);
-
-
         this.communityCards = new CommunityCards();
-
         deck = new Deck();
-
         dealer = new Dealer(deck);
-
-        players = new PlayerList(new ArrayList<>(List.of(player1, player2)));
-        pokerTurnManager = new TurnManager(pot);
-        //we can use factory design pattern here to choose what kind of model to instantiate
-
-        holdemModel = new CommunityModel(4, players, communityCards, dealer);
-    }
-
-
-    public Model getModel() {
-        return holdemModel;
+        handEvaluator = new HandEvaluator();
+        turnManager = new TurnManager(pot);
     }
 
     public TurnManager getTurnManager(){
-        return pokerTurnManager;
+        return turnManager;
     }
 
     public Deck getDeck(){
         return deck;
-    }
-
-    public PlayerList getPlayers(){
-        return players;
     }
 
     public CommunityCards getCommunityCards(){
@@ -58,6 +33,13 @@ public class Game {
         return pot;
     }
 
+    public Dealer getDealer(){
+        return dealer;
+    }
+
+    public HandEvaluator getHandEvaluator(){
+        return handEvaluator;
+    }
 
 
 }
