@@ -68,7 +68,7 @@ public class Controller {
         return view.setupScene();
     }
 
-    public void initializePlayerList(String fileName){
+    private void initializePlayerList(String fileName){
         //TODO: use factory design pattern here to choose what kind of playerList to instantiate
         //TODO: use configuration files to instantiate the players
         try {
@@ -76,17 +76,16 @@ public class Controller {
             String playerListType = modelProperties.getProperty("playerListType");
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
             Player player1 = new InteractivePlayer("Arjun", 100, communityCards, pot);
-            Player player2 = new AutoPlayer("Christian", 100, communityCards, pot);
-            Player player3 = new InteractivePlayer("Noah", 100, communityCards, pot);
+            Player player2 = new InteractivePlayer("Christian", 100, communityCards, pot);
             playerList = (PlayerList) cl.getConstructor(List.class)
-                    .newInstance(new ArrayList<>(List.of(player1,player2, player3)));
+                    .newInstance(new ArrayList<>(List.of(player1,player2)));
         }
         catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    public void initializeModel(String fileName){
+    private void initializeModel(String fileName){
         //TODO: use factory design pattern here to choose what kind of model to instantiate
         try {
             Properties modelProperties = reader.getPropertyFile(fileName);
@@ -141,9 +140,7 @@ public class Controller {
         }
     }
 
-
-
-    public void nextAction(String action){
+    private void nextAction(String action){
         try{
             Class<?> c = Class.forName("controller.Controller");
             Method method = c.getDeclaredMethod(action);
@@ -154,7 +151,7 @@ public class Controller {
         }
     }
 
-    public void exchangeRound(){
+    private void exchangeRound(){
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
@@ -196,7 +193,7 @@ public class Controller {
         initializeBettingMenu();
     }
 
-    private void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
+    public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
         for (Card newCard: recipient.getNewCards()){
             FrontEndCard displayCard = getFrontEndCard(newCard);
             int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();

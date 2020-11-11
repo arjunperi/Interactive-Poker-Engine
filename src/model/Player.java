@@ -128,14 +128,11 @@ public class Player extends CardRecipient{
     }
 
 
-    @Override
     public String toString () {
         return playerName;
     }
 
-
-    @Override
-    void receiveCard(Card card) {
+    public void receiveCard(Card card) {
         playerHand.add(card);
         addNewCards(card);
         updateTotalHand();
