@@ -4,7 +4,7 @@ package model;
 
 import java.util.*;
 
-public abstract class Model {
+public class Model {
     protected int totalRounds;
     protected Dealer dealer;
     protected PlayerList playerList;
@@ -30,7 +30,7 @@ public abstract class Model {
     public void dealStats(int currentRound){
         dealer.checkDeck();
 
-        playerList.removeFoldedPlayers();
+        playerList.updateActivePlayers();
         activePlayerList = playerList.getActivePlayers();
 
         String[] roundRules = modelProperties.getProperty(String.valueOf(currentRound)).split(",");
@@ -57,7 +57,19 @@ public abstract class Model {
         }
     }
 
-    public abstract void dealFlow(int currentRound);
+    public void dealFlow(int currentRound){
+        //TODO: find a way around this conditional
+        dealStats(currentRound);
+        if (recipient.equals("Community")){
+            //TODO: Throw an exception here
+            System.out.println("No community cards in a Draw game");
+        }
+        else{
+            for (Player player: activePlayerList){
+                dealer.dealCards(player, visibilityList);
+            }
+        }
+    }
 
     public int getNumberOfCards(){
         return numberOfCards;

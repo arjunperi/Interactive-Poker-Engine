@@ -26,11 +26,11 @@ public class GameView {
         topGroup = new Group();
         centerGroup = new Group();
         bottomGroup = new Group();
+        bottomGroup.setId("Bottom");
         root = new BorderPane();
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
-
     }
 
     public Scene setupScene() {
@@ -71,6 +71,7 @@ public class GameView {
 //        button.setId("Fold");
 
         GridPane grid = new GridPane();
+        grid.setId("OptionPane");
         betInput.setPromptText("Enter a bet");
         betInput.setId("Bet");
         GridPane.setConstraints(betInput, 0,2);

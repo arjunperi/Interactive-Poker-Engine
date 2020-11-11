@@ -68,6 +68,10 @@ public class Player extends CardRecipient{
     }
 
 
+    public void setHand(Hand hand){
+        playerHand = hand;
+    }
+
     public void updateBankroll(int amount){
         moneyCount += amount;
         System.out.println(this.toString()  + " has $"  + moneyCount);
@@ -119,6 +123,7 @@ public class Player extends CardRecipient{
     }
 
     public void fold(){
+        System.out.println(this.toString() + " has folded");
         hasFolded = true;
     }
 
@@ -127,14 +132,11 @@ public class Player extends CardRecipient{
     }
 
 
-    @Override
     public String toString () {
         return playerName;
     }
 
-
-    @Override
-    void receiveCard(Card card) {
+    public void receiveCard(Card card) {
         playerHand.add(card);
         addNewCards(card);
         updateTotalHand();
