@@ -9,6 +9,21 @@ public class HandEvaluator {
     private HandCombiner combiner;
     private Map<Hand, Player> bestHandMapping;
 
+    private static final int POKERHANDSIZE = 5;
+    private static final int DUMMYCARDRANK = -1;
+    private static final int STRENGTHINDEX = 0;
+    private static final int STRAIGHTFLUSHRANK = 8;
+    private static final int FOUROFAKINDRANK = 7;
+    private static final int FULLHOUSERANK = 6;
+    private static final int FLUSHRANK = 5;
+    private static final int STRAIGHTRANK = 4;
+    private static final int THREEOFAKINDRANK = 3;
+    private static final int TWOPAIRRANK = 2;
+    private static final int PAIRRANK = 1;
+    private static final int HIGHCARDRANK = 0;
+
+
+
     public HandEvaluator(){
         combiner = new HandCombiner();
         bestHandMapping = new HashMap<>();
@@ -16,11 +31,31 @@ public class HandEvaluator {
 
     public boolean isFiveCardHand(Hand hand){
         for(Card card : hand.getCards()){
-            if(card.getRank()<1){
+            if(card.getRank()<1 || hand.getHandSize()!=POKERHANDSIZE){
                 return false;
             }
         }
         return true;
+    }
+
+    //hands need to be sorted in descending order for the booleans
+
+    public boolean isStraightFlush(Hand hand) {
+        return isStraight(hand) && isFlush(hand);
+    }
+
+    public boolean isFourOfAKind(Hand hand) {
+        if(rankCount(hand,DUMMYCARDRANK)==4){ return false;}
+        if (rankCount(hand, hand.get(0).getRank()) == 4 || rankCount(hand, hand.get(1).getRank()) == 4) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isFullHouse(Hand hand) {
+        if ((rankCount(hand, hand.get(0).getRank()) == 3 && rankCount(hand, hand.get(3).getRank()) == 2) || (rankCount(hand, hand.get(0).getRank()) == 2 && rankCount(hand, hand.get(2).getRank()) == 3)) {
+            return isFiveCardHand( hand);        }
+        return false;
     }
 
     public boolean isFlush(Hand hand) {
@@ -30,8 +65,7 @@ public class HandEvaluator {
                 return false;
             }
         }
-
-        return isFiveCardHand( hand);
+        return isFiveCardHand(hand);
     }
 
 
@@ -47,42 +81,20 @@ public class HandEvaluator {
                 }
                 return false;
             }
-
         }
-         return isFiveCardHand( hand);
-    }
-
-    public boolean isStraightFlush(Hand hand) {
-        return isStraight(hand) && isFlush(hand);
-    }
-
-    public boolean isFourOfAKind(Hand hand) {
-        if(rankCount(hand,-1)==4){ return false;}
-
-        if (rankCount(hand, hand.get(0).getRank()) == 4 || rankCount(hand, hand.get(1).getRank()) == 4) {
-            return true;        }
-        return false;
-    }
-
-
-    public boolean isFullHouse(Hand hand) {
-        if ((rankCount(hand, hand.get(0).getRank()) == 3 && rankCount(hand, hand.get(3).getRank()) == 2) || (rankCount(hand, hand.get(0).getRank()) == 2 && rankCount(hand, hand.get(2).getRank()) == 3)) {
-            return isFiveCardHand( hand);        }
-        return false;
+         return isFiveCardHand(hand);
     }
 
     public boolean isThreeOfAKind(Hand hand) {
-        if(rankCount(hand,-1)==3){ return false;}
+        if(rankCount(hand,DUMMYCARDRANK)==3){ return false;}
         if ((rankCount(hand, hand.get(0).getRank()) == 3) || (rankCount(hand, hand.get(1).getRank()) == 3) || (rankCount(hand, hand.get(2).getRank()) == 3)) {
             return true;
         }
-
         return false;
     }
 
-
     public boolean isTwoPair(Hand hand) {
-        if(rankCount(hand,-1)==2){ return false;}
+        if(rankCount(hand,DUMMYCARDRANK)==2){ return false;}
         if ((rankCount(hand, hand.get(1).getRank()) == 2 && rankCount(hand, hand.get(3).getRank()) == 2)) {
             return true;
         }
@@ -90,20 +102,17 @@ public class HandEvaluator {
     }
 
     public boolean isPair(Hand hand) {
-
         for (Card card : hand.getCards()) {
-            if ((rankCount(hand, card.getRank())) == 2 && card.getRank()!=-1){
+            if ((rankCount(hand, card.getRank())) == 2 && card.getRank()!=DUMMYCARDRANK){
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isHighCard(Hand hand) {
+    public boolean isHighCard(Hand hand) {return true;}
 
-        return true;
-    }
-
+//put in a hand and a rank and returns how many times that rank was in the hand
     public int rankCount(Hand hand, int rank) {
         int rankCount = 0;
         for (Card card : hand.getCards()) {
@@ -114,9 +123,10 @@ public class HandEvaluator {
         return rankCount;
     }
 
+//Hands need to be sorted in descending order before put into formatting methods
 
     public int[] formatStraightFlush(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         if (hand.get(0).getRank() == 14 && hand.get(1).getRank() == 5) {
             Suit aceSuit = hand.get(0).getCardSuit();
             hand.remove(hand.get(0));
@@ -129,7 +139,7 @@ public class HandEvaluator {
     }
 
     public int[] formatFourOfAKind(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         int index = 0;
         for (Card card : hand.getCards()) {
             if (rankCount(hand, card.getRank()) == 4) {
@@ -144,7 +154,7 @@ public class HandEvaluator {
 
 
     public int[] formatFullHouse(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         int index1 = 0;
         int index2 = 3;
         for (Card card : hand.getCards()) {
@@ -160,7 +170,7 @@ public class HandEvaluator {
     }
 
     public int[] formatFlush(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         for (int index = 0; index < orderedHand.length; index++) {
             orderedHand[index] = hand.get(index).getRank();
         }
@@ -168,21 +178,12 @@ public class HandEvaluator {
     }
 
     public int[] formatStraight(Hand hand) {
-        int[] orderedHand = new int[5];
-        if (hand.get(0).getRank() == 14 && hand.get(1).getRank() == 5) {
-            Suit aceSuit = hand.get(0).getCardSuit();
-            hand.remove(hand.get(0));
-            hand.add(new Card(1, aceSuit));
-        }
-        for (int index = 0; index < orderedHand.length; index++) {
-            orderedHand[index] = hand.get(index).getRank();
-        }
-        return orderedHand;
+        return formatStraightFlush(hand);
     }
 
 
     public int[] formatThreeOfAKind(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         int index1 = 0;
         int index2 = 3;
         for (Card card : hand.getCards()) {
@@ -198,7 +199,7 @@ public class HandEvaluator {
     }
 
     public int[] formatTwoPair(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         int index1 = 0;
         int index2 = 4;
         for (Card card : hand.getCards()) {
@@ -213,7 +214,7 @@ public class HandEvaluator {
     }
 
     public int[] formatPair(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         int index1 = 0;
         int index2 = 2;
         for (Card card : hand.getCards()) {
@@ -229,7 +230,7 @@ public class HandEvaluator {
     }
 
     public int[] formatHighCard(Hand hand) {
-        int[] orderedHand = new int[5];
+        int[] orderedHand = makeNewArray();
         for (int index = 0; index < orderedHand.length; index++) {
             orderedHand[index] = hand.get(index).getRank();
         }
@@ -240,7 +241,7 @@ public class HandEvaluator {
     public int[] handStrength(Hand hand) {
         int[] handRank = new int[6];
         if (isStraightFlush(hand)) {
-            handRank[0] = 8;
+            handRank[STRENGTHINDEX] = STRAIGHTFLUSHRANK;
             int[] formattedHand = formatStraightFlush(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -248,7 +249,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isFourOfAKind(hand)) {
-            handRank[0] = 7;
+            handRank[STRENGTHINDEX] = FOUROFAKINDRANK;
             int[] formattedHand = formatFourOfAKind(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -256,7 +257,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isFullHouse(hand)) {
-            handRank[0] = 6;
+            handRank[STRENGTHINDEX] = FULLHOUSERANK;
             int[] formattedHand = formatFullHouse(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -264,7 +265,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isFlush(hand)) {
-            handRank[0] = 5;
+            handRank[STRENGTHINDEX] = FLUSHRANK;
             int[] formattedHand = formatFlush(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -272,7 +273,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isStraight(hand)) {
-            handRank[0] = 4;
+            handRank[STRENGTHINDEX] = STRAIGHTRANK;
             int[] formattedHand = formatStraight(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -280,7 +281,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isThreeOfAKind(hand)) {
-            handRank[0] = 3;
+            handRank[STRENGTHINDEX] = THREEOFAKINDRANK;
             int[] formattedHand = formatThreeOfAKind(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -288,7 +289,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isTwoPair(hand)) {
-            handRank[0] = 2;
+            handRank[STRENGTHINDEX] = TWOPAIRRANK;
             int[] formattedHand = formatTwoPair(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -296,7 +297,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isPair(hand)) {
-            handRank[0] = 1;
+            handRank[STRENGTHINDEX] = PAIRRANK;
             int[] formattedHand = formatPair(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -304,7 +305,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isHighCard(hand)) {
-            handRank[0] = 0;
+            handRank[STRENGTHINDEX] = HIGHCARDRANK;
             int[] formattedHand = formatHighCard(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -377,4 +378,7 @@ public class HandEvaluator {
 
         return bestPlayers;
     }
+
+    public int[] makeNewArray(){return new int[POKERHANDSIZE];}
+
 }
