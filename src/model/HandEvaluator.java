@@ -199,13 +199,14 @@ public class HandEvaluator {
 
     public int[] formatTwoPair(Hand hand) {
         int[] orderedHand = new int[5];
-        int index = 0;
+        int index1 = 0;
+        int index2 = 4;
         for (Card card : hand.getCards()) {
             if (rankCount(hand, card.getRank()) == 2) {
-                orderedHand[index] = card.getRank();
-                index++;
+                orderedHand[index1] = card.getRank();
+                index1++;
             } else if (rankCount(hand, card.getRank()) == 1) {
-                orderedHand[4] = card.getRank();
+                orderedHand[index2] = card.getRank();
             }
         }
         return orderedHand;
