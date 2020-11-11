@@ -3,6 +3,9 @@ package model;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest extends DukeApplicationTest {
@@ -73,6 +76,19 @@ public class PlayerTest extends DukeApplicationTest {
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
         assertEquals("Player", player.toString());
+    }
+
+    @Test
+    public void testExchangeCards(){
+        Deck deck = new Deck();
+        Card card1 = deck.peekTopCard();
+        Dealer dealer = new Dealer(deck);
+        CommunityCards communityCards = new CommunityCards();
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
+        dealer.exchangeCards(player, (List.of("DIAMONDS 14")));
+        assertEquals(card1, player.getHand().getCards().get(0));
+        assertEquals(card1, player.getHand().getCards().get(0));
     }
 
 }

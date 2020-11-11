@@ -1,7 +1,7 @@
 package model;
 
 public class Game {
-    private TurnManager turnManager;
+    private RoundManager roundManager;
     private Pot pot;
     private Deck deck;
     private Dealer dealer;
@@ -14,11 +14,11 @@ public class Game {
         deck = new Deck();
         dealer = new Dealer(deck);
         handEvaluator = new HandEvaluator();
-        turnManager = new TurnManager(pot);
+        roundManager = new RoundManager(pot);
     }
 
-    public TurnManager getTurnManager(){
-        return turnManager;
+    public RoundManager getTurnManager(){
+        return roundManager;
     }
 
     public Deck getDeck(){

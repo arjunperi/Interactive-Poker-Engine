@@ -22,11 +22,6 @@ public abstract class PlayerList {
         activePlayers.removeAll(filtered);
     }
 
-    public void restore(){
-        activePlayers.addAll(removedPlayers);
-    }
-
-
     public abstract void updateActivePlayers();
 
 

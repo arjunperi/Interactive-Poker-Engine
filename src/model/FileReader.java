@@ -7,7 +7,7 @@ public class FileReader {
         Properties propertyFile = new Properties();
         try {
             propertyFile
-                    .load(CommunityModel.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
+                    .load(FileReader.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -24,7 +24,7 @@ public class Controller {
     private ResourceBundle projectTextResources;
 
     private Model model;
-    private TurnManager turnManager;
+    private RoundManager roundManager;
     private PlayerList playerList;
     private final List<GameDisplayRecipient> frontEndPlayers;
     private final CommunityCards communityCards;
@@ -48,9 +48,9 @@ public class Controller {
         pot = game.getPot();
         initializePlayerList("FiveCardDraw");
 
-        turnManager = game.getTurnManager();
+        roundManager = game.getTurnManager();
         dealer = game.getDealer();
-        turnManager = game.getTurnManager();
+        roundManager = game.getTurnManager();
 
         view = new GameView();
         playerMappings = new HashMap<>();
@@ -61,7 +61,9 @@ public class Controller {
         initializeCommunity();
 
         initializeSplashMenu();
-        initializeModel("FiveCardDraw");
+        Properties modelProperties = reader.getPropertyFile("FiveCardDraw");
+        totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
+        model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
     }
 
     public Scene setupScene() {
@@ -85,20 +87,6 @@ public class Controller {
         }
     }
 
-    private void initializeModel(String fileName){
-        //TODO: use factory design pattern here to choose what kind of model to instantiate
-        try {
-            Properties modelProperties = reader.getPropertyFile(fileName);
-            String modelType = modelProperties.getProperty("type");
-            totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
-            Class<?> cl = Class.forName("model." + modelType + "Model");
-            model = (Model) cl.getConstructor(int.class, PlayerList.class, CommunityCards.class, Dealer.class, Properties.class)
-                    .newInstance(totalRounds, playerList, communityCards, dealer, modelProperties);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public void initializeSplashMenu(){
         EventHandler<ActionEvent> startEvent = e -> {
@@ -129,10 +117,10 @@ public class Controller {
                     indicateBet(player, betInput.getText());
                 }
             }
-            turnManager.checkOnePlayerRemains(playerList);
+            roundManager.checkOnePlayerRemains(playerList);
         }
         playerList.updateActivePlayers();
-        turnManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
+        roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
         if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
             System.out.println(roundNumber);
