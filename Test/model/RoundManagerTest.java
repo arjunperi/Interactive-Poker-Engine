@@ -30,11 +30,11 @@ public class RoundManagerTest {
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
         player2.bet(50);
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(8, Suit.SPADES);
-        Card card3 = new Card(8, Suit.DIAMONDS);
-        Card  card4 = new Card(14, Suit.CLUBS);
-        Card card5 = new Card(14, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(8, "SPADES");
+        Card card3 = new Card(8, "DIAMONDS");
+        Card  card4 = new Card(14, "CLUBS");
+        Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -45,11 +45,11 @@ public class RoundManagerTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(10, Suit.CLUBS);
-        Card card7 = new Card(10, Suit.DIAMONDS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(10, Suit.HEARTS);
-        Card card10 = new Card(2, Suit.HEARTS);
+        Card card6 = new Card(10, "CLUBS");
+        Card card7 = new Card(10, "DIAMONDS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(10, "HEARTS");
+        Card card10 = new Card(2, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -75,11 +75,11 @@ public class RoundManagerTest {
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
         player2.bet(50);
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(8, Suit.SPADES);
-        Card card3 = new Card(8, Suit.DIAMONDS);
-        Card  card4 = new Card(14, Suit.CLUBS);
-        Card card5 = new Card(14, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(8, "SPADES");
+        Card card3 = new Card(8, "DIAMONDS");
+        Card  card4 = new Card(14, "CLUBS");
+        Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);

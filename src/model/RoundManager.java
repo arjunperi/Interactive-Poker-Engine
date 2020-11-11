@@ -19,7 +19,6 @@ public class RoundManager {
         playerList.updateActivePlayers();
         List<Player> activePlayers = playerList.getActivePlayers();
         if (activePlayers.size() == 1){
-            System.out.print("hit");
             winner = activePlayers.get(0);
             pot.dispersePot(winner,pot.getPotTotal());
             pot.clearPot();
