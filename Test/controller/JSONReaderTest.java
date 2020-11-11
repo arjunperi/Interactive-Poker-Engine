@@ -31,22 +31,22 @@ class JSONReaderTest {
 
   @Test
   void getRanks() {
-    Map<String, Integer> expectedRanks = new HashMap<>();
-    expectedRanks.put("DEUCE", 2);
-    expectedRanks.put("THREE", 3);
-    expectedRanks.put("FOUR", 4);
-    expectedRanks.put("FIVE", 5);
-    expectedRanks.put("SIX", 6);
-    expectedRanks.put("SEVEN", 7);
-    expectedRanks.put("EIGHT", 8);
-    expectedRanks.put("NINE", 9);
-    expectedRanks.put("TEN", 10);
-    expectedRanks.put("JACK", 11);
-    expectedRanks.put("QUEEN", 12);
-    expectedRanks.put("KING", 13);
-    expectedRanks.put("ACE", 14);
+    Map<Integer, String> expectedRanks = new HashMap<>();
+    expectedRanks.put(2, "DEUCE");
+    expectedRanks.put(3, "THREE");
+    expectedRanks.put(4, "FOUR");
+    expectedRanks.put(5, "FIVE");
+    expectedRanks.put(6, "SIX");
+    expectedRanks.put(7, "SEVEN");
+    expectedRanks.put(8, "EIGHT");
+    expectedRanks.put(9, "NINE");
+    expectedRanks.put(10, "TEN");
+    expectedRanks.put(11, "JACK");
+    expectedRanks.put(12, "QUEEN");
+    expectedRanks.put(13, "KING");
+    expectedRanks.put(14, "ACE");
 
-    Map<String, Integer> actualRanks = reader.getRanks();
+    Map<Integer, String> actualRanks = reader.getRanks();
     assertEquals(expectedRanks, actualRanks);
   }
 

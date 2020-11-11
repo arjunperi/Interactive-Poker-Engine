@@ -5,12 +5,22 @@ import javafx.scene.text.Text;
 public class FrontEndCard extends Text {
     private String symbol;
     private String suit;
+    private boolean isVisible;
 
     //TODO: take the suit and symbol, and get the associated image
-    public FrontEndCard(String symbol, String suit) {
-        super(10, 10, symbol + "\n" + suit);
-        this.setId(symbol+suit);
+    public FrontEndCard(String symbol, String suit, boolean isVisible) {
+        super(10, 10, "");
+        this.setId(symbol + suit);
+        this.isVisible = isVisible;
+        this.setText(symbol + "\n" + suit + "\n" + getVisibilityDisplay());
         this.symbol = symbol;
         this.suit = suit;
+    }
+
+    private String getVisibilityDisplay() {
+        if (isVisible){
+            return "VISIBLE";
+        }
+        return "NON VISIBLE";
     }
 }

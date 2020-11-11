@@ -22,12 +22,8 @@ public class DeckTest {
         reader.parse("/texas_holdem.json");
         List<String> suitNames = new ArrayList<>();
         List<Integer> rankValues = new ArrayList<>();
-        for (Integer rank: reader.getRanks().values()) {
-            rankValues.add(rank);
-        }
-        for (String suit: reader.getSuits().keySet()) {
-            suitNames.add(suit);
-        }
+        rankValues.addAll(reader.getRanks().keySet());
+        suitNames.addAll(reader.getSuits().keySet());
         deck = new Deck(suitNames, rankValues);
     }
 
@@ -44,18 +40,9 @@ public class DeckTest {
         assertEquals("J", deck.getTopCard().getCardSymbol());
     }
 
-    @Test
-    public void testGetTopCard(){
-        assertEquals(14, deck.getTopCard().getRank());
-        assertEquals("SPADES", deck.getTopCard().getCardSuit());
-        assertEquals("Q", deck.getTopCard().getCardSymbol());
-    }
 
     @Test
-    public void testReplaceTopCard(){
-        assertEquals(14, deck.getTopCard().getRank());
-        assertEquals("SPADES", deck.getTopCard().getCardSuit());
-        assertEquals("Q", deck.getTopCard().getCardSymbol());
+    public void testTopCard(){
         Card card1 = new Card(11,"CLUBS");
         Card card2 = new Card(4,"DIAMONDS");
         Card card3 = new Card(2,"SPADES");

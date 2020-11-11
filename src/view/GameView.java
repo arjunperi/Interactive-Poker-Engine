@@ -11,12 +11,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import model.Game;
+import javafx.scene.layout.VBox;
 import pokerSuite.PokerRunner;
-
-import java.util.List;
 
 public class GameView {
     private Scene scene;
@@ -28,6 +24,7 @@ public class GameView {
     public GameView(){
         topGroup = new Group();
         centerGroup = new Group();
+        centerGroup.setId("Center");
         bottomGroup = new Group();
         root = new BorderPane();
         root.setCenter(centerGroup);
@@ -41,22 +38,17 @@ public class GameView {
         return this.scene;
     }
 
-    public void createStartScreen(EventHandler<ActionEvent> startEvent){
-        Button startButton = makeButton("Start", startEvent);
-        bottomGroup.getChildren().add(startButton);
+    public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
+        VBox gameBox = new VBox();
+        gameBox.setId("GameBox");
+        Button holdEmButton = makeButton("Holdem", holdemEvent);
+        Button drawButton = makeButton("Draw", drawEvent);
+        Button studButton = makeButton("Stud", studEvent);
+        Button customButton = makeButton("Custom", customEvent);
+        gameBox.getChildren().addAll(holdEmButton,drawButton,studButton,customButton);
+        centerGroup.getChildren().add(gameBox);
     }
 
-
-//    //want a way for this to specify top or bottom group based on the recipient
-//    public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int cardOffset) {
-//        int xLocation = displayRecipient.getX() + cardOffset;
-//        card.setX(xLocation);
-//        displayRecipient.updateFrontEndCards(card, xLocation);
-//        card.setY(displayRecipient.getY());
-//        root.getChildren().add(card);
-//    }
-
-    //want a way for this to specify top or bottom group based on the recipient
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
         card.setX(xLocation);
         displayRecipient.updateFrontEndCards(card, xLocation);
@@ -67,28 +59,32 @@ public class GameView {
     public void remove(FrontEndCard card){
         root.getChildren().remove(card);
     }
-
-
+    
     public Button makeButton(String property, EventHandler<ActionEvent> handler) {
         Button result = new Button();
+        result.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         result.setId(property);
         result.setText(property);
         result.setOnAction(handler);
         return result;
     }
 
-    public Dialog makeOptionScreen(TextField betInput) {
-        bottomGroup.getChildren().clear();
+    public Dialog makeOptionScreen(TextField betInput, EventHandler<ActionEvent> foldEvent) {
+        centerGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();
+//        Button button = new Button("Fold");
+//        button.setId("Fold");
+
         GridPane grid = new GridPane();
+        grid.setId("OptionPane");
         betInput.setPromptText("Enter a bet");
         betInput.setId("Bet");
-        GridPane.setConstraints(betInput, 0,0);
+        GridPane.setConstraints(betInput, 0,2);
         grid.getChildren().add(betInput);
         betBox.getDialogPane().setContent(grid);
 
-//        Button foldButton = makeButton("Fold", foldEvent);
+
 //        grid.getChildren().add(foldButton);
 //        topGroup.getChildren().add(grid);
         return betBox;

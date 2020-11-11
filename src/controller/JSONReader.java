@@ -15,7 +15,7 @@ import org.json.JSONTokener;
 
 public class JSONReader {
   private Map<String, String> suits;
-  private Map<String, Integer> ranks;
+  private Map<Integer, String> ranks;
   private int numberOfPlayers;
   private JSONObject jo;
 
@@ -61,7 +61,7 @@ public class JSONReader {
     JSONObject cardRanks = jo.getJSONObject("ranks");
     for (Iterator<String> it = cardRanks.keys(); it.hasNext(); ) {
       String rank = it.next();
-      ranks.put(rank, (Integer) cardRanks.get(rank));
+      ranks.put(Integer.parseInt(rank), (String) cardRanks.get(rank));
     }
   }
 
@@ -69,7 +69,7 @@ public class JSONReader {
     return suits;
   }
 
-  public Map<String, Integer> getRanks() {
+  public Map<Integer, String> getRanks() {
     return ranks;
   }
 
@@ -88,7 +88,7 @@ public class JSONReader {
   }
 
   public List<Integer> getRankValues() {
-    List<Integer> rankValues = new ArrayList<>(getRanks().values());
+    List<Integer> rankValues = new ArrayList<>(getRanks().keySet());
     Collections.sort(rankValues);
     return rankValues;
   }
