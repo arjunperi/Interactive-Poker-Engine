@@ -21,7 +21,6 @@ public class Card {
         initializeCardNumber();
     }
 
-
     private void initializeCardNumber(){
         Properties mappings = reader.getPropertyFile(FILENAME);
         cardSymbol = mappings.getProperty(String.valueOf(rank));

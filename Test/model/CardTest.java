@@ -38,7 +38,6 @@ public class CardTest {
         assertTrue(false == card.isVisible());
         card.makeVisible();
         assertTrue(true == card.isVisible());
-
     }
 
     @Test

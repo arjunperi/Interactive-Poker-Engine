@@ -100,7 +100,6 @@ public class Controller {
         nextAction(model.getAction(roundNumber));
     }
 
-
     private void initializePlayerList(String fileName){
         //TODO: use factory design pattern here to choose what kind of playerList to instantiate
         //TODO: use configuration files to instantiate the players
