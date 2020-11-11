@@ -1,16 +1,20 @@
 package view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import pokerSuite.PokerRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 
 public class GameView {
@@ -63,25 +67,70 @@ public class GameView {
         return result;
     }
 
-    public Dialog makeOptionScreen(TextField betInput, EventHandler<ActionEvent> foldEvent) {
+    public ChoiceDialog makeActionScreen(EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> checkEvent, EventHandler<ActionEvent> betEvent){
+        Button foldButton = makeButton("Fold", foldEvent);
+        foldButton.setId("Fold");
+        Button checkButton = makeButton("Check", checkEvent);
+        checkButton.setId("Check");
+        Button betButton = makeButton("Bet", betEvent);
+        List<Button> choices = new ArrayList<>();
+
+        choices.add(foldButton);
+        choices.add(checkButton);
+        choices.add(betButton);
+
+        ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(checkButton, choices);
+        dialog.setTitle("Select Action");
+        dialog.setHeaderText("What would you like to do?");
+        dialog.setContentText("Choose your action:");
+
+// Traditional way to get the response value.
+
+        return dialog;
+    }
+
+
+    public Dialog makeOptionScreen(TextField betInput) {
         bottomGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();
-//        Button button = new Button("Fold");
-//        button.setId("Fold");
+
+
+
+        betInput.setPromptText("Enter a bet");
+        betInput.setId("Bet");
+
 
         GridPane grid = new GridPane();
         grid.setId("OptionPane");
-        betInput.setPromptText("Enter a bet");
-        betInput.setId("Bet");
-        GridPane.setConstraints(betInput, 0,2);
+        GridPane.setConstraints(betInput, 0,1);
         grid.getChildren().add(betInput);
         betBox.getDialogPane().setContent(grid);
 
-
-//        grid.getChildren().add(foldButton);
-//        topGroup.getChildren().add(grid);
         return betBox;
+    }
+    public GridPane getGrid(Dialog betBox){
+
+        Node grid = betBox.getDialogPane().getContent();
+
+            if (grid.getId().equals("OptionPane"));{
+                return (GridPane) grid;
+            }
+
+
+    }
+
+
+    public Button getButton(Dialog betBox, String buttonName){
+
+        GridPane grid = getGrid(betBox);
+        for (Node node: grid.getChildrenUnmodifiable())
+            if (node.getId().equals(buttonName)){
+                Button desiredButton = (Button) node;
+                return desiredButton;
+            }
+
+        return null;
     }
 
     public Dialog makeExchangeScreen(TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){

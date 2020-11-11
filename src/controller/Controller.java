@@ -4,15 +4,18 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import model.*;
 import view.*;
 
 
+import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -46,7 +49,7 @@ public class Controller {
         Game game = new Game();
         communityCards = game.getCommunityCards();
         pot = game.getPot();
-        initializePlayerList("Holdem");
+        initializePlayerList("SevenCardStud");
 
         roundManager = game.getTurnManager();
         dealer = game.getDealer();
@@ -61,7 +64,7 @@ public class Controller {
         initializeCommunity();
 
         initializeSplashMenu();
-        Properties modelProperties = reader.getPropertyFile("Holdem");
+        Properties modelProperties = reader.getPropertyFile("SevenCardStud");
         totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
     }
@@ -79,8 +82,9 @@ public class Controller {
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
             Player player1 = new InteractivePlayer("Arjun", 100, communityCards, pot);
             Player player2 = new InteractivePlayer("Christian", 100, communityCards, pot);
+            Player player3 = new InteractivePlayer("Yasser", 100, communityCards, pot);
             playerList = (PlayerList) cl.getConstructor(List.class)
-                    .newInstance(new ArrayList<>(List.of(player1,player2)));
+                    .newInstance(new ArrayList<>(List.of(player1,player2, player3)));
         }
         catch(Exception e){
             e.printStackTrace();
@@ -98,7 +102,7 @@ public class Controller {
 
 
     //TODO: maintain player that raised last
-    public void initializeBettingMenu() {
+    public void initializeActionMenu() throws InterruptedException {
         playerList.updateActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
@@ -109,13 +113,30 @@ public class Controller {
             }
             else {
                 EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
+                EventHandler<ActionEvent> checkEvent = e -> indicateCheck(player);
+                EventHandler<ActionEvent> betEvent = e -> displayBetMenu(player);
 
-                TextField betInput = new TextField();
-                Dialog betBox = view.makeOptionScreen(betInput, foldEvent);
-                Optional<ButtonType> betBoxResult = betBox.showAndWait();
-                if (betBoxResult.isPresent()) {
-                    indicateBet(player, betInput.getText());
+
+                ChoiceDialog dialog = view.makeActionScreen(foldEvent, checkEvent, betEvent);
+                Optional<Button> result = dialog.showAndWait();
+                if (result.isPresent()){
+                    if (result.get().getId().equals("Bet")){
+                        displayBetMenu(player);
+                    }
+                    else {
+                        try {
+                            Class<?> c = Class.forName("controller.Controller");
+                            Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
+                            method.invoke(this, player);
+                            //TODO: fix exceptions
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
+
+
             }
             roundManager.checkOnePlayerRemains(playerList);
         }
@@ -139,7 +160,7 @@ public class Controller {
         }
     }
 
-    private void exchangeRound(){
+    private void exchangeRound() throws InterruptedException {
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
@@ -162,11 +183,11 @@ public class Controller {
         }
         roundNumber++;
         playerList.updateActivePlayers();
-        initializeBettingMenu();
+        initializeActionMenu();
     }
 
     //don't like this conditional
-    private void dealingRound(){
+    private void dealingRound() throws InterruptedException {
         String recipient = model.getRecipient();
         if (recipient.equals("Community")){
             dealFrontEndCardsInRound(communityCards, displayCommunity);
@@ -178,7 +199,7 @@ public class Controller {
         }
         roundNumber++;
         playerList.updateActivePlayers();
-        initializeBettingMenu();
+        initializeActionMenu();
     }
 
     public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
@@ -249,5 +270,22 @@ public class Controller {
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.betDisplay(betAmount * -1);
     }
+    private void indicateCheck(Player player){
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.checkDisplay();
+
+    }
+    public void displayBetMenu(Player player){
+
+        TextField betInput = new TextField();
+        Dialog betBox = view.makeOptionScreen(betInput);
+        Optional betBoxResult = betBox.showAndWait();
+        if (betBoxResult.isPresent()) {
+
+                indicateBet(player, betInput.getText());}
+
+
+    }
+
 }
 
