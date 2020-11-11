@@ -1,4 +1,7 @@
 {
+  "gameSettings": {
+    "numberOfPlayers": 3
+  },
   "suits": {
     "HEARTS": "hearts.png",
     "SPADES": "spades.png",

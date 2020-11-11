@@ -16,11 +16,13 @@ import org.json.JSONTokener;
 public class JSONReader {
   private Map<String, String> suits;
   private Map<String, Integer> ranks;
+  private int numberOfPlayers;
   private JSONObject jo;
 
   public JSONReader(){
     suits = new HashMap<>();
     ranks = new HashMap<>();
+    numberOfPlayers = 0;
   }
 
   public void parse(String directory) {
@@ -30,26 +32,36 @@ public class JSONReader {
       jo = new JSONObject(tokener);
       parseCardSuits();
       parseCardRanks();
+      parseGameSettings();
 
     } catch (Exception e) {
       throw new SetUpException();
     }
   }
 
+  private void parseGameSettings() {
+    JSONObject gameSettings = jo.getJSONObject("gameSettings");
+    parseNumberOfPlayers(gameSettings);
+  }
+
+  private void parseNumberOfPlayers(JSONObject gameSettings) {
+    numberOfPlayers = (int) gameSettings.get("numberOfPlayers");
+  }
+
   //TODO Refactor all parse methods into one that uses Generics
   private void parseCardSuits() {
-    JSONObject jObject = jo.getJSONObject("suits");
-    for (Iterator<String> it = jObject.keys(); it.hasNext(); ) {
+    JSONObject cardSuits = jo.getJSONObject("suits");
+    for (Iterator<String> it = cardSuits.keys(); it.hasNext(); ) {
       String suit = it.next();
-      suits.put(suit, (String) jObject.get(suit));
+      suits.put(suit, (String) cardSuits.get(suit));
     }
   }
 
   private void parseCardRanks() {
-    JSONObject jObject = jo.getJSONObject("ranks");
-    for (Iterator<String> it = jObject.keys(); it.hasNext(); ) {
+    JSONObject cardRanks = jo.getJSONObject("ranks");
+    for (Iterator<String> it = cardRanks.keys(); it.hasNext(); ) {
       String rank = it.next();
-      ranks.put(rank, (Integer) jObject.get(rank));
+      ranks.put(rank, (Integer) cardRanks.get(rank));
     }
   }
 
@@ -79,6 +91,10 @@ public class JSONReader {
     List<Integer> rankValues = new ArrayList<>(getRanks().values());
     Collections.sort(rankValues);
     return rankValues;
+  }
+
+  public int getNumberOfPlayers(){
+    return numberOfPlayers;
   }
 
 }
