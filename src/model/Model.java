@@ -21,7 +21,8 @@ public class Model {
     public Model(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer, Properties modelProperties){
         this.totalRounds = totalRounds;
         this.communityCards = communityCards;
-        playerList = players;
+//        playerList = players;
+        activePlayerList = players.getActivePlayers();
         this.dealer = dealer;
         this.modelProperties = modelProperties;
         visibilityList = new ArrayList<>();
@@ -30,8 +31,8 @@ public class Model {
     public void dealStats(int currentRound){
         dealer.checkDeck();
 
-        playerList.updateActivePlayers();
-        activePlayerList = playerList.getActivePlayers();
+//        playerList.updateActivePlayers();
+//        activePlayerList = playerList.getActivePlayers();
 
         String[] roundRules = modelProperties.getProperty(String.valueOf(currentRound)).split(",");
         numberOfCards = Integer.parseInt(roundRules[0]);
@@ -61,8 +62,7 @@ public class Model {
         //TODO: find a way around this conditional
         dealStats(currentRound);
         if (recipient.equals("Community")){
-            //TODO: Throw an exception here
-            System.out.println("No community cards in a Draw game");
+            dealer.dealCards(communityCards, visibilityList);
         }
         else{
             for (Player player: activePlayerList){

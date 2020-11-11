@@ -46,7 +46,7 @@ public class Controller {
         Game game = new Game();
         communityCards = game.getCommunityCards();
         pot = game.getPot();
-        initializePlayerList("FiveCardDraw");
+        initializePlayerList("Holdem");
 
         roundManager = game.getTurnManager();
         dealer = game.getDealer();
@@ -61,7 +61,7 @@ public class Controller {
         initializeCommunity();
 
         initializeSplashMenu();
-        Properties modelProperties = reader.getPropertyFile("FiveCardDraw");
+        Properties modelProperties = reader.getPropertyFile("Holdem");
         totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
     }

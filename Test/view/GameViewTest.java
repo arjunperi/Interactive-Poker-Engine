@@ -64,6 +64,8 @@ public class GameViewTest extends DukeApplicationTest {
     @Test
     public void testBettingMenu() {
         javafxRun(() -> controller.initializeSplashMenu());
+        Button startButton = lookup("#Start").queryButton();
+        clickOn(startButton);
         javafxRun(() -> controller.initializeBettingMenu());
         TextField betInput = lookup("#Bet").query();
         GridPane optionPane = lookup("#OptionPane").query();
