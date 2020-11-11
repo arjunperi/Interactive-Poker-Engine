@@ -68,6 +68,10 @@ public class Player extends CardRecipient{
     }
 
 
+    public void setHand(Hand hand){
+        playerHand = hand;
+    }
+
     public void updateBankroll(int amount){
         moneyCount += amount;
         System.out.println(this.toString()  + " has $"  + moneyCount);

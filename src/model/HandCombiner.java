@@ -9,55 +9,42 @@ public class HandCombiner {
     //only need total visible in stud
     public ArrayList<Hand> getAllHands(Hand hand){
         //update total hand?
-        int r = 5;
+        int handSize = 5;
         // A temporary array to store all combination one by one
-        Card data[]=new Card[r];
-        int n  = hand.getHandSize();
+        Card temporaryHand[]=new Card[handSize];
+        int totalHandSize  = hand.getHandSize();
         clearAllHands();
-        makeAllPossibleHands(hand, data, 0, n-1, 0);
+        makeAllPossibleHands(hand, temporaryHand, 0, totalHandSize-1, 0);
         return allHands;
     }
 
     public void clearAllHands(){
         allHands = new ArrayList<>();
     }
-        public void makeAllPossibleHands(Hand hand, Card[] data, int start,
-                                         int end, int index)
+        public void makeAllPossibleHands(Hand hand, Card[] temporaryHand, int start,
+                                         int end, int currentIndex)
         {
-            // Current combination is ready to be printed, print it
-            int r = 5;
-            if (index == r)
+            int handSize = 5;
+            if (currentIndex == handSize)
             {
                 Hand tempHand = new Hand();
-                for (int j=0; j<r; j++){
-                    tempHand.add(data[j]);
+                for (int temporaryHandIndex=0; temporaryHandIndex<handSize; temporaryHandIndex++){
+                    tempHand.add(temporaryHand[temporaryHandIndex]);
                 }
                 allHands.add(tempHand);
 
             }
 
             // replace index with all possible elements. The condition
-            // "end-i+1 >= r-index" makes sure that including one element
+            // "end-totalHandIndex+1 >= handSize-currentIndex" makes sure that including one element
             // at index will make a combination with remaining elements
             // at remaining positions
-            if(index<r){
-                for (int i=start; i<=end && end-i+1 >= r-index; i++)
+            if(currentIndex<handSize){
+                for (int totalHandIndex=start; totalHandIndex<=end && end-totalHandIndex+1 >= handSize-currentIndex; totalHandIndex++)
                 {
-                    data[index] = hand.get(i);
-                    makeAllPossibleHands(hand, data, i+1, end, index+1);
+                    temporaryHand[currentIndex] = hand.get(totalHandIndex);
+                    makeAllPossibleHands(hand, temporaryHand, totalHandIndex+1, end, currentIndex+1);
                 }
             }
-        }
-
-        // The main function that prints all combinations of size r
-        // in arr[] of size n. This function mainly uses combinationUtil()
-        public  void printCombination(Hand hand, int n)
-        {
-            int r = 5;
-            // A temporary array to store all combination one by one
-            Card data[]=new Card[r];
-
-            // Print all combination using temprary array 'data[]'
-            makeAllPossibleHands(hand, data, 0, n-1, 0);
         }
     }
