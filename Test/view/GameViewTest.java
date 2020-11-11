@@ -10,6 +10,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,6 @@ import util.DukeApplicationTest;
 public class GameViewTest extends DukeApplicationTest {
     private Controller controller;
     private Stage stage;
-    private TextField betInput;
     private FrontEndCard testCard;
 
     public void start(final Stage stage) throws Exception {
@@ -54,17 +54,17 @@ public class GameViewTest extends DukeApplicationTest {
     }
 
     @Test
-    public void testSplashMenu() {
-        javafxRun(() -> controller.initializeSplashMenu());
-        Group bottomGroup = lookup("#Bottom").query();
-        Button startButton = lookup("#Start").queryButton();
-        assertTrue(bottomGroup.getChildrenUnmodifiable().contains(startButton));
+    public void testGameSelect() {
+        javafxRun(() -> controller.initializeGameSelect());
+        Group CenterGroup = lookup("#Center").query();
+        VBox gameBox = lookup("#GameBox").query();
+        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(gameBox));
     }
 
     @Test
     public void testBettingMenu() {
-        javafxRun(() -> controller.initializeSplashMenu());
-        Button startButton = lookup("#Start").queryButton();
+        javafxRun(() -> controller.initializeGameSelect());
+        Button startButton = lookup("#Holdem").queryButton();
         clickOn(startButton);
         javafxRun(() -> controller.initializeBettingMenu());
         TextField betInput = lookup("#Bet").query();
