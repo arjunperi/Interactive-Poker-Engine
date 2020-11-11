@@ -33,8 +33,8 @@ public class GameViewTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
-        player.receiveCard(new Card(14, Suit.DIAMONDS));
-        player.receiveCard(new Card(13, Suit.DIAMONDS));
+        player.receiveCard(new Card(14, "DIAMONDS"));
+        player.receiveCard(new Card(13, "DIAMONDS"));
         FrontEndPlayer frontEndPlayer = new FrontEndPlayer(10, 30, "Arjun", 100);
         javafxRun(() -> controller.dealFrontEndCardsInRound(player, frontEndPlayer));
         testCard = lookup("#ADIAMONDS").query();
@@ -43,8 +43,8 @@ public class GameViewTest extends DukeApplicationTest {
         assertEquals(100, testCard.getX());
 
         Player player2 = new InteractivePlayer("Christian", 100, communityCards, pot);
-        player2.receiveCard(new Card(12, Suit.DIAMONDS));
-        player2.receiveCard(new Card(11, Suit.DIAMONDS));
+        player2.receiveCard(new Card(12, "DIAMONDS"));
+        player2.receiveCard(new Card(11, "DIAMONDS"));
         FrontEndPlayer frontEndPlayer2 = new FrontEndPlayer(10, 80, "Christian", 100);
         javafxRun(() -> controller.dealFrontEndCardsInRound(player2, frontEndPlayer2));
         testCard = lookup("#QDIAMONDS").query();
@@ -77,8 +77,8 @@ public class GameViewTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
-        Card card1 = new Card(14, Suit.DIAMONDS);
-        Card card2 = new Card(13, Suit.DIAMONDS);
+        Card card1 = new Card(14, "DIAMONDS");
+        Card card2 = new Card(13, "DIAMONDS");
         player.receiveCard(card1);
         player.receiveCard(card2);
         FrontEndPlayer frontEndPlayer = new FrontEndPlayer(10, 30, "Arjun", 100);
@@ -89,8 +89,8 @@ public class GameViewTest extends DukeApplicationTest {
         player.discardCard(card1);
         player.discardCard(card2);
 
-        Card card3 = new Card(12, Suit.DIAMONDS);
-        Card card4 = new Card(11, Suit.DIAMONDS);
+        Card card3 = new Card(12, "DIAMONDS");
+        Card card4 = new Card(11, "DIAMONDS");
         player.receiveCard(card3);
         player.receiveCard(card4);
 

@@ -1,5 +1,7 @@
 package model;
 
+import controller.JSONReader;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -10,7 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest extends DukeApplicationTest {
     private Player player;
+    private Deck deck;
+    private JSONReader reader;
 
+    @BeforeEach
+    void setUp(){
+        reader = new JSONReader();
+        reader.parse("/texas_holdem.json");
+        List<String> suitNames = new ArrayList<>();
+        List<Integer> rankValues = new ArrayList<>();
+        rankValues.addAll(reader.getRanks().keySet());
+        suitNames.addAll(reader.getSuits().keySet());
+        deck = new Deck(suitNames, rankValues);
+    }
     @Test
     public void testGetBankroll(){
         CommunityCards communityCards = new CommunityCards();
@@ -52,7 +66,7 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
-        Card testCard = new Card(2,Suit.CLUBS);
+        Card testCard = new Card(2,"CLUBS");
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
     }
@@ -62,7 +76,7 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
-        Card testCard = new Card(2,Suit.CLUBS);
+        Card testCard = new Card(2,"CLUBS");
         player.receiveCard(testCard);
         assertEquals(testCard, player.getHand().getCards().get(0));
         player.discardCard(testCard);
@@ -80,13 +94,12 @@ public class PlayerTest extends DukeApplicationTest {
 
     @Test
     public void testExchangeCards(){
-        Deck deck = new Deck();
         Card card1 = deck.peekTopCard();
         Dealer dealer = new Dealer(deck);
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
-        dealer.exchangeCards(player, (List.of("DIAMONDS 14")));
+        dealer.exchangeCards(player, (List.of("14 DIAMONDS")));
         assertEquals(card1, player.getHand().getCards().get(0));
         assertEquals(card1, player.getHand().getCards().get(0));
     }

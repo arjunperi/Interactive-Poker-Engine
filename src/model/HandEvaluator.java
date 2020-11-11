@@ -59,9 +59,9 @@ public class HandEvaluator {
     }
 
     public boolean isFlush(Hand hand) {
-        Suit flushSuit = hand.get(0).getCardSuit();
+        String flushSuit = hand.get(0).getCardSuit();
         for (Card card : hand.getCards()) {
-            if (card.getCardSuit() != flushSuit) {
+            if (!card.getCardSuit().equals(flushSuit)) {
                 return false;
             }
         }
@@ -73,7 +73,7 @@ public class HandEvaluator {
         for (int i = 1; i < hand.getHandSize(); i++) {
             if (hand.get(i).getRank() != (hand.get(i - 1).getRank() - 1)) {
                 if (hand.get(0).getRank() == 14) {
-                    Suit aceSuit = hand.get(0).getCardSuit();
+                    String aceSuit = hand.get(0).getCardSuit();
                     Hand tempHand = hand.copyHand();
                     tempHand.remove(hand.get(0));
                     tempHand.add(new Card(1, aceSuit));
@@ -128,7 +128,7 @@ public class HandEvaluator {
     public int[] formatStraightFlush(Hand hand) {
         int[] orderedHand = makeNewArray();
         if (hand.get(0).getRank() == 14 && hand.get(1).getRank() == 5) {
-            Suit aceSuit = hand.get(0).getCardSuit();
+            String aceSuit = hand.get(0).getCardSuit();
             hand.remove(hand.get(0));
             hand.add(new Card(1, aceSuit));
         }

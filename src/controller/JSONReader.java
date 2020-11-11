@@ -1,62 +1,100 @@
 package controller;
 
 import controller.exceptions.SetUpException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 
 public class JSONReader {
-  private Map<String, Integer> cardTypes;
-  private List<String> suits;
-  private List<String> ranks;
+  private Map<String, String> suits;
+  private Map<Integer, String> ranks;
+  private int numberOfPlayers;
   private JSONObject jo;
 
   public JSONReader(){
-    cardTypes = new HashMap<>();
-    suits = new ArrayList<>();
-    ranks = new ArrayList<>();
+    suits = new HashMap<>();
+    ranks = new HashMap<>();
+    numberOfPlayers = 0;
   }
 
   public void parse(String directory) {
     try {
-      Object obj = new JSONParser().parse(new FileReader(directory));
-      jo = (JSONObject) obj;
+      InputStream is = JSONReader.class.getResourceAsStream(directory);
+      JSONTokener tokener = new JSONTokener(is);
+      jo = new JSONObject(tokener);
       parseCardSuits();
       parseCardRanks();
-    } catch (ParseException | IOException e) {
+      parseGameSettings();
+
+    } catch (Exception e) {
       throw new SetUpException();
     }
   }
 
+  private void parseGameSettings() {
+    JSONObject gameSettings = jo.getJSONObject("gameSettings");
+    parseNumberOfPlayers(gameSettings);
+  }
+
+  private void parseNumberOfPlayers(JSONObject gameSettings) {
+    numberOfPlayers = (int) gameSettings.get("numberOfPlayers");
+  }
+
+  //TODO Refactor all parse methods into one that uses Generics
   private void parseCardSuits() {
-    JSONArray jsonArray = (JSONArray) jo.get("suits");
-    for (String suit : (Iterable<String>) jsonArray) {
-      suits.add(suit);
+    JSONObject cardSuits = jo.getJSONObject("suits");
+    for (Iterator<String> it = cardSuits.keys(); it.hasNext(); ) {
+      String suit = it.next();
+      suits.put(suit, (String) cardSuits.get(suit));
     }
   }
 
   private void parseCardRanks() {
-    JSONArray jsonArray = (JSONArray) jo.get("ranks");
-    for (String rank : (Iterable<String>) jsonArray) {
-      ranks.add(rank);
+    JSONObject cardRanks = jo.getJSONObject("ranks");
+    for (Iterator<String> it = cardRanks.keys(); it.hasNext(); ) {
+      String rank = it.next();
+      ranks.put(Integer.parseInt(rank), (String) cardRanks.get(rank));
     }
   }
 
-  public List<String> getSuits() {
+  public Map<String, String> getSuits() {
     return suits;
   }
 
-  public List<String> getRanks() {
+  public Map<Integer, String> getRanks() {
     return ranks;
   }
+
+  /*public <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
+    try {
+      return clazz.cast(o);
+    } catch(ClassCastException e) {
+      return null;
+    }
+  }*/
+
+  public List<String> getSuitNames() {
+    List<String> suitNames = new ArrayList<>(getSuits().keySet());
+    Collections.sort(suitNames);
+    return suitNames;
+  }
+
+  public List<Integer> getRankValues() {
+    List<Integer> rankValues = new ArrayList<>(getRanks().keySet());
+    Collections.sort(rankValues);
+    return rankValues;
+  }
+
+  public int getNumberOfPlayers(){
+    return numberOfPlayers;
+  }
+
 }

@@ -4,7 +4,7 @@ import java.util.Properties;
 
 public class Card {
 
-    private Suit suit;
+    private String suit;
     private String cardSymbol;
     private int rank;
     private boolean isVisible;
@@ -13,10 +13,17 @@ public class Card {
 
     private static final String FILENAME = "CardValueMapping";
 
-    public Card(int rank , Suit suit){
+    /*public Card(int rank, Suit suit) {
         this.suit = suit;
         this.rank = rank;
-        isVisible =false;
+        visible=false;
+        initializeCardNumber();
+    }*/
+
+    public Card(int rank, String suit) {
+        this.suit = suit;
+        this.rank = rank;
+        isVisible = false;
         reader = new FileReader();
         initializeCardNumber();
     }
@@ -48,7 +55,7 @@ public class Card {
         return rank == otherCard.rank && suit == otherCard.suit;
     }
 
-    public Suit getCardSuit(){
+    public String getCardSuit(){
         return suit;
     }
 
