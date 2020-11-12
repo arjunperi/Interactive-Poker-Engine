@@ -75,6 +75,7 @@ public class GameView {
     }
 
     public ChoiceDialog makeActionScreen(EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> checkEvent, EventHandler<ActionEvent> betEvent){
+        centerGroup.getChildren().clear();
         Button foldButton = makeButton("Fold", foldEvent);
         foldButton.setId("Fold");
         Button checkButton = makeButton("Check", checkEvent);
