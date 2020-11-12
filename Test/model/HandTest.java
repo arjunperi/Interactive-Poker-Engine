@@ -10,9 +10,9 @@ public class HandTest {
     @Test
     void testNewHand() {
         Hand hand = new Hand();
-        Card card1 = new Card(11,Suit.CLUBS);
-        Card card2 = new Card(4,Suit.DIAMONDS);
-        Card card3 = new Card(2,Suit.SPADES);
+        Card card1 = new Card(11,"CLUBS");
+        Card card2 = new Card(4,"DIAMONDS");
+        Card card3 = new Card(2,"SPADES");
         hand.add(card1);
         hand.add(card2);
         hand.add(card3);

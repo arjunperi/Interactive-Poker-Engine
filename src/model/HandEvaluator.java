@@ -60,9 +60,13 @@ public class HandEvaluator {
     }
 
     public boolean isFlush(Hand hand) {
+<<<<<<< HEAD
         Suit flushSuit = hand.get(HIGHESTCARDINDEX).getCardSuit();
+=======
+        String flushSuit = hand.get(0).getCardSuit();
+>>>>>>> 09ba22c3f73deb70b1885234e2041c5c75159e67
         for (Card card : hand.getCards()) {
-            if (card.getCardSuit() != flushSuit) {
+            if (!card.getCardSuit().equals(flushSuit)) {
                 return false;
             }
         }
@@ -73,8 +77,13 @@ public class HandEvaluator {
     public boolean isStraight(Hand hand) {
         for (int i = 1; i < hand.getHandSize(); i++) {
             if (hand.get(i).getRank() != (hand.get(i - 1).getRank() - 1)) {
+<<<<<<< HEAD
                 if (hand.get(HIGHESTCARDINDEX).getRank() == ACERANK) {
                     Suit aceSuit = hand.get(0).getCardSuit();
+=======
+                if (hand.get(0).getRank() == 14) {
+                    String aceSuit = hand.get(0).getCardSuit();
+>>>>>>> 09ba22c3f73deb70b1885234e2041c5c75159e67
                     Hand tempHand = hand.copyHand();
                     tempHand.remove(hand.get(0));
                     tempHand.add(new Card(1, aceSuit));
@@ -121,9 +130,15 @@ public class HandEvaluator {
 //Hands need to be sorted in descending order before put into formatting methods
 
     public int[] formatStraightFlush(Hand hand) {
+<<<<<<< HEAD
         int[] orderedHand = makeNewArray(POKERHANDSIZE);
         if (hand.get(0).getRank() == ACERANK && hand.get(1).getRank() == 5) {
             Suit aceSuit = hand.get(0).getCardSuit();
+=======
+        int[] orderedHand = makeNewArray();
+        if (hand.get(0).getRank() == 14 && hand.get(1).getRank() == 5) {
+            String aceSuit = hand.get(0).getCardSuit();
+>>>>>>> 09ba22c3f73deb70b1885234e2041c5c75159e67
             hand.remove(hand.get(0));
             hand.add(new Card(1, aceSuit));
         }

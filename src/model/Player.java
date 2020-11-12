@@ -107,7 +107,7 @@ public class Player extends CardRecipient{
         if (handSize < 5){
             int fiveCardHandDifference = 5 - handSize;
             for (int i=0; i<fiveCardHandDifference; i++){
-                Card dummyCard = new Card(-1, Suit.CLUBS);
+                Card dummyCard = new Card(-1, "CLUBS");
                 hand.add(dummyCard);
             }
         }
@@ -132,14 +132,11 @@ public class Player extends CardRecipient{
     }
 
 
-    @Override
     public String toString () {
         return playerName;
     }
 
-
-    @Override
-    void receiveCard(Card card) {
+    public void receiveCard(Card card) {
         playerHand.add(card);
         addNewCards(card);
         updateTotalHand();

@@ -13,11 +13,11 @@ public class HandEvaluatorTest {
     @Test
     void testIsFlush() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -25,9 +25,9 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isFlush(hand1));
+        assertTrue(evaluator.isFlush(hand1));
 
-        Card card6 = new Card(10, Suit.DIAMONDS);
+        Card card6 = new Card(10, "DIAMONDS");
         Hand hand2 = new Hand();
         hand2.add(card1);
         hand2.add(card2);
@@ -35,18 +35,18 @@ public class HandEvaluatorTest {
         hand2.add(card4);
         hand2.add(card6);
         hand2 = hand2.sortHand();
-        assertTrue(false == evaluator.isFlush(hand2));
+        assertTrue(!evaluator.isFlush(hand2));
     }
 
 
     @Test
     void testIsStraight() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(11, Suit.CLUBS);
-        Card card4 = new Card(7, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(11, "CLUBS");
+        Card card4 = new Card(7, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -54,9 +54,9 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isStraight(hand1));
+        assertTrue(evaluator.isStraight(hand1));
 
-        Card card6 = new Card(1, Suit.DIAMONDS);
+        Card card6 = new Card(1, "DIAMONDS");
         Hand hand2 = new Hand();
         hand2.add(card1);
         hand2.add(card2);
@@ -64,13 +64,13 @@ public class HandEvaluatorTest {
         hand2.add(card4);
         hand2.add(card6);
         hand2 = hand2.sortHand();
-        assertTrue(false == evaluator.isStraight(hand2));
+        assertTrue(!evaluator.isStraight(hand2));
 
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(13, Suit.CLUBS);
-        Card card9 = new Card(12, Suit.CLUBS);
-        Card card10 = new Card(11, Suit.CLUBS);
-        Card card11 = new Card(10, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(13, "CLUBS");
+        Card card9 = new Card(12, "CLUBS");
+        Card card10 = new Card(11, "CLUBS");
+        Card card11 = new Card(10, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -78,13 +78,13 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isStraight(hand3));
+        assertTrue(evaluator.isStraight(hand3));
 
 
-        Card card12 = new Card(5, Suit.CLUBS);
-        Card card13 = new Card(4, Suit.CLUBS);
-        Card card14 = new Card(3, Suit.CLUBS);
-        Card card15 = new Card(2, Suit.CLUBS);
+        Card card12 = new Card(5, "CLUBS");
+        Card card13 = new Card(4, "CLUBS");
+        Card card14 = new Card(3, "CLUBS");
+        Card card15 = new Card(2, "CLUBS");
         Hand hand4 = new Hand();
         hand4.add(card7);
         hand4.add(card12);
@@ -92,17 +92,17 @@ public class HandEvaluatorTest {
         hand4.add(card14);
         hand4.add(card15);
         hand4 = hand4.sortHand();
-        assertTrue(true == evaluator.isStraight(hand4));
+        assertTrue(evaluator.isStraight(hand4));
     }
 
     @Test
     void testIsStraightFlush() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(13, Suit.CLUBS);
-        Card card9 = new Card(12, Suit.CLUBS);
-        Card card10 = new Card(11, Suit.CLUBS);
-        Card card11 = new Card(10, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(13, "CLUBS");
+        Card card9 = new Card(12, "CLUBS");
+        Card card10 = new Card(11, "CLUBS");
+        Card card11 = new Card(10, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -110,17 +110,17 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isStraightFlush(hand3));
+        assertTrue(evaluator.isStraightFlush(hand3));
     }
 
     @Test
     void testIsFourOfAKind() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.DIAMONDS);
-        Card card9 = new Card(14, Suit.SPADES);
-        Card card10 = new Card(14, Suit.HEARTS);
-        Card card11 = new Card(10, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(14, "DIAMONDS");
+        Card card9 = new Card(14, "SPADES");
+        Card card10 = new Card(14, "HEARTS");
+        Card card11 = new Card(10, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -128,13 +128,13 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isFourOfAKind(hand3));
+        assertTrue(evaluator.isFourOfAKind(hand3));
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(10, Suit.DIAMONDS);
-        Card card3 = new Card(10, Suit.SPADES);
-        Card card4 = new Card(10, Suit.HEARTS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(10, "DIAMONDS");
+        Card card3 = new Card(10, "SPADES");
+        Card card4 = new Card(10, "HEARTS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -142,14 +142,14 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isFourOfAKind(hand1));
+        assertTrue(evaluator.isFourOfAKind(hand1));
 
 
-        card1 = new Card(8, Suit.CLUBS);
-        card2 = new Card(9, Suit.CLUBS);
-        card3 = new Card(2, Suit.CLUBS);
-        card4 = new Card(4, Suit.CLUBS);
-        card5 = new Card(10, Suit.CLUBS);
+        card1 = new Card(8, "CLUBS");
+        card2 = new Card(9, "CLUBS");
+        card3 = new Card(2, "CLUBS");
+        card4 = new Card(4, "CLUBS");
+        card5 = new Card(10, "CLUBS");
         hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -157,17 +157,17 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(false == evaluator.isFourOfAKind(hand1));
+        assertTrue(!evaluator.isFourOfAKind(hand1));
     }
 
     @Test
     void testIsFullHouse() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.DIAMONDS);
-        Card card9 = new Card(14, Suit.SPADES);
-        Card card10 = new Card(10, Suit.HEARTS);
-        Card card11 = new Card(10, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(14, "DIAMONDS");
+        Card card9 = new Card(14, "SPADES");
+        Card card10 = new Card(10, "HEARTS");
+        Card card11 = new Card(10, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -175,13 +175,13 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isFullHouse(hand3));
+        assertTrue(evaluator.isFullHouse(hand3));
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(14, Suit.DIAMONDS);
-        Card card3 = new Card(10, Suit.SPADES);
-        Card card4 = new Card(10, Suit.HEARTS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(14, "DIAMONDS");
+        Card card3 = new Card(10, "SPADES");
+        Card card4 = new Card(10, "HEARTS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -191,11 +191,11 @@ public class HandEvaluatorTest {
         hand1 = hand1.sortHand();
         assertTrue(true == evaluator.isFullHouse(hand1));
 
-        card1 = new Card(8, Suit.CLUBS);
-        card2 = new Card(9, Suit.CLUBS);
-        card3 = new Card(2, Suit.CLUBS);
-        card4 = new Card(4, Suit.CLUBS);
-        card5 = new Card(10, Suit.CLUBS);
+        card1 = new Card(8, "CLUBS");
+        card2 = new Card(9, "CLUBS");
+        card3 = new Card(2, "CLUBS");
+        card4 = new Card(4, "CLUBS");
+        card5 = new Card(10, "CLUBS");
         hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -210,11 +210,11 @@ public class HandEvaluatorTest {
     @Test
     void testIsThreeOfAKind() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.DIAMONDS);
-        Card card9 = new Card(14, Suit.SPADES);
-        Card card10 = new Card(10, Suit.HEARTS);
-        Card card11 = new Card(9, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(14, "DIAMONDS");
+        Card card9 = new Card(14, "SPADES");
+        Card card10 = new Card(10, "HEARTS");
+        Card card11 = new Card(9, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -224,11 +224,11 @@ public class HandEvaluatorTest {
         hand3 = hand3.sortHand();
         assertTrue(true == evaluator.isThreeOfAKind(hand3));
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(12, Suit.DIAMONDS);
-        Card card3 = new Card(10, Suit.SPADES);
-        Card card4 = new Card(10, Suit.HEARTS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(12, "DIAMONDS");
+        Card card3 = new Card(10, "SPADES");
+        Card card4 = new Card(10, "HEARTS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -238,11 +238,11 @@ public class HandEvaluatorTest {
         hand1 = hand1.sortHand();
         assertTrue(true == evaluator.isThreeOfAKind(hand1));
 
-        card1 = new Card(8, Suit.CLUBS);
-        card2 = new Card(9, Suit.CLUBS);
-        card3 = new Card(2, Suit.CLUBS);
-        card4 = new Card(4, Suit.CLUBS);
-        card5 = new Card(10, Suit.CLUBS);
+        card1 = new Card(8, "CLUBS");
+        card2 = new Card(9, "CLUBS");
+        card3 = new Card(2, "CLUBS");
+        card4 = new Card(4, "CLUBS");
+        card5 = new Card(10, "CLUBS");
         hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -257,11 +257,11 @@ public class HandEvaluatorTest {
     @Test
     void testIsTwoPair() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.DIAMONDS);
-        Card card9 = new Card(1, Suit.SPADES);
-        Card card10 = new Card(10, Suit.HEARTS);
-        Card card11 = new Card(10, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(14, "DIAMONDS");
+        Card card9 = new Card(1, "SPADES");
+        Card card10 = new Card(10, "HEARTS");
+        Card card11 = new Card(10, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -271,11 +271,11 @@ public class HandEvaluatorTest {
         hand3 = hand3.sortHand();
         assertTrue(true == evaluator.isTwoPair(hand3));
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(14, Suit.DIAMONDS);
-        Card card3 = new Card(10, Suit.SPADES);
-        Card card4 = new Card(10, Suit.HEARTS);
-        Card card5 = new Card(3, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(14, "DIAMONDS");
+        Card card3 = new Card(10, "SPADES");
+        Card card4 = new Card(10, "HEARTS");
+        Card card5 = new Card(3, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -285,11 +285,11 @@ public class HandEvaluatorTest {
         hand1 = hand1.sortHand();
         assertTrue(true == evaluator.isTwoPair(hand1));
 
-        card1 = new Card(8, Suit.CLUBS);
-        card2 = new Card(9, Suit.CLUBS);
-        card3 = new Card(2, Suit.CLUBS);
-        card4 = new Card(4, Suit.CLUBS);
-        card5 = new Card(10, Suit.CLUBS);
+        card1 = new Card(8, "CLUBS");
+        card2 = new Card(9, "CLUBS");
+        card3 = new Card(2, "CLUBS");
+        card4 = new Card(4, "CLUBS");
+        card5 = new Card(10, "CLUBS");
         hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -303,11 +303,11 @@ public class HandEvaluatorTest {
     @Test
     void testIsPair() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.DIAMONDS);
-        Card card9 = new Card(1, Suit.SPADES);
-        Card card10 = new Card(10, Suit.HEARTS);
-        Card card11 = new Card(9, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(14, "DIAMONDS");
+        Card card9 = new Card(1, "SPADES");
+        Card card10 = new Card(10, "HEARTS");
+        Card card11 = new Card(9, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -317,11 +317,11 @@ public class HandEvaluatorTest {
         hand3 = hand3.sortHand();
         assertTrue(true == evaluator.isPair(hand3));
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(12, Suit.DIAMONDS);
-        Card card3 = new Card(10, Suit.SPADES);
-        Card card4 = new Card(10, Suit.HEARTS);
-        Card card5 = new Card(1, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(12, "DIAMONDS");
+        Card card3 = new Card(10, "SPADES");
+        Card card4 = new Card(10, "HEARTS");
+        Card card5 = new Card(1, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -331,11 +331,11 @@ public class HandEvaluatorTest {
         hand1 = hand1.sortHand();
         assertTrue(true == evaluator.isPair(hand1));
 
-        card1 = new Card(8, Suit.CLUBS);
-        card2 = new Card(9, Suit.CLUBS);
-        card3 = new Card(2, Suit.CLUBS);
-        card4 = new Card(4, Suit.CLUBS);
-        card5 = new Card(10, Suit.HEARTS);
+        card1 = new Card(8, "CLUBS");
+        card2 = new Card(9, "CLUBS");
+        card3 = new Card(2, "CLUBS");
+        card4 = new Card(4, "CLUBS");
+        card5 = new Card(10, "HEARTS");
         hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -349,11 +349,11 @@ public class HandEvaluatorTest {
     @Test
     void testIsHighCard() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card7 = new Card(14, Suit.CLUBS);
-        Card card8 = new Card(12, Suit.DIAMONDS);
-        Card card9 = new Card(4, Suit.SPADES);
-        Card card10 = new Card(10, Suit.HEARTS);
-        Card card11 = new Card(1, Suit.CLUBS);
+        Card card7 = new Card(14, "CLUBS");
+        Card card8 = new Card(12, "DIAMONDS");
+        Card card9 = new Card(4, "SPADES");
+        Card card10 = new Card(10, "HEARTS");
+        Card card11 = new Card(1, "CLUBS");
         Hand hand3 = new Hand();
         hand3.add(card7);
         hand3.add(card8);
@@ -363,11 +363,11 @@ public class HandEvaluatorTest {
         hand3 = hand3.sortHand();
         assertTrue(true == evaluator.isHighCard(hand3));
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(12, Suit.DIAMONDS);
-        Card card3 = new Card(10, Suit.SPADES);
-        Card card4 = new Card(4, Suit.HEARTS);
-        Card card5 = new Card(5, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(12, "DIAMONDS");
+        Card card3 = new Card(10, "SPADES");
+        Card card4 = new Card(4, "HEARTS");
+        Card card5 = new Card(5, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -377,11 +377,11 @@ public class HandEvaluatorTest {
         hand1 = hand1.sortHand();
         assertTrue(true == evaluator.isHighCard(hand1));
 
-        card1 = new Card(8, Suit.CLUBS);
-        card2 = new Card(9, Suit.CLUBS);
-        card3 = new Card(2, Suit.CLUBS);
-        card4 = new Card(4, Suit.CLUBS);
-        card5 = new Card(10, Suit.CLUBS);
+        card1 = new Card(8, "CLUBS");
+        card2 = new Card(9, "CLUBS");
+        card3 = new Card(2, "CLUBS");
+        card4 = new Card(4, "CLUBS");
+        card5 = new Card(10, "CLUBS");
         hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -395,11 +395,11 @@ public class HandEvaluatorTest {
     @Test
     void testHandStrength() {
         HandEvaluator evaluator = new HandEvaluator();
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(3, Suit.CLUBS);
-        Card card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(3, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -415,13 +415,13 @@ public class HandEvaluatorTest {
     void testGetBestHand() {
         HandEvaluator evaluator = new HandEvaluator();
         HandCombiner comb = new HandCombiner();
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(13, Suit.CLUBS);
-        Card card3 = new Card(12, Suit.CLUBS);
-        Card card4 = new Card(11, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
-        Card card6 = new Card(4, Suit.SPADES);
-        Card card7 = new Card(4, Suit.CLUBS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(13, "CLUBS");
+        Card card3 = new Card(12, "CLUBS");
+        Card card4 = new Card(11, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
+        Card card6 = new Card(4, "SPADES");
+        Card card7 = new Card(4, "CLUBS");
 
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -458,11 +458,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -473,11 +473,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(9, Suit.CLUBS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(4, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(9, "CLUBS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(4, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -502,11 +502,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(10, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(10, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -517,11 +517,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(9, Suit.CLUBS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(4, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(9, "CLUBS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(4, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -545,11 +545,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(-1, Suit.CLUBS);
-        Card  card4 = new Card(14, Suit.CLUBS);
-        Card card5 = new Card(14, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(-1, "CLUBS");
+        Card  card4 = new Card(14, "CLUBS");
+        Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -560,11 +560,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(9, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.CLUBS);
-        Card  card9 = new Card(4, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(9, "CLUBS");
+        Card card8 = new Card(14, "CLUBS");
+        Card  card9 = new Card(4, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -588,11 +588,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(10, Suit.CLUBS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(10, "CLUBS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -603,11 +603,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(8, Suit.HEARTS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(14, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(8, "HEARTS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(14, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -631,11 +631,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(2, Suit.CLUBS);
-        Card card3 = new Card(8, Suit.HEARTS);
-        Card  card4 = new Card(10, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(2, "CLUBS");
+        Card card3 = new Card(8, "HEARTS");
+        Card  card4 = new Card(10, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -646,11 +646,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(2, Suit.HEARTS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(14, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(2, "HEARTS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(14, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -674,11 +674,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(4, Suit.HEARTS);
-        Card card2 = new Card(10, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(4, "HEARTS");
+        Card card2 = new Card(10, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -689,11 +689,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(4, Suit.HEARTS);
-        Card card8 = new Card(4, Suit.SPADES);
-        Card  card9 = new Card(4, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(4, "HEARTS");
+        Card card8 = new Card(4, "SPADES");
+        Card  card9 = new Card(4, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -717,11 +717,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(12, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(9, Suit.HEARTS);
-        Card  card4 = new Card(9, Suit.DIAMONDS);
-        Card card5 = new Card(14, Suit.HEARTS);
+        Card card1 = new Card(12, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(9, "HEARTS");
+        Card  card4 = new Card(9, "DIAMONDS");
+        Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -732,11 +732,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(2, Suit.CLUBS);
-        Card card8 = new Card(14, Suit.CLUBS);
-        Card  card9 = new Card(14, Suit.DIAMONDS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(2, "CLUBS");
+        Card card8 = new Card(14, "CLUBS");
+        Card  card9 = new Card(14, "DIAMONDS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -761,11 +761,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(4, Suit.CLUBS);
-        Card card3 = new Card(4, Suit.DIAMONDS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(4, "CLUBS");
+        Card card3 = new Card(4, "DIAMONDS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -776,11 +776,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(14, Suit.CLUBS);
-        Card card7 = new Card(5, Suit.CLUBS);
-        Card card8 = new Card(4, Suit.CLUBS);
-        Card  card9 = new Card(3, Suit.CLUBS);
-        Card card10 = new Card(2, Suit.HEARTS);
+        Card card6 = new Card(14, "CLUBS");
+        Card card7 = new Card(5, "CLUBS");
+        Card card8 = new Card(4, "CLUBS");
+        Card  card9 = new Card(3, "CLUBS");
+        Card card10 = new Card(2, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -804,11 +804,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(14, Suit.CLUBS);
-        Card card2 = new Card(5, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(3, Suit.HEARTS);
+        Card card1 = new Card(14, "CLUBS");
+        Card card2 = new Card(5, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(3, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -819,11 +819,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(10, Suit.CLUBS);
-        Card card7 = new Card(11, Suit.CLUBS);
-        Card card8 = new Card(12, Suit.CLUBS);
-        Card  card9 = new Card(13, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(10, "CLUBS");
+        Card card7 = new Card(11, "CLUBS");
+        Card card8 = new Card(12, "CLUBS");
+        Card  card9 = new Card(13, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -847,11 +847,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(7, Suit.CLUBS);
-        Card  card4 = new Card(6, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(7, "CLUBS");
+        Card  card4 = new Card(6, "CLUBS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -862,11 +862,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(9, Suit.CLUBS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(4, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.CLUBS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(9, "CLUBS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(4, "CLUBS");
+        Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -890,11 +890,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -905,11 +905,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(9, Suit.CLUBS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(4, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.CLUBS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(9, "CLUBS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(4, "CLUBS");
+        Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -933,11 +933,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(4, Suit.CLUBS);
-        Card card5 = new Card(10, Suit.CLUBS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -948,11 +948,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(8, Suit.HEARTS);
-        Card card8 = new Card(8, Suit.SPADES);
-        Card  card9 = new Card(14, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(8, "HEARTS");
+        Card card8 = new Card(8, "SPADES");
+        Card  card9 = new Card(14, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -976,11 +976,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(8, Suit.SPADES);
-        Card card3 = new Card(8, Suit.DIAMONDS);
-        Card  card4 = new Card(14, Suit.CLUBS);
-        Card card5 = new Card(14, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(8, "SPADES");
+        Card card3 = new Card(8, "DIAMONDS");
+        Card  card4 = new Card(14, "CLUBS");
+        Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -991,11 +991,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(10, Suit.CLUBS);
-        Card card7 = new Card(10, Suit.DIAMONDS);
-        Card card8 = new Card(2, Suit.CLUBS);
-        Card  card9 = new Card(10, Suit.HEARTS);
-        Card card10 = new Card(2, Suit.HEARTS);
+        Card card6 = new Card(10, "CLUBS");
+        Card card7 = new Card(10, "DIAMONDS");
+        Card card8 = new Card(2, "CLUBS");
+        Card  card9 = new Card(10, "HEARTS");
+        Card card10 = new Card(2, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -1019,11 +1019,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(8, Suit.HEARTS);
-        Card card3 = new Card(8, Suit.SPADES);
-        Card  card4 = new Card(8, Suit.DIAMONDS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(8, "HEARTS");
+        Card card3 = new Card(8, "SPADES");
+        Card  card4 = new Card(8, "DIAMONDS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -1034,11 +1034,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(8, Suit.DIAMONDS);
-        Card card8 = new Card(8, Suit.HEARTS);
-        Card  card9 = new Card(14, Suit.HEARTS);
-        Card card10 = new Card(14, Suit.CLUBS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(8, "DIAMONDS");
+        Card card8 = new Card(8, "HEARTS");
+        Card  card9 = new Card(14, "HEARTS");
+        Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -1062,11 +1062,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(8, Suit.DIAMONDS);
-        Card card3 = new Card(8, Suit.SPADES);
-        Card  card4 = new Card(8, Suit.HEARTS);
-        Card card5 = new Card(14, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(8, "DIAMONDS");
+        Card card3 = new Card(8, "SPADES");
+        Card  card4 = new Card(8, "HEARTS");
+        Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -1077,11 +1077,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.CLUBS);
-        Card card7 = new Card(14, Suit.SPADES);
-        Card card8 = new Card(14, Suit.DIAMONDS);
-        Card  card9 = new Card(14, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.HEARTS);
+        Card card6 = new Card(8, "CLUBS");
+        Card card7 = new Card(14, "SPADES");
+        Card card8 = new Card(14, "DIAMONDS");
+        Card  card9 = new Card(14, "CLUBS");
+        Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -1105,11 +1105,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(8, Suit.HEARTS);
-        Card card3 = new Card(8, Suit.DIAMONDS);
-        Card  card4 = new Card(8, Suit.SPADES);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(8, "HEARTS");
+        Card card3 = new Card(8, "DIAMONDS");
+        Card  card4 = new Card(8, "SPADES");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -1120,11 +1120,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(3, Suit.CLUBS);
-        Card card7 = new Card(4, Suit.CLUBS);
-        Card card8 = new Card(5, Suit.CLUBS);
-        Card  card9 = new Card(14, Suit.CLUBS);
-        Card card10 = new Card(2, Suit.CLUBS);
+        Card card6 = new Card(3, "CLUBS");
+        Card card7 = new Card(4, "CLUBS");
+        Card card8 = new Card(5, "CLUBS");
+        Card  card9 = new Card(14, "CLUBS");
+        Card card10 = new Card(2, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -1148,11 +1148,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(4, Suit.CLUBS);
-        Card card2 = new Card(3, Suit.CLUBS);
-        Card card3 = new Card(2, Suit.CLUBS);
-        Card  card4 = new Card(14, Suit.CLUBS);
-        Card card5 = new Card(5, Suit.CLUBS);
+        Card card1 = new Card(4, "CLUBS");
+        Card card2 = new Card(3, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card  card4 = new Card(14, "CLUBS");
+        Card card5 = new Card(5, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -1163,11 +1163,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(11, Suit.CLUBS);
-        Card card7 = new Card(10, Suit.CLUBS);
-        Card card8 = new Card(12, Suit.CLUBS);
-        Card  card9 = new Card(13, Suit.CLUBS);
-        Card card10 = new Card(14, Suit.CLUBS);
+        Card card6 = new Card(11, "CLUBS");
+        Card card7 = new Card(10, "CLUBS");
+        Card card8 = new Card(12, "CLUBS");
+        Card  card9 = new Card(13, "CLUBS");
+        Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);
@@ -1191,11 +1191,11 @@ public class HandEvaluatorTest {
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
 
 
-        Card card1 = new Card(8, Suit.CLUBS);
-        Card card2 = new Card(9, Suit.DIAMONDS);
-        Card card3 = new Card(12, Suit.CLUBS);
-        Card  card4 = new Card(12, Suit.DIAMONDS);
-        Card card5 = new Card(10, Suit.HEARTS);
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "DIAMONDS");
+        Card card3 = new Card(12, "CLUBS");
+        Card  card4 = new Card(12, "DIAMONDS");
+        Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -1206,11 +1206,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
 
-        Card card6 = new Card(8, Suit.DIAMONDS);
-        Card card7 = new Card(9, Suit.HEARTS);
-        Card card8 = new Card(12, Suit.DIAMONDS);
-        Card  card9 = new Card(12, Suit.HEARTS);
-        Card card10 = new Card(10, Suit.HEARTS);
+        Card card6 = new Card(8, "DIAMONDS");
+        Card card7 = new Card(9, "HEARTS");
+        Card card8 = new Card(12, "DIAMONDS");
+        Card  card9 = new Card(12, "HEARTS");
+        Card card10 = new Card(10, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
         hand2.add(card7);

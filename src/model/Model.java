@@ -4,7 +4,7 @@ package model;
 
 import java.util.*;
 
-public abstract class Model {
+public class Model {
     protected int totalRounds;
     protected Dealer dealer;
     protected PlayerList playerList;
@@ -21,7 +21,8 @@ public abstract class Model {
     public Model(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer, Properties modelProperties){
         this.totalRounds = totalRounds;
         this.communityCards = communityCards;
-        playerList = players;
+//        playerList = players;
+        activePlayerList = players.getActivePlayers();
         this.dealer = dealer;
         this.modelProperties = modelProperties;
         visibilityList = new ArrayList<>();
@@ -30,8 +31,8 @@ public abstract class Model {
     public void dealStats(int currentRound){
         dealer.checkDeck();
 
-        playerList.updateActivePlayers();
-        activePlayerList = playerList.getActivePlayers();
+//        playerList.updateActivePlayers();
+//        activePlayerList = playerList.getActivePlayers();
 
         String[] roundRules = modelProperties.getProperty(String.valueOf(currentRound)).split(",");
         numberOfCards = Integer.parseInt(roundRules[0]);
@@ -57,7 +58,18 @@ public abstract class Model {
         }
     }
 
-    public abstract void dealFlow(int currentRound);
+    public void dealFlow(int currentRound){
+        //TODO: find a way around this conditional
+        dealStats(currentRound);
+        if (recipient.equals("Community")){
+            dealer.dealCards(communityCards, visibilityList);
+        }
+        else{
+            for (Player player: activePlayerList){
+                dealer.dealCards(player, visibilityList);
+            }
+        }
+    }
 
     public int getNumberOfCards(){
         return numberOfCards;

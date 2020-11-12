@@ -1,24 +1,41 @@
 package model;
 
+
+import controller.JSONReader;
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Game {
-    private TurnManager turnManager;
+    private RoundManager roundManager;
     private Pot pot;
     private Deck deck;
     private Dealer dealer;
     private CommunityCards communityCards;
+    private List<String> suits;
+    private List<String> ranks;
+    private JSONReader reader;
     private HandEvaluator handEvaluator;
 
+    //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
     public Game(){
         pot = new Pot();
         this.communityCards = new CommunityCards();
-        deck = new Deck();
+
+
+        reader = new JSONReader();
+        reader.parse("/texas_holdem.json");
+
+        //deck = new Deck();
+        deck = new Deck(reader.getSuitNames(), reader.getRankValues());
+
         dealer = new Dealer(deck);
         handEvaluator = new HandEvaluator();
-        turnManager = new TurnManager(pot);
+        roundManager = new RoundManager(pot);
     }
 
-    public TurnManager getTurnManager(){
-        return turnManager;
+    public RoundManager getTurnManager(){
+        return roundManager;
     }
 
     public Deck getDeck(){

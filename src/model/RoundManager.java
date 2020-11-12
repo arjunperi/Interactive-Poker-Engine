@@ -2,14 +2,14 @@ package model;
 
 import java.util.*;
 
-public class TurnManager {
+public class RoundManager {
     private Player winner;
     private int currentRound;
     private Pot pot;
     private HandEvaluator handEvaluator;
 
 
-    public TurnManager(Pot pot){
+    public RoundManager(Pot pot){
         currentRound = 0;
         this.pot = pot;
         handEvaluator = new HandEvaluator();
@@ -19,11 +19,9 @@ public class TurnManager {
         playerList.updateActivePlayers();
         List<Player> activePlayers = playerList.getActivePlayers();
         if (activePlayers.size() == 1){
-            System.out.print("hit");
             winner = activePlayers.get(0);
             pot.dispersePot(winner,pot.getPotTotal());
             pot.clearPot();
-            System.exit(0);
         }
     }
 
@@ -40,7 +38,7 @@ public class TurnManager {
 
     //should we be updating the players' total hands in a better way/ different place?
     //AI updating?
-    public void showDown(PlayerList activePlayers){
+    private void showDown(PlayerList activePlayers){
         for (Player player: activePlayers.getActivePlayers()){
             player.updateTotalHand();
         }
@@ -51,10 +49,5 @@ public class TurnManager {
             pot.dispersePot(player, winningAmount);
         }
         pot.clearPot();
-        System.exit(0);
-    }
-
-    public int getCurrentRound(){
-        return currentRound;
     }
 }
