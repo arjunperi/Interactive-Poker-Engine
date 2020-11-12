@@ -8,11 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.*;
 import view.*;
-
-
-import java.awt.*;
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
@@ -44,33 +44,61 @@ public class Controller {
 
     public Controller() {
         reader = new FileReader();
+        view = new GameView();
         roundNumber = 1;
-
         Game game = new Game();
+        initializeGameSelect();
+
         communityCards = game.getCommunityCards();
         pot = game.getPot();
-        initializePlayerList("SevenCardStud");
-
-        roundManager = game.getTurnManager();
         dealer = game.getDealer();
         roundManager = game.getTurnManager();
 
-        view = new GameView();
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
-
         frontEndPlayers = new ArrayList<>();
-        initializeFrontEndPlayers();
-        initializeCommunity();
-
-        initializeSplashMenu();
-        Properties modelProperties = reader.getPropertyFile("SevenCardStud");
-        totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
-        model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
     }
 
     public Scene setupScene() {
         return view.setupScene();
+    }
+
+    public void initializeGameSelect(){
+        EventHandler<ActionEvent> holdemEvent = e -> initializeProperties("Holdem.properties");
+        EventHandler<ActionEvent> drawEvent = e -> initializeProperties("FiveCardDraw.properties");
+        EventHandler<ActionEvent> studEvent = e -> initializeProperties("SevenCardStud.properties");
+        EventHandler<ActionEvent> customEvent = e -> chooseNewFile();
+        view.makeGameSelectScreen(holdemEvent, drawEvent, studEvent, customEvent);
+    }
+
+
+    private void chooseNewFile() {
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)", "*.properties");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(filter);
+        fileChooser.setInitialDirectory(new File("properties/"));
+        File file = fileChooser.showOpenDialog(new Stage());
+        if(file!=null) {
+            initializeProperties((file).getName());
+        }
+        //else?
+    }
+
+    public void initializeProperties(String fileName){
+        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+        System.out.println(fileName);
+        Properties modelProperties = reader.getPropertyFile(fileName);
+        totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
+        initializePlayerList(fileName);
+        initializeFrontEndPlayers();
+        initializeCommunity();
+        model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
+        startRound();
+    }
+
+    public void startRound(){
+        model.dealFlow(roundNumber);
+        nextAction(model.getAction(roundNumber));
     }
 
     private void initializePlayerList(String fileName){
@@ -91,15 +119,19 @@ public class Controller {
         }
     }
 
-
-    public void initializeSplashMenu(){
-        EventHandler<ActionEvent> startEvent = e -> {
-            model.dealFlow(roundNumber);
-            nextAction(model.getAction(roundNumber));
-        };
-        view.createStartScreen(startEvent);
+    private void initializeFrontEndPlayers(){
+        int playerOffset = 30;
+        for (Player currentPlayer: playerList.getActivePlayers()){
+            FrontEndPlayer newPlayer = new FrontEndPlayer(10, playerOffset, currentPlayer.toString(), currentPlayer.getBankroll());
+            playerMappings.put(currentPlayer, newPlayer);
+            frontEndPlayers.add(newPlayer);
+            playerOffset+=50;
+        }
     }
 
+    private void initializeCommunity(){
+        displayCommunity = new FrontEndCommunity(200,400);
+    }
 
     //TODO: maintain player that raised last
     public void initializeActionMenu() throws InterruptedException {
@@ -219,13 +251,13 @@ public class Controller {
     }
 
     public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
-        int dealLocation = 0;
+//        int dealLocation = 0;
         int cardIndex = 0;
         for (Card discardedCard: player.getDiscardedCards()){
             FrontEndCard discardedFrontEndCard = frontEndCardMappings.get(discardedCard.toString());
             view.remove(discardedFrontEndCard);
 
-            dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
+            int dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
             Card newCard = player.getNewCards().get(cardIndex);
             FrontEndCard displayCard = getFrontEndCard(newCard);
             view.deal(displayCard, displayRecipient, dealLocation);
@@ -239,21 +271,6 @@ public class Controller {
         FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
         frontEndCardMappings.put(card.toString(), frontEndCard);
         return frontEndCard;
-    }
-
-    private void initializeCommunity(){
-        displayCommunity = new FrontEndCommunity(200,400);
-    }
-
-
-    private void initializeFrontEndPlayers(){
-        int playerOffset = 30;
-        for (Player currentPlayer: playerList.getActivePlayers()){
-            FrontEndPlayer newPlayer = new FrontEndPlayer(10, playerOffset, currentPlayer.toString(), currentPlayer.getBankroll());
-            playerMappings.put(currentPlayer, newPlayer);
-            frontEndPlayers.add(newPlayer);
-            playerOffset+=50;
-        }
     }
 
     private void indicateFold(Player player){

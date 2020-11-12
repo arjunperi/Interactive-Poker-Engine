@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import pokerSuite.PokerRunner;
 
 import java.util.ArrayList;
@@ -24,13 +26,11 @@ public class GameView {
     private Group centerGroup;
     private Group bottomGroup;
 
-
-
     public GameView(){
         topGroup = new Group();
         centerGroup = new Group();
+        centerGroup.setId("Center");
         bottomGroup = new Group();
-        bottomGroup.setId("Bottom");
         root = new BorderPane();
         root.setCenter(centerGroup);
         root.setTop(topGroup);
@@ -43,9 +43,15 @@ public class GameView {
         return this.scene;
     }
 
-    public void createStartScreen(EventHandler<ActionEvent> startEvent){
-        Button startButton = makeButton("Start", startEvent);
-        bottomGroup.getChildren().add(startButton);
+    public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
+        VBox gameBox = new VBox();
+        gameBox.setId("GameBox");
+        Button holdEmButton = makeButton("Holdem", holdemEvent);
+        Button drawButton = makeButton("Draw", drawEvent);
+        Button studButton = makeButton("Stud", studEvent);
+        Button customButton = makeButton("Custom", customEvent);
+        gameBox.getChildren().addAll(holdEmButton,drawButton,studButton,customButton);
+        centerGroup.getChildren().add(gameBox);
     }
 
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
@@ -61,6 +67,7 @@ public class GameView {
     
     public Button makeButton(String property, EventHandler<ActionEvent> handler) {
         Button result = new Button();
+        result.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         result.setId(property);
         result.setText(property);
         result.setOnAction(handler);
@@ -93,6 +100,7 @@ public class GameView {
     public Dialog makeOptionScreen(TextField betInput) {
         bottomGroup.getChildren().clear();
 
+
         Dialog betBox = new TextInputDialog();
 
 
@@ -120,9 +128,7 @@ public class GameView {
 
     }
 
-
     public Button getButton(Dialog betBox, String buttonName){
-
         GridPane grid = getGrid(betBox);
         for (Node node: grid.getChildrenUnmodifiable())
             if (node.getId().equals(buttonName)){
