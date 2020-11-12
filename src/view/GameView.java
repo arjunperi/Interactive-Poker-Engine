@@ -14,9 +14,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
@@ -68,10 +70,8 @@ public class GameView {
         pane.setTranslateX(100);
         pane.setTranslateY(300);
 
-        ImageView iv2 = new ImageView(Controller.class.getResource("/blank-card.jpg").toExternalForm());
         ImageView iv3 = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
-        iv2.setFitHeight(100);
-        iv2.setFitWidth(70);
+
         iv3.setFitHeight(50);
         iv3.setFitWidth(50);
         Text inftx2 = new Text("Q");
@@ -88,7 +88,7 @@ public class GameView {
 
 
         //pane2.getChildren().add(card2);
-        pane2.getChildren().add(iv2);
+
         pane2.getChildren().add(iv3);
         pane2.getChildren().add(inftx2);
 
@@ -101,6 +101,37 @@ public class GameView {
         //StackPane.setAlignment(iv,Pos.CENTER); //set it to the Center Left(by default it's on the center)
 
         root.getChildren().add(pane2);
+
+        Pane pane3 = new Pane();;
+
+        double centerX = 300 ;
+        double centerY = 300 ;
+        double radius = 5 ;
+
+        Circle earth = new Circle(centerX, centerY, 200, Color.web("green", 0.5));
+        pane3.getChildren().add(earth);
+
+        int numMoons = 6;
+        double distance = 200 * 1.5 ;
+        List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Donald Trump");
+
+        for (int i = 0 ; i < numMoons; i++) {
+            double angle = 2 * i * Math.PI / numMoons ;
+            double xOffset = distance * Math.cos(angle);
+            double yOffset = distance * Math.sin(angle);
+            double x = centerX + xOffset ;
+            double y = centerY + yOffset ;
+            Rectangle playerBox = new Rectangle(x-(175/2), y, 175, 30);
+            playerBox.setStroke(Color.RED);
+            playerBox.setFill(Color.TRANSPARENT);
+            Circle cardLocation = new Circle(x-(175/2), y, radius, Color.web("blue", 0.5));
+            Circle moon = new Circle(x, y, radius, Color.web("blue", 0.5));
+            Text name = new Text(x-(175/2), y+20, names.get(i));
+            pane3.getChildren().addAll(playerBox, cardLocation, name);
+            //pane3.getChildren().addAll(playerInfo);
+
+        }
+        centerGroup.getChildren().addAll(pane3);
     }
 
     public Scene setupScene() {
