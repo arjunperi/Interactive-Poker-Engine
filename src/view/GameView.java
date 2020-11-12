@@ -68,14 +68,17 @@ public class GameView {
         pane.setTranslateX(100);
         pane.setTranslateY(300);
 
-        ImageView iv2 = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
-        iv2.setFitHeight(50);
-        iv2.setFitWidth(50);
+        ImageView iv2 = new ImageView(Controller.class.getResource("/blank-card.jpg").toExternalForm());
+        ImageView iv3 = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
+        iv2.setFitHeight(100);
+        iv2.setFitWidth(70);
+        iv3.setFitHeight(50);
+        iv3.setFitWidth(50);
         Text inftx2 = new Text("Q");
-        Rectangle card2 = new Rectangle(70,100);
+        //Rectangle card2 = new Rectangle(70,100);
         //card.setStrokeType(StrokeType.INSIDE);
-        card2.setStroke(Color.BLACK);
-        card2.setFill(Color.TRANSPARENT);
+        //card2.setStroke(Color.BLACK);
+        //card2.setFill(Color.TRANSPARENT);
 
         //inftx.setX(50000000);
         //inftx.setX(50);
@@ -84,8 +87,9 @@ public class GameView {
         pane2.setPrefSize(70,100); //set a default size for your stackpane
 
 
-        pane2.getChildren().add(card2);
+        //pane2.getChildren().add(card2);
         pane2.getChildren().add(iv2);
+        pane2.getChildren().add(iv3);
         pane2.getChildren().add(inftx2);
 
 
