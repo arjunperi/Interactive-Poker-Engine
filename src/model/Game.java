@@ -22,11 +22,9 @@ public class Game {
         pot = new Pot();
         this.communityCards = new CommunityCards();
 
-
         reader = new JSONReader();
         reader.parse("/texas_holdem.json");
 
-        //deck = new Deck();
         deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 
         dealer = new Dealer(deck);

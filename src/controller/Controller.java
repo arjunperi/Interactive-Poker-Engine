@@ -29,38 +29,64 @@ public class Controller {
     private Model model;
     private RoundManager roundManager;
     private PlayerList playerList;
-    private final List<GameDisplayRecipient> frontEndPlayers;
-    private final CommunityCards communityCards;
+    private List<GameDisplayRecipient> frontEndPlayers;
+    private CommunityCards communityCards;
     private GameDisplayRecipient displayCommunity;
-    private final Pot pot;
-    private final Dealer dealer;
-    private final GameView view;
+    private Pot pot;
+    private Dealer dealer;
+    private GameView view;
     private int roundNumber;
     private int totalRounds;
-    private final Map<Player, FrontEndPlayer> playerMappings;
-    private final Map<String, FrontEndCard> frontEndCardMappings;
-    private final FileReader reader;
-
+    private Map<Player, FrontEndPlayer> playerMappings;
+    private Map<String, FrontEndCard> frontEndCardMappings;
+    private FileReader reader;
+    private Properties modelProperties;
+    private String currentGame;
+    private boolean gameStart;
 
     public Controller() {
+        gameStart = true;
+        playerMappings = new HashMap<>();
+        frontEndCardMappings = new HashMap<>();
+        frontEndPlayers = new ArrayList<>();
         reader = new FileReader();
         view = new GameView();
         roundNumber = 1;
-        Game game = new Game();
         initializeGameSelect();
+        initializeGameObjects();
+    }
 
+    private void initializeGameObjects(){
+        Game game = new Game();
         communityCards = game.getCommunityCards();
         pot = game.getPot();
         dealer = game.getDealer();
         roundManager = game.getTurnManager();
-
-        playerMappings = new HashMap<>();
-        frontEndCardMappings = new HashMap<>();
-        frontEndPlayers = new ArrayList<>();
     }
 
     public Scene setupScene() {
         return view.setupScene();
+    }
+
+    public void checkRoundOver(){
+        if (roundManager.roundOver()){
+            startRound();
+        }
+    }
+
+    public void startRound(){
+        System.out.println("new round");
+        roundNumber = 1;
+        view.clear();
+        initializeGameObjects();
+        for (Player player: playerList.getAllPlayers()){
+            player.clearHand();
+            player.enterNewGame(communityCards, pot);
+            playerMappings.get(player).clearFrontEndCardLocations();
+        }
+        playerList.updateStartingRoundOrder();
+        playerList.resetActivePlayers();
+        initializeProperties(currentGame);
     }
 
     public void initializeGameSelect(){
@@ -71,7 +97,6 @@ public class Controller {
         view.makeGameSelectScreen(holdemEvent, drawEvent, studEvent, customEvent);
     }
 
-
     private void chooseNewFile() {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)", "*.properties");
         FileChooser fileChooser = new FileChooser();
@@ -81,25 +106,24 @@ public class Controller {
         if(file!=null) {
             initializeProperties((file).getName());
         }
-        //else?
     }
 
     public void initializeProperties(String fileName){
+        currentGame = fileName;
         fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-        System.out.println(fileName);
-        Properties modelProperties = reader.getPropertyFile(fileName);
+        modelProperties = reader.getPropertyFile(fileName);
         totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
-        initializePlayerList(fileName);
-        initializeFrontEndPlayers();
+        if (gameStart){
+            initializePlayerList(fileName);
+            initializeFrontEndPlayers();
+            gameStart = false;
+        }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
-        startRound();
-    }
-
-    public void startRound(){
         model.dealFlow(roundNumber);
         nextAction(model.getAction(roundNumber));
     }
+
 
     private void initializePlayerList(String fileName){
         //TODO: use factory design pattern here to choose what kind of playerList to instantiate
@@ -134,7 +158,7 @@ public class Controller {
     }
 
     //TODO: maintain player that raised last
-    public void initializeActionMenu() throws InterruptedException {
+    public void initializeActionMenu()  {
         playerList.updateActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
@@ -149,7 +173,7 @@ public class Controller {
                 EventHandler<ActionEvent> betEvent = e -> displayBetMenu(player);
 
 
-                ChoiceDialog dialog = view.makeActionScreen(foldEvent, checkEvent, betEvent);
+                ChoiceDialog dialog = view.makeActionScreen(player.toString(), foldEvent, checkEvent, betEvent);
                 Optional<Button> result = dialog.showAndWait();
                 if (result.isPresent()){
                     if (result.get().getId().equals("Bet")){
@@ -165,12 +189,10 @@ public class Controller {
                             e.printStackTrace();
                         }
                     }
-
                 }
-
-
             }
             roundManager.checkOnePlayerRemains(playerList);
+            checkRoundOver();
         }
         playerList.updateActivePlayers();
         roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
@@ -178,6 +200,9 @@ public class Controller {
             model.dealFlow(roundNumber);
             System.out.println(roundNumber);
             nextAction(model.getAction(roundNumber));
+        }
+        else {
+            startRound();
         }
     }
 
@@ -192,7 +217,7 @@ public class Controller {
         }
     }
 
-    private void exchangeRound() throws InterruptedException {
+    public void exchangeRound() {
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
@@ -200,7 +225,7 @@ public class Controller {
             TextField exchangeCardInput1 = new TextField();
             TextField exchangeCardInput2 = new TextField();
             TextField exchangeCardInput3 = new TextField();
-            Dialog exchangeBox = view.makeExchangeScreen(exchangeCardInput1,exchangeCardInput2, exchangeCardInput3);
+            Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1,exchangeCardInput2, exchangeCardInput3);
 
             Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
             if (exchangeBoxResult.isPresent()) {
@@ -265,7 +290,6 @@ public class Controller {
         }
     }
 
-
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
         FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
@@ -274,7 +298,7 @@ public class Controller {
     }
 
     private void indicateFold(Player player){
-        player.exitHand();
+        player.fold();
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.foldDisplay();
     }
@@ -287,21 +311,19 @@ public class Controller {
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.betDisplay(betAmount * -1);
     }
+
     private void indicateCheck(Player player){
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.checkDisplay();
-
     }
-    public void displayBetMenu(Player player){
 
+    public void displayBetMenu(Player player){
         TextField betInput = new TextField();
         Dialog betBox = view.makeOptionScreen(betInput);
         Optional betBoxResult = betBox.showAndWait();
         if (betBoxResult.isPresent()) {
 
                 indicateBet(player, betInput.getText());}
-
-
     }
 
 }

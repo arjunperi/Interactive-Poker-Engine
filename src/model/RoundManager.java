@@ -7,12 +7,14 @@ public class RoundManager {
     private int currentRound;
     private Pot pot;
     private HandEvaluator handEvaluator;
+    private boolean roundOver;
 
 
     public RoundManager(Pot pot){
         currentRound = 0;
         this.pot = pot;
         handEvaluator = new HandEvaluator();
+        roundOver = false;
     }
 
     public void checkOnePlayerRemains(PlayerList playerList){
@@ -22,9 +24,9 @@ public class RoundManager {
             winner = activePlayers.get(0);
             pot.dispersePot(winner,pot.getPotTotal());
             pot.clearPot();
+            roundOver = true;
         }
     }
-
 
     public void checkShowDown(PlayerList playerList, int currentRound, int totalRounds){
         if (currentRound == totalRounds){
@@ -49,5 +51,10 @@ public class RoundManager {
             pot.dispersePot(player, winningAmount);
         }
         pot.clearPot();
+        roundOver = true;
+    }
+
+    public boolean roundOver(){
+        return roundOver;
     }
 }

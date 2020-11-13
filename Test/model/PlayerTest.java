@@ -1,5 +1,6 @@
 package model;
 
+import controller.Controller;
 import controller.JSONReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ public class PlayerTest extends DukeApplicationTest {
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
         assertTrue(player.isActive());
-        player.exitHand();
+        player.fold();
         assertFalse(player.isActive());
     }
 
@@ -102,6 +103,29 @@ public class PlayerTest extends DukeApplicationTest {
         dealer.exchangeCards(player, (List.of("14 DIAMONDS")));
         assertEquals(card1, player.getHand().getCards().get(0));
         assertEquals(card1, player.getHand().getCards().get(0));
+    }
+
+
+    @Test
+    public void testClearHand(){
+        CommunityCards communityCards = new CommunityCards();
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
+        Card testCard = new Card(2,"CLUBS");
+        player.receiveCard(testCard);
+        player.clearHand();
+        assertEquals(0, player.getHand().getCards().size());
+    }
+
+    @Test
+    public void testEnterNewGame(){
+        CommunityCards communityCards = new CommunityCards();
+        Pot pot = new Pot();
+        player = new Player("Player", 100, communityCards, pot);
+        player.fold();
+        assertFalse(player.isActive());
+        player.enterNewGame(communityCards,pot);
+        assertTrue(player.isActive());
     }
 
 }

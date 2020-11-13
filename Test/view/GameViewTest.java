@@ -16,6 +16,10 @@ import model.*;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
+import javax.swing.table.TableCellEditor;
+import javax.swing.text.View;
+import java.util.List;
+
 public class GameViewTest extends DukeApplicationTest {
     private Controller controller;
     private Stage stage;
@@ -63,7 +67,6 @@ public class GameViewTest extends DukeApplicationTest {
 
     @Test
     public void testBettingMenu() {
-
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
@@ -104,4 +107,27 @@ public class GameViewTest extends DukeApplicationTest {
         testCard = lookup("#JDIAMONDS").query();
         assertEquals(100, testCard.getX());
     }
+
+
+    @Test
+    public void testExchangeInputScreen(){
+        javafxRun(() -> controller.initializeGameSelect());
+        Button startButton = lookup("#Holdem").queryButton();
+        clickOn(startButton);
+        javafxRun(() -> {
+            controller.exchangeRound();
+        });
+        GridPane exchangeGrid = lookup("#ExchangeGrid").query();
+        TextField exchangeCardInput1 = lookup("#ExchangeCard1").query();
+        TextField exchangeCardInput2 = lookup("#ExchangeCard2").query();
+        TextField exchangeCardInput3 = lookup("#ExchangeCard3").query();
+        assertTrue(exchangeGrid.getChildren().containsAll(List.of(exchangeCardInput1, exchangeCardInput2, exchangeCardInput3)));
+    }
+
+//    @Test
+//    public void testStartNewGame(){
+//        Controller controller = new Controller();
+//        javafxRun(() -> controller.initializeProperties("Holdem.properties"));
+//        javafxRun(() -> controller.startRound());
+//    }
 }

@@ -43,6 +43,10 @@ public class GameView {
         return this.scene;
     }
 
+    public void clear(){
+        root.getChildren().clear();
+    }
+
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
         VBox gameBox = new VBox();
         gameBox.setId("GameBox");
@@ -74,7 +78,8 @@ public class GameView {
         return result;
     }
 
-    public ChoiceDialog makeActionScreen(EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> checkEvent, EventHandler<ActionEvent> betEvent){
+    public ChoiceDialog makeActionScreen(String playerName, EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> checkEvent, EventHandler<ActionEvent> betEvent){
+        centerGroup.getChildren().clear();
         Button foldButton = makeButton("Fold", foldEvent);
         foldButton.setId("Fold");
         Button checkButton = makeButton("Check", checkEvent);
@@ -88,7 +93,7 @@ public class GameView {
 
         ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(checkButton, choices);
         dialog.setTitle("Select Action");
-        dialog.setHeaderText("What would you like to do?");
+        dialog.setHeaderText(playerName + " is up. What would you like to do?");
         dialog.setContentText("Choose your action:");
 
 // Traditional way to get the response value.
@@ -100,14 +105,10 @@ public class GameView {
     public Dialog makeOptionScreen(TextField betInput) {
         bottomGroup.getChildren().clear();
 
-
         Dialog betBox = new TextInputDialog();
-
-
 
         betInput.setPromptText("Enter a bet");
         betInput.setId("Bet");
-
 
         GridPane grid = new GridPane();
         grid.setId("OptionPane");
@@ -117,15 +118,12 @@ public class GameView {
 
         return betBox;
     }
+
     public GridPane getGrid(Dialog betBox){
-
         Node grid = betBox.getDialogPane().getContent();
-
             if (grid.getId().equals("OptionPane"));{
                 return (GridPane) grid;
             }
-
-
     }
 
     public Button getButton(Dialog betBox, String buttonName){
@@ -135,13 +133,16 @@ public class GameView {
                 Button desiredButton = (Button) node;
                 return desiredButton;
             }
-
         return null;
     }
 
-    public Dialog makeExchangeScreen(TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
+    public Dialog makeExchangeScreen(String playerName, TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
         Dialog exchangeBox = new TextInputDialog();
+        exchangeBox.setTitle("Exchange Cards");
+        exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
+
         GridPane grid = new GridPane();
+        grid.setId("ExchangeGrid");
 
         exchangeCardInput1.setPromptText("First card to exchange");
         exchangeCardInput1.setId("ExchangeCard1");
