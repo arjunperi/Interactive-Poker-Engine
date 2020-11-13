@@ -16,6 +16,7 @@ public class Player extends CardRecipient{
     private Hand totalVisibleHand;
     private Pot pot;
     protected boolean isInteractive;
+    private int betAmount;
     //have a player's hand strength
     //update it after every deal
 
@@ -127,9 +128,15 @@ public class Player extends CardRecipient{
 
     public void bet(int amountToBet){
         System.out.print(this.toString() + "bets " + amountToBet);
+        betAmount = amountToBet;
         pot.addToPot(amountToBet);
         updateBankroll(amountToBet * -1);
     }
+
+    public int getBetAmount(){
+        return betAmount;
+    }
+
 
     public void fold(){
         System.out.println(this.toString() + " has folded");

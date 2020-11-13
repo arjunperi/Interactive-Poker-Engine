@@ -158,11 +158,16 @@ public class Controller {
     }
 
     //TODO: maintain player that raised last
-    public void initializeActionMenu()  {
+
+    public void initializeActionMenu() {
         playerList.updateActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
+        //want to stop at the last player and not prompt them -> if they have raised
+            //if they didn't then no
+            //if
         for (Player player : playersCopy) {
+
             if (!player.isInteractive()) {
                 AutoPlayer autoPlayer = (AutoPlayer) player;
                 autoPlayer.decideAction();
@@ -171,7 +176,6 @@ public class Controller {
                 EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
                 EventHandler<ActionEvent> checkEvent = e -> indicateCheck(player);
                 EventHandler<ActionEvent> betEvent = e -> displayBetMenu(player);
-
 
                 ChoiceDialog dialog = view.makeActionScreen(player.toString(), foldEvent, checkEvent, betEvent);
                 Optional<Button> result = dialog.showAndWait();
@@ -191,6 +195,11 @@ public class Controller {
                     }
                 }
             }
+            if (playerList.raiseMade(player)){
+                initializeActionMenu();
+                break;
+            }
+
             roundManager.checkOnePlayerRemains(playerList);
             checkRoundOver();
         }
@@ -242,6 +251,7 @@ public class Controller {
         playerList.updateActivePlayers();
         initializeActionMenu();
     }
+
 
     //don't like this conditional
     private void dealingRound() throws InterruptedException {
@@ -305,8 +315,7 @@ public class Controller {
 
     private void indicateBet(Player player, String betInput){
         int betAmount = Integer.parseInt(betInput);
-        pot.addToPot(betAmount);
-        player.updateBankroll(betAmount * -1);
+        player.bet(betAmount);
 
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.betDisplay(betAmount * -1);
