@@ -1,7 +1,7 @@
 package model;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StandardPlayerList extends PlayerList{
 
@@ -11,5 +11,12 @@ public class StandardPlayerList extends PlayerList{
 
     public void updateActivePlayers() {
         removeFoldedPlayers();
+        if (raiseMade){
+            int shiftIndex = activePlayers.indexOf(playerUp);
+            Collections.rotate(activePlayers, -shiftIndex);
+        }
+        raiseMade = false;
     }
+
+
 }

@@ -134,11 +134,12 @@ public class Controller {
     }
 
     //TODO: maintain player that raised last
-    public void initializeActionMenu() throws InterruptedException {
+    public void initializeActionMenu() {
         playerList.updateActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
         for (Player player : playersCopy) {
+
             if (!player.isInteractive()) {
                 AutoPlayer autoPlayer = (AutoPlayer) player;
                 autoPlayer.decideAction();
@@ -147,7 +148,6 @@ public class Controller {
                 EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
                 EventHandler<ActionEvent> checkEvent = e -> indicateCheck(player);
                 EventHandler<ActionEvent> betEvent = e -> displayBetMenu(player);
-
 
                 ChoiceDialog dialog = view.makeActionScreen(foldEvent, checkEvent, betEvent);
                 Optional<Button> result = dialog.showAndWait();
@@ -167,9 +167,13 @@ public class Controller {
                     }
 
                 }
-
-
             }
+
+            if (playerList.raiseMade(player)){
+                initializeActionMenu();
+                break;
+            }
+
             roundManager.checkOnePlayerRemains(playerList);
         }
         playerList.updateActivePlayers();
@@ -217,6 +221,9 @@ public class Controller {
         playerList.updateActivePlayers();
         initializeActionMenu();
     }
+
+
+
 
     //don't like this conditional
     private void dealingRound() throws InterruptedException {
