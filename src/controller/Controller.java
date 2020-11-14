@@ -276,12 +276,12 @@ public class Controller {
 
         for (Player player : playersCopy) {
             if (playerList.getRaiseSeat()!=player){
+                lastBet = playerList.getLastBet();
                 if (!player.isInteractive()) {
                     AutoPlayer autoPlayer = (AutoPlayer) player;
-                    autoPlayer.decideAction();
+                    autoPlayer.decideAction(lastBet);
                 }
                 else {
-                    lastBet = playerList.getLastBet();
 
                     ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet);
                     Optional<Button> result = dialog.showAndWait();
@@ -312,6 +312,7 @@ public class Controller {
         }
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
+        lastBet=0;
         roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
 
         if (roundNumber < totalRounds + 1) {
@@ -373,13 +374,17 @@ public class Controller {
         }
     }
 
-    private void indicateBet(Player player, String betInput){
+    private void indicateBet(Player player, String betInput) {
         int betAmount = Integer.parseInt(betInput);
 
-        player.bet(betAmount);
+        if (player.getTotalBetAmount() + betAmount < lastBet) {
+            showError("Bet not high enough");
+        } else {
+            player.bet(betAmount);
 
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.betDisplay(betAmount * -1);
+            FrontEndPlayer displayPlayer = playerMappings.get(player);
+            displayPlayer.betDisplay(betAmount * -1);
+        }
     }
 
     private void indicateFold(Player player){
@@ -391,8 +396,7 @@ public class Controller {
 
     private void indicateCall(Player player){
         System.out.println("call");
-        callAmount = lastBet - player.getTotalBetAmount();
-        player.bet(callAmount);
+        player.call(lastBet);
         FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }
@@ -418,7 +422,7 @@ public class Controller {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Controller Error");
         alert.setContentText(message);
-        alert.show();
+        alert.showAndWait();
     }
 
 
