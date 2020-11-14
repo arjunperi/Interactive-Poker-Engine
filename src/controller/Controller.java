@@ -162,7 +162,7 @@ public class Controller {
     //TODO: maintain player that raised last
 
     public void initializeActionMenu() {
-        playerList.updateActivePlayers();
+        playerList.initializeActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
 
@@ -186,8 +186,10 @@ public class Controller {
                                 Class<?> c = Class.forName("controller.Controller");
                                 Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
                                 method.invoke(this, player);
-                                callAmount = lastBet - player.getBetAmount();
-                                System.out.println("bet amount: " + player.getBetAmount());
+
+                                System.out.println("bet amount: " + player.getCurrentBetAmount());
+                                System.out.println("last bet: " + lastBet);
+                                System.out.println("call amount: " + callAmount);
                                 //TODO: fix exceptions
                             } catch (Exception e) {
 //                                e.printStackTrace();
@@ -340,8 +342,8 @@ public class Controller {
 
     private void indicateCall(Player player){
         System.out.println("call");
+        callAmount = lastBet - player.getTotalBetAmount();
         player.bet(callAmount);
-        callAmount = 0;
         FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }

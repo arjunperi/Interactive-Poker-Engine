@@ -18,7 +18,7 @@ public class RoundManager {
     }
 
     public void checkOnePlayerRemains(PlayerList playerList){
-        playerList.updateActivePlayers();
+        playerList.removeFoldedPlayers();
         List<Player> activePlayers = playerList.getActivePlayers();
         if (activePlayers.size() == 1){
             winner = activePlayers.get(0);

@@ -1,8 +1,5 @@
 package model;
 
-import com.sun.jdi.InvocationException;
-import controller.Controller;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +14,8 @@ public class Player extends CardRecipient{
     private Hand totalVisibleHand;
     private Pot pot;
     protected boolean isInteractive;
-    private int betAmount;
+    private int totalBetAmount;
+    private int currentBetAmount;
     //have a player's hand strength
     //update it after every deal
 
@@ -140,18 +138,22 @@ public class Player extends CardRecipient{
 
     public void bet(int amountToBet){
         System.out.print(this.toString() + " bets " + amountToBet + "\n");
-
-        betAmount = amountToBet;
-        pot.addToPot(amountToBet);
-        updateBankroll(amountToBet * -1);
+        currentBetAmount = amountToBet;
+        totalBetAmount = totalBetAmount + currentBetAmount;
+        pot.addToPot(currentBetAmount);
+        updateBankroll(currentBetAmount * -1);
     }
 
-    public int getBetAmount(){
-        return betAmount;
+    public int getTotalBetAmount(){
+        return totalBetAmount;
+    }
+
+    public int getCurrentBetAmount(){
+        return currentBetAmount;
     }
 
     public void clearBetAmount(){
-        betAmount = 0;
+        totalBetAmount = 0;
     }
 
     public void fold(){
