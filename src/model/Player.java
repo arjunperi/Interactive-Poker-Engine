@@ -149,11 +149,23 @@ public class Player extends CardRecipient{
 
     public void clearBetAmount(){
         totalBetAmount = 0;
+        currentBetAmount = 0;
     }
 
     public void fold(){
         System.out.println(this.toString() + " has folded");
         hasFolded = true;
+    }
+
+    public void call(int lastBet){
+        System.out.println(this.toString() + " has called");
+        int callAmount = lastBet-totalBetAmount;
+        if(callAmount>=moneyCount){
+            bet(moneyCount);
+        }
+        else{
+            bet(callAmount);
+        }
     }
 
     public boolean isInteractive(){
