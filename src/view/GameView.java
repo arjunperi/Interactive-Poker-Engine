@@ -220,7 +220,7 @@ public class GameView {
                     col = 0;
                     row = 0;
                 }
-                info = new StackPane();
+                /*info = new StackPane();
                 //info.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
                 Text t = new Text(currentCards.get(c));
                 t.setVisible(true);
@@ -231,9 +231,11 @@ public class GameView {
                 Rectangle card = new Rectangle(35, 50);
                 card.setStroke(Color.BLUE);
                 card.setFill(Color.TRANSPARENT);
-                info.getChildren().addAll(iv3,t,card);
-                cardSpots.add(info, col, row);
+                info.getChildren().addAll(iv3,t,card);*/
+                CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+                cardSpots.add(yuh,col, row);
                 //cardSpots.getChildren().remove()
+                yuh.setFrontEndVisible(false);
                 col++;
             }
             cardSpots.getChildren().remove(info);

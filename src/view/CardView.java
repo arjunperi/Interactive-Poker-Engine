@@ -9,6 +9,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class CardView extends StackPane {
+
+
   private String rankSymbol;
   private boolean isFrontEndVisible;
   private ImageView displayedImage;
@@ -69,5 +71,9 @@ public class CardView extends StackPane {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+    displayedImage.setFitHeight(CARD_HEIGHT);
+    displayedImage.setFitWidth(CARD_WIDTH);
+
   }
 }
