@@ -25,12 +25,11 @@ public class CardView extends StackPane {
     super();
 
     this.rankSymbol = rankSymbol;
-    this.isFrontEndVisible = isFrontEndVisible;
     this.suitImage = suitImage;
     this.cardBack = cardBack;
 
     setUpCard();
-    checkVisibility();
+    setFrontEndVisible(isFrontEndVisible);
   }
 
   private void setUpCard() {
