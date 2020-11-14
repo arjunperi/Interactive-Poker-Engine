@@ -12,15 +12,7 @@ public class Card {
     private boolean isVisible;
     private FileReader reader;
 
-
     private static final String FILENAME = "CardValueMapping";
-
-    /*public Card(int rank, Suit suit) {
-        this.suit = suit;
-        this.rank = rank;
-        visible=false;
-        initializeCardNumber();
-    }*/
 
     public Card(int rank, String suit) {
         this.suit = suit;
