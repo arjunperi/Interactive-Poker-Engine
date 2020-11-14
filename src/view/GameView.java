@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import pokerSuite.PokerRunner;
 
@@ -41,6 +40,10 @@ public class GameView {
         this.scene = new Scene(root, PokerRunner.SCENE_WIDTH, PokerRunner.SCENE_HEIGHT,
                 PokerRunner.BACKGROUND);
         return this.scene;
+    }
+
+    public void clear(){
+        root.getChildren().clear();
     }
 
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
@@ -74,40 +77,48 @@ public class GameView {
         return result;
     }
 
-    public ChoiceDialog makeActionScreen(EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> checkEvent, EventHandler<ActionEvent> betEvent){
-        Button foldButton = makeButton("Fold", foldEvent);
-        foldButton.setId("Fold");
-        Button checkButton = makeButton("Check", checkEvent);
-        checkButton.setId("Check");
-        Button betButton = makeButton("Bet", betEvent);
-        List<Button> choices = new ArrayList<>();
+    public ChoiceDialog makeActionScreen(String playerName, int lastBet){
+        centerGroup.getChildren().clear();
 
+        Button foldButton = new Button("Fold");
+        foldButton.setId("Fold");
+
+        Button checkButton = new Button("Check");
+        checkButton.setId("Check");
+
+        Button callButton = new Button("Call");
+        callButton.setId("Call");
+
+        Button betButton = new Button("Bet");
+        betButton.setId("Bet");
+
+        List<Button> choices = new ArrayList<>();
         choices.add(foldButton);
-        choices.add(checkButton);
         choices.add(betButton);
 
-        ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(checkButton, choices);
-        dialog.setTitle("Select Action");
-        dialog.setHeaderText("What would you like to do?");
-        dialog.setContentText("Choose your action:");
+        if (lastBet > 0){
+            choices.add(callButton);
+        }
+        else{
+            choices.add(checkButton);
+        }
 
-// Traditional way to get the response value.
+        ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(foldButton, choices);
+        dialog.setTitle("Select Action");
+        dialog.setHeaderText(playerName + " is up. What would you like to do?");
+        dialog.setContentText("Choose your action:");
 
         return dialog;
     }
 
 
-    public Dialog makeOptionScreen(TextField betInput) {
+    public Dialog makeBetScreen(TextField betInput) {
         bottomGroup.getChildren().clear();
-
 
         Dialog betBox = new TextInputDialog();
 
-
-
         betInput.setPromptText("Enter a bet");
         betInput.setId("Bet");
-
 
         GridPane grid = new GridPane();
         grid.setId("OptionPane");
@@ -117,15 +128,12 @@ public class GameView {
 
         return betBox;
     }
+
     public GridPane getGrid(Dialog betBox){
-
         Node grid = betBox.getDialogPane().getContent();
-
             if (grid.getId().equals("OptionPane"));{
                 return (GridPane) grid;
             }
-
-
     }
 
     public Button getButton(Dialog betBox, String buttonName){
@@ -135,13 +143,16 @@ public class GameView {
                 Button desiredButton = (Button) node;
                 return desiredButton;
             }
-
         return null;
     }
 
-    public Dialog makeExchangeScreen(TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
+    public Dialog makeExchangeScreen(String playerName, TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
         Dialog exchangeBox = new TextInputDialog();
+        exchangeBox.setTitle("Exchange Cards");
+        exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
+
         GridPane grid = new GridPane();
+        grid.setId("ExchangeGrid");
 
         exchangeCardInput1.setPromptText("First card to exchange");
         exchangeCardInput1.setId("ExchangeCard1");

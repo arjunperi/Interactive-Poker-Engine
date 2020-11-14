@@ -13,10 +13,12 @@ public class StudPlayerList extends PlayerList {
     }
 
     public void updateActivePlayers() {
+        resetActivePlayers();
         removeFoldedPlayers();
         Player bestPlayer =  handEvaluator.getBestPlayers(this, true).get(0);
         int shiftAmount = activePlayers.size() - activePlayers.indexOf(bestPlayer);
         Collections.rotate(activePlayers, shiftAmount);
+        raiseShift();
     }
 
 }

@@ -1,14 +1,18 @@
 package model;
 
+import controller.Controller;
 import org.junit.jupiter.api.Test;
+import util.DukeApplicationTest;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudPlayerListTest {
+public class PlayerListTest extends DukeApplicationTest {
     @Test
-    public void testStudBettingOrder(){
+    public void testStudBettingOrder() {
         Pot pot = new Pot();
         CommunityCards communityCards = new CommunityCards();
         Player player1 = new Player("Jimmy", 100, communityCards, pot);
@@ -57,5 +61,22 @@ public class StudPlayerListTest {
         PlayerList studList = new StudPlayerList(new ArrayList<>(List.of(player1,player2)));
         studList.updateActivePlayers();
         assertEquals(player2, studList.getActivePlayers().get(0));
+    }
+
+    @Test
+    public void testUpdateStartingRoundOrder(){
+        Pot pot = new Pot();
+        CommunityCards communityCards = new CommunityCards();
+        Player player1 = new Player("Jimmy", 100, communityCards, pot);
+        Player player2 = new Player("Dinna", 100, communityCards, pot);
+        Player player3 = new Player("Yasser", 100, communityCards, pot);
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2, player3)));
+        assertEquals(player1, playerList.getActivePlayers().get(0));
+        playerList.updateStartingRoundOrder();
+        playerList.resetActivePlayers();
+        assertEquals(player2, playerList.getActivePlayers().get(0));
+        playerList.updateStartingRoundOrder();
+        playerList.resetActivePlayers();
+        assertEquals(player3, playerList.getActivePlayers().get(0));
     }
 }

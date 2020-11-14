@@ -1,5 +1,8 @@
 package model;
 
+import com.sun.jdi.InvocationException;
+import controller.Controller;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,16 +33,13 @@ public class Player extends CardRecipient{
         discardedCardList = new ArrayList<>();
     }
 
+
     public int getBankroll(){
         return moneyCount;
     }
 
     public boolean isSolvent(){
         return moneyCount > 0;
-    }
-
-    public void exitHand(){
-        hasFolded = true;
     }
 
     public boolean isActive(){
@@ -51,10 +51,19 @@ public class Player extends CardRecipient{
         }
     }
 
+    public void enterNewGame(CommunityCards communityCards, Pot pot){
+        if (isSolvent()){
+             hasFolded = false;
+        }
+        this.communityCards = communityCards;
+        this.pot = pot;
+    }
+
     public void discardCard(Card card) {
         playerHand.getCards().remove(card);
         discardedCardList.add(card);
     }
+
 
     public List<Card> getDiscardedCards(){
         return discardedCardList;
@@ -118,7 +127,20 @@ public class Player extends CardRecipient{
         return totalHand;
     }
 
+//    public void bet(int amountToBet){
+//        System.out.print(this.toString() + " bets " + amountToBet + "\n");
+//        if (amountToBet <= moneyCount){
+//            betAmount = amountToBet;
+//            pot.addToPot(amountToBet);
+//            updateBankroll(amountToBet * -1);
+//        }
+//        else{
+//            throw new ModelException("Cannot bet more money than you have!");
+//        }
+
     public void bet(int amountToBet){
+        System.out.print(this.toString() + " bets " + amountToBet + "\n");
+
         betAmount = amountToBet;
         pot.addToPot(amountToBet);
         updateBankroll(amountToBet * -1);
@@ -128,6 +150,9 @@ public class Player extends CardRecipient{
         return betAmount;
     }
 
+    public void clearBetAmount(){
+        betAmount = 0;
+    }
 
     public void fold(){
         System.out.println(this.toString() + " has folded");
@@ -147,5 +172,9 @@ public class Player extends CardRecipient{
         playerHand.add(card);
         addNewCards(card);
         updateTotalHand();
+    }
+
+    public void clearHand(){
+        playerHand.clear();
     }
 }

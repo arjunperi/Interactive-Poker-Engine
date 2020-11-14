@@ -363,15 +363,9 @@ public class HandEvaluator {
             bestHandMapping.put(playerHand, player);
         }
         List<Hand> bestHands = getBestHands (new ArrayList<>(bestHandMapping.keySet()));
-
-        for (Card bestCard: bestHands.get(0).getCards()){
-            System.out.print(bestCard.toString() + " " );
-        }
-
         for (Hand bestHand : bestHands){
             bestPlayers.add(bestHandMapping.get(bestHand));
         }
-
         return bestPlayers;
     }
 
