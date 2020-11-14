@@ -7,36 +7,42 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class CardView extends StackPane {
-  private String rank;
+  private String rankSymbol;
   private boolean isFrontEndVisible;
   private ImageView displayedImage;
   private String suitImage;
   private String cardBack;
 
+  private Text rank;
+  private Rectangle cardBackground;
+
   private static final int CARD_WIDTH = 35;
   private static final int CARD_HEIGHT = 50;
 
-  public CardView(String rank, String suitImage, String cardBack, boolean isFrontEndVisible) {
+  public CardView(String rankSymbol, String suitImage, String cardBack, boolean isFrontEndVisible) {
     super();
 
-    this.rank = rank;
+    this.rankSymbol = rankSymbol;
     this.isFrontEndVisible = isFrontEndVisible;
     this.suitImage = suitImage;
     this.cardBack = cardBack;
-    this.displayedImage = new ImageView();
-
-
 
     setUpCard();
     checkVisibility();
-
-
   }
 
   private void setUpCard() {
+    rank = new Text(rankSymbol);
+    cardBackground = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
+    cardBackground.setStroke(Color.RED);
+    cardBackground.setFill(Color.TRANSPARENT);
+    displayedImage = new ImageView();
+
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+    this.getChildren().addAll(cardBackground, displayedImage, rank);
   }
 
   public void setFrontEndVisible(boolean isFrontEndVisible) {
@@ -45,26 +51,19 @@ public class CardView extends StackPane {
   }
 
   private void checkVisibility() {
-    this.getChildren().clear();
     if (isFrontEndVisible) {
-      makeCardViewVisible();
+      setVisibility(suitImage, true);
     } else {
-      makeCardViewInvisible();
+      setVisibility(cardBack, false);
     }
   }
 
-  private void makeCardViewInvisible() {
+  private void setVisibility(String cardBack, boolean b) {
     setCardImage(cardBack);
-    this.getChildren().addAll(displayedImage);
+    cardBackground.setVisible(b);
+    rank.setVisible(b);
   }
 
-  private void makeCardViewVisible() {
-    setCardImage(suitImage);
-    Rectangle card = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
-    Text suitName = new Text(rank);
-    card.setStroke(Color.RED);
-    card.setFill(Color.TRANSPARENT);
-  }
 
   private void setCardImage(String suitImage) {
     try {
@@ -73,5 +72,4 @@ public class CardView extends StackPane {
       e.printStackTrace();
     }
   }
-
 }

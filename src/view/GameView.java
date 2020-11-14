@@ -223,14 +223,15 @@ public class GameView {
                 info = new StackPane();
                 //info.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
                 Text t = new Text(currentCards.get(c));
+                t.setVisible(true);
                 ImageView iv3 = new ImageView();
                 iv3.setImage(new Image(Controller.class.getResource("/card-back.png").toExternalForm()));
                 iv3.setFitHeight(50);
                 iv3.setFitWidth(35);
-                //Rectangle card = new Rectangle(35, 50);
-                //card.setStroke(Color.BLUE);
-                //card.setFill(Color.TRANSPARENT);
-                info.getChildren().addAll(iv3);
+                Rectangle card = new Rectangle(35, 50);
+                card.setStroke(Color.BLUE);
+                card.setFill(Color.TRANSPARENT);
+                info.getChildren().addAll(iv3,t,card);
                 cardSpots.add(info, col, row);
                 //cardSpots.getChildren().remove()
                 col++;
