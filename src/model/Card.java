@@ -1,5 +1,7 @@
 package model;
 
+import controller.FileReader;
+
 import java.util.Properties;
 
 public class Card {
@@ -7,7 +9,8 @@ public class Card {
     private String suit;
     private String cardSymbol;
     private int rank;
-    private boolean isVisible;
+    private boolean isBackEndVisible;
+    private boolean isInteractivePlayerCard;
     private FileReader reader;
 
 
@@ -23,7 +26,8 @@ public class Card {
     public Card(int rank, String suit) {
         this.suit = suit;
         this.rank = rank;
-        isVisible = false;
+        isBackEndVisible = false;
+        isInteractivePlayerCard = false;
         reader = new FileReader();
         initializeCardNumber();
     }
@@ -61,12 +65,24 @@ public class Card {
 
     public int getRank(){return rank;}
 
-    public boolean isVisible(){
-        return isVisible;
+    public boolean isInteractivePlayerCard(){
+        return isInteractivePlayerCard;
+    }
+
+    public void setInteractivePlayerCard(){
+         isInteractivePlayerCard = true;
+    }
+
+    public boolean isBackEndVisible(){
+        return isBackEndVisible;
     }
 
 
-    public void makeVisible(){
-        isVisible =true;
+
+
+    public void makeBackEndVisible(){
+        isBackEndVisible =true;
     }
+
+
 }

@@ -23,6 +23,8 @@ public class FrontEndPlayer extends GameDisplayRecipient{
         displayText.setText(name + " has $: " + bankroll);
     }
 
+    public void checkDisplay(){ displayText.setText(name + "has checked.");}
+
     public String getText(){
         return displayText.getText();
     }
