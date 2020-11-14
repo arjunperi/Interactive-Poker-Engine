@@ -136,6 +136,7 @@ public class Controller {
     //TODO: maintain player that raised last
     public void initializeActionMenu() {
         playerList.updateActivePlayers();
+        System.out.print(playerList.getActivePlayers());
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
         for (Player player : playersCopy) {
@@ -169,6 +170,7 @@ public class Controller {
                 }
             }
 
+            System.out.print(playerList.raiseMade(player));
             if (playerList.raiseMade(player)){
                 initializeActionMenu();
                 break;
@@ -288,9 +290,10 @@ public class Controller {
 
     private void indicateBet(Player player, String betInput){
         int betAmount = Integer.parseInt(betInput);
-        pot.addToPot(betAmount);
-        player.updateBankroll(betAmount * -1);
+//        pot.addToPot(betAmount);
+//        player.updateBankroll(betAmount * -1);
 
+        player.bet(betAmount);
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.betDisplay(betAmount * -1);
     }
