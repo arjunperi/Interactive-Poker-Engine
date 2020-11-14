@@ -5,13 +5,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,6 +29,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Rotate;
 import pokerSuite.PokerRunner;
 
 import java.util.ArrayList;
@@ -47,7 +54,7 @@ public class GameView {
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
 
-        ImageView iv = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
+        /*ImageView iv = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
         iv.setFitHeight(50);
         iv.setFitWidth(50);
         Text inftx = new Text("K");
@@ -100,38 +107,86 @@ public class GameView {
 
         //StackPane.setAlignment(iv,Pos.CENTER); //set it to the Center Left(by default it's on the center)
 
-        root.getChildren().add(pane2);
+        root.getChildren().add(pane2);*/
 
-        Pane pane3 = new Pane();;
+        Pane pane3 = new Pane();
+
+        /*GridPane pane4 = new GridPane();
+        pane4.setGridLinesVisible(true);
+        pane4.setBorder(new Border(new BorderStroke(Color.RED,
+            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        pane4.setMinSize(400, 200);
+        pane4.add(new Circle(10), 1,1);
+        pane4.setPadding(new Insets(10, 10, 10, 10));
+        centerGroup.getChildren().add(pane4);*/
+
+
+
 
         double centerX = 300 ;
         double centerY = 300 ;
-        double radius = 5 ;
+        int radius = 5 ;
 
         Circle earth = new Circle(centerX, centerY, 200, Color.web("green", 0.5));
         pane3.getChildren().add(earth);
+        //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
-        int numMoons = 6;
+        int numPlayers = 6;
         double distance = 200 * 1.5 ;
-        List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Donald Trump");
+        List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Luke Skywalker", "Harry Potter", "Voldemort");
 
-        for (int i = 0 ; i < numMoons; i++) {
-            double angle = 2 * i * Math.PI / numMoons ;
+        for (int i = 0 ; i < numPlayers; i++) {
+            double angle = 2 * i * Math.PI / numPlayers ;
             double xOffset = distance * Math.cos(angle);
             double yOffset = distance * Math.sin(angle);
-            double x = centerX + xOffset ;
-            double y = centerY + yOffset ;
-            Rectangle playerBox = new Rectangle(x-(175/2), y, 175, 30);
+            double x = centerX + xOffset;
+            double y = centerY + yOffset;
+            GridPane cardSpots = new GridPane();
+            cardSpots.setVgap(5);
+            cardSpots.setHgap(5);
+            cardSpots.setLayoutX(x);
+            cardSpots.setLayoutY(y-210);
+            //cardSpots.setGridLinesVisible(true);
+            Rectangle card = new Rectangle(70, 100);
+            Rectangle card2 = new Rectangle(70, 100);
+            Rectangle card3 = new Rectangle(70, 100);
+            Rectangle card4 = new Rectangle(70, 100);
+            Circle calculatedPosition = new Circle(x, y, radius, Color.web("blue", 0.5));
+            card.setStroke(Color.RED);
+            card2.setStroke(Color.RED);
+            card3.setStroke(Color.RED);
+            card4.setStroke(Color.RED);
+
+            card.setFill(Color.TRANSPARENT);
+            card2.setFill(Color.TRANSPARENT);
+            card3.setFill(Color.TRANSPARENT);
+            card4.setFill(Color.TRANSPARENT);
+
+            cardSpots.add(card, 0,0);
+            cardSpots.add(card2, 1,0);
+            cardSpots.add(card3, 2,0);
+            cardSpots.add(card4, 0,1);
+
+
+
+            Rectangle playerBox = new Rectangle(x, y, 175, 30);
+            //Rectangle playerBox = new Rectangle(175, 30);
             playerBox.setStroke(Color.RED);
             playerBox.setFill(Color.TRANSPARENT);
-            Circle cardLocation = new Circle(x-(175/2), y, radius, Color.web("blue", 0.5));
-            Circle moon = new Circle(x, y, radius, Color.web("blue", 0.5));
-            Text name = new Text(x-(175/2), y+20, names.get(i));
-            pane3.getChildren().addAll(playerBox, cardLocation, name);
+            //Circle cardLocation = new Circle(radius, Color.web("blue", 0.5));
+            //Text name = new Text(names.get(i));
+            //pane3.add(playerBox, x, y);
+            //pane3.add(cardLocation, x, y);
+            //pane3.add(name, x, y + 2);
+
+            //Circle cardLocation = new Circle(x, y, radius, Color.web("blue", 0.5));
+            Text name = new Text(x, y+20, names.get(i));
+
+            pane3.getChildren().addAll(playerBox, name, cardSpots, calculatedPosition);
             //pane3.getChildren().addAll(playerInfo);
 
         }
-        centerGroup.getChildren().addAll(pane3);
+        centerGroup.getChildren().add(pane3);
     }
 
     public Scene setupScene() {
@@ -149,6 +204,7 @@ public class GameView {
         Button customButton = makeButton("Custom", customEvent);
         gameBox.getChildren().addAll(holdEmButton,drawButton,studButton,customButton);
         centerGroup.getChildren().add(gameBox);
+        centerGroup.getChildren().remove(gameBox);
     }
 
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
