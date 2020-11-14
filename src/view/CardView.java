@@ -57,10 +57,10 @@ public class CardView extends StackPane {
     }
   }
 
-  private void setVisibility(String cardBack, boolean b) {
-    setCardImage(cardBack);
-    cardBackground.setVisible(b);
-    rank.setVisible(b);
+  private void setVisibility(String cardImage, boolean isFrontEndVisible) {
+    setCardImage(cardImage);
+    cardBackground.setVisible(isFrontEndVisible);
+    rank.setVisible(isFrontEndVisible);
   }
 
 
