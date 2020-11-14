@@ -160,7 +160,7 @@ public class GameView {
             cardSpots.setLayoutX(x);
             cardSpots.setLayoutY(y-110);
             //cardSpots.setGridLinesVisible(true);
-            Rectangle card = new Rectangle(35, 50);
+            //Rectangle card = new Rectangle(35, 50);
             Rectangle card2 = new Rectangle(35, 50);
             Rectangle card3 = new Rectangle(35, 50);
             Rectangle card4 = new Rectangle(35, 50);
@@ -171,7 +171,6 @@ public class GameView {
             Rectangle card9 = new Rectangle(35, 50);
             Rectangle card10 = new Rectangle(35, 50);
 
-            card.setStroke(Color.RED);
             card2.setStroke(Color.RED);
             card3.setStroke(Color.RED);
             card4.setStroke(Color.RED);
@@ -184,7 +183,6 @@ public class GameView {
 
 
 
-            card.setFill(Color.TRANSPARENT);
             card2.setFill(Color.TRANSPARENT);
             card3.setFill(Color.TRANSPARENT);
             card4.setFill(Color.TRANSPARENT);
@@ -196,9 +194,46 @@ public class GameView {
             card10.setFill(Color.TRANSPARENT);
 
 
+            /*for (int startRow)
+            StackPane info = new StackPane();
+            Text t = new Text("yuh");
+            info.getChildren().addAll(card, t);*/
+
+            for (int row = 0; row < 2; row++) {
+                for (int column = 0; column < 5; column++) {
+                    Rectangle card = new Rectangle(35, 50);
+                    card.setStroke(Color.TRANSPARENT);
+                    card.setFill(Color.TRANSPARENT);
+                    cardSpots.add(card, column, row);
+                }
+            }
+
+            int row = 1;
+            int col = 0;
+
+            List<String> currentCards = List.of("K", "Q", "A", "2", "3", "5");
+            for (int c = 0; c < currentCards.size(); c++) {
+                if (col == 5) {
+                    col = 0;
+                    row = 0;
+                }
+                StackPane info = new StackPane();
+                Text t = new Text(currentCards.get(c));
+                Rectangle card = new Rectangle(35, 50);
+                card.setStroke(Color.RED);
+                card.setFill(Color.TRANSPARENT);
+                info.getChildren().addAll(card, t);
+                cardSpots.add(info, col, row);
+                col++;
+            }
 
 
-            cardSpots.add(card, 0,0);
+
+
+
+            /*cardSpots.add(card, 0,0);
+            cardSpots.add(info, 1,0);
+
             cardSpots.add(card2, 1,0);
             cardSpots.add(card3, 2,0);
             cardSpots.add(card4, 3,0);
@@ -208,7 +243,7 @@ public class GameView {
             cardSpots.add(card8, 2,1);
 
             cardSpots.add(card9, 3,1);
-            cardSpots.add(card10, 4,1);
+            cardSpots.add(card10, 4,1);*/
 
 
 
