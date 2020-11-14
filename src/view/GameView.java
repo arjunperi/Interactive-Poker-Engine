@@ -110,7 +110,6 @@ public class GameView {
         root.getChildren().add(pane2);*/
 
         Pane pane3 = new Pane();
-
         /*GridPane pane4 = new GridPane();
         pane4.setGridLinesVisible(true);
         pane4.setBorder(new Border(new BorderStroke(Color.RED,
@@ -124,15 +123,14 @@ public class GameView {
 
 
         double centerX = 300 ;
-        double centerY = 300 ;
-        int radius = 5 ;
+        double centerY = 200 ;
 
-        Circle earth = new Circle(centerX, centerY, 200, Color.web("green", 0.5));
+        Circle earth = new Circle(centerX, centerY, 150, Color.web("green", 0.5));
         pane3.getChildren().add(earth);
         //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
-        int numPlayers = 6;
-        double distance = 200 * 1.5 ;
+        int numPlayers = 7;
+        double distance = 200 ;
         List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Luke Skywalker", "Harry Potter", "Voldemort");
 
         for (int i = 0 ; i < numPlayers; i++) {
@@ -141,35 +139,79 @@ public class GameView {
             double yOffset = distance * Math.sin(angle);
             double x = centerX + xOffset;
             double y = centerY + yOffset;
+            /*if (x - centerX < 0) {
+                x -= 175;
+            }
+
+            if (y - centerY > 0) {
+                y += 60;
+            }
+            else {
+                y -= 60;
+            }*/
+
             GridPane cardSpots = new GridPane();
             cardSpots.setVgap(5);
             cardSpots.setHgap(5);
             cardSpots.setLayoutX(x);
-            cardSpots.setLayoutY(y-210);
+            cardSpots.setLayoutY(y-110);
             //cardSpots.setGridLinesVisible(true);
-            Rectangle card = new Rectangle(70, 100);
-            Rectangle card2 = new Rectangle(70, 100);
-            Rectangle card3 = new Rectangle(70, 100);
-            Rectangle card4 = new Rectangle(70, 100);
-            Circle calculatedPosition = new Circle(x, y, radius, Color.web("blue", 0.5));
-            card.setStroke(Color.RED);
-            card2.setStroke(Color.RED);
-            card3.setStroke(Color.RED);
-            card4.setStroke(Color.RED);
+            Rectangle card = new Rectangle(35, 50);
+            Rectangle card2 = new Rectangle(35, 50);
+            Rectangle card3 = new Rectangle(35, 50);
+            Rectangle card4 = new Rectangle(35, 50);
+            Rectangle card5 = new Rectangle(35, 50);
+            Rectangle card6 = new Rectangle(35, 50);
+            Rectangle card7 = new Rectangle(35, 50);
+            Rectangle card8 = new Rectangle(35, 50);
+            Rectangle card9 = new Rectangle(35, 50);
+            Rectangle card10 = new Rectangle(35, 50);
+
+            Circle calculatedPosition = new Circle(x, y, 5, Color.web("blue", 0.5));
+            card.setStroke(Color.TRANSPARENT);
+            card2.setStroke(Color.TRANSPARENT);
+            card3.setStroke(Color.TRANSPARENT);
+            card4.setStroke(Color.TRANSPARENT);
+            card5.setStroke(Color.TRANSPARENT);
+            card6.setStroke(Color.TRANSPARENT);
+            card7.setStroke(Color.TRANSPARENT);
+            card8.setStroke(Color.TRANSPARENT);
+            card9.setStroke(Color.RED);
+            card10.setStroke(Color.RED);
+
+
 
             card.setFill(Color.TRANSPARENT);
             card2.setFill(Color.TRANSPARENT);
             card3.setFill(Color.TRANSPARENT);
             card4.setFill(Color.TRANSPARENT);
+            card5.setFill(Color.TRANSPARENT);
+            card6.setFill(Color.TRANSPARENT);
+            card7.setFill(Color.TRANSPARENT);
+            card8.setFill(Color.TRANSPARENT);
+            card9.setFill(Color.TRANSPARENT);
+            card10.setFill(Color.TRANSPARENT);
+
+
+
 
             cardSpots.add(card, 0,0);
             cardSpots.add(card2, 1,0);
             cardSpots.add(card3, 2,0);
-            cardSpots.add(card4, 0,1);
+            cardSpots.add(card4, 3,0);
+            cardSpots.add(card5, 4,0);
+            cardSpots.add(card6, 0,1);
+            cardSpots.add(card7, 1,1);
+            cardSpots.add(card8, 2,1);
+
+            cardSpots.add(card9, 3,1);
+            cardSpots.add(card10, 4,1);
 
 
 
-            Rectangle playerBox = new Rectangle(x, y, 175, 30);
+
+
+            Rectangle playerBox = new Rectangle(x, y, 200, 30);
             //Rectangle playerBox = new Rectangle(175, 30);
             playerBox.setStroke(Color.RED);
             playerBox.setFill(Color.TRANSPARENT);
@@ -187,6 +229,7 @@ public class GameView {
 
         }
         centerGroup.getChildren().add(pane3);
+        earth.setFill(Color.YELLOW);
     }
 
     public Scene setupScene() {
