@@ -43,6 +43,8 @@ public class Controller {
     private Properties modelProperties;
     private String currentGame;
     private boolean gameStart;
+    private int lastBet;
+    private int callAmount;
 
     public Controller() {
         gameStart = true;
@@ -132,9 +134,9 @@ public class Controller {
             Properties modelProperties = reader.getPropertyFile(fileName);
             String playerListType = modelProperties.getProperty("playerListType");
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
-            Player player1 = new InteractivePlayer("Arjun", 100, communityCards, pot);
-            Player player2 = new InteractivePlayer("Christian", 100, communityCards, pot);
-            Player player3 = new InteractivePlayer("Yasser", 100, communityCards, pot);
+            Player player1 = new InteractivePlayer("Arjun", 1000, communityCards, pot);
+            Player player2 = new InteractivePlayer("Christian", 1000, communityCards, pot);
+            Player player3 = new InteractivePlayer("Yasser", 1000, communityCards, pot);
             playerList = (PlayerList) cl.getConstructor(List.class)
                     .newInstance(new ArrayList<>(List.of(player1,player2, player3)));
         }
@@ -163,51 +165,50 @@ public class Controller {
         playerList.updateActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
-        //want to stop at the last player and not prompt them -> if they have raised
-            //if they didn't then no
-            //if
+
         for (Player player : playersCopy) {
+            if (playerList.getRaiseSeat()!=player){
+                if (!player.isInteractive()) {
+                    AutoPlayer autoPlayer = (AutoPlayer) player;
+                    autoPlayer.decideAction();
+                }
+                else {
+                    lastBet = playerList.getLastBet();
 
-            if (!player.isInteractive()) {
-                AutoPlayer autoPlayer = (AutoPlayer) player;
-                autoPlayer.decideAction();
-            }
-            else {
-                EventHandler<ActionEvent> foldEvent = e -> indicateFold(player);
-                EventHandler<ActionEvent> checkEvent = e -> indicateCheck(player);
-                EventHandler<ActionEvent> betEvent = e -> displayBetMenu(player);
-
-                ChoiceDialog dialog = view.makeActionScreen(player.toString(), foldEvent, checkEvent, betEvent);
-                Optional<Button> result = dialog.showAndWait();
-                if (result.isPresent()){
-                    if (result.get().getId().equals("Bet")){
-                        displayBetMenu(player);
-                    }
-                    else {
-                        try {
-                            Class<?> c = Class.forName("controller.Controller");
-                            Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
-                            method.invoke(this, player);
-                            //TODO: fix exceptions
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet);
+                    Optional<Button> result = dialog.showAndWait();
+                    if (result.isPresent()){
+                        if (result.get().getId().equals("Bet")){
+                            displayBetMenu(player);
+                        }
+                        else {
+                            try {
+                                Class<?> c = Class.forName("controller.Controller");
+                                Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
+                                method.invoke(this, player);
+                                callAmount = lastBet - player.getBetAmount();
+                                System.out.println("bet amount: " + player.getBetAmount());
+                                //TODO: fix exceptions
+                            } catch (Exception e) {
+//                                e.printStackTrace();
+                                showError(e.getMessage());
+                            }
                         }
                     }
                 }
+                if (playerList.raiseMade(player)){
+                    initializeActionMenu();
+                    break;
+                }
+                roundManager.checkOnePlayerRemains(playerList);
+                checkRoundOver();
             }
-            if (playerList.raiseMade(player)){
-                initializeActionMenu();
-                break;
-            }
-
-            roundManager.checkOnePlayerRemains(playerList);
-            checkRoundOver();
         }
+        playerList.resetRaiseStats();
         playerList.updateActivePlayers();
         roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
         if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
-            System.out.println(roundNumber);
             nextAction(model.getAction(roundNumber));
         }
         else {
@@ -215,14 +216,20 @@ public class Controller {
         }
     }
 
+
+
+    //Everything gets caught here
     private void nextAction(String action){
         try{
             Class<?> c = Class.forName("controller.Controller");
             Method method = c.getDeclaredMethod(action);
             method.invoke(this);
         }
-        catch (Exception e){
-            e.printStackTrace();
+        //catches an invocation target exception
+        catch (Exception e) {
+            //if it's a exchange card error, then we want to reprompt an exchange
+            //if it's an invalid bet, we want to reprompt the whole action
+            showError(e.getCause().getMessage());
         }
     }
 
@@ -307,10 +314,13 @@ public class Controller {
         return frontEndCard;
     }
 
-    private void indicateFold(Player player){
-        player.fold();
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.foldDisplay();
+    public void displayBetMenu(Player player){
+        TextField betInput = new TextField();
+        Dialog betBox = view.makeBetScreen(betInput);
+        Optional betBoxResult = betBox.showAndWait();
+        if (betBoxResult.isPresent()) {
+            indicateBet(player, betInput.getText());
+        }
     }
 
     private void indicateBet(Player player, String betInput){
@@ -321,19 +331,34 @@ public class Controller {
         displayPlayer.betDisplay(betAmount * -1);
     }
 
+    private void indicateFold(Player player){
+        player.fold();
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.foldDisplay();
+    }
+
+
+    private void indicateCall(Player player){
+        System.out.println("call");
+        player.bet(callAmount);
+        callAmount = 0;
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+//        displayPlayer.callDisplay();
+    }
+
     private void indicateCheck(Player player){
+        System.out.println("Check");
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.checkDisplay();
     }
 
-    public void displayBetMenu(Player player){
-        TextField betInput = new TextField();
-        Dialog betBox = view.makeOptionScreen(betInput);
-        Optional betBoxResult = betBox.showAndWait();
-        if (betBoxResult.isPresent()) {
-
-                indicateBet(player, betInput.getText());}
+    public void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Controller Error");
+        alert.setContentText(message);
+        alert.show();
     }
+
 
 }
 

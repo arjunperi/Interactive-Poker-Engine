@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import pokerSuite.PokerRunner;
 
@@ -78,31 +77,42 @@ public class GameView {
         return result;
     }
 
-    public ChoiceDialog makeActionScreen(String playerName, EventHandler<ActionEvent> foldEvent, EventHandler<ActionEvent> checkEvent, EventHandler<ActionEvent> betEvent){
+    public ChoiceDialog makeActionScreen(String playerName, int lastBet){
         centerGroup.getChildren().clear();
-        Button foldButton = makeButton("Fold", foldEvent);
-        foldButton.setId("Fold");
-        Button checkButton = makeButton("Check", checkEvent);
-        checkButton.setId("Check");
-        Button betButton = makeButton("Bet", betEvent);
-        List<Button> choices = new ArrayList<>();
 
+        Button foldButton = new Button("Fold");
+        foldButton.setId("Fold");
+
+        Button checkButton = new Button("Check");
+        checkButton.setId("Check");
+
+        Button callButton = new Button("Call");
+        callButton.setId("Call");
+
+        Button betButton = new Button("Bet");
+        betButton.setId("Bet");
+
+        List<Button> choices = new ArrayList<>();
         choices.add(foldButton);
-        choices.add(checkButton);
         choices.add(betButton);
 
-        ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(checkButton, choices);
+        if (lastBet > 0){
+            choices.add(callButton);
+        }
+        else{
+            choices.add(checkButton);
+        }
+
+        ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(foldButton, choices);
         dialog.setTitle("Select Action");
         dialog.setHeaderText(playerName + " is up. What would you like to do?");
         dialog.setContentText("Choose your action:");
-
-// Traditional way to get the response value.
 
         return dialog;
     }
 
 
-    public Dialog makeOptionScreen(TextField betInput) {
+    public Dialog makeBetScreen(TextField betInput) {
         bottomGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();

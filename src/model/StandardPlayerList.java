@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,12 +11,10 @@ public class StandardPlayerList extends PlayerList{
     }
 
     public void updateActivePlayers() {
+        //why did we have this line -> so that betting order is reset after all the raise shifts
+        resetActivePlayers();
         removeFoldedPlayers();
-        if (raiseMade){
-            int shiftIndex = activePlayers.indexOf(playerUp) + 1;
-            Collections.rotate(activePlayers, -shiftIndex);
-        }
-        raiseMade = false;
+        raiseShift();
     }
 
 

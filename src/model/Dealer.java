@@ -32,12 +32,13 @@ public class Dealer {
     }
 
     private Card stringToCard(String cardString){
-        /*int spaceIndex = cardString.indexOf(" ");
-        Suit suit = Suit.valueOf(cardString.substring(0,spaceIndex));
-        int rank = Integer.parseInt(cardString.substring(spaceIndex + 1, cardString.length()));
-        return new Card(rank, suit);*/
-
-        return new Card(Integer.parseInt(cardString.split(" ")[0]), cardString.split(" ")[1]);
+        try{
+            Card exchangeCard = new Card(Integer.parseInt(cardString.split(" ")[0]), cardString.split(" ")[1]);
+            return exchangeCard;
+        }
+        catch (NumberFormatException e){
+            throw new ModelException("Invalid Card Input");
+        }
     }
 
 

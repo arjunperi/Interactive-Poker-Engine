@@ -108,7 +108,6 @@ public class GameViewTest extends DukeApplicationTest {
         assertEquals(100, testCard.getX());
     }
 
-
     @Test
     public void testExchangeInputScreen(){
         javafxRun(() -> controller.initializeGameSelect());
