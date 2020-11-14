@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -129,7 +131,7 @@ public class GameView {
         pane3.getChildren().add(earth);
         //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
-        int numPlayers = 7;
+        int numPlayers = 8;
         double distance = 300 ;
         List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Luke Skywalker", "Harry Potter", "Voldemort", "bool");
 
@@ -211,21 +213,29 @@ public class GameView {
             int row = 1;
             int col = 0;
 
+            StackPane info = new StackPane();
             List<String> currentCards = List.of("K", "Q", "A", "2", "3", "5");
             for (int c = 0; c < currentCards.size(); c++) {
                 if (col == 5) {
                     col = 0;
                     row = 0;
                 }
-                StackPane info = new StackPane();
+                info = new StackPane();
+                //info.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
                 Text t = new Text(currentCards.get(c));
-                Rectangle card = new Rectangle(35, 50);
-                card.setStroke(Color.RED);
-                card.setFill(Color.TRANSPARENT);
-                info.getChildren().addAll(card, t);
+                ImageView iv3 = new ImageView();
+                iv3.setImage(new Image(Controller.class.getResource("/card-back.png").toExternalForm()));
+                iv3.setFitHeight(50);
+                iv3.setFitWidth(35);
+                //Rectangle card = new Rectangle(35, 50);
+                //card.setStroke(Color.BLUE);
+                //card.setFill(Color.TRANSPARENT);
+                info.getChildren().addAll(iv3);
                 cardSpots.add(info, col, row);
+                //cardSpots.getChildren().remove()
                 col++;
             }
+            cardSpots.getChildren().remove(info);
 
 
 
