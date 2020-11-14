@@ -362,6 +362,7 @@ public class Controller {
 
     private void indicateBet(Player player, String betInput){
         int betAmount = Integer.parseInt(betInput);
+
         player.bet(betAmount);
 
         FrontEndPlayer displayPlayer = playerMappings.get(player);

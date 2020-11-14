@@ -20,8 +20,7 @@ public class StudPlayerList extends PlayerList {
 
     public void updateActivePlayers() {
         resetActivePlayers();
-        removeFoldedPlayers();
-        studOrder();
+        initializeActivePlayers();
 
     }
 
