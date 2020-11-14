@@ -144,21 +144,21 @@ public class GameViewTest extends DukeApplicationTest {
         javafxRun(() -> stage.close());
     }
 
-    @Test
-    public void testBettingMenu() {
-        CommunityCards communityCards = new CommunityCards();
-        Pot pot = new Pot();
-        Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
-        javafxRun(() -> controller.initializeGameSelect());
-        Button startButton = lookup("#Holdem").queryButton();
-        clickOn(startButton);
-        javafxRun(() -> {
-            controller.displayBetMenu(player);
-        });
-        TextField betInput = lookup("#Bet").query();
-        GridPane optionPane = lookup("#OptionPane").query();
-        assertTrue(optionPane.getChildren().contains(betInput));
-    }
+//    @Test
+//    public void testBettingMenu() {
+//        CommunityCards communityCards = new CommunityCards();
+//        Pot pot = new Pot();
+//        Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
+//        javafxRun(() -> controller.initializeGameSelect());
+//        Button startButton = lookup("#Holdem").queryButton();
+//        clickOn(startButton);
+//        javafxRun(() -> {
+//            controller.displayBetMenu(player);
+//        });
+//        TextField betInput = lookup("#Bet").query();
+//        GridPane optionPane = lookup("#OptionPane").query();
+//        assertTrue(optionPane.getChildren().contains(betInput));
+//    }
 
     @Test
     public void testFrontEndExchange() {

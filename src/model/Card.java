@@ -1,5 +1,7 @@
 package model;
 
+import controller.FileReader;
+
 import java.util.Properties;
 
 public class Card {

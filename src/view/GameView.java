@@ -60,11 +60,11 @@ public class GameView {
         initializeBorderPane();
     }
 
-    public Alert makeCashOutAlert(){
+    public Alert makeCashOutAlert(String playerName, int playerBankroll){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Cash Out");
         alert.setHeaderText("CASH OUT CONFIRMATION");
-        alert.setContentText("Are you sure you want to cash out?");
+        alert.setContentText(playerName + ", are you sure you want to cash out? You have $" + playerBankroll);
         return alert;
     }
 
@@ -156,16 +156,18 @@ public class GameView {
     }
 
 
-    public Dialog makeBetPopUp(TextField input) {
+    public Dialog makeBetPopUp(TextField input, String message) {
         bottomGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();
+        betBox.setHeaderText(message);
 
         input.setPromptText("Enter a Bet: ");
         input.setId("Bet");
 
         GridPane grid = new GridPane();
         grid.setId("OptionPane");
+
         GridPane.setConstraints(input, 0,1);
         grid.getChildren().add(input);
         betBox.getDialogPane().setContent(grid);

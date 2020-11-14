@@ -62,12 +62,6 @@ public class Controller {
         customWriter = new Writer();
         view = new GameView();
         roundNumber = 1;
-        try{
-            writer = new FileWriter("properties/Bank.properties");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
         initializeMainMenu();
         initializeGameObjects();
     }
@@ -105,30 +99,29 @@ public class Controller {
         initializeProperties(currentGame);
     }
 
+
     public void initializeMainMenu(){
-//        view = new GameView();
-        System.out.println("out");
         EventHandler<ActionEvent> gameSelectEvent = e -> initializeGameSelect();
         EventHandler<ActionEvent> homeEvent = e -> initializeMainMenu();
         view.makeMainMenu(gameSelectEvent, homeEvent);
     }
 
     private void cashOut(Player player){
-//        cashedOut = true;
         try{
+            roundNumber=1;
+            gameStart = true;
             view.clear();
             initializeGameObjects();
             initializeMainMenu();
 
             Properties cashOutProperties = new Properties();
             cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
-            customWriter.cashOutToProperties(writer, cashOutProperties);
+            customWriter.cashOutToProperties(player.toString(), cashOutProperties);
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
-
 
     public void initializeGameSelect(){
         EventHandler<ActionEvent> holdemEvent = e -> initializeProperties("Holdem.properties");
@@ -202,13 +195,9 @@ public class Controller {
         displayCommunity = new FrontEndCommunity(200,400);
     }
 
-
     //Everything gets caught here
     private void nextRound(String action){
-        if (cashedOut){
-            return;
-        }
-
+        if (cashedOut) return;
         try{
             Class<?> c = Class.forName("controller.Controller");
             Method method = c.getDeclaredMethod(action);
@@ -216,7 +205,11 @@ public class Controller {
         }
         //catches an invocation target exception
         catch (Exception e) {
-            e.printStackTrace();
+//            displayBetMenu(interactivePlayer, e.getCause().getMessage());
+            //bad input strings or something do another catch
+            showError(e.getCause().getMessage());
+
+//            e.printStackTrace();
             //if it's a exchange card error, then we want to reprompt an exchange
             //if it's an invalid bet, we want to reprompt the whole action
 //            showError(e.getCause().getMessage());
@@ -266,10 +259,6 @@ public class Controller {
     }
 
     public void initializeActionMenu() {
-        if (cashedOut){
-            return;
-        }
-
         playerList.initializeActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
@@ -282,22 +271,23 @@ public class Controller {
                 }
                 else {
                     lastBet = playerList.getLastBet();
-
                     ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet);
                     Optional<Button> result = dialog.showAndWait();
                     if (result.isPresent()){
                         if (result.get().getId().equals("Bet")){
-                            displayBetMenu(player);
+                            displayBetMenu(player, "Enter Bet: ");
                         }
                         else {
                             try {
                                 Class<?> c = Class.forName("controller.Controller");
                                 Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
                                 method.invoke(this, player);
+                                if (cashedOut){
+                                    return;
+                                }
                                 //TODO: fix exceptions
                             } catch (Exception e) {
                                 e.printStackTrace();
-//                                showError(e.getMessage());
                             }
                         }
                     }
@@ -313,7 +303,6 @@ public class Controller {
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
         roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
-
         if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
             nextRound(model.getAction(roundNumber));
@@ -322,8 +311,6 @@ public class Controller {
             startRound();
         }
     }
-
-
 
 
     public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
@@ -364,19 +351,24 @@ public class Controller {
         return frontEndCard;
     }
 
-    public void displayBetMenu(Player player){
+    public void displayBetMenu(Player player, String message){
         TextField betInput = new TextField();
-        Dialog betBox = view.makeBetPopUp(betInput);
+        Dialog betBox = view.makeBetPopUp(betInput, message);
         Optional betBoxResult = betBox.showAndWait();
         if (betBoxResult.isPresent()) {
-            indicateBet(player, betInput.getText());
+            try{
+                indicateBet(player, betInput.getText());
+            }
+            catch (ModelException e){
+                displayBetMenu(player, "Invalid");
+            }
         }
     }
+
 
     private void indicateBet(Player player, String betInput){
         int betAmount = Integer.parseInt(betInput);
         player.bet(betAmount);
-
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.betDisplay(betAmount * -1);
     }
@@ -403,10 +395,9 @@ public class Controller {
     }
 
     private void indicateCashOut(Player player){
-        Alert cashOutConfirm = view.makeCashOutAlert();
+        Alert cashOutConfirm = view.makeCashOutAlert(player.toString(), player.getBankroll());
         Optional<ButtonType> cashOutResult = cashOutConfirm.showAndWait();
         if (cashOutResult.get() == ButtonType.OK){
-//            cashOut(player);
             cashedOut = true;
         } else {
             System.out.println("Did not cash out");
