@@ -123,15 +123,15 @@ public class GameView {
 
 
         double centerX = 300 ;
-        double centerY = 200 ;
+        double centerY = 300 ;
 
         Circle earth = new Circle(centerX, centerY, 150, Color.web("green", 0.5));
         pane3.getChildren().add(earth);
         //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
         int numPlayers = 7;
-        double distance = 200 ;
-        List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Luke Skywalker", "Harry Potter", "Voldemort");
+        double distance = 300 ;
+        List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Luke Skywalker", "Harry Potter", "Voldemort", "bool");
 
         for (int i = 0 ; i < numPlayers; i++) {
             double angle = 2 * i * Math.PI / numPlayers ;
@@ -139,11 +139,15 @@ public class GameView {
             double yOffset = distance * Math.sin(angle);
             double x = centerX + xOffset;
             double y = centerY + yOffset;
-            /*if (x - centerX < 0) {
-                x -= 175;
-            }
 
-            if (y - centerY > 0) {
+            Circle calculatedPosition = new Circle(x, y, 5, Color.web("blue", 0.5));
+            x -= 100;
+
+
+            /*if (x - centerX < 0) {
+                x -= 200;
+            }*/
+            /*if (y - centerY > 0) {
                 y += 60;
             }
             else {
@@ -167,15 +171,14 @@ public class GameView {
             Rectangle card9 = new Rectangle(35, 50);
             Rectangle card10 = new Rectangle(35, 50);
 
-            Circle calculatedPosition = new Circle(x, y, 5, Color.web("blue", 0.5));
-            card.setStroke(Color.TRANSPARENT);
-            card2.setStroke(Color.TRANSPARENT);
-            card3.setStroke(Color.TRANSPARENT);
-            card4.setStroke(Color.TRANSPARENT);
-            card5.setStroke(Color.TRANSPARENT);
-            card6.setStroke(Color.TRANSPARENT);
-            card7.setStroke(Color.TRANSPARENT);
-            card8.setStroke(Color.TRANSPARENT);
+            card.setStroke(Color.RED);
+            card2.setStroke(Color.RED);
+            card3.setStroke(Color.RED);
+            card4.setStroke(Color.RED);
+            card5.setStroke(Color.RED);
+            card6.setStroke(Color.RED);
+            card7.setStroke(Color.RED);
+            card8.setStroke(Color.RED);
             card9.setStroke(Color.RED);
             card10.setStroke(Color.RED);
 
@@ -229,7 +232,6 @@ public class GameView {
 
         }
         centerGroup.getChildren().add(pane3);
-        earth.setFill(Color.YELLOW);
     }
 
     public Scene setupScene() {
