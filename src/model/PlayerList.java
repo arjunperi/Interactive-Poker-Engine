@@ -41,19 +41,24 @@ public abstract class PlayerList {
 
     public abstract void updateActivePlayers();
 
+    public abstract void initializeActivePlayers();
+
     public void resetActivePlayers(){
         activePlayers =  new ArrayList<>(allPlayers);
+        for(Player player : getActivePlayers()){
+            player.clearBetAmount();
+        }
     }
 
     public boolean raiseMade(Player player) {
         playerUp = player;
-        if (playerUp.getBetAmount() > lastBet) {
+        if (playerUp.getTotalBetAmount() > lastBet) {
             System.out.println(playerUp.toString() + " has raised");
+            System.out.println(playerUp.getTotalBetAmount());
             raiseMade = true;
-            lastBet = playerUp.getBetAmount();
+            lastBet = playerUp.getTotalBetAmount();
             raiseSeat = player;
         }
-        playerUp.clearBetAmount();
         return raiseMade;
     }
 

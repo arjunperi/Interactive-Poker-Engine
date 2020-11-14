@@ -201,7 +201,7 @@ public class Controller {
         //you should be skipped in the betting and dealing rounds
 
     public void initializeActionMenu() {
-        playerList.updateActivePlayers();
+        playerList.initializeActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
 
@@ -225,7 +225,6 @@ public class Controller {
                                 Class<?> c = Class.forName("controller.Controller");
                                 Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
                                 method.invoke(this, player);
-                                callAmount = lastBet - player.getBetAmount();
                                 //TODO: fix exceptions
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -378,8 +377,8 @@ public class Controller {
 
     private void indicateCall(Player player){
         System.out.println("call");
+        callAmount = lastBet - player.getTotalBetAmount();
         player.bet(callAmount);
-        callAmount = 0;
         FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }
