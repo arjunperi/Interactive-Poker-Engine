@@ -28,11 +28,22 @@ public class GameView {
     private Button homeButton;
 
     public GameView(){
+        root = new BorderPane();
+//        initializeBorderPane();
         topGroup = new Group();
         centerGroup = new Group();
         centerGroup.setId("Center");
         bottomGroup = new Group();
-        root = new BorderPane();
+        root.setCenter(centerGroup);
+        root.setTop(topGroup);
+        root.setBottom(bottomGroup);
+    }
+
+    public void initializeBorderPane(){
+        topGroup = new Group();
+        centerGroup = new Group();
+        centerGroup.setId("Center");
+        bottomGroup = new Group();
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
@@ -46,6 +57,7 @@ public class GameView {
 
     public void clear(){
         root.getChildren().clear();
+        initializeBorderPane();
     }
 
     public Alert makeCashOutAlert(){
@@ -57,8 +69,7 @@ public class GameView {
     }
 
     public void makeMainMenu(EventHandler<ActionEvent> gameSelectEvent, EventHandler<ActionEvent> homeEvent){
-        centerGroup.getChildren().clear();
-        topGroup.getChildren().clear();
+        clear();
         VBox startBox = new VBox();
         startBox.setId("StartBox");
         homeButton = makeButton("Main Menu", homeEvent);
@@ -70,7 +81,7 @@ public class GameView {
     }
 
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
-        centerGroup.getChildren().clear();
+        clear();
         VBox gameBox = new VBox();
         gameBox.setId("GameBox");
         Button holdEmButton = makeButton("Holdem", holdemEvent);
@@ -138,7 +149,7 @@ public class GameView {
 
         ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(foldButton, choices);
         dialog.setTitle("Select Action");
-        dialog.setHeaderText(playerName + " is up. What would you like to do?");
+        dialog.setHeaderText(playerName + ", you're up! What would you like to do?");
         dialog.setContentText("Choose your action:");
 
         return dialog;

@@ -139,7 +139,9 @@ public class GameViewTest extends DukeApplicationTest {
         clickOn(selectButton);
         VBox gameBox = lookup("#GameBox").query();
         Button customButton = lookup("#Custom").query();
+        clickOn(customButton);
         assertTrue(gameBox.getChildrenUnmodifiable().contains(customButton));
+        javafxRun(() -> stage.close());
     }
 
     @Test
@@ -202,9 +204,6 @@ public class GameViewTest extends DukeApplicationTest {
 
     @Test
     public void testStartNewGame(){
-
-
-
         Controller controller = new Controller();
         javafxRun(() -> controller.initializeProperties("Holdem.properties"));
         javafxRun(() -> controller.startRound());

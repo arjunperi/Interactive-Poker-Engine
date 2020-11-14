@@ -50,9 +50,11 @@ public class Controller {
     private int lastBet;
     private int callAmount;
     private Player interactivePlayer;
+    private boolean cashedOut;
 
     public Controller() {
         gameStart = true;
+        cashedOut = false;
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
         frontEndPlayers = new ArrayList<>();
@@ -104,6 +106,7 @@ public class Controller {
     }
 
     public void initializeMainMenu(){
+//        view = new GameView();
         System.out.println("out");
         EventHandler<ActionEvent> gameSelectEvent = e -> initializeGameSelect();
         EventHandler<ActionEvent> homeEvent = e -> initializeMainMenu();
@@ -111,16 +114,21 @@ public class Controller {
     }
 
     private void cashOut(Player player){
+//        cashedOut = true;
         try{
+            view.clear();
+            initializeGameObjects();
+            initializeMainMenu();
+
             Properties cashOutProperties = new Properties();
             cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
             customWriter.cashOutToProperties(writer, cashOutProperties);
-            initializeMainMenu();
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
+
 
     public void initializeGameSelect(){
         EventHandler<ActionEvent> holdemEvent = e -> initializeProperties("Holdem.properties");
@@ -154,7 +162,11 @@ public class Controller {
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
         model.dealFlow(roundNumber);
-        nextAction(model.getAction(roundNumber));
+        nextRound(model.getAction(roundNumber));
+        if (cashedOut){
+            cashedOut = false;
+            cashOut(interactivePlayer);
+        }
     }
 
     private void initializePlayerList(String fileName){
@@ -190,17 +202,74 @@ public class Controller {
         displayCommunity = new FrontEndCommunity(200,400);
     }
 
-    //cashing out is a button that pops up a dialog asking you if you want to cash out and telling you how much money you have right now
-        //pressing okay takes you to the main menu
 
-    //at any point after the game has been selected, you should be able to cash out
-        //unless you have no money
-        //and this should save to a file
-    //you should also always be able to buy more money
-        //and should not be able to bet unless you do
-        //you should be skipped in the betting and dealing rounds
+    //Everything gets caught here
+    private void nextRound(String action){
+        if (cashedOut){
+            return;
+        }
+
+        try{
+            Class<?> c = Class.forName("controller.Controller");
+            Method method = c.getDeclaredMethod(action);
+            method.invoke(this);
+        }
+        //catches an invocation target exception
+        catch (Exception e) {
+            e.printStackTrace();
+            //if it's a exchange card error, then we want to reprompt an exchange
+            //if it's an invalid bet, we want to reprompt the whole action
+//            showError(e.getCause().getMessage());
+        }
+    }
+
+    //don't like this conditional
+    private void dealingRound() throws InterruptedException {
+        String recipient = model.getRecipient();
+        if (recipient.equals("Community")){
+            dealFrontEndCardsInRound(communityCards, displayCommunity);
+        }
+        else {
+            for (Player player : playerList.getActivePlayers()){
+                dealFrontEndCardsInRound(player,playerMappings.get(player));
+            }
+        }
+        roundNumber++;
+        playerList.updateActivePlayers();
+        initializeActionMenu();
+    }
+
+    public void exchangeRound() {
+        playerList.updateActivePlayers();
+        for (Player player : playerList.getActivePlayers()) {
+
+            //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed as specified by user
+            TextField exchangeCardInput1 = new TextField();
+            TextField exchangeCardInput2 = new TextField();
+            TextField exchangeCardInput3 = new TextField();
+            Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1,exchangeCardInput2, exchangeCardInput3);
+
+            Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
+            if (exchangeBoxResult.isPresent()) {
+                List<String> exchangeCards  = new ArrayList<>(List.of(exchangeCardInput1.getText(),exchangeCardInput2.getText(),exchangeCardInput3.getText()));
+                List<String> filtered = exchangeCards.stream()
+                        .filter(b -> b.equals(""))
+                        .collect(Collectors.toList());
+                exchangeCards.removeAll(filtered);
+                dealer.exchangeCards(player, exchangeCards);
+                exchangeFrontEndCards(player, playerMappings.get(player));
+            }
+        }
+        roundNumber++;
+        playerList.updateActivePlayers();
+        initializeActionMenu();
+    }
 
     public void initializeActionMenu() {
+        if (cashedOut){
+            return;
+        }
+
         playerList.initializeActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
@@ -244,9 +313,10 @@ public class Controller {
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
         roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
+
         if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
-            nextAction(model.getAction(roundNumber));
+            nextRound(model.getAction(roundNumber));
         }
         else {
             startRound();
@@ -254,64 +324,7 @@ public class Controller {
     }
 
 
-    //Everything gets caught here
-    private void nextAction(String action){
-        try{
-            Class<?> c = Class.forName("controller.Controller");
-            Method method = c.getDeclaredMethod(action);
-            method.invoke(this);
-        }
-        //catches an invocation target exception
-        catch (Exception e) {
-            e.printStackTrace();
-            //if it's a exchange card error, then we want to reprompt an exchange
-            //if it's an invalid bet, we want to reprompt the whole action
-//            showError(e.getCause().getMessage());
-        }
-    }
 
-    public void exchangeRound() {
-        playerList.updateActivePlayers();
-        for (Player player : playerList.getActivePlayers()) {
-
-            //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed as specified by user
-            TextField exchangeCardInput1 = new TextField();
-            TextField exchangeCardInput2 = new TextField();
-            TextField exchangeCardInput3 = new TextField();
-            Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1,exchangeCardInput2, exchangeCardInput3);
-
-            Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
-            if (exchangeBoxResult.isPresent()) {
-                List<String> exchangeCards  = new ArrayList<>(List.of(exchangeCardInput1.getText(),exchangeCardInput2.getText(),exchangeCardInput3.getText()));
-                List<String> filtered = exchangeCards.stream()
-                        .filter(b -> b.equals(""))
-                        .collect(Collectors.toList());
-                exchangeCards.removeAll(filtered);
-                dealer.exchangeCards(player, exchangeCards);
-                exchangeFrontEndCards(player, playerMappings.get(player));
-            }
-        }
-        roundNumber++;
-        playerList.updateActivePlayers();
-        initializeActionMenu();
-    }
-
-
-    //don't like this conditional
-    private void dealingRound() throws InterruptedException {
-        String recipient = model.getRecipient();
-        if (recipient.equals("Community")){
-            dealFrontEndCardsInRound(communityCards, displayCommunity);
-        }
-        else {
-            for (Player player : playerList.getActivePlayers()){
-                dealFrontEndCardsInRound(player,playerMappings.get(player));
-            }
-        }
-        roundNumber++;
-        playerList.updateActivePlayers();
-        initializeActionMenu();
-    }
 
     public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
         for (Card newCard: recipient.getNewCards()){
@@ -393,7 +406,8 @@ public class Controller {
         Alert cashOutConfirm = view.makeCashOutAlert();
         Optional<ButtonType> cashOutResult = cashOutConfirm.showAndWait();
         if (cashOutResult.get() == ButtonType.OK){
-            cashOut(player);
+//            cashOut(player);
+            cashedOut = true;
         } else {
             System.out.println("Did not cash out");
         }
