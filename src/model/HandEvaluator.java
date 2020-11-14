@@ -355,7 +355,7 @@ public class HandEvaluator {
             combiner.clearAllHands();
             Hand playerHand;
             if (isVisibleHand){
-                playerHand = getBestHands(combiner.getAllHands(player.getTotalVisibleHand())).get(0);
+                playerHand = getBestHands(combiner.getAllHands(player.getTotalBackendVisibleHand())).get(0);
             }
             else{
                 playerHand = getBestHands(combiner.getAllHands(player.getTotalHand())).get(0);

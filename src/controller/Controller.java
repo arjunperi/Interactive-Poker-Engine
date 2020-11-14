@@ -265,12 +265,12 @@ public class Controller {
 
         for (Player player : playersCopy) {
             if (playerList.getRaiseSeat()!=player){
+                lastBet = playerList.getLastBet();
                 if (!player.isInteractive()) {
                     AutoPlayer autoPlayer = (AutoPlayer) player;
-                    autoPlayer.decideAction();
+                    autoPlayer.decideAction(lastBet);
                 }
                 else {
-                    lastBet = playerList.getLastBet();
                     ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet);
                     Optional<Button> result = dialog.showAndWait();
                     if (result.isPresent()){
@@ -302,6 +302,7 @@ public class Controller {
         }
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
+        lastBet=0;
         roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
         if (roundNumber < totalRounds + 1) {
             model.dealFlow(roundNumber);
@@ -346,7 +347,9 @@ public class Controller {
 
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
+        boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
+
+        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
         frontEndCardMappings.put(card.toString(), frontEndCard);
         return frontEndCard;
     }
@@ -382,8 +385,7 @@ public class Controller {
 
     private void indicateCall(Player player){
         System.out.println("call");
-        callAmount = lastBet - player.getTotalBetAmount();
-        player.bet(callAmount);
+        player.call(lastBet);
         FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }
@@ -408,7 +410,7 @@ public class Controller {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Controller Error");
         alert.setContentText(message);
-        alert.show();
+        alert.showAndWait();
     }
 
 

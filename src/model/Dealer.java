@@ -14,7 +14,7 @@ public class Dealer {
         for (boolean isVisible: visibilityList){
             Card cardDealt = deck.getTopCard();
             if (isVisible){
-                cardDealt.makeVisible();
+                cardDealt.makeBackEndVisible();
             }
             recipient.receiveCard(cardDealt);
         }
