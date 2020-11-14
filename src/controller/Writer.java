@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Writer {
-    //cashing out cashes out yourself
-    //when you go in as a new player and cash out you need to save the line of the other player who cashed out
 
-    public void cashOutToProperties(FileWriter writer, Properties propertyFile) {
+    public void cashOutToProperties(String playerName,  Properties propertyFile) {
         try {
-            propertyFile.store(writer, null);
+            FileWriter fileWriter = new FileWriter("properties/" + playerName + "Player.properties");
+            propertyFile.store(fileWriter, null);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

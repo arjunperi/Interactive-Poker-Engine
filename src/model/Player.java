@@ -125,23 +125,18 @@ public class Player extends CardRecipient{
         return totalHand;
     }
 
-//    public void bet(int amountToBet){
-//        System.out.print(this.toString() + " bets " + amountToBet + "\n");
-//        if (amountToBet <= moneyCount){
-//            betAmount = amountToBet;
-//            pot.addToPot(amountToBet);
-//            updateBankroll(amountToBet * -1);
-//        }
-//        else{
-//            throw new ModelException("Cannot bet more money than you have!");
-//        }
 
     public void bet(int amountToBet){
-        System.out.print(this.toString() + " bets " + amountToBet + "\n");
-        currentBetAmount = amountToBet;
-        totalBetAmount = totalBetAmount + currentBetAmount;
-        pot.addToPot(currentBetAmount);
-        updateBankroll(currentBetAmount * -1);
+        if (amountToBet <= moneyCount){
+            System.out.print(this.toString() + " bets " + amountToBet + "\n");
+            currentBetAmount = amountToBet;
+            totalBetAmount = totalBetAmount + currentBetAmount;
+            pot.addToPot(currentBetAmount);
+            updateBankroll(currentBetAmount * -1);
+        }
+        else{
+            throw new ModelException("Cannot bet more money than you have!");
+        }
     }
 
     public int getTotalBetAmount(){
