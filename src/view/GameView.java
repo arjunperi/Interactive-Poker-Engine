@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import pokerSuite.PokerRunner;
 
+import javax.swing.tree.ExpandVetoException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class GameView {
     private Group topGroup;
     private Group centerGroup;
     private Group bottomGroup;
+    private Button homeButton;
 
     public GameView(){
         topGroup = new Group();
@@ -46,18 +48,46 @@ public class GameView {
         root.getChildren().clear();
     }
 
+    public Alert makeCashOutAlert(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cash Out");
+        alert.setHeaderText("CASH OUT CONFIRMATION");
+        alert.setContentText("Are you sure you want to cash out?");
+        return alert;
+    }
+
+    public void makeMainMenu(EventHandler<ActionEvent> gameSelectEvent, EventHandler<ActionEvent> homeEvent){
+        centerGroup.getChildren().clear();
+        topGroup.getChildren().clear();
+        VBox startBox = new VBox();
+        startBox.setId("StartBox");
+        homeButton = makeButton("Main Menu", homeEvent);
+        homeButton.setId("MainMenu");
+        Button gameSelectButton = makeButton("Game Select", gameSelectEvent);
+        gameSelectButton.setId("GameSelect");
+        startBox.getChildren().addAll(gameSelectButton);
+        centerGroup.getChildren().add(startBox);
+    }
+
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
+        centerGroup.getChildren().clear();
         VBox gameBox = new VBox();
         gameBox.setId("GameBox");
         Button holdEmButton = makeButton("Holdem", holdemEvent);
+        holdEmButton.setId("Holdem");
         Button drawButton = makeButton("Draw", drawEvent);
+        drawButton.setId("Draw");
         Button studButton = makeButton("Stud", studEvent);
+        studButton.setId("Stud");
         Button customButton = makeButton("Custom", customEvent);
+        customButton.setId("Custom");
         gameBox.getChildren().addAll(holdEmButton,drawButton,studButton,customButton);
         centerGroup.getChildren().add(gameBox);
+        topGroup.getChildren().add(homeButton);
     }
 
     public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
+        topGroup.getChildren().clear();
         card.setX(xLocation);
         displayRecipient.updateFrontEndCards(card, xLocation);
         card.setY(displayRecipient.getY());
@@ -71,7 +101,6 @@ public class GameView {
     public Button makeButton(String property, EventHandler<ActionEvent> handler) {
         Button result = new Button();
         result.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        result.setId(property);
         result.setText(property);
         result.setOnAction(handler);
         return result;
@@ -79,6 +108,9 @@ public class GameView {
 
     public ChoiceDialog makeActionScreen(String playerName, int lastBet){
         centerGroup.getChildren().clear();
+
+        Button cashOutButton = new Button("Cash Out");
+        cashOutButton.setId("CashOut");
 
         Button foldButton = new Button("Fold");
         foldButton.setId("Fold");
@@ -95,6 +127,7 @@ public class GameView {
         List<Button> choices = new ArrayList<>();
         choices.add(foldButton);
         choices.add(betButton);
+        choices.add(cashOutButton);
 
         if (lastBet > 0){
             choices.add(callButton);
@@ -112,18 +145,18 @@ public class GameView {
     }
 
 
-    public Dialog makeBetScreen(TextField betInput) {
+    public Dialog makeBetPopUp(TextField input) {
         bottomGroup.getChildren().clear();
 
         Dialog betBox = new TextInputDialog();
 
-        betInput.setPromptText("Enter a bet");
-        betInput.setId("Bet");
+        input.setPromptText("Enter a Bet: ");
+        input.setId("Bet");
 
         GridPane grid = new GridPane();
         grid.setId("OptionPane");
-        GridPane.setConstraints(betInput, 0,1);
-        grid.getChildren().add(betInput);
+        GridPane.setConstraints(input, 0,1);
+        grid.getChildren().add(input);
         betBox.getDialogPane().setContent(grid);
 
         return betBox;
