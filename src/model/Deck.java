@@ -1,14 +1,12 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Deck {
     private Stack<Card> deck;
     private List<String> suits;
     private List<Integer> ranks;
+    private Map<String, Card> stringToCardMap;
 
     /*public Deck() {
         deck = new Stack();
@@ -18,8 +16,10 @@ public class Deck {
     public Deck(List<String> suits, List<Integer> ranks) {
         this.suits = suits;
         this.ranks = ranks;
+        stringToCardMap = new HashMap<>();
         deck = new Stack<>();
         createDeck2();
+
         Collections.shuffle(deck);
     }
 
@@ -41,6 +41,7 @@ public class Deck {
             for (int rank: ranks) {
                 Card card = new Card(rank, suit);
                 deck.add(card);
+                stringToCardMap.put(card.toString(), card);
             }
         }
     }
@@ -61,5 +62,9 @@ public class Deck {
 
     public void shuffle(){
         Collections.shuffle(deck);
+    }
+
+    public Card StringToCard(String cardString){
+        return stringToCardMap.get(cardString);
     }
 }

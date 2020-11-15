@@ -14,6 +14,8 @@ public class Player extends CardRecipient{
     private Hand totalVisibleHand;
     private Pot pot;
     protected boolean isInteractive;
+    private int totalBetAmount;
+    private int currentBetAmount;
     //have a player's hand strength
     //update it after every deal
 
@@ -29,16 +31,13 @@ public class Player extends CardRecipient{
         discardedCardList = new ArrayList<>();
     }
 
+
     public int getBankroll(){
         return moneyCount;
     }
 
     public boolean isSolvent(){
         return moneyCount > 0;
-    }
-
-    public void exitHand(){
-        hasFolded = true;
     }
 
     public boolean isActive(){
@@ -50,10 +49,19 @@ public class Player extends CardRecipient{
         }
     }
 
+    public void enterNewGame(CommunityCards communityCards, Pot pot){
+        if (isSolvent()){
+             hasFolded = false;
+        }
+        this.communityCards = communityCards;
+        this.pot = pot;
+    }
+
     public void discardCard(Card card) {
-        playerHand.getCards().remove(card);
+        playerHand.remove(card);
         discardedCardList.add(card);
     }
+
 
     public List<Card> getDiscardedCards(){
         return discardedCardList;
@@ -90,10 +98,10 @@ public class Player extends CardRecipient{
         totalHand = totalHand.sortHand();
     }
 
-    public Hand getTotalVisibleHand(){
+    public Hand getTotalBackendVisibleHand(){
         totalVisibleHand.clear();
         for (Card card: totalHand.getCards()){
-            if (card.isVisible()){
+            if (card.isBackEndVisible()){
                 totalVisibleHand.add(card);
             }
         }
@@ -117,14 +125,47 @@ public class Player extends CardRecipient{
         return totalHand;
     }
 
+
     public void bet(int amountToBet){
-        pot.addToPot(amountToBet);
-        updateBankroll(amountToBet * -1);
+        if (amountToBet <= moneyCount){
+            System.out.print(this.toString() + " bets " + amountToBet + "\n");
+            currentBetAmount = amountToBet;
+            totalBetAmount = totalBetAmount + currentBetAmount;
+            pot.addToPot(currentBetAmount);
+            updateBankroll(currentBetAmount * -1);
+        }
+        else{
+            throw new ModelException("Cannot bet more money than you have!");
+        }
+    }
+
+    public int getTotalBetAmount(){
+        return totalBetAmount;
+    }
+
+    public int getCurrentBetAmount(){
+        return currentBetAmount;
+    }
+
+    public void clearBetAmount(){
+        totalBetAmount = 0;
+        currentBetAmount = 0;
     }
 
     public void fold(){
         System.out.println(this.toString() + " has folded");
         hasFolded = true;
+    }
+
+    public void call(int lastBet){
+        System.out.println(this.toString() + " has called");
+        int callAmount = lastBet-totalBetAmount;
+        if(callAmount>=moneyCount){
+            bet(moneyCount);
+        }
+        else{
+            bet(callAmount);
+        }
     }
 
     public boolean isInteractive(){
@@ -137,8 +178,15 @@ public class Player extends CardRecipient{
     }
 
     public void receiveCard(Card card) {
+        if (isInteractive){
+            card.setInteractivePlayerCard();
+        }
         playerHand.add(card);
         addNewCards(card);
         updateTotalHand();
+    }
+
+    public void clearHand(){
+        playerHand.clear();
     }
 }

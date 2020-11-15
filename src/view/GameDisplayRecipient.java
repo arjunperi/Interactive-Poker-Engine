@@ -28,6 +28,10 @@ public abstract class GameDisplayRecipient{
         lastCard = card;
     }
 
+    public void clearFrontEndCardLocations(){
+        frontEndCardLocations.clear();
+    }
+
     public Map<FrontEndCard, Integer> getFrontEndCardLocations(){
         return frontEndCardLocations;
     }
