@@ -240,17 +240,26 @@ public class Controller {
             TextField exchangeCardInput1 = new TextField();
             TextField exchangeCardInput2 = new TextField();
             TextField exchangeCardInput3 = new TextField();
-            Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1,exchangeCardInput2, exchangeCardInput3);
+            if (!player.isInteractive()) {
 
-            Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
-            if (exchangeBoxResult.isPresent()) {
-                List<String> exchangeCards  = new ArrayList<>(List.of(exchangeCardInput1.getText(),exchangeCardInput2.getText(),exchangeCardInput3.getText()));
-                List<String> filtered = exchangeCards.stream()
-                        .filter(b -> b.equals(""))
-                        .collect(Collectors.toList());
-                exchangeCards.removeAll(filtered);
-                dealer.exchangeCards(player, exchangeCards);
-                exchangeFrontEndCards(player, playerMappings.get(player));
+                // Autoplayer decide exchange
+                AutoPlayer autoPlayer = (AutoPlayer) player;
+                autoPlayer.decideExchange();
+            }
+            else {
+                Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1, exchangeCardInput2, exchangeCardInput3);
+
+                Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
+                if (exchangeBoxResult.isPresent()) {
+                    List<String> exchangeCards = new ArrayList<>(List.of(exchangeCardInput1.getText(), exchangeCardInput2.getText(), exchangeCardInput3.getText()));
+                    List<String> filtered = exchangeCards.stream()
+                            .filter(b -> b.equals(""))
+                            .collect(Collectors.toList());
+                    exchangeCards.removeAll(filtered);
+
+                    dealer.exchangeCards(player, exchangeCards);
+                    exchangeFrontEndCards(player, playerMappings.get(player));
+                }
             }
         }
         roundNumber++;
