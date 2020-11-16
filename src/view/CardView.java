@@ -20,8 +20,8 @@ public class CardView extends StackPane {
   private Text rank;
   private Rectangle cardBackground;
 
-  private static final int CARD_WIDTH = 35;
-  private static final int CARD_HEIGHT = 50;
+  public static final int CARD_WIDTH = 35;
+  public static final int CARD_HEIGHT = 50;
 
   public CardView(String rankSymbol, String suitImage, String cardBack, boolean isFrontEndVisible) {
     super();

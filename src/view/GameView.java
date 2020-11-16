@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -90,9 +91,10 @@ public class GameView {
             double x = centerX + xOffset;
             double y = centerY + yOffset;
             BorderPane p = new BorderPane();
-            Group cardGrid = new Group();
+            //Group cardGrid = new Group();
+            CardGrid cardSpots = new CardGrid();
             Group playerInfo = new Group();
-            p.setCenter(cardGrid);
+            p.setCenter(cardSpots);
             p.setBottom(playerInfo);
             GridPane test = new GridPane();
             p.setLeft(test);
@@ -116,46 +118,17 @@ public class GameView {
                 y -= 60;
             }*/
 
-            GridPane cardSpots = new GridPane();
+            //GridPane cardSpots = new GridPane();
+            //CardGrid cardSpots = new CardGrid();
 
-            cardSpots.setVgap(5);
-            cardSpots.setHgap(5);
-            cardSpots.setPadding(new Insets(5,0,5,0));
+
+            //cardSpots.setVgap(5);
+            //cardSpots.setHgap(5);
+            //cardSpots.setPadding(new Insets(5,0,5,0));
             //cardSpots.setLayoutX(x);
             //cardSpots.setLayoutY(y-110);
             //cardSpots.setGridLinesVisible(true);
             //Rectangle card = new Rectangle(35, 50);
-            Rectangle card2 = new Rectangle(35, 50);
-            Rectangle card3 = new Rectangle(35, 50);
-            Rectangle card4 = new Rectangle(35, 50);
-            Rectangle card5 = new Rectangle(35, 50);
-            Rectangle card6 = new Rectangle(35, 50);
-            Rectangle card7 = new Rectangle(35, 50);
-            Rectangle card8 = new Rectangle(35, 50);
-            Rectangle card9 = new Rectangle(35, 50);
-            Rectangle card10 = new Rectangle(35, 50);
-
-            card2.setStroke(Color.RED);
-            card3.setStroke(Color.RED);
-            card4.setStroke(Color.RED);
-            card5.setStroke(Color.RED);
-            card6.setStroke(Color.RED);
-            card7.setStroke(Color.RED);
-            card8.setStroke(Color.RED);
-            card9.setStroke(Color.RED);
-            card10.setStroke(Color.RED);
-
-
-
-            card2.setFill(Color.TRANSPARENT);
-            card3.setFill(Color.TRANSPARENT);
-            card4.setFill(Color.TRANSPARENT);
-            card5.setFill(Color.TRANSPARENT);
-            card6.setFill(Color.TRANSPARENT);
-            card7.setFill(Color.TRANSPARENT);
-            card8.setFill(Color.TRANSPARENT);
-            card9.setFill(Color.TRANSPARENT);
-            card10.setFill(Color.TRANSPARENT);
 
 
             /*for (int startRow)
@@ -163,21 +136,21 @@ public class GameView {
             Text t = new Text("yuh");
             info.getChildren().addAll(card, t);*/
 
-            for (int row = 0; row < 2; row++) {
+            /*for (int row = 0; row < 2; row++) {
                 for (int column = 0; column < 5; column++) {
                     Rectangle card = new Rectangle(35, 50);
                     card.setStroke(Color.TRANSPARENT);
                     card.setFill(Color.TRANSPARENT);
                     cardSpots.add(card, column, row);
                 }
-            }
+            }*/
 
             int row = 1;
             int col = 0;
 
             StackPane info = new StackPane();
             List<String> currentCards = List.of("K", "Q","f","f","f","f");
-            for (int c = 0; c < currentCards.size(); c++) {
+            /*for (int c = 0; c < currentCards.size(); c++) {
                 if (col == 5) {
                     col = 0;
                     row = 0;
@@ -194,13 +167,39 @@ public class GameView {
                 card.setStroke(Color.BLUE);
                 card.setFill(Color.TRANSPARENT);
                 info.getChildren().addAll(iv3,t,card);*/
-                CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
-                cardSpots.add(yuh,col, row);
+                /*CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+                //cardSpots.add(yuh,col, row);
+                cardSpots.addCardView(yuh);
                 //cardSpots.getChildren().remove()
-                yuh.setFrontEndVisible(true);
+                yuh.setFrontEndVisible(false);
                 col++;
+            }*/
+            //cardSpots.getChildren().remove(info);
+
+            CardView card1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card1);
+            CardView card2 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card2);
+            CardView card3 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card3);
+
+            CardView added = new CardView("Yessir", "/heart-suit.png", "/card-back.png", false);
+            //Point2D removeLocation = cardSpots.removeCard(card2);
+            cardSpots.addCardViewToLocation(added, cardSpots.removeCard(card2));
+
+
+
+            CardView card4 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card4);
+
+            CardView card5 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card5);
+            CardView card6 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card6);
+
+            for (CardView key : cardSpots.getCardLocations().keySet()) {
+                System.out.println(cardSpots.getCardLocations().get(key));
             }
-            cardSpots.getChildren().remove(info);
 
 
 
@@ -237,7 +236,7 @@ public class GameView {
 
             //Circle cardLocation = new Circle(x, y, radius, Color.web("blue", 0.5));
             Text name = new Text(x, y+20, names.get(i));
-            cardGrid.getChildren().add(cardSpots);
+            //cardGrid.getChildren().add(cardSpots);
             GridPane playerStats = new GridPane();
             playerStats.setPadding(new Insets(0,5,0,5));
             playerStats.setMinSize(200, 30);
