@@ -10,12 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pokerSuite.PokerRunner;
 
 import javax.swing.*;
 import javax.swing.tree.ExpandVetoException;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -121,6 +123,7 @@ public class GameView {
 
     public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount){
         centerGroup.getChildren().clear();
+        bottomGroup.getChildren().clear();
 
         Button cashOutButton = new Button("Cash Out");
         cashOutButton.setId("CashOut");
@@ -225,7 +228,7 @@ public class GameView {
 //        bottomGroup.getChildren().clear();
 
         Dialog buyBackBox = new TextInputDialog();
-        buyBackBox.setHeaderText("Would you like to buy back in? If so, please enter an amount: ");
+        buyBackBox.setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing: ");
 
         buyBackInput.setPromptText("Amount: ");
         buyBackInput.setId("BuyBack");
@@ -238,5 +241,13 @@ public class GameView {
         buyBackBox.getDialogPane().setContent(grid);
 
         return buyBackBox;
+    }
+
+    public void makeEndRoundScreen(EventHandler<ActionEvent> nextRoundEvent, EventHandler<ActionEvent> cashOutEvent){
+        HBox nextRoundBox = new HBox();
+        Button nextRoundButton = makeButton("Deal next round", nextRoundEvent);
+        Button cashOutButton = makeButton("Cash Out", cashOutEvent);
+        nextRoundBox.getChildren().addAll(nextRoundButton,cashOutButton);
+        bottomGroup.getChildren().add(nextRoundBox);
     }
 }

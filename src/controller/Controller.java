@@ -48,20 +48,19 @@ public class Controller {
     private String currentGame;
     private boolean gameStart;
     private int lastBet;
-    private int callAmount;
     private Player interactivePlayer;
     private boolean exitedPoker;
     private boolean oneSolventPlayer;
     private String betScreenMessage;
     private boolean interactiveActionComplete;
-    private boolean busted;
+    private boolean roundOver;
 
     public Controller() {
         betScreenMessage = "Enter a bet:";
         interactiveActionComplete = true;
+        roundOver = false;
         gameStart = true;
         exitedPoker = false;
-        busted = false;
         oneSolventPlayer = false;
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
@@ -86,15 +85,33 @@ public class Controller {
         return view.setupScene();
     }
 
-    public void checkRoundOver(){
-        if (roundManager.roundOver()){
+    public void transitionRound(){
+//        roundOver = true;
+        EventHandler<ActionEvent> nextRoundEvent = e -> {
+            promptBuyIn();
             startRound();
-        }
+            if (exitedPoker) {
+                exitPoker(interactivePlayer);
+            }
+        };
+        EventHandler<ActionEvent> cashOutEvent = e -> {
+            indicateCashOut(interactivePlayer);
+            if (exitedPoker) {
+                exitPoker(interactivePlayer);
+            }
+        };
+//        EventHandler<ActionEvent> cashOutEvent = e -> indicateCashOut(interactivePlayer);
+        view.makeEndRoundScreen(nextRoundEvent, cashOutEvent);
+//        if (exitedPoker) {
+//            exitPoker(interactivePlayer);
+//        }
     }
 
     public void startRound(){
         System.out.println("new round");
         roundNumber = 1;
+        oneSolventPlayer = false;
+//        roundOver = false;
         playerList.resetRaiseStats();
         view.clear();
         initializeGameObjects();
@@ -167,7 +184,6 @@ public class Controller {
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
-//        model.dealFlow(roundNumber);
         nextRound(model.getAction(roundNumber));
         if (exitedPoker){
             exitedPoker = false;
@@ -210,13 +226,12 @@ public class Controller {
 
     //Everything gets caught here
     private void nextRound(String action){
-        while (roundNumber < totalRounds + 1) {
+        while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
             model.dealFlow(roundNumber);
             try{
                 Class<?> c = Class.forName("controller.Controller");
                 Method method = c.getDeclaredMethod(action);
                 method.invoke(this);
-//            if (exitedPoker) return;
             }
             //catches an invocation target exception
             catch (Exception e) {
@@ -225,10 +240,13 @@ public class Controller {
 //            showError(e.getCause().getMessage());
             }
         }
-        roundManager.showDown(playerList);
-        promptBuyIn();
-        if (exitedPoker) return;
-        startRound();
+//        if (!roundManager.isRoundOver()){
+////            roundManager.showDown(playerList);
+////        }
+        if (!roundManager.isRoundOver() && !exitedPoker){
+            roundManager.showDown(playerList);
+            transitionRound();
+        }
     }
 
     //don't like this conditional
@@ -280,6 +298,7 @@ public class Controller {
         interactiveActionComplete = true;
 
         if(!oneSolventPlayer){
+            actionLoop:
             while(interactiveActionComplete){
                 for (Player player : playersCopy) {
                     if (playerList.getRaiseSeat()!=player && player.isSolvent()){
@@ -312,9 +331,11 @@ public class Controller {
                             initializeActionMenu();
                             break;
                         }
-
                         roundManager.checkOnePlayerRemains(playerList);
-                        checkRoundOver();
+                        if (roundManager.isRoundOver()){
+                            transitionRound();
+                            break actionLoop;
+                        }
                     }
                 }
                 interactiveActionComplete = false;
@@ -323,22 +344,6 @@ public class Controller {
         oneSolventPlayer = playerList.doesOneSolventPlayerRemain();
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
-//        roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
-//        if (roundNumber < totalRounds + 1) {
-//            model.dealFlow(roundNumber);
-//            //nextRound (here) is called by initialize
-//
-//            nextRound(model.getAction(roundNumber));
-////            if (exitedPoker){
-////                //return to what calle
-////                return;
-////            }
-//        }
-//        else {
-//            promptBuyIn();
-//            if (exitedPoker) return;
-//            startRound();
-//        }
     }
 
     public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){

@@ -49,7 +49,7 @@ public class RoundManager {
         roundOver = true;
     }
 
-    public boolean roundOver(){
+    public boolean isRoundOver(){
         return roundOver;
     }
 }
