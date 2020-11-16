@@ -400,7 +400,9 @@ public class Controller {
 
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
+        boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
+
+        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
         frontEndCardMappings.put(card.toString(), frontEndCard);
         return frontEndCard;
     }
@@ -428,10 +430,17 @@ public class Controller {
                 }
             }
         }
-        else{
-            //return back to the loop
-        }
+    }
+
+
+    private void indicateBet(Player player, String betInput){
+        int betAmount = Integer.parseInt(betInput);
+        player.bet(betAmount);
+        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        displayPlayer.betDisplay(betAmount * -1);
+
         betScreenMessage = "Enter a Bet:";
+
     }
 
 
