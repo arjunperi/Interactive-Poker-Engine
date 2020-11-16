@@ -58,7 +58,8 @@ public class Player extends CardRecipient{
     }
 
     public void discardCard(Card card) {
-        playerHand.getCards().remove(card);
+        int cardIndex = playerHand.getIndex(card);
+        playerHand.getCards().remove(cardIndex);
         discardedCardList.add(card);
     }
 

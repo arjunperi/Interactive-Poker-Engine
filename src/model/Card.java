@@ -48,7 +48,7 @@ public class Card {
         }
 
         Card otherCard = (Card) obj;
-        return rank == otherCard.rank && suit == otherCard.suit;
+        return rank == otherCard.rank && suit.equals(otherCard.suit);
     }
 
     public String getCardSuit(){
@@ -75,6 +75,4 @@ public class Card {
     public void makeBackEndVisible(){
         isBackEndVisible =true;
     }
-
-
 }
