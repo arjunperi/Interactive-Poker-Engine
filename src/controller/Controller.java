@@ -50,13 +50,19 @@ public class Controller {
     private int lastBet;
     private int callAmount;
     private Player interactivePlayer;
-    private boolean cashedOut;
+    private boolean exitedPoker;
+    private boolean oneSolventPlayer;
     private String betScreenMessage;
+    private boolean interactiveActionComplete;
+    private boolean busted;
 
     public Controller() {
         betScreenMessage = "Enter a bet:";
+        interactiveActionComplete = true;
         gameStart = true;
-        cashedOut = false;
+        exitedPoker = false;
+        busted = false;
+        oneSolventPlayer = false;
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
         frontEndPlayers = new ArrayList<>();
@@ -89,6 +95,7 @@ public class Controller {
     public void startRound(){
         System.out.println("new round");
         roundNumber = 1;
+        playerList.resetRaiseStats();
         view.clear();
         initializeGameObjects();
         for (Player player: playerList.getAllPlayers()){
@@ -108,13 +115,9 @@ public class Controller {
         view.makeMainMenu(gameSelectEvent, homeEvent);
     }
 
-    private void cashOut(Player player){
+    private void exitPoker(Player player){
         try{
-            roundNumber=1;
-            gameStart = true;
-            view.clear();
-            initializeGameObjects();
-            initializeMainMenu();
+            resetGame();
 
             Properties cashOutProperties = new Properties();
             cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
@@ -123,6 +126,14 @@ public class Controller {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void resetGame(){
+        roundNumber=1;
+        gameStart = true;
+        view.clear();
+        initializeGameObjects();
+        initializeMainMenu();
     }
 
     public void initializeGameSelect(){
@@ -156,11 +167,11 @@ public class Controller {
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
-        model.dealFlow(roundNumber);
+//        model.dealFlow(roundNumber);
         nextRound(model.getAction(roundNumber));
-        if (cashedOut){
-            cashedOut = false;
-            cashOut(interactivePlayer);
+        if (exitedPoker){
+            exitedPoker = false;
+            exitPoker(interactivePlayer);
         }
     }
 
@@ -199,23 +210,25 @@ public class Controller {
 
     //Everything gets caught here
     private void nextRound(String action){
-        if (cashedOut) return;
-        try{
-            Class<?> c = Class.forName("controller.Controller");
-            Method method = c.getDeclaredMethod(action);
-            method.invoke(this);
-        }
-        //catches an invocation target exception
-        catch (Exception e) {
+        while (roundNumber < totalRounds + 1) {
+            model.dealFlow(roundNumber);
+            try{
+                Class<?> c = Class.forName("controller.Controller");
+                Method method = c.getDeclaredMethod(action);
+                method.invoke(this);
+//            if (exitedPoker) return;
+            }
+            //catches an invocation target exception
+            catch (Exception e) {
 //            displayBetMenu(interactivePlayer, e.getCause().getMessage());
-            //bad input strings or something do another catch
+                //bad input strings or something do another catch
 //            showError(e.getCause().getMessage());
-
-//            e.printStackTrace();
-            //if it's a exchange card error, then we want to reprompt an exchange
-            //if it's an invalid bet, we want to reprompt the whole action
-//            showError(e.getCause().getMessage());
+            }
         }
+        roundManager.showDown(playerList);
+        promptBuyIn();
+        if (exitedPoker) return;
+        startRound();
     }
 
     //don't like this conditional
@@ -260,112 +273,73 @@ public class Controller {
         initializeActionMenu();
     }
 
-//    public void initializeActionMenu() {
-//        playerList.initializeActivePlayers();
-//        List<Player> players = playerList.getActivePlayers();
-//        List<Player> playersCopy = new ArrayList<>(players);
-//
-//        for (Player player : playersCopy) {
-//            if (playerList.getRaiseSeat()!=player){
-//                lastBet = playerList.getLastBet();
-//                if (!player.isInteractive()) {
-//                    AutoPlayer autoPlayer = (AutoPlayer) player;
-//                    autoPlayer.decideAction(lastBet);
-//                }
-//                else {
-//                    ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet);
-//                    Optional<Button> result = dialog.showAndWait();
-//                    if (result.isPresent()){
-//                        if (result.get().getId().equals("Bet")){
-//                            displayBetMenu(player, "Enter Bet: ");
-//                        }
-//                        else {
-//                            try {
-//                                Class<?> c = Class.forName("controller.Controller");
-//                                Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
-//                                method.invoke(this, player);
-//                                if (cashedOut){
-//                                    return;
-//                                }
-//                                //TODO: fix exceptions
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                }
-//                if (playerList.raiseMade(player)){
-//                    initializeActionMenu();
-//                    break;
-//                }
-//                roundManager.checkOnePlayerRemains(playerList);
-//                checkRoundOver();
-//            }
-//        }
-//        playerList.resetRaiseStats();
-//        playerList.updateActivePlayers();
-//        lastBet=0;
-//        roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
-//        if (roundNumber < totalRounds + 1) {
-//            model.dealFlow(roundNumber);
-//            nextRound(model.getAction(roundNumber));
-//        }
-//        else {
-//            startRound();
-//        }
-//    }
-
-
     public void initializeActionMenu() {
         playerList.initializeActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
+        interactiveActionComplete = true;
 
-        for (Player player : playersCopy) {
-            if (playerList.getRaiseSeat()!=player){
-                lastBet = playerList.getLastBet();
-                if (!player.isInteractive()) {
-                    AutoPlayer autoPlayer = (AutoPlayer) player;
-                    autoPlayer.decideAction(lastBet);
-                }
-                else {
-                    ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet);
-                    Optional<Button> result = dialog.showAndWait();
-                    if (result.isPresent()){
-                        try {
-                            Class<?> c = Class.forName("controller.Controller");
-                            Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
-                            method.invoke(this, player);
-                            if (cashedOut){
-                                return;
-                            }
-                            //TODO: fix exceptions
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        if(!oneSolventPlayer){
+            while(interactiveActionComplete){
+                for (Player player : playersCopy) {
+                    if (playerList.getRaiseSeat()!=player && player.isSolvent()){
+                        lastBet = playerList.getLastBet();
+                        if (!player.isInteractive()) {
+                            AutoPlayer autoPlayer = (AutoPlayer) player;
+                            autoPlayer.decideAction(lastBet);
                         }
+                        else {
+                            interactiveActionComplete = false;
+                            while (!interactiveActionComplete){
+                                ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet, lastBet - player.getTotalBetAmount());
+                                Optional<Button> result = dialog.showAndWait();
+                                if (result.isPresent()){
+                                    try {
+                                        Class<?> c = Class.forName("controller.Controller");
+                                        Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
+                                        method.invoke(this, player);
+                                        if (exitedPoker){
+                                            return;
+                                        }
+                                        //TODO: fix exceptions
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                        if (playerList.raiseMade(player)){
+                            initializeActionMenu();
+                            break;
+                        }
+
+                        roundManager.checkOnePlayerRemains(playerList);
+                        checkRoundOver();
                     }
                 }
-                if (playerList.raiseMade(player)){
-                    initializeActionMenu();
-                    break;
-                }
-                roundManager.checkOnePlayerRemains(playerList);
-                checkRoundOver();
+                interactiveActionComplete = false;
             }
         }
+        oneSolventPlayer = playerList.doesOneSolventPlayerRemain();
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
-        lastBet=0;
-        roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
-        if (roundNumber < totalRounds + 1) {
-            model.dealFlow(roundNumber);
-            nextRound(model.getAction(roundNumber));
-        }
-        else {
-            startRound();
-        }
+//        roundManager.checkShowDown(playerList, roundNumber, totalRounds + 1);
+//        if (roundNumber < totalRounds + 1) {
+//            model.dealFlow(roundNumber);
+//            //nextRound (here) is called by initialize
+//
+//            nextRound(model.getAction(roundNumber));
+////            if (exitedPoker){
+////                //return to what calle
+////                return;
+////            }
+//        }
+//        else {
+//            promptBuyIn();
+//            if (exitedPoker) return;
+//            startRound();
+//        }
     }
-
 
     public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
         for (Card newCard: recipient.getNewCards()){
@@ -407,6 +381,27 @@ public class Controller {
         return frontEndCard;
     }
 
+    public void promptBuyIn(){
+        for (Player player : playerList.getAllPlayers()){
+            if (!player.isSolvent()){
+                System.out.println(player.toString());
+                if (!player.isInteractive()){
+                    player.updateBankroll(1000);
+                }
+                else{
+                    TextField buyBackInput = new TextField();
+                    Dialog buyBackBox = view.makeBuyInScreen(buyBackInput);
+                    Optional buyBackBoxResult = buyBackBox.showAndWait();
+                    if (buyBackBoxResult.isPresent()){
+                        player.updateBankroll(Integer.parseInt(buyBackInput.getText()));
+                    }
+                    else{
+                        exitedPoker = true;
+                    }
+                }
+            }
+        }
+    }
 
     private void indicateBet(Player player) {
         int betAmount = 0;
@@ -416,12 +411,13 @@ public class Controller {
         if (betBoxResult.isPresent()) {
             betAmount = Integer.parseInt(betInput.getText());
             if (player.getTotalBetAmount() + betAmount < lastBet) {
-                betScreenMessage  = "Cannot bet less than the call amount on the table! Please bet at least: " + (lastBet - player.getTotalBetAmount());
+                betScreenMessage  = "Cannot bet less than the call amount on the table! Please bet at least $" + (lastBet - player.getTotalBetAmount());
                 indicateBet(player);
             }
             else {
                 try {
                     player.bet(betAmount);
+                    interactiveActionComplete = true;
                     FrontEndPlayer displayPlayer = playerMappings.get(player);
                     displayPlayer.betDisplay(betAmount * -1);
                 } catch (ModelException e) {
@@ -430,14 +426,6 @@ public class Controller {
                 }
             }
         }
-    }
-
-
-    private void indicateBet(Player player, String betInput){
-        int betAmount = Integer.parseInt(betInput);
-        player.bet(betAmount);
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.betDisplay(betAmount * -1);
 
         betScreenMessage = "Enter a Bet:";
 
@@ -445,6 +433,7 @@ public class Controller {
 
 
     private void indicateFold(Player player){
+        interactiveActionComplete = true;
         player.fold();
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.foldDisplay();
@@ -452,6 +441,7 @@ public class Controller {
 
 
     private void indicateCall(Player player){
+        interactiveActionComplete = true;
         System.out.println("call");
         player.call(lastBet);
         FrontEndPlayer displayPlayer = playerMappings.get(player);
@@ -459,6 +449,7 @@ public class Controller {
     }
 
     private void indicateCheck(Player player){
+        interactiveActionComplete = true;
         System.out.println("Check");
         FrontEndPlayer displayPlayer = playerMappings.get(player);
         displayPlayer.checkDisplay();
@@ -468,7 +459,7 @@ public class Controller {
         Alert cashOutConfirm = view.makeCashOutAlert(player.toString(), player.getBankroll());
         Optional<ButtonType> cashOutResult = cashOutConfirm.showAndWait();
         if (cashOutResult.get() == ButtonType.OK){
-            cashedOut = true;
+            exitedPoker = true;
         } else {
             System.out.println("Did not cash out");
         }
