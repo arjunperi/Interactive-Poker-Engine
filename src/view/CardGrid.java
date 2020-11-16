@@ -5,13 +5,15 @@ import java.util.Map;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class CardGrid extends GridPane {
   private static final int MAX_NUMBER_OF_ROWS = 2;
   private static final int MAX_NUMBER_OF_COLUMNS = 5;
+
+  private static final int CARD_GRID_MIN_WIDTH = 200;
+  private static final int CARD_GRID_MIN_HEIGHT = CardView.CARD_HEIGHT * 2 + 10;
 
   private int currentRow;
   private int currentColumn;
@@ -37,6 +39,8 @@ public class CardGrid extends GridPane {
     this.setVgap(5);
     this.setHgap(5);
     this.setPadding(new Insets(5, 0, 5, 0));
+    this.setMinSize(CARD_GRID_MIN_WIDTH, CARD_GRID_MIN_HEIGHT);
+
   }
 
   private void initializeCardHolders() {

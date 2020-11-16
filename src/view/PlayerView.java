@@ -18,5 +18,16 @@ public class PlayerView extends BorderPane {
     this.position = position;
     this.setCenter(cardGrid);
     this.setBottom(playerInfoBox);
+
+    this.setLayoutX(position.getX() - (playerInfoBox.getMinWidth() / 2));
+    this.setLayoutY(position.getY() - ((playerInfoBox.getMinHeight() + cardGrid.getMinHeight()) / 2));
+  }
+
+  public CardGrid getCardGrid() {
+    return cardGrid;
+  }
+
+  public PlayerInfoBox getPlayerInfoBox() {
+    return playerInfoBox;
   }
 }

@@ -90,19 +90,26 @@ public class GameView {
             double yOffset = distance * Math.sin(angle);
             double x = centerX + xOffset;
             double y = centerY + yOffset;
-            BorderPane p = new BorderPane();
+            //BorderPane p = new BorderPane();
+            PlayerView v = new PlayerView(new Point2D(x, y), "yuh", 100, "/default-profile-pic.png");
+            CardGrid cardSpots = v.getCardGrid();
+            PlayerInfoBox pInfo = v.getPlayerInfoBox();
             //Group cardGrid = new Group();
-            CardGrid cardSpots = new CardGrid();
-            PlayerInfoBox pInfo = new PlayerInfoBox("Yasser", 1000, "/default-profile-pic.png");
+            //CardGrid cardSpots = new CardGrid();
+            //PlayerInfoBox pInfo = new PlayerInfoBox("Yasser", 1000, "/default-profile-pic.png");
             //Group playerInfo = new Group();
-            p.setCenter(cardSpots);
-            p.setBottom(pInfo);
+            //p.setCenter(cardSpots);
+            //p.setBottom(pInfo);
+
             GridPane test = new GridPane();
-            p.setLeft(test);
+            //p.setLeft(test);
 
 
-            p.setLayoutX(x - 100);
-            p.setLayoutY(y-100);
+            //p.setLayoutX(x - (pInfo.getMinWidth() / 2));
+            //p.setLayoutY(y- ((pInfo.getMinHeight() + cardSpots.getMinHeight()) / 2));
+            //p.setLayoutY(y);
+            //System.out.println(pInfo.getMinHeight());
+            //System.out.println(cardSpots.getMinHeight());
 
             Circle calculatedPosition = new Circle(x, y, 5, Color.web("blue", 0.5));
             pane3.getChildren().add(calculatedPosition);
@@ -235,9 +242,9 @@ public class GameView {
             //Circle cardLocation = new Circle(x, y, radius, Color.web("blue", 0.5));
             Text name = new Text(x, y+20, names.get(i));
             //cardGrid.getChildren().add(cardSpots);
-            GridPane playerStats = new GridPane();
-            playerStats.setPadding(new Insets(0,0,0,5));
-            playerStats.setMinSize(200, 30);
+            //GridPane playerStats = new GridPane();
+            //playerStats.setPadding(new Insets(0,0,0,5));
+            //playerStats.setMinSize(200, 30);
             //playerStats.setMaxSize(200, 30);
 
 
@@ -253,27 +260,30 @@ public class GameView {
             col2.setPercentWidth(40);
             ColumnConstraints col3 = new ColumnConstraints();
             col3.setPercentWidth(20);
-            playerStats.getColumnConstraints().addAll(col1,col2,col3);
+            //playerStats.getColumnConstraints().addAll(col1,col2,col3);
 
 
-            playerStats.add(q, 0,0);
-            playerStats.add(w, 1,0);
+            //playerStats.add(q, 0,0);
+            //playerStats.add(w, 1,0);
 
-            playerStats.add(iv3, 2,0);
+            //playerStats.add(iv3, 2,0);
 
-            playerStats.setHgap(5);
+            //playerStats.setHgap(5);
             System.out.println(q.getTabSize());
 
             //playerStats.setGridLinesVisible(true);
             //playerInfo.getChildren().add(playerStats);
-            playerStats.setStyle("-fx-border-color: red");
+            //playerStats.setStyle("-fx-border-color: red");
             pInfo.updateBankRoll(100);
+            //System.out.println(pInfo.getHeight());
+            //System.out.println(pInfo.getPrefHeight());
+
 
 
             //playerInfo.getChildren().add(playerBox);
 
 
-            pane3.getChildren().add(p);
+            pane3.getChildren().add(v);
 
             //pane3.getChildren().addAll(playerBox, name, cardSpots, calculatedPosition);
             //pane3.getChildren().addAll(playerInfo);
