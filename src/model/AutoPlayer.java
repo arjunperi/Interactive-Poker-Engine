@@ -15,6 +15,7 @@ public class AutoPlayer extends Player {
     private static final int HAND_RANK_THRESHOLD = 0;
     private static final int EXCHANGE_THRESHOLD = 7;
     private static final int MAX_EXCHANGE = 3;
+    private static final int BET_INCREMENT= 5;
 
 
     public AutoPlayer(String name, int startingAmount, CommunityCards communityCards, Pot pot) {
@@ -35,13 +36,12 @@ public class AutoPlayer extends Player {
         }
         if (handStrength > HAND_RANK_THRESHOLD || isHighEnough) {
             if(lastBet==0){
-                int betAmount = computerBetAmount(DEFAULTBETAMOUNT);
+                int betAmount = computerBetAmount(DEFAULTBETAMOUNT+ (BET_INCREMENT*(handStrength - 1)));
                 bet(betAmount);
             }
             else {
                 call(lastBet);
             }
-
         }
         else {
             fold();
