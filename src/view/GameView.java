@@ -93,9 +93,10 @@ public class GameView {
             BorderPane p = new BorderPane();
             //Group cardGrid = new Group();
             CardGrid cardSpots = new CardGrid();
-            Group playerInfo = new Group();
+            PlayerInfoBox pInfo = new PlayerInfoBox("Yasser", 1000, "/default-profile-pic.png");
+            //Group playerInfo = new Group();
             p.setCenter(cardSpots);
-            p.setBottom(playerInfo);
+            p.setBottom(pInfo);
             GridPane test = new GridPane();
             p.setLeft(test);
 
@@ -145,10 +146,7 @@ public class GameView {
                 }
             }*/
 
-            int row = 1;
-            int col = 0;
 
-            StackPane info = new StackPane();
             List<String> currentCards = List.of("K", "Q","f","f","f","f");
             /*for (int c = 0; c < currentCards.size(); c++) {
                 if (col == 5) {
@@ -238,9 +236,9 @@ public class GameView {
             Text name = new Text(x, y+20, names.get(i));
             //cardGrid.getChildren().add(cardSpots);
             GridPane playerStats = new GridPane();
-            playerStats.setPadding(new Insets(0,5,0,5));
+            playerStats.setPadding(new Insets(0,0,0,5));
             playerStats.setMinSize(200, 30);
-            playerStats.setMaxSize(200, 30);
+            //playerStats.setMaxSize(200, 30);
 
 
             Text q = new Text("Yasser");
@@ -267,8 +265,9 @@ public class GameView {
             System.out.println(q.getTabSize());
 
             //playerStats.setGridLinesVisible(true);
-            playerInfo.getChildren().add(playerStats);
+            //playerInfo.getChildren().add(playerStats);
             playerStats.setStyle("-fx-border-color: red");
+            pInfo.updateBankRoll(100);
 
 
             //playerInfo.getChildren().add(playerBox);
