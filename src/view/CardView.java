@@ -16,6 +16,7 @@ public class CardView extends StackPane {
   private ImageView displayedImage;
   private String suitImage;
   private String cardBack;
+  private boolean isSelected;
 
   private Text rank;
   private Rectangle cardBackground;
@@ -34,6 +35,15 @@ public class CardView extends StackPane {
     setFrontEndVisible(isFrontEndVisible);
   }
 
+  //TODO: Use CSS instead
+  private void toggleCardSelected() {
+    isSelected = !isSelected;
+    this.setStyle("");
+    if (isSelected) {
+      this.setStyle("-fx-border-color: black; -fx-border-width: 2px");
+    }
+  }
+
   private void setUpCard() {
     rank = new Text(rankSymbol);
 
@@ -45,6 +55,9 @@ public class CardView extends StackPane {
     displayedImage.setFitHeight(CARD_HEIGHT);
     displayedImage.setFitWidth(CARD_WIDTH);
 
+    isSelected = false;
+
+    this.setOnMouseClicked(event -> toggleCardSelected());
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
     this.getChildren().addAll(cardBackground, displayedImage, rank);
   }
