@@ -76,7 +76,37 @@ public class GameView {
         double centerX = 300 ;
         double centerY = 300 ;
 
-        Circle earth = new Circle(centerX, centerY, 150, Color.web("green", 0.5));
+        Table t = new Table(300,300, 150, 4);
+        pane3.getChildren().add(t);
+        for (PlayerView v: t.getPlayerViews()) {
+            CardGrid cardSpots = v.getCardGrid();
+            PlayerInfoBox pInfo = v.getPlayerInfoBox();
+
+            CardView card1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card1);
+            CardView card2 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card2);
+            CardView card3 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card3);
+
+            CardView added = new CardView("Yessir", "/heart-suit.png", "/card-back.png", false);
+            //Point2D removeLocation = cardSpots.removeCard(card2);
+            cardSpots.addCardViewToLocation(added, cardSpots.removeCard(card2));
+
+
+
+            CardView card4 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card4);
+
+            CardView card5 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card5);
+            CardView card6 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+            cardSpots.addCardView(card6);
+
+            pane3.getChildren().add(v);
+        }
+
+        /*Circle earth = new Circle(centerX, centerY, 150, Color.web("green", 0.5));
         pane3.getChildren().add(earth);
         //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
@@ -116,15 +146,15 @@ public class GameView {
             //x -= 100;
 
 
-            /*if (x - centerX < 0) {
+            *//*if (x - centerX < 0) {
                 x -= 200;
-            }*/
-            /*if (y - centerY > 0) {
+            }*//*
+            *//*if (y - centerY > 0) {
                 y += 60;
             }
             else {
                 y -= 60;
-            }*/
+            }*//*
 
             //GridPane cardSpots = new GridPane();
             //CardGrid cardSpots = new CardGrid();
@@ -139,23 +169,23 @@ public class GameView {
             //Rectangle card = new Rectangle(35, 50);
 
 
-            /*for (int startRow)
+            *//*for (int startRow)
             StackPane info = new StackPane();
             Text t = new Text("yuh");
-            info.getChildren().addAll(card, t);*/
+            info.getChildren().addAll(card, t);*//*
 
-            /*for (int row = 0; row < 2; row++) {
+            *//*for (int row = 0; row < 2; row++) {
                 for (int column = 0; column < 5; column++) {
                     Rectangle card = new Rectangle(35, 50);
                     card.setStroke(Color.TRANSPARENT);
                     card.setFill(Color.TRANSPARENT);
                     cardSpots.add(card, column, row);
                 }
-            }*/
+            }*//*
 
 
             List<String> currentCards = List.of("K", "Q","f","f","f","f");
-            /*for (int c = 0; c < currentCards.size(); c++) {
+            *//*for (int c = 0; c < currentCards.size(); c++) {
                 if (col == 5) {
                     col = 0;
                     row = 0;
@@ -171,14 +201,14 @@ public class GameView {
                 Rectangle card = new Rectangle(35, 50);
                 card.setStroke(Color.BLUE);
                 card.setFill(Color.TRANSPARENT);
-                info.getChildren().addAll(iv3,t,card);*/
-                /*CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+                info.getChildren().addAll(iv3,t,card);*//*
+                *//*CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
                 //cardSpots.add(yuh,col, row);
                 cardSpots.addCardView(yuh);
                 //cardSpots.getChildren().remove()
                 yuh.setFrontEndVisible(false);
                 col++;
-            }*/
+            }*//*
             //cardSpots.getChildren().remove(info);
 
             CardView card1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
@@ -202,15 +232,11 @@ public class GameView {
             CardView card6 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
             cardSpots.addCardView(card6);
 
-            for (CardView key : cardSpots.getCardLocations().keySet()) {
-                System.out.println(cardSpots.getCardLocations().get(key));
-            }
 
 
 
 
-
-            /*cardSpots.add(card, 0,0);
+            *//*cardSpots.add(card, 0,0);
             cardSpots.add(info, 1,0);
 
             cardSpots.add(card2, 1,0);
@@ -222,7 +248,7 @@ public class GameView {
             cardSpots.add(card8, 2,1);
 
             cardSpots.add(card9, 3,1);
-            cardSpots.add(card10, 4,1);*/
+            cardSpots.add(card10, 4,1);*//*
 
 
 
@@ -288,7 +314,7 @@ public class GameView {
             //pane3.getChildren().addAll(playerBox, name, cardSpots, calculatedPosition);
             //pane3.getChildren().addAll(playerInfo);
 
-        }
+        }*/
         centerGroup.getChildren().add(pane3);
     }
 

@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.geometry.Point2D;
@@ -11,21 +12,21 @@ import javafx.scene.shape.Circle;
 public class Table extends Circle {
   private int centerX;
   private int centerY;
-  private int radius;
   private int numPlayers;
-  private List<Point2D> playerPositions;
   private int playerDistanceFromCenter;
-  //private Map<PlayerView, Point2D> playerPositions;
+  private Map<Point2D, PlayerView> playerPositions;
+  private List<PlayerView> playerViews;
 
   public Table (int centerX, int centerY, int radius, int numPlayers) {
     super (centerX, centerY, radius);
     this.centerX = centerX;
     this.centerY = centerY;
-    this.radius = radius;
     this.numPlayers = numPlayers;
 
-    this.playerPositions = new ArrayList<>();
+    this.playerPositions = new HashMap<>();
+    this.playerViews = new ArrayList<>();
     this.playerDistanceFromCenter = radius * 2;
+    this.setStyle("-fx-fill: darkgreen");
     calculatePlayerPositions();
   }
 
@@ -36,12 +37,20 @@ public class Table extends Circle {
       double verticalOffset = playerDistanceFromCenter * Math.sin(angle);
       double playerX = centerX + horizontalOffset;
       double playerY = centerY + verticalOffset;
-      playerPositions.add(new Point2D(playerX, playerY));
+
+      Point2D location = new Point2D(playerX, playerY);
+      PlayerView playerView = new PlayerView(location, "yuh", 100, "/default-profile-pic.png");
+      playerPositions.put(location, playerView);
+      playerViews.add(playerView);
     }
   }
 
-  public List<Point2D> getPlayerPositions() {
+  public Map<Point2D, PlayerView> getPlayerPositions() {
     return playerPositions;
+  }
+
+  public List<PlayerView> getPlayerViews() {
+    return playerViews;
   }
 
 
