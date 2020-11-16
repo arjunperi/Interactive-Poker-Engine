@@ -36,10 +36,14 @@ public class CardView extends StackPane {
 
   private void setUpCard() {
     rank = new Text(rankSymbol);
+
     cardBackground = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
     cardBackground.setStroke(Color.RED);
     cardBackground.setFill(Color.TRANSPARENT);
+
     displayedImage = new ImageView();
+    displayedImage.setFitHeight(CARD_HEIGHT);
+    displayedImage.setFitWidth(CARD_WIDTH);
 
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
     this.getChildren().addAll(cardBackground, displayedImage, rank);
@@ -71,9 +75,5 @@ public class CardView extends StackPane {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-    displayedImage.setFitHeight(CARD_HEIGHT);
-    displayedImage.setFitWidth(CARD_WIDTH);
-
   }
 }

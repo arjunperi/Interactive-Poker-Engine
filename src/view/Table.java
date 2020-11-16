@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -14,6 +15,7 @@ public class Table extends Circle {
   private int numPlayers;
   private List<Point2D> playerPositions;
   private int playerDistanceFromCenter;
+  //private Map<PlayerView, Point2D> playerPositions;
 
   public Table (int centerX, int centerY, int radius, int numPlayers) {
     super (centerX, centerY, radius);

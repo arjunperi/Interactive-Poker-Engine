@@ -13,11 +13,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -56,60 +58,6 @@ public class GameView {
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
 
-        /*ImageView iv = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
-        iv.setFitHeight(50);
-        iv.setFitWidth(50);
-        Text inftx = new Text("K");
-        Rectangle card = new Rectangle(70,100);
-        //card.setStrokeType(StrokeType.INSIDE);
-        card.setStroke(Color.BLACK);
-        card.setFill(Color.TRANSPARENT);
-
-        //inftx.setX(50000000);
-        //inftx.setX(50);
-        StackPane pane = new StackPane();
-        pane.setPrefSize(70,100); //set a default size for your stackpane
-
-        pane.getChildren().add(card);
-        pane.getChildren().add(iv);
-        pane.getChildren().add(inftx);
-
-
-        pane.setAlignment(Pos.CENTER);
-        pane.setTranslateX(100);
-        pane.setTranslateY(300);
-
-        ImageView iv3 = new ImageView(Controller.class.getResource("/heart-suit.png").toExternalForm());
-
-        iv3.setFitHeight(50);
-        iv3.setFitWidth(50);
-        Text inftx2 = new Text("Q");
-        //Rectangle card2 = new Rectangle(70,100);
-        //card.setStrokeType(StrokeType.INSIDE);
-        //card2.setStroke(Color.BLACK);
-        //card2.setFill(Color.TRANSPARENT);
-
-        //inftx.setX(50000000);
-        //inftx.setX(50);
-        StackPane pane2 = new StackPane();
-        //pane.setPrefSize(7000000,700000); //set a default size for your stackpane
-        pane2.setPrefSize(70,100); //set a default size for your stackpane
-
-
-        //pane2.getChildren().add(card2);
-
-        pane2.getChildren().add(iv3);
-        pane2.getChildren().add(inftx2);
-
-
-        pane2.setAlignment(Pos.CENTER);
-        pane2.setTranslateX(270);
-        pane2.setTranslateY(300);
-
-
-        //StackPane.setAlignment(iv,Pos.CENTER); //set it to the Center Left(by default it's on the center)
-
-        root.getChildren().add(pane2);*/
 
         Pane pane3 = new Pane();
         /*GridPane pane4 = new GridPane();
@@ -131,7 +79,7 @@ public class GameView {
         pane3.getChildren().add(earth);
         //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
-        int numPlayers = 8;
+        int numPlayers = 4;
         double distance = 300 ;
         List<String> names = List.of("Arjun", "Noah", "Yasser", "Christian", "Duvall", "Luke Skywalker", "Harry Potter", "Voldemort", "bool");
 
@@ -141,9 +89,21 @@ public class GameView {
             double yOffset = distance * Math.sin(angle);
             double x = centerX + xOffset;
             double y = centerY + yOffset;
+            BorderPane p = new BorderPane();
+            Group cardGrid = new Group();
+            Group playerInfo = new Group();
+            p.setCenter(cardGrid);
+            p.setBottom(playerInfo);
+            GridPane test = new GridPane();
+            p.setLeft(test);
+
+
+            p.setLayoutX(x - 100);
+            p.setLayoutY(y-100);
 
             Circle calculatedPosition = new Circle(x, y, 5, Color.web("blue", 0.5));
-            x -= 100;
+            pane3.getChildren().add(calculatedPosition);
+            //x -= 100;
 
 
             /*if (x - centerX < 0) {
@@ -157,10 +117,12 @@ public class GameView {
             }*/
 
             GridPane cardSpots = new GridPane();
+
             cardSpots.setVgap(5);
             cardSpots.setHgap(5);
-            cardSpots.setLayoutX(x);
-            cardSpots.setLayoutY(y-110);
+            cardSpots.setPadding(new Insets(5,0,5,0));
+            //cardSpots.setLayoutX(x);
+            //cardSpots.setLayoutY(y-110);
             //cardSpots.setGridLinesVisible(true);
             //Rectangle card = new Rectangle(35, 50);
             Rectangle card2 = new Rectangle(35, 50);
@@ -214,7 +176,7 @@ public class GameView {
             int col = 0;
 
             StackPane info = new StackPane();
-            List<String> currentCards = List.of("K", "Q", "A", "2", "3", "5");
+            List<String> currentCards = List.of("K", "Q","f","f","f","f");
             for (int c = 0; c < currentCards.size(); c++) {
                 if (col == 5) {
                     col = 0;
@@ -235,7 +197,7 @@ public class GameView {
                 CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
                 cardSpots.add(yuh,col, row);
                 //cardSpots.getChildren().remove()
-                yuh.setFrontEndVisible(false);
+                yuh.setFrontEndVisible(true);
                 col++;
             }
             cardSpots.getChildren().remove(info);
@@ -262,8 +224,9 @@ public class GameView {
 
 
 
-            Rectangle playerBox = new Rectangle(x, y, 200, 30);
+            //Rectangle playerBox = new Rectangle(x, y, 200, 30);
             //Rectangle playerBox = new Rectangle(175, 30);
+            Rectangle playerBox = new Rectangle(200, 30);
             playerBox.setStroke(Color.RED);
             playerBox.setFill(Color.TRANSPARENT);
             //Circle cardLocation = new Circle(radius, Color.web("blue", 0.5));
@@ -274,8 +237,47 @@ public class GameView {
 
             //Circle cardLocation = new Circle(x, y, radius, Color.web("blue", 0.5));
             Text name = new Text(x, y+20, names.get(i));
+            cardGrid.getChildren().add(cardSpots);
+            GridPane playerStats = new GridPane();
+            playerStats.setPadding(new Insets(0,5,0,5));
+            playerStats.setMinSize(200, 30);
+            playerStats.setMaxSize(200, 30);
 
-            pane3.getChildren().addAll(playerBox, name, cardSpots, calculatedPosition);
+
+            Text q = new Text("Yasser");
+            Text w = new Text("$1000");
+            ImageView iv3 = new ImageView();
+            iv3.setImage(new Image(Controller.class.getResource("/default-profile-pic.png").toExternalForm()));
+            iv3.setFitHeight(30);
+            iv3.setFitWidth(35);
+            ColumnConstraints col1 = new ColumnConstraints();
+            col1.setPercentWidth(40);
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setPercentWidth(40);
+            ColumnConstraints col3 = new ColumnConstraints();
+            col3.setPercentWidth(20);
+            playerStats.getColumnConstraints().addAll(col1,col2,col3);
+
+
+            playerStats.add(q, 0,0);
+            playerStats.add(w, 1,0);
+
+            playerStats.add(iv3, 2,0);
+
+            playerStats.setHgap(5);
+            System.out.println(q.getTabSize());
+
+            //playerStats.setGridLinesVisible(true);
+            playerInfo.getChildren().add(playerStats);
+            playerStats.setStyle("-fx-border-color: red");
+
+
+            //playerInfo.getChildren().add(playerBox);
+
+
+            pane3.getChildren().add(p);
+
+            //pane3.getChildren().addAll(playerBox, name, cardSpots, calculatedPosition);
             //pane3.getChildren().addAll(playerInfo);
 
         }
