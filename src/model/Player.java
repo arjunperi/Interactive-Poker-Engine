@@ -134,8 +134,8 @@ public class Player extends CardRecipient{
             pot.addToPot(currentBetAmount);
             updateBankroll(currentBetAmount * -1);
         }
-        else{
-            throw new ModelException("Cannot bet more money than you have!");
+        else {
+            throw new ModelException("Cannot bet more money than you have! You only have $" + getBankroll());
         }
     }
 

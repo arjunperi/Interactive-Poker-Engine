@@ -83,6 +83,7 @@ public class GameViewTest extends DukeApplicationTest {
         assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
         Button selectButton = lookup("#GameSelect").query();
         clickOn(selectButton);
+        CenterGroup = lookup("#Center").query();
         VBox gameBox = lookup("#GameBox").query();
         assertTrue(CenterGroup.getChildrenUnmodifiable().contains(gameBox));
     }

@@ -10,10 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import pokerSuite.PokerRunner;
 
+import javax.swing.*;
 import javax.swing.tree.ExpandVetoException;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -117,8 +121,9 @@ public class GameView {
         return result;
     }
 
-    public ChoiceDialog makeActionScreen(String playerName, int lastBet){
+    public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount){
         centerGroup.getChildren().clear();
+        bottomGroup.getChildren().clear();
 
         Button cashOutButton = new Button("Cash Out");
         cashOutButton.setId("CashOut");
@@ -129,7 +134,7 @@ public class GameView {
         Button checkButton = new Button("Check");
         checkButton.setId("Check");
 
-        Button callButton = new Button("Call");
+        Button callButton = new Button("Call ($"  + callAmount + ")");
         callButton.setId("Call");
 
         Button betButton = new Button("Bet");
@@ -215,5 +220,34 @@ public class GameView {
         grid.getChildren().addAll(exchangeCardInput1,exchangeCardInput2,exchangeCardInput3);
         exchangeBox.getDialogPane().setContent(grid);
         return exchangeBox;
+    }
+
+
+    //maybe combine this with bet screen input
+    public Dialog makeBuyInScreen(TextField buyBackInput){
+//        bottomGroup.getChildren().clear();
+
+        Dialog buyBackBox = new TextInputDialog();
+        buyBackBox.setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing: ");
+
+        buyBackInput.setPromptText("Amount: ");
+        buyBackInput.setId("BuyBack");
+
+        GridPane grid = new GridPane();
+        grid.setId("BuyBackPane");
+
+        GridPane.setConstraints(buyBackInput, 0,1);
+        grid.getChildren().add(buyBackInput);
+        buyBackBox.getDialogPane().setContent(grid);
+
+        return buyBackBox;
+    }
+
+    public void makeEndRoundScreen(EventHandler<ActionEvent> nextRoundEvent, EventHandler<ActionEvent> cashOutEvent){
+        HBox nextRoundBox = new HBox();
+        Button nextRoundButton = makeButton("Deal next round", nextRoundEvent);
+        Button cashOutButton = makeButton("Cash Out", cashOutEvent);
+        nextRoundBox.getChildren().addAll(nextRoundButton,cashOutButton);
+        bottomGroup.getChildren().add(nextRoundBox);
     }
 }

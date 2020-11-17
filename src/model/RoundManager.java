@@ -22,15 +22,10 @@ public class RoundManager {
         List<Player> activePlayers = playerList.getActivePlayers();
         if (activePlayers.size() == 1){
             winner = activePlayers.get(0);
+            System.out.println("\n" + winner.toString() + " won and received $" + pot.getPotTotal());
             pot.dispersePot(winner,pot.getPotTotal());
             pot.clearPot();
             roundOver = true;
-        }
-    }
-
-    public void checkShowDown(PlayerList playerList, int currentRound, int totalRounds){
-        if (currentRound == totalRounds){
-            showDown(playerList);
         }
     }
 
@@ -40,21 +35,21 @@ public class RoundManager {
 
     //should we be updating the players' total hands in a better way/ different place?
     //AI updating?
-    private void showDown(PlayerList activePlayers){
+    public void showDown(PlayerList activePlayers){
         for (Player player: activePlayers.getActivePlayers()){
             player.updateTotalHand();
         }
         List<Player> bestPlayers =  handEvaluator.getBestPlayers(activePlayers, false);
         int winningAmount = splitAmount(bestPlayers.size());
         for (Player player : bestPlayers){
-            System.out.println("\n" + player.toString() + " won and received $" + winningAmount);
+            System.out.println("\n" + player.toString() + " won the showdown and received $" + winningAmount);
             pot.dispersePot(player, winningAmount);
         }
         pot.clearPot();
         roundOver = true;
     }
 
-    public boolean roundOver(){
+    public boolean isRoundOver(){
         return roundOver;
     }
 }

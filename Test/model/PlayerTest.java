@@ -111,11 +111,17 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-        Card testCard = new Card(11,"CLUBS");
-        Card testCard2 = new Card(8,"CLUBS");
-        Card testCard3 = new Card(10,"HEARTS");
-        Card testCard4 = new Card(7,"DIAMONDS");
-        Card testCard5 = new Card(14,"SPADES");
+//        Card testCard = new Card(11,"CLUBS");
+//        Card testCard2 = new Card(8,"CLUBS");
+//        Card testCard3 = new Card(10,"HEARTS");
+//        Card testCard4 = new Card(7,"DIAMONDS");
+//        Card testCard5 = new Card(14,"SPADES");
+
+        Card testCard = deck.StringToCard("11 CLUBS");
+        Card testCard2 = deck.StringToCard("8 CLUBS");
+        Card testCard3 = deck.StringToCard("10 HEARTS");
+        Card testCard4 = deck.StringToCard("7 DIAMONDS");
+        Card testCard5 = deck.StringToCard("14 SPADES");
 
         player.receiveCard(testCard);
         player.receiveCard(testCard2);
@@ -143,11 +149,17 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-        Card testCard = new Card(2,"CLUBS");
-        Card otherCard1 = new Card(8,"CLUBS");
-        Card otherCard2 = new Card(10,"HEARTS");
-        Card otherCard3 = new Card(7,"DIAMONDS");
-        Card otherCard4 = new Card(9,"SPADES");
+//        Card testCard = new Card(2,"CLUBS");
+//        Card otherCard1 = new Card(8,"CLUBS");
+//        Card otherCard2 = new Card(10,"HEARTS");
+//        Card otherCard3 = new Card(7,"DIAMONDS");
+//        Card otherCard4 = new Card(9,"SPADES");
+
+        Card testCard = deck.StringToCard("2 CLUBS");
+        Card otherCard1 = deck.StringToCard("8 CLUBS");
+        Card otherCard2 = deck.StringToCard("10 HEARTS");
+        Card otherCard3 = deck.StringToCard("7 DIAMONDS");
+        Card otherCard4 = deck.StringToCard("9 SPADES");
 
         player.receiveCard(testCard);
         player.receiveCard(otherCard1);
@@ -170,11 +182,17 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-        Card testCard = new Card(2, "CLUBS");
-        Card testCard2 = new Card(6, "CLUBS");
-        Card otherCard2 = new Card(10, "HEARTS");
-        Card otherCard3 = new Card(7, "DIAMONDS");
-        Card otherCard4 = new Card(9, "SPADES");
+//        Card testCard = new Card(2, "CLUBS");
+//        Card testCard2 = new Card(6, "CLUBS");
+//        Card otherCard2 = new Card(10, "HEARTS");
+//        Card otherCard3 = new Card(7, "DIAMONDS");
+//        Card otherCard4 = new Card(9, "SPADES");
+
+        Card testCard = deck.StringToCard("2 CLUBS");
+        Card testCard2 = deck.StringToCard("6 CLUBS");
+        Card otherCard2 = deck.StringToCard("10 HEARTS");
+        Card otherCard3 = deck.StringToCard("7 DIAMONDS");
+        Card otherCard4 = deck.StringToCard("9 SPADES");
 
         player.receiveCard(testCard);
         player.receiveCard(testCard2);
@@ -197,11 +215,18 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-        Card testCard = new Card(2, "CLUBS");
-        Card testCard2 = new Card(6, "CLUBS");
-        Card testCard3 = new Card(3, "HEARTS");
-        Card otherCard3 = new Card(7, "DIAMONDS");
-        Card otherCard4 = new Card(9, "SPADES");
+//        Card testCard = new Card(2, "CLUBS");
+//        Card testCard2 = new Card(6, "CLUBS");
+//        Card testCard3 = new Card(3, "HEARTS");
+//        Card otherCard3 = new Card(7, "DIAMONDS");
+//        Card otherCard4 = new Card(9, "SPADES");
+
+        Card testCard = deck.StringToCard("2 CLUBS");
+        Card testCard2 = deck.StringToCard("6 CLUBS");
+        Card testCard3 = deck.StringToCard("3 HEARTS");
+        Card otherCard3 = deck.StringToCard("7 DIAMONDS");
+        Card otherCard4 = deck.StringToCard("9 SPADES");
+
 
         player.receiveCard(testCard);
         player.receiveCard(testCard2);
@@ -228,11 +253,18 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-        Card testCard = new Card(2, "CLUBS");
-        Card testCard2 = new Card(6, "CLUBS");
-        Card testCard3 = new Card(5, "HEARTS");
-        Card testCard4 = new Card(3, "DIAMONDS");
-        Card otherCard = new Card(9, "SPADES");
+//
+//        Card testCard = new Card(2, "CLUBS");
+//        Card testCard2 = new Card(6, "CLUBS");
+//        Card testCard3 = new Card(5, "HEARTS");
+//        Card testCard4 = new Card(3, "DIAMONDS");
+//        Card otherCard = new Card(9, "SPADES");
+
+        Card testCard = deck.StringToCard("2 CLUBS");
+        Card testCard2 = deck.StringToCard("6 CLUBS");
+        Card testCard3 = deck.StringToCard("5 HEARTS");
+        Card testCard4 = deck.StringToCard("3 DIAMONDS");
+        Card otherCard = deck.StringToCard("9 SPADES");
 
         player.receiveCard(testCard);
         player.receiveCard(testCard2);

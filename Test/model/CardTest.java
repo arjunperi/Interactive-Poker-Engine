@@ -10,7 +10,7 @@ public class CardTest {
     @Test
     public void testToString(){
         Card card = new Card(2, "CLUBS");
-        assertEquals("CLUBS 2", card.toString());
+        assertEquals("2 CLUBS", card.toString());
     }
 
     @Test

@@ -49,8 +49,6 @@ public class AutoPlayer extends Player {
     }
 
     public List<String> decideExchange(){
-
-
         List<Hand> allHands = handCombiner.getAllHands(this.getTotalHand());
         Hand bestHand = handEvaluator.getBestHands(allHands).get(0).sortHand();
         int handStrength = handEvaluator.handStrength(bestHand)[0];
@@ -60,7 +58,7 @@ public class AutoPlayer extends Player {
             Collections.reverse(handCopy);
             int numberExchanged = 0;
                 for (Card card : handCopy) {
-                    if ((card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
+                    if ((card.getRank() > 0 ) && (card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
                         exchangeCards.add(card.toString()); // why does exchange take in a string instead of card??
                         numberExchanged++;
                     }
