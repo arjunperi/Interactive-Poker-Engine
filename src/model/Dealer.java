@@ -14,7 +14,7 @@ public class Dealer {
         for (boolean isVisible: visibilityList){
             Card cardDealt = deck.getTopCard();
             if (isVisible){
-                cardDealt.makeVisible();
+                cardDealt.makeBackEndVisible();
             }
             recipient.receiveCard(cardDealt);
         }
@@ -24,22 +24,22 @@ public class Dealer {
         player.clearDiscardedCards();
         player.clearNewCards();
         for (String exchangeCard: exchangeCards){
-            player.discardCard(stringToCard(exchangeCard));
-            System.out.println(player.toString() + " gets: " + deck.peekTopCard().getRank());
+            player.discardCard(deck.StringToCard(exchangeCard));
+            System.out.println(player.toString() + " gets: " + deck.peekTopCard().toString());
             Card cardDealt = deck.getTopCard();
             player.receiveCard(cardDealt);
         }
     }
 
-    private Card stringToCard(String cardString){
-        try{
-            Card exchangeCard = new Card(Integer.parseInt(cardString.split(" ")[0]), cardString.split(" ")[1]);
-            return exchangeCard;
-        }
-        catch (NumberFormatException e){
-            throw new ModelException("Invalid Card Input");
-        }
-    }
+//    private Card stringToCard(String cardString){
+//        try{
+//            Card exchangeCard = new Card(Integer.parseInt(cardString.split(" ")[0]), cardString.split(" ")[1]);
+//            return exchangeCard;
+//        }
+//        catch (NumberFormatException e){
+//            throw new ModelException("Invalid Card Input");
+//        }
+//    }
 
 
     public void checkDeck(){

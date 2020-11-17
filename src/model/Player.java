@@ -58,7 +58,7 @@ public class Player extends CardRecipient{
     }
 
     public void discardCard(Card card) {
-        playerHand.getCards().remove(card);
+        playerHand.remove(card);
         discardedCardList.add(card);
     }
 
@@ -98,10 +98,10 @@ public class Player extends CardRecipient{
         totalHand = totalHand.sortHand();
     }
 
-    public Hand getTotalVisibleHand(){
+    public Hand getTotalBackendVisibleHand(){
         totalVisibleHand.clear();
         for (Card card: totalHand.getCards()){
-            if (card.isVisible()){
+            if (card.isBackEndVisible()){
                 totalVisibleHand.add(card);
             }
         }
@@ -178,6 +178,9 @@ public class Player extends CardRecipient{
     }
 
     public void receiveCard(Card card) {
+        if (isInteractive){
+            card.setInteractivePlayerCard();
+        }
         playerHand.add(card);
         addNewCards(card);
         updateTotalHand();

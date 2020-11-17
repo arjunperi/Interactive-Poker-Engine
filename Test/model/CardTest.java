@@ -10,7 +10,7 @@ public class CardTest {
     @Test
     public void testToString(){
         Card card = new Card(2, "CLUBS");
-        assertEquals("CLUBS 2", card.toString());
+        assertEquals("2 CLUBS", card.toString());
     }
 
     @Test
@@ -35,9 +35,9 @@ public class CardTest {
     @Test
     void testCardVisibility() {
         Card card = new Card(2, "CLUBS");
-        assertTrue(false == card.isVisible());
-        card.makeVisible();
-        assertTrue(true == card.isVisible());
+        assertTrue(false == card.isBackEndVisible());
+        card.makeBackEndVisible();
+        assertTrue(true == card.isBackEndVisible());
     }
 
     @Test

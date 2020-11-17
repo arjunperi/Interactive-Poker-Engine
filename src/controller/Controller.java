@@ -275,17 +275,28 @@ public class Controller {
             TextField exchangeCardInput1 = new TextField();
             TextField exchangeCardInput2 = new TextField();
             TextField exchangeCardInput3 = new TextField();
-            Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1,exchangeCardInput2, exchangeCardInput3);
+            if (!player.isInteractive()) {
 
-            Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
-            if (exchangeBoxResult.isPresent()) {
-                List<String> exchangeCards  = new ArrayList<>(List.of(exchangeCardInput1.getText(),exchangeCardInput2.getText(),exchangeCardInput3.getText()));
-                List<String> filtered = exchangeCards.stream()
-                        .filter(b -> b.equals(""))
-                        .collect(Collectors.toList());
-                exchangeCards.removeAll(filtered);
-                dealer.exchangeCards(player, exchangeCards);
-                exchangeFrontEndCards(player, playerMappings.get(player));
+                // Autoplayer decide exchange
+                AutoPlayer autoPlayer = (AutoPlayer) player;
+                autoPlayer.decideExchange();
+                dealer.exchangeCards(autoPlayer,autoPlayer.decideExchange());
+                exchangeFrontEndCards(autoPlayer, playerMappings.get(autoPlayer));
+            }
+            else {
+                Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1, exchangeCardInput2, exchangeCardInput3);
+
+                Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
+                if (exchangeBoxResult.isPresent()) {
+                    List<String> exchangeCards = new ArrayList<>(List.of(exchangeCardInput1.getText(), exchangeCardInput2.getText(), exchangeCardInput3.getText()));
+                    List<String> filtered = exchangeCards.stream()
+                            .filter(b -> b.equals(""))
+                            .collect(Collectors.toList());
+                    exchangeCards.removeAll(filtered);
+
+                    dealer.exchangeCards(player, exchangeCards);
+                    exchangeFrontEndCards(player, playerMappings.get(player));
+                }
             }
         }
         roundNumber++;
@@ -297,6 +308,7 @@ public class Controller {
         playerList.initializeActivePlayers();
         List<Player> players = playerList.getActivePlayers();
         List<Player> playersCopy = new ArrayList<>(players);
+
         interactiveActionComplete = true;
 
         if(!oneSolventPlayer){
@@ -381,7 +393,9 @@ public class Controller {
 
     //should this be in View or Controller?
     private FrontEndCard getFrontEndCard(Card card){
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), card.isVisible());
+        boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
+
+        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
         frontEndCardMappings.put(card.toString(), frontEndCard);
         return frontEndCard;
     }
