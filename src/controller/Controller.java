@@ -288,15 +288,22 @@ public class Controller {
 //            showError(e.getCause().getMessage());
             }
         }
+        checkShowDown();
+    }
+
+    private void checkShowDown() {
         if (!roundManager.isRoundOver() && !exitedPoker){
             roundManager.showDown(playerList);
-            for (Player player: playerMappings.keySet()) {
-                if (player.isActive()) {
-                    playerMappings.get(player).getCardGrid().flipCards();
-                }
-            }
-
+            flipActivePlayerCards();
             transitionRound();
+        }
+    }
+
+    private void flipActivePlayerCards() {
+        for (Player player: playerMappings.keySet()) {
+            if (player.isActive()) {
+                playerMappings.get(player).getCardGrid().flipCards();
+            }
         }
     }
 
@@ -316,7 +323,7 @@ public class Controller {
         initializeActionMenu();
     }
 
-    /*public void exchangeRound() {
+    public void exchangeRound() {
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
@@ -351,7 +358,7 @@ public class Controller {
         roundNumber++;
         playerList.updateActivePlayers();
         initializeActionMenu();
-    }*/
+    }
 
     public void initializeActionMenu() {
         playerList.initializeActivePlayers();
@@ -413,17 +420,6 @@ public class Controller {
         for (Card newCard: recipient.getNewCards()) {
             CardView displayCard = getFrontEndCard(newCard);
             cardGrid.addCardView(displayCard);
-            //int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();
-
-            /*if (numberOfFrontEndCards != 0){
-                FrontEndCard lastCard = displayRecipient.getLastCard();
-                int lastCardLocation = displayRecipient.getFrontEndCardLocations().get(lastCard);
-                view.deal(displayCard, displayRecipient, lastCardLocation + 80);
-            }
-            else{
-                view.deal(displayCard, displayRecipient, 20);
-            }*/
-
         }
     }
 
