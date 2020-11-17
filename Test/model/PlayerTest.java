@@ -2,6 +2,7 @@ package model;
 
 import controller.Controller;
 import controller.JSONReader;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -15,7 +16,8 @@ public class PlayerTest extends DukeApplicationTest {
     private Player player;
     private Deck deck;
     private JSONReader reader;
-
+    private HandEvaluator handEval = new HandEvaluator();
+    private HandCombiner handCombiner = new HandCombiner();
     @BeforeEach
     void setUp(){
         reader = new JSONReader();
@@ -285,6 +287,33 @@ public class PlayerTest extends DukeApplicationTest {
         assertFalse(player.getHand().getCards().contains(testCard));
         assertFalse(player.getHand().getCards().contains(testCard3));
         assertFalse(player.getHand().getCards().contains(testCard4));
+    }
+    @Test
+    public void testAutoPlayerBetAmount(){
+
+
+        CommunityCards communityCards = new CommunityCards();
+        Pot pot = new Pot();
+        AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
+        AutoPlayer player2 = new AutoPlayer("Player2", 100, communityCards, pot);
+        Card testCard = new Card(8, "CLUBS");
+        Card testCard2 = new Card(8, "CLUBS");
+        Card testCard3 = new Card(8, "HEARTS");
+        Card otherCard3 = new Card(8, "DIAMONDS");
+        Card otherCard4 = new Card(9, "SPADES");
+
+        player.receiveCard(testCard);
+        player.receiveCard(testCard2);
+        player.receiveCard(testCard3);
+        player.receiveCard(otherCard3);
+        player.receiveCard(otherCard4);
+        System.out.println(player.getTotalHand().getCards());
+        System.out.println(handCombiner.getAllHands(player.getTotalHand()));
+        System.out.println(player.getHand().getCards());
+
+        //player.decideAction(0);
+        assertEquals(40,pot.getPotTotal());
+
     }
 
 
