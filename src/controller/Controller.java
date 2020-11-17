@@ -173,6 +173,9 @@ public class Controller {
         view.clear();
         initializeGameObjects();
         initializeMainMenu();
+        playerViews.clear();
+        playerMappings.clear();
+
     }
 
     public void initializeGameSelect(){
@@ -216,11 +219,15 @@ public class Controller {
 
     private void initializeGameBoard() {
         pokerTable = new Table(300, 300, 150, playerViews);
-        view.addGameObject(pokerTable);
         communityCardGrid = new CommunityCardGrid();
         communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
         communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
+        view.addGameObject(pokerTable);
         view.addGameObject(communityCardGrid);
+        for (PlayerView playerView: playerViews) {
+            view.addGameObject(playerView);
+            playerView.getCardGrid().clearCardGrid();
+        }
     }
 
     private void initializePlayerList(String fileName){
@@ -254,7 +261,7 @@ public class Controller {
             }
             playerMappings.put(currentPlayer, newPlayerView);
             playerViews.add(newPlayerView);
-            view.addGameObject(newPlayerView);
+            //view.addGameObject(newPlayerView);
             //frontEndPlayers.add(newPlayerView);
         }
     }
@@ -480,7 +487,7 @@ public class Controller {
                     player.bet(betAmount);
                     interactiveActionComplete = true;
                     PlayerView displayPlayer = playerMappings.get(player);
-                    displayPlayer.getPlayerInfoBox().updateBankRoll(-1 * betAmount);
+                    displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
                     //displayPlayer.betDisplay(betAmount * -1);
                 } catch (ModelException e) {
                     betScreenMessage = e.getMessage();
@@ -504,6 +511,8 @@ public class Controller {
         interactiveActionComplete = true;
         System.out.println("call");
         player.call(lastBet);
+        PlayerView displayPlayer = playerMappings.get(player);
+        displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
         //FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }

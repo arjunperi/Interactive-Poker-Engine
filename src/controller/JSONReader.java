@@ -39,6 +39,7 @@ public class JSONReader {
 
   private void parseGameSettings() {
     JSONObject gameSettings = jo.getJSONObject("gameSettings");
+    parseCardBack(gameSettings);
   }
 
 

@@ -3,10 +3,10 @@
     "cardBack" : "/card-back.png"
   },
   "suits": {
-    "HEARTS": "/hearts.png",
-    "SPADES": "/spades.png",
-    "CLUBS": "/clubs.png",
-    "DIAMONDS": "/diamonds.png"
+    "HEARTS": "/heart-suit.png",
+    "SPADES": "/spade-suit.png",
+    "CLUBS": "/club-suit.png",
+    "DIAMONDS": "/diamond-suit.png"
   },
   "ranks": {
     "2": "DEUCE",
@@ -20,7 +20,7 @@
     "10": "TEN",
     "11": "JACK",
     "12": "QUEEN",
-    "13":  "KING",
+    "13": "KING",
     "14": "ACE"
   }
 }

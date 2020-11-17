@@ -46,6 +46,7 @@ public class CardView extends StackPane {
 
   private void setUpCard() {
     rank = new Text(rankSymbol);
+    rank.setStroke(Color.WHITE);
 
     cardBackground = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
     cardBackground.setStroke(Color.RED);

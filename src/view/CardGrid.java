@@ -117,4 +117,11 @@ public class CardGrid extends GridPane {
     return cardLocations;
   }
 
+  public void clearCardGrid() {
+    for (CardView card: cardLocations.keySet()) {
+      this.getChildren().remove(card);
+    }
+    initializeCardAddingPosition();
+  }
+
 }

@@ -12,7 +12,6 @@ import model.PlayerList;
 public class Table extends Group {
   private int centerX;
   private int centerY;
-  private int numPlayers;
   private int playerDistanceFromCenter;
   private Map<Point2D, PlayerView> playerPositions;
   private List<PlayerView> playerViews;
@@ -20,7 +19,7 @@ public class Table extends Group {
   private Circle pokerTable;
   List<PlayerView> players;
 
-  public Table (int centerX, int centerY, int radius, int numPlayers) {
+  /*public Table (int centerX, int centerY, int radius, int numPlayers) {
     super();
     pokerTable = new Circle(centerX, centerY, radius);
     this.getChildren().add(pokerTable);
@@ -33,12 +32,12 @@ public class Table extends Group {
     communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
     communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));*/
 
-    this.playerPositions = new HashMap<>();
+    /*this.playerPositions = new HashMap<>();
     this.playerViews = new ArrayList<>();
     this.playerDistanceFromCenter = radius * 2;
     pokerTable.setStyle("-fx-fill: darkgreen");
     calculatePlayerPositions();
-  }
+  }*/
 
   public Table (int centerX, int centerY, int radius, List<PlayerView> players) {
     super();
@@ -62,7 +61,7 @@ public class Table extends Group {
 
   private void calculatePlayerPositions() {
     for (int player = 0; player < players.size(); player++) {
-      double angle = 2 * player * Math.PI / numPlayers;
+      double angle = 2 * player * Math.PI / players.size();
       double horizontalOffset = playerDistanceFromCenter * Math.cos(angle);
       double verticalOffset = playerDistanceFromCenter * Math.sin(angle);
       double playerX = centerX + horizontalOffset;

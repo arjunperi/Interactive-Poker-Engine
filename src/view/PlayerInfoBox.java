@@ -70,8 +70,9 @@ public class PlayerInfoBox extends GridPane {
     this.setMinSize(INFO_BOX_MIN_WIDTH, INFO_BOX_MIN_HEIGHT);
   }
 
-  public void updateBankRoll(int incrementAmount) {
-    playerBankroll.setText("$" + (bankroll + incrementAmount));
+
+  public void setBankroll(int bankroll) {
+    playerBankroll.setText("$" + bankroll);
   }
 
 }

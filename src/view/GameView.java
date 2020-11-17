@@ -28,6 +28,7 @@ public class GameView {
     private Group centerGroup;
     private Group bottomGroup;
     private Button homeButton;
+    private VBox gameBox;
 
     public GameView(){
         root = new BorderPane();
@@ -39,6 +40,7 @@ public class GameView {
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
+        gameBox = new VBox();
     }
 
     public void initializeBorderPane(){
@@ -51,15 +53,15 @@ public class GameView {
         root.setBottom(bottomGroup);
 
 
-        Pane pane3 = new Pane();
-        /*GridPane pane4 = new GridPane();
+        /*Pane pane3 = new Pane();
+        *//*GridPane pane4 = new GridPane();
         pane4.setGridLinesVisible(true);
         pane4.setBorder(new Border(new BorderStroke(Color.RED,
             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         pane4.setMinSize(400, 200);
         pane4.add(new Circle(10), 1,1);
         pane4.setPadding(new Insets(10, 10, 10, 10));
-        centerGroup.getChildren().add(pane4);*/
+        centerGroup.getChildren().add(pane4);*//*
 
 
 
@@ -71,9 +73,9 @@ public class GameView {
         CardView cc1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
         CardView cc2 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
         CardView cc3 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
-        /*t.getCommunityCardGrid().addCardView(cc1);
+        *//*t.getCommunityCardGrid().addCardView(cc1);
         t.getCommunityCardGrid().addCardView(cc2);
-        t.getCommunityCardGrid().addCardView(cc3);*/
+        t.getCommunityCardGrid().addCardView(cc3);*//*
 
 
         pane3.getChildren().add(t);
@@ -105,7 +107,7 @@ public class GameView {
             pane3.getChildren().add(v);
         }
 
-        /*Circle earth = new Circle(centerX, centerY, 150, Color.web("green", 0.5));
+        *//*Circle earth = new Circle(centerX, centerY, 150, Color.web("green", 0.5));
         pane3.getChildren().add(earth);
         //pane3.add(new Circle(2), (int)centerX, (int)centerY);
 
@@ -145,15 +147,15 @@ public class GameView {
             //x -= 100;
 
 
-            *//*if (x - centerX < 0) {
+            *//**//*if (x - centerX < 0) {
                 x -= 200;
-            }*//*
-            *//*if (y - centerY > 0) {
+            }*//**//*
+            *//**//*if (y - centerY > 0) {
                 y += 60;
             }
             else {
                 y -= 60;
-            }*//*
+            }*//**//*
 
             //GridPane cardSpots = new GridPane();
             //CardGrid cardSpots = new CardGrid();
@@ -168,23 +170,23 @@ public class GameView {
             //Rectangle card = new Rectangle(35, 50);
 
 
-            *//*for (int startRow)
+            *//**//*for (int startRow)
             StackPane info = new StackPane();
             Text t = new Text("yuh");
-            info.getChildren().addAll(card, t);*//*
+            info.getChildren().addAll(card, t);*//**//*
 
-            *//*for (int row = 0; row < 2; row++) {
+            *//**//*for (int row = 0; row < 2; row++) {
                 for (int column = 0; column < 5; column++) {
                     Rectangle card = new Rectangle(35, 50);
                     card.setStroke(Color.TRANSPARENT);
                     card.setFill(Color.TRANSPARENT);
                     cardSpots.add(card, column, row);
                 }
-            }*//*
+            }*//**//*
 
 
             List<String> currentCards = List.of("K", "Q","f","f","f","f");
-            *//*for (int c = 0; c < currentCards.size(); c++) {
+            *//**//*for (int c = 0; c < currentCards.size(); c++) {
                 if (col == 5) {
                     col = 0;
                     row = 0;
@@ -200,14 +202,14 @@ public class GameView {
                 Rectangle card = new Rectangle(35, 50);
                 card.setStroke(Color.BLUE);
                 card.setFill(Color.TRANSPARENT);
-                info.getChildren().addAll(iv3,t,card);*//*
-                *//*CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+                info.getChildren().addAll(iv3,t,card);*//**//*
+                *//**//*CardView yuh = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
                 //cardSpots.add(yuh,col, row);
                 cardSpots.addCardView(yuh);
                 //cardSpots.getChildren().remove()
                 yuh.setFrontEndVisible(false);
                 col++;
-            }*//*
+            }*//**//*
             //cardSpots.getChildren().remove(info);
 
             CardView card1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
@@ -235,7 +237,7 @@ public class GameView {
 
 
 
-            *//*cardSpots.add(card, 0,0);
+            *//**//*cardSpots.add(card, 0,0);
             cardSpots.add(info, 1,0);
 
             cardSpots.add(card2, 1,0);
@@ -247,7 +249,7 @@ public class GameView {
             cardSpots.add(card8, 2,1);
 
             cardSpots.add(card9, 3,1);
-            cardSpots.add(card10, 4,1);*//*
+            cardSpots.add(card10, 4,1);*//**//*
 
 
 
@@ -313,8 +315,8 @@ public class GameView {
             //pane3.getChildren().addAll(playerBox, name, cardSpots, calculatedPosition);
             //pane3.getChildren().addAll(playerInfo);
 
-        }*/
-        centerGroup.getChildren().add(pane3);
+        }*//*
+        centerGroup.getChildren().add(pane3);*/
     }
 
     public Scene setupScene() {
@@ -325,6 +327,7 @@ public class GameView {
 
     public void clear(){
         root.getChildren().clear();
+        gameBox = new VBox();
         initializeBorderPane();
     }
 
@@ -349,14 +352,13 @@ public class GameView {
     }
 
     public void addGameObject(Node gameObject) {
-        root.getChildren().add(gameObject);
+        centerGroup.getChildren().add(gameObject);
     }
 
 
 
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
         clear();
-        VBox gameBox = new VBox();
         gameBox.setId("GameBox");
         Button holdEmButton = makeButton("Holdem", holdemEvent);
         holdEmButton.setId("Holdem");
@@ -393,7 +395,8 @@ public class GameView {
 
 
     public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount){
-        centerGroup.getChildren().clear();
+        //centerGroup.getChildren().clear();
+        centerGroup.getChildren().remove(gameBox);
         bottomGroup.getChildren().clear();
 
         Button cashOutButton = new Button("Cash Out");
