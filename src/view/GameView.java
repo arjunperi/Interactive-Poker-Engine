@@ -164,6 +164,7 @@ public class GameView {
     public Dialog makeBetPopUp(TextField input, String message) {
         bottomGroup.getChildren().clear();
 
+
         Dialog betBox = new TextInputDialog();
         betBox.setHeaderText(message);
 
