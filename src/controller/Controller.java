@@ -256,6 +256,7 @@ public class Controller {
             } else {
                 newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
             }
+
             newPlayerView.getPlayerInfoBox().getBankroll().textProperty().bind(currentPlayer.getBankroll().asString());
 
             playerMappings.put(currentPlayer, newPlayerView);
@@ -289,6 +290,12 @@ public class Controller {
         }
         if (!roundManager.isRoundOver() && !exitedPoker){
             roundManager.showDown(playerList);
+            for (Player player: playerMappings.keySet()) {
+                if (player.isActive()) {
+                    playerMappings.get(player).getCardGrid().flipCards();
+                }
+            }
+
             transitionRound();
         }
     }
