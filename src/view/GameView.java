@@ -205,7 +205,32 @@ public class GameView {
         return null;
     }
 
-    public Dialog makeExchangeScreen(String playerName, TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
+//    public Dialog makeExchangeScreen(String playerName, List<TextField> textFields){
+//        Dialog exchangeBox = new TextInputDialog();
+//        exchangeBox.setTitle("Exchange Cards");
+//        exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
+//
+//        GridPane grid = new GridPane();
+//        grid.setId("ExchangeGrid");
+//
+//        exchangeCardInput1.setPromptText("First card to exchange");
+//        exchangeCardInput1.setId("ExchangeCard1");
+//        GridPane.setConstraints(exchangeCardInput1, 0,0);
+//
+//        exchangeCardInput2.setPromptText("Second card to exchange");
+//        exchangeCardInput2.setId("ExchangeCard2");
+//        GridPane.setConstraints(exchangeCardInput2, 0,1);
+//
+//        exchangeCardInput3.setPromptText("Third card to exchange");
+//        exchangeCardInput3.setId("ExchangeCard3");
+//        GridPane.setConstraints(exchangeCardInput3, 0,2);
+//
+//        grid.getChildren().addAll(exchangeCardInput1,exchangeCardInput2,exchangeCardInput3);
+//        exchangeBox.getDialogPane().setContent(grid);
+//        return exchangeBox;
+//    }
+
+    public Dialog makeExchangeScreen(String playerName, List<TextField> exchangeInputs){
         Dialog exchangeBox = new TextInputDialog();
         exchangeBox.setTitle("Exchange Cards");
         exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
@@ -213,22 +238,20 @@ public class GameView {
         GridPane grid = new GridPane();
         grid.setId("ExchangeGrid");
 
-        exchangeCardInput1.setPromptText("First card to exchange");
-        exchangeCardInput1.setId("ExchangeCard1");
-        GridPane.setConstraints(exchangeCardInput1, 0,0);
+        int inputNumber = 1;
+        for (TextField exchangeCardInput: exchangeInputs){
+            exchangeCardInput.setPromptText("Card to Exchange:");
+            exchangeCardInput.setId("ExchangeCard" + inputNumber);
+            GridPane.setConstraints(exchangeCardInput, 0,inputNumber - 1);
+            grid.getChildren().add(exchangeCardInput);
+            inputNumber ++;
+        }
 
-        exchangeCardInput2.setPromptText("Second card to exchange");
-        exchangeCardInput2.setId("ExchangeCard2");
-        GridPane.setConstraints(exchangeCardInput2, 0,1);
-
-        exchangeCardInput3.setPromptText("Third card to exchange");
-        exchangeCardInput3.setId("ExchangeCard3");
-        GridPane.setConstraints(exchangeCardInput3, 0,2);
-
-        grid.getChildren().addAll(exchangeCardInput1,exchangeCardInput2,exchangeCardInput3);
         exchangeBox.getDialogPane().setContent(grid);
         return exchangeBox;
     }
+
+
 
 
     //maybe combine this with bet screen input

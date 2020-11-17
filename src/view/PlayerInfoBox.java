@@ -79,8 +79,12 @@ public class PlayerInfoBox extends GridPane {
     playerBankroll.setText("$" + bankroll);
   }
 
-  public void setPlayerAction(String action){
+  public void setPlayerAction(String action) {
     playerAction.setText(action);
+  }
+
+  public Text getBankroll() {
+    return playerBankroll;
   }
 
 }

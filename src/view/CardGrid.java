@@ -124,4 +124,10 @@ public class CardGrid extends GridPane {
     initializeCardAddingPosition();
   }
 
+  public void flipCards() {
+    for (CardView card: cardLocations.keySet()) {
+      card.setFrontEndVisible(true);
+    }
+  }
+
 }
