@@ -323,7 +323,7 @@ public class Controller {
         initializeActionMenu();
     }
 
-    public void exchangeRound() {
+    /*public void exchangeRound() {
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
@@ -358,7 +358,7 @@ public class Controller {
         roundNumber++;
         playerList.updateActivePlayers();
         initializeActionMenu();
-    }
+    }*/
 
     public void initializeActionMenu() {
         playerList.initializeActivePlayers();
