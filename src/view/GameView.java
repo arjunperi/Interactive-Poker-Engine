@@ -1,45 +1,19 @@
 package view;
 
-import controller.Controller;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Rotate;
 import pokerSuite.PokerRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class GameView {
@@ -77,6 +51,14 @@ public class GameView {
         double centerY = 300 ;
 
         Table t = new Table(300,300, 150, 4);
+        CardView cc1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+        CardView cc2 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+        CardView cc3 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
+        t.getCommunityCardGrid().addCardView(cc1);
+        t.getCommunityCardGrid().addCardView(cc2);
+        t.getCommunityCardGrid().addCardView(cc3);
+
+
         pane3.getChildren().add(t);
         for (PlayerView v: t.getPlayerViews()) {
             CardGrid cardSpots = v.getCardGrid();

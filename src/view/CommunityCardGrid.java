@@ -1,5 +1,8 @@
 package view;
 
-public class CommunityCardGrid {
+public class CommunityCardGrid extends CardGrid {
+  public CommunityCardGrid() {
+    super();
+  }
 
 }

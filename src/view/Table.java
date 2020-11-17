@@ -5,28 +5,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.Group;
 import javafx.scene.shape.Circle;
 
-public class Table extends Circle {
+public class Table extends Group {
   private int centerX;
   private int centerY;
   private int numPlayers;
   private int playerDistanceFromCenter;
   private Map<Point2D, PlayerView> playerPositions;
   private List<PlayerView> playerViews;
+  private CommunityCardGrid communityCardGrid;
+  private Circle pokerTable;
 
   public Table (int centerX, int centerY, int radius, int numPlayers) {
-    super (centerX, centerY, radius);
+    super();
+    pokerTable = new Circle(centerX, centerY, radius);
+    this.getChildren().add(pokerTable);
     this.centerX = centerX;
     this.centerY = centerY;
     this.numPlayers = numPlayers;
 
+    communityCardGrid = new CommunityCardGrid();
+    this.getChildren().add(communityCardGrid);
+    communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
+    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));
+    communityCardGrid.setGridLinesVisible(true);
+
     this.playerPositions = new HashMap<>();
     this.playerViews = new ArrayList<>();
     this.playerDistanceFromCenter = radius * 2;
-    this.setStyle("-fx-fill: darkgreen");
+    pokerTable.setStyle("-fx-fill: darkgreen");
     calculatePlayerPositions();
   }
 
@@ -51,6 +60,10 @@ public class Table extends Circle {
 
   public List<PlayerView> getPlayerViews() {
     return playerViews;
+  }
+
+  public CommunityCardGrid getCommunityCardGrid() {
+    return communityCardGrid;
   }
 
 
