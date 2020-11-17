@@ -30,7 +30,6 @@ public class Table extends Group {
     this.getChildren().add(communityCardGrid);
     communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
     communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));
-    communityCardGrid.setGridLinesVisible(true);
 
     this.playerPositions = new HashMap<>();
     this.playerViews = new ArrayList<>();

@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StandardPlayerList extends PlayerList{
 
@@ -9,7 +8,16 @@ public class StandardPlayerList extends PlayerList{
         super(players);
     }
 
-    public void updateActivePlayers() {
+    public void initializeActivePlayers() {
         removeFoldedPlayers();
+        raiseShift();
     }
+
+    public void updateActivePlayers() {
+        //why did we have this line -> so that betting order is reset after all the raise shifts
+        resetActivePlayers();
+        initializeActivePlayers();
+    }
+
+
 }

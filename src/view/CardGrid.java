@@ -18,17 +18,21 @@ public class CardGrid extends GridPane {
   private int currentRow;
   private int currentColumn;
 
+  private int numberOfCardsHighlighted;
+
   private Map<CardView, Point2D> cardLocations;
 
   public CardGrid() {
     super();
 
     cardLocations = new HashMap<>();
+    numberOfCardsHighlighted = 0;
 
     initializeCardAddingPosition();
     initializeCardHolders();
     initializeProperties();
   }
+
 
   //TODO: Add to CSS File
   private void initializeProperties() {
@@ -59,6 +63,16 @@ public class CardGrid extends GridPane {
     currentColumn = 0;
   }
 
+  public void countNumberOfCardsHighlighted() {
+    numberOfCardsHighlighted = 0;
+    for (CardView card: cardLocations.keySet()) {
+      if (card.getIsSelected()) {
+        numberOfCardsHighlighted++;
+      }
+    }
+    System.out.println(numberOfCardsHighlighted);
+  }
+
   public void addCardView(CardView card) {
     addCardViewToLocation(card, new Point2D(currentColumn, currentRow));
   }
@@ -79,6 +93,9 @@ public class CardGrid extends GridPane {
     if (location.getX() == currentColumn) {
       currentColumn++;
     }
+
+    card.setOnMouseClicked(event -> {card.toggleCardSelected(); countNumberOfCardsHighlighted();});
+    //card.setOnMouseClicked(event2 -> countNumberOfCardsHighlighted());
   }
 
   private void checkGridConstraints() {

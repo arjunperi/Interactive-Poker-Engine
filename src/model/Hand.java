@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Hand {
@@ -25,7 +26,7 @@ public class Hand {
 
     public void remove(Card card) {
         hand.remove(card);
-        handSize = handSize - 1;
+        handSize -= 1;
     }
 
     public List<Card> getCards() {

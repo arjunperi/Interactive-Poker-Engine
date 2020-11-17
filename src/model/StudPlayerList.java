@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,11 +11,23 @@ public class StudPlayerList extends PlayerList {
         handEvaluator = new HandEvaluator();
     }
 
-    public void updateActivePlayers() {
+
+    public void initializeActivePlayers() {
+        //why did we have this line -> so that betting order is reset after all the raise shifts
         removeFoldedPlayers();
-        Player bestPlayer =  handEvaluator.getBestPlayers(this, true).get(0);
-        int shiftAmount = activePlayers.size() - activePlayers.indexOf(bestPlayer);
-        Collections.rotate(activePlayers, shiftAmount);
+        studOrder();
     }
+
+    public void updateActivePlayers() {
+        resetActivePlayers();
+        initializeActivePlayers();
+    }
+
+    private void studOrder(){
+            Player bestPlayer =  handEvaluator.getBestPlayers(this, true).get(0);
+            int shiftAmount = activePlayers.size() - activePlayers.indexOf(bestPlayer);
+            Collections.rotate(activePlayers, shiftAmount);
+            raiseShift();
+        }
 
 }

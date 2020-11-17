@@ -36,7 +36,7 @@ public class CardView extends StackPane {
   }
 
   //TODO: Use CSS instead
-  private void toggleCardSelected() {
+  public void toggleCardSelected() {
     isSelected = !isSelected;
     this.setStyle("");
     if (isSelected) {
@@ -57,7 +57,7 @@ public class CardView extends StackPane {
 
     isSelected = false;
 
-    this.setOnMouseClicked(event -> toggleCardSelected());
+    //this.setOnMouseClicked(event -> toggleCardSelected());
     this.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
     this.getChildren().addAll(cardBackground, displayedImage, rank);
   }
@@ -88,5 +88,9 @@ public class CardView extends StackPane {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public boolean getIsSelected() {
+    return isSelected;
   }
 }

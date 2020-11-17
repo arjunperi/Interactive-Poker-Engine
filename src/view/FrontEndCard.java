@@ -9,6 +9,8 @@ public class FrontEndCard extends Text {
 
     //TODO: take the suit and symbol, and get the associated image
     public FrontEndCard(String symbol, String suit, boolean isVisible) {
+        //if backend vis -> front end vis
+
         super(10, 10, "");
         this.setId(symbol + suit);
         this.isVisible = isVisible;

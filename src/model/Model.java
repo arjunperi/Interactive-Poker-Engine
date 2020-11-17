@@ -21,7 +21,6 @@ public class Model {
     public Model(int totalRounds, PlayerList players, CommunityCards communityCards, Dealer dealer, Properties modelProperties){
         this.totalRounds = totalRounds;
         this.communityCards = communityCards;
-//        playerList = players;
         activePlayerList = players.getActivePlayers();
         this.dealer = dealer;
         this.modelProperties = modelProperties;
@@ -30,9 +29,6 @@ public class Model {
 
     public void dealStats(int currentRound){
         dealer.checkDeck();
-
-//        playerList.updateActivePlayers();
-//        activePlayerList = playerList.getActivePlayers();
 
         String[] roundRules = modelProperties.getProperty(String.valueOf(currentRound)).split(",");
         numberOfCards = Integer.parseInt(roundRules[0]);
@@ -69,10 +65,6 @@ public class Model {
                 dealer.dealCards(player, visibilityList);
             }
         }
-    }
-
-    public int getNumberOfCards(){
-        return numberOfCards;
     }
 
     public String getRecipient(){
