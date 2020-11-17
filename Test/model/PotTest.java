@@ -28,7 +28,7 @@ public class PotTest {
         Player player = new Player("Arjun",100, communityCards, pot);
         pot.addToPot(10);
         pot.dispersePot(player, pot.getPotTotal());
-        assertEquals(110,player.getBankroll());
+        assertEquals(110,player.getBankroll().getValue());
     }
 
     @Test

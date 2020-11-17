@@ -41,7 +41,7 @@ public class PlayerTest extends DukeApplicationTest {
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
         player.updateBankroll(-100);
-        assertEquals(0, player.getBankroll());
+        assertEquals(0, player.getBankroll().getValue());
     }
 
     @Test
