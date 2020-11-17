@@ -1,12 +1,12 @@
 {
   "gameSettings": {
-    "numberOfPlayers": 3
+    "cardBack" : "/card-back.png"
   },
   "suits": {
-    "HEARTS": "hearts.png",
-    "SPADES": "spades.png",
-    "CLUBS": "clubs.png",
-    "DIAMONDS": "diamonds.png"
+    "HEARTS": "/hearts.png",
+    "SPADES": "/spades.png",
+    "CLUBS": "/clubs.png",
+    "DIAMONDS": "/diamonds.png"
   },
   "ranks": {
     "2": "DEUCE",

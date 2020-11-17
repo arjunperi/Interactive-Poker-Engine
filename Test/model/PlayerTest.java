@@ -20,7 +20,7 @@ public class PlayerTest extends DukeApplicationTest {
     @BeforeEach
     void setUp(){
         reader = new JSONReader();
-        reader.parse("/texas_holdem.json");
+        reader.parse("/cardSettings.json");
         List<String> suitNames = new ArrayList<>();
         List<Integer> rankValues = new ArrayList<>();
         rankValues.addAll(reader.getRanks().keySet());

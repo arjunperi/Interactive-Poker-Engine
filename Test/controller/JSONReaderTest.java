@@ -16,7 +16,7 @@ class JSONReaderTest {
   @BeforeAll
   static void setUp() {
     reader = new JSONReader();
-    reader.parse("/texas_holdem.json");
+    reader.parse("/cardSettings.json");
   }
   @Test
   void getSuits() {

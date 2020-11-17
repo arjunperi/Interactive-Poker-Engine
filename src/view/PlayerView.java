@@ -9,7 +9,7 @@ public class PlayerView extends BorderPane {
   private Point2D position;
 
 
-  public PlayerView(Point2D position, String name, int bankroll, String avatar) {
+  public PlayerView(String name, int bankroll, String avatar) {
     super();
 
     cardGrid = new CardGrid();
@@ -19,9 +19,7 @@ public class PlayerView extends BorderPane {
     this.setCenter(cardGrid);
     this.setBottom(playerInfoBox);
 
-    this.setLayoutX(position.getX() - (playerInfoBox.getMinWidth() / 2));
-    this.setLayoutY(position.getY() - ((playerInfoBox.getMinHeight() + cardGrid.getMinHeight()) / 2));
-  }
+    }
 
   public CardGrid getCardGrid() {
     return cardGrid;
@@ -29,5 +27,10 @@ public class PlayerView extends BorderPane {
 
   public PlayerInfoBox getPlayerInfoBox() {
     return playerInfoBox;
+  }
+
+  public void setPosition(Point2D position) {
+    this.setLayoutX(position.getX() - (playerInfoBox.getMinWidth() / 2));
+    this.setLayoutY(position.getY() - ((playerInfoBox.getMinHeight() + cardGrid.getMinHeight()) / 2));
   }
 }

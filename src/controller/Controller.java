@@ -43,8 +43,8 @@ public class Controller {
     private GameView view;
     private int roundNumber;
     private int totalRounds;
-    private Map<Player, FrontEndPlayer> playerMappings;
-    private Map<String, FrontEndCard> frontEndCardMappings;
+    private Map<Player, PlayerView> playerMappings;
+    private Map<String, CardView> frontEndCardMappings;
     private FileReader reader;
     private Writer customWriter;
     private FileWriter writer;
@@ -58,6 +58,13 @@ public class Controller {
     private String betScreenMessage;
     private boolean interactiveActionComplete;
     private boolean roundOver;
+    private Table pokerTable;
+    private List<PlayerView> playerViews;
+    private String cardBack;
+    private JSONReader jsonReader;
+
+
+    private static final String CARD_SETTINGS = "/cardSettings.json";
 
     public Controller() {
         betScreenMessage = "Enter a bet:";
@@ -69,12 +76,22 @@ public class Controller {
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
         frontEndPlayers = new ArrayList<>();
+        playerViews = new ArrayList<>();
         reader = new FileReader();
+        initializeCardSettings();
+
         customWriter = new Writer();
         view = new GameView();
         roundNumber = 1;
         initializeMainMenu();
         initializeGameObjects();
+    }
+
+    private void initializeCardSettings() {
+        jsonReader = new JSONReader();
+        jsonReader.parse(CARD_SETTINGS);
+
+        cardBack = jsonReader.getCardBack();
     }
 
     private void initializeGameObjects(){
@@ -188,11 +205,16 @@ public class Controller {
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
+        initializeGameBoard();
         nextRound();
         if (exitedPoker){
             exitedPoker = false;
             exitPoker(interactivePlayer);
         }
+    }
+
+    private void initializeGameBoard() {
+        pokerTable = new Table(300, 300, 150, playerViews);
     }
 
     private void initializePlayerList(String fileName){
@@ -217,10 +239,15 @@ public class Controller {
     private void initializeFrontEndPlayers(){
         int playerOffset = 30;
         for (Player currentPlayer: playerList.getActivePlayers()){
-            FrontEndPlayer newPlayer = new FrontEndPlayer(10, playerOffset, currentPlayer.toString(), currentPlayer.getBankroll());
-            playerMappings.put(currentPlayer, newPlayer);
-            frontEndPlayers.add(newPlayer);
-            playerOffset+=50;
+            PlayerView newPlayerView;
+            if (!currentPlayer.isInteractive()) {
+                newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll(), "/default-profile-pic.png");
+            } else {
+                newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll(), "/default-profile-pic.png");
+            }
+            playerMappings.put(currentPlayer, newPlayerView);
+            playerViews.add(newPlayerView);
+            //frontEndPlayers.add(newPlayerView);
         }
     }
 
@@ -369,7 +396,7 @@ public class Controller {
             FrontEndCard displayCard = getFrontEndCard(newCard);
             int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();
 
-            if (numberOfFrontEndCards!= 0){
+            if (numberOfFrontEndCards != 0){
                 FrontEndCard lastCard = displayRecipient.getLastCard();
                 int lastCardLocation = displayRecipient.getFrontEndCardLocations().get(lastCard);
                 view.deal(displayCard, displayRecipient, lastCardLocation + 80);
@@ -399,8 +426,9 @@ public class Controller {
     private FrontEndCard getFrontEndCard(Card card){
         boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
 
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
-        frontEndCardMappings.put(card.toString(), frontEndCard);
+        //FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
+        CardView cardView = new CardView(jsonReader.getRanks().get(card.getRank()), jsonReader.getSuits().get(card.getCardSuit()), cardBack, isFrontEndVisible);
+        frontEndCardMappings.put(card.toString(), cardView);
         return frontEndCard;
     }
 

@@ -7,6 +7,7 @@ import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
+import model.PlayerList;
 
 public class Table extends Group {
   private int centerX;
@@ -17,6 +18,7 @@ public class Table extends Group {
   private List<PlayerView> playerViews;
   private CommunityCardGrid communityCardGrid;
   private Circle pokerTable;
+  List<PlayerView> players;
 
   public Table (int centerX, int centerY, int radius, int numPlayers) {
     super();
@@ -38,18 +40,38 @@ public class Table extends Group {
     calculatePlayerPositions();
   }
 
+  public Table (int centerX, int centerY, int radius, List<PlayerView> players) {
+    super();
+    pokerTable = new Circle(centerX, centerY, radius);
+    this.getChildren().add(pokerTable);
+    this.centerX = centerX;
+    this.centerY = centerY;
+    this.players = players;
+
+    communityCardGrid = new CommunityCardGrid();
+    this.getChildren().add(communityCardGrid);
+    communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
+    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));
+
+    this.playerPositions = new HashMap<>();
+    this.playerViews = new ArrayList<>();
+    this.playerDistanceFromCenter = radius * 2;
+    pokerTable.setStyle("-fx-fill: darkgreen");
+    calculatePlayerPositions();
+  }
+
   private void calculatePlayerPositions() {
-    for (int player = 0; player < numPlayers; player++) {
+    for (int player = 0; player < players.size(); player++) {
       double angle = 2 * player * Math.PI / numPlayers;
       double horizontalOffset = playerDistanceFromCenter * Math.cos(angle);
       double verticalOffset = playerDistanceFromCenter * Math.sin(angle);
       double playerX = centerX + horizontalOffset;
       double playerY = centerY + verticalOffset;
 
-      Point2D location = new Point2D(playerX, playerY);
-      PlayerView playerView = new PlayerView(location, "yuh", 100, "/default-profile-pic.png");
-      playerPositions.put(location, playerView);
-      playerViews.add(playerView);
+      Point2D position = new Point2D(playerX, playerY);
+      players.get(player).setPosition(position);
+
+      playerPositions.put(position, players.get(player));
     }
   }
 

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -16,13 +15,12 @@ import org.json.JSONTokener;
 public class JSONReader {
   private Map<String, String> suits;
   private Map<Integer, String> ranks;
-  private int numberOfPlayers;
   private JSONObject jo;
+  private String cardBack;
 
   public JSONReader(){
     suits = new HashMap<>();
     ranks = new HashMap<>();
-    numberOfPlayers = 0;
   }
 
   public void parse(String directory) {
@@ -41,11 +39,11 @@ public class JSONReader {
 
   private void parseGameSettings() {
     JSONObject gameSettings = jo.getJSONObject("gameSettings");
-    parseNumberOfPlayers(gameSettings);
   }
 
-  private void parseNumberOfPlayers(JSONObject gameSettings) {
-    numberOfPlayers = (int) gameSettings.get("numberOfPlayers");
+
+  private void parseCardBack(JSONObject gameSettings) {
+    cardBack = (String) gameSettings.get("cardBack");
   }
 
   //TODO Refactor all parse methods into one that uses Generics
@@ -93,8 +91,9 @@ public class JSONReader {
     return rankValues;
   }
 
-  public int getNumberOfPlayers(){
-    return numberOfPlayers;
+
+  public String getCardBack() {
+    return cardBack;
   }
 
 }
