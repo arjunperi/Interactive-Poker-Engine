@@ -108,7 +108,7 @@ public class Controller {
     }
 
     public void startRound(){
-        System.out.println("new round");
+        System.out.println("\nnew hand");
         roundNumber = 1;
         oneSolventPlayer = false;
 //        roundOver = false;
@@ -184,7 +184,7 @@ public class Controller {
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
-        nextRound(model.getAction(roundNumber));
+        nextRound();
         if (exitedPoker){
             exitedPoker = false;
             exitPoker(interactivePlayer);
@@ -225,8 +225,10 @@ public class Controller {
     }
 
     //Everything gets caught here
-    private void nextRound(String action){
+    private void nextRound(){
         while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
+            String action = model.getAction(roundNumber);
+            System.out.println("\nnext round");
             model.dealFlow(roundNumber);
             try{
                 Class<?> c = Class.forName("controller.Controller");

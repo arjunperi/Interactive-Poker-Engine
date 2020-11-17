@@ -39,7 +39,6 @@ public class AutoPlayer extends Player {
         }
     }
 
-
     private int computerBetAmount(int defaultBetAmount){
         int betAmount = defaultBetAmount;
         if(betAmount>this.getBankroll()){
