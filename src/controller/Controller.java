@@ -252,10 +252,12 @@ public class Controller {
         for (Player currentPlayer: playerList.getActivePlayers()){
             PlayerView newPlayerView;
             if (!currentPlayer.isInteractive()) {
-                newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll(), "/default-profile-pic.png");
+                newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
             } else {
-                newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll(), "/default-profile-pic.png");
+                newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
             }
+            newPlayerView.getPlayerInfoBox().getBankroll().textProperty().bind(currentPlayer.getBankroll().asString());
+
             playerMappings.put(currentPlayer, newPlayerView);
             playerViews.add(newPlayerView);
             //view.addGameObject(newPlayerView);
@@ -481,7 +483,7 @@ public class Controller {
                     player.bet(betAmount);
                     interactiveActionComplete = true;
                     PlayerView displayPlayer = playerMappings.get(player);
-                    displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
+                    //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
                     //displayPlayer.betDisplay(betAmount * -1);
                 } catch (ModelException e) {
                     betScreenMessage = e.getMessage();
@@ -506,7 +508,7 @@ public class Controller {
         System.out.println("call");
         player.call(lastBet);
         PlayerView displayPlayer = playerMappings.get(player);
-        displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
+        //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
         //FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }
@@ -519,7 +521,7 @@ public class Controller {
     }
 
     private void indicateCashOut(Player player){
-        Alert cashOutConfirm = view.makeCashOutAlert(player.toString(), player.getBankroll());
+        Alert cashOutConfirm = view.makeCashOutAlert(player.toString(), player.getBankroll().getValue());
         Optional<ButtonType> cashOutResult = cashOutConfirm.showAndWait();
         if (cashOutResult.get() == ButtonType.OK){
             exitedPoker = true;

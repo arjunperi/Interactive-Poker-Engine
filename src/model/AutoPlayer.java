@@ -70,8 +70,8 @@ public class AutoPlayer extends Player {
 
     private int computerBetAmount(int defaultBetAmount){
         int betAmount = defaultBetAmount;
-        if(betAmount>this.getBankroll()){
-            betAmount = this.getBankroll();
+        if (betAmount > this.getBankroll().getValue()){
+            betAmount = this.getBankroll().getValue();
         }
         return betAmount;
     }
