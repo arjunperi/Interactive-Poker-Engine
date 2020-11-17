@@ -1,7 +1,5 @@
 package view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -11,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pokerSuite.PokerRunner;
@@ -20,7 +19,6 @@ import javax.swing.tree.ExpandVetoException;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class GameView {
@@ -30,6 +28,7 @@ public class GameView {
     private Group centerGroup;
     private Group bottomGroup;
     private Button homeButton;
+    private VBox gameBox;
 
     public GameView(){
         root = new BorderPane();
@@ -41,6 +40,7 @@ public class GameView {
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
+        gameBox = new VBox();
     }
 
     public void initializeBorderPane(){
@@ -61,6 +61,7 @@ public class GameView {
 
     public void clear(){
         root.getChildren().clear();
+        gameBox = new VBox();
         initializeBorderPane();
     }
 
@@ -84,9 +85,12 @@ public class GameView {
         centerGroup.getChildren().add(startBox);
     }
 
+    public void addGameObject(Node gameObject) {
+        centerGroup.getChildren().add(gameObject);
+    }
+
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
         clear();
-        VBox gameBox = new VBox();
         gameBox.setId("GameBox");
         Button holdEmButton = makeButton("Holdem", holdemEvent);
         holdEmButton.setId("Holdem");
@@ -121,8 +125,11 @@ public class GameView {
         return result;
     }
 
+
     public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount){
-        centerGroup.getChildren().clear();
+        //centerGroup.getChildren().clear();
+        centerGroup.getChildren().remove(gameBox);
+        topGroup.getChildren().remove(homeButton);
         bottomGroup.getChildren().clear();
 
         Button cashOutButton = new Button("Cash Out");

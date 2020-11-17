@@ -3,11 +3,15 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.*;
@@ -39,8 +43,8 @@ public class Controller {
     private GameView view;
     private int roundNumber;
     private int totalRounds;
-    private Map<Player, FrontEndPlayer> playerMappings;
-    private Map<String, FrontEndCard> frontEndCardMappings;
+    private Map<Player, PlayerView> playerMappings;
+    private Map<String, CardView> frontEndCardMappings;
     private FileReader reader;
     private Writer customWriter;
     private FileWriter writer;
@@ -53,24 +57,40 @@ public class Controller {
     private boolean oneSolventPlayer;
     private String betScreenMessage;
     private boolean interactiveActionComplete;
-    private boolean roundOver;
+    private Table pokerTable;
+    private List<PlayerView> playerViews;
+    private String cardBack;
+    private JSONReader jsonReader;
+
+
+    private static final String CARD_SETTINGS = "/cardSettings.json";
+    private CommunityCardGrid communityCardGrid;
 
     public Controller() {
         betScreenMessage = "Enter a bet:";
         interactiveActionComplete = true;
-        roundOver = false;
         gameStart = true;
         exitedPoker = false;
         oneSolventPlayer = false;
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
         frontEndPlayers = new ArrayList<>();
+        playerViews = new ArrayList<>();
         reader = new FileReader();
+        initializeCardSettings();
+
         customWriter = new Writer();
         view = new GameView();
         roundNumber = 1;
         initializeMainMenu();
         initializeGameObjects();
+    }
+
+    private void initializeCardSettings() {
+        jsonReader = new JSONReader();
+        jsonReader.parse(CARD_SETTINGS);
+
+        cardBack = jsonReader.getCardBack();
     }
 
     private void initializeGameObjects(){
@@ -86,7 +106,6 @@ public class Controller {
     }
 
     public void transitionRound(){
-//        roundOver = true;
         EventHandler<ActionEvent> nextRoundEvent = e -> {
             promptBuyIn();
             startRound();
@@ -111,14 +130,13 @@ public class Controller {
         System.out.println("\nnew hand");
         roundNumber = 1;
         oneSolventPlayer = false;
-//        roundOver = false;
         playerList.resetRaiseStats();
         view.clear();
         initializeGameObjects();
         for (Player player: playerList.getAllPlayers()){
             player.clearHand();
             player.enterNewGame(communityCards, pot);
-            playerMappings.get(player).clearFrontEndCardLocations();
+            //playerMappings.get(player).clearFrontEndCardLocations();
         }
         playerList.updateStartingRoundOrder();
         playerList.resetActivePlayers();
@@ -147,10 +165,14 @@ public class Controller {
 
     private void resetGame(){
         roundNumber=1;
+        oneSolventPlayer = false;
         gameStart = true;
+        exitedPoker = false;
         view.clear();
         initializeGameObjects();
         initializeMainMenu();
+        playerViews.clear();
+        playerMappings.clear();
     }
 
     public void initializeGameSelect(){
@@ -184,10 +206,24 @@ public class Controller {
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
+        initializeGameBoard();
         nextRound();
         if (exitedPoker){
             exitedPoker = false;
             exitPoker(interactivePlayer);
+        }
+    }
+
+    private void initializeGameBoard() {
+        pokerTable = new Table(300, 300, 150, playerViews);
+        communityCardGrid = new CommunityCardGrid();
+        communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
+        communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
+        view.addGameObject(pokerTable);
+        view.addGameObject(communityCardGrid);
+        for (PlayerView playerView: playerViews) {
+            view.addGameObject(playerView);
+            playerView.getCardGrid().clearCardGrid();
         }
     }
 
@@ -211,12 +247,19 @@ public class Controller {
     }
 
     private void initializeFrontEndPlayers(){
+        //Todo: Create abstraction for AutoPlayerView and PlayerView
         int playerOffset = 30;
         for (Player currentPlayer: playerList.getActivePlayers()){
-            FrontEndPlayer newPlayer = new FrontEndPlayer(10, playerOffset, currentPlayer.toString(), currentPlayer.getBankroll());
-            playerMappings.put(currentPlayer, newPlayer);
-            frontEndPlayers.add(newPlayer);
-            playerOffset+=50;
+            PlayerView newPlayerView;
+            if (!currentPlayer.isInteractive()) {
+                newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll(), "/default-profile-pic.png");
+            } else {
+                newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll(), "/default-profile-pic.png");
+            }
+            playerMappings.put(currentPlayer, newPlayerView);
+            playerViews.add(newPlayerView);
+            //view.addGameObject(newPlayerView);
+            //frontEndPlayers.add(newPlayerView);
         }
     }
 
@@ -242,9 +285,6 @@ public class Controller {
 //            showError(e.getCause().getMessage());
             }
         }
-//        if (!roundManager.isRoundOver()){
-////            roundManager.showDown(playerList);
-////        }
         if (!roundManager.isRoundOver() && !exitedPoker){
             roundManager.showDown(playerList);
             transitionRound();
@@ -255,11 +295,11 @@ public class Controller {
     private void dealingRound() throws InterruptedException {
         String recipient = model.getRecipient();
         if (recipient.equals("Community")){
-            dealFrontEndCardsInRound(communityCards, displayCommunity);
+            dealFrontEndCardsInRound(communityCards, communityCardGrid);
         }
         else {
             for (Player player : playerList.getActivePlayers()){
-                dealFrontEndCardsInRound(player,playerMappings.get(player));
+                dealFrontEndCardsInRound(player, playerMappings.get(player).getCardGrid());
             }
         }
         roundNumber++;
@@ -267,7 +307,7 @@ public class Controller {
         initializeActionMenu();
     }
 
-    public void exchangeRound() {
+    /*public void exchangeRound() {
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
@@ -302,7 +342,7 @@ public class Controller {
         roundNumber++;
         playerList.updateActivePlayers();
         initializeActionMenu();
-    }
+    }*/
 
     public void initializeActionMenu() {
         playerList.initializeActivePlayers();
@@ -360,23 +400,25 @@ public class Controller {
         playerList.updateActivePlayers();
     }
 
-    public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
-        for (Card newCard: recipient.getNewCards()){
-            FrontEndCard displayCard = getFrontEndCard(newCard);
-            int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();
+    public void dealFrontEndCardsInRound(CardRecipient recipient, CardGrid cardGrid){
+        for (Card newCard: recipient.getNewCards()) {
+            CardView displayCard = getFrontEndCard(newCard);
+            cardGrid.addCardView(displayCard);
+            //int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();
 
-            if (numberOfFrontEndCards!= 0){
+            /*if (numberOfFrontEndCards != 0){
                 FrontEndCard lastCard = displayRecipient.getLastCard();
                 int lastCardLocation = displayRecipient.getFrontEndCardLocations().get(lastCard);
                 view.deal(displayCard, displayRecipient, lastCardLocation + 80);
             }
             else{
                 view.deal(displayCard, displayRecipient, 20);
-            }
+            }*/
+
         }
     }
 
-    public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
+    /*public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
 //        int dealLocation = 0;
         int cardIndex = 0;
         for (Card discardedCard: player.getDiscardedCards()){
@@ -389,15 +431,16 @@ public class Controller {
             view.deal(displayCard, displayRecipient, dealLocation);
             cardIndex ++;
         }
-    }
+    }*/
 
     //should this be in View or Controller?
-    private FrontEndCard getFrontEndCard(Card card){
+    private CardView getFrontEndCard(Card card){
         boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
 
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
-        frontEndCardMappings.put(card.toString(), frontEndCard);
-        return frontEndCard;
+        //FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
+        CardView cardView = new CardView(jsonReader.getRanks().get(card.getRank()), jsonReader.getSuits().get(card.getCardSuit()), cardBack, isFrontEndVisible);
+        frontEndCardMappings.put(card.toString(), cardView);
+        return cardView;
     }
 
     public void promptBuyIn(){
@@ -437,8 +480,9 @@ public class Controller {
                 try {
                     player.bet(betAmount);
                     interactiveActionComplete = true;
-                    FrontEndPlayer displayPlayer = playerMappings.get(player);
-                    displayPlayer.betDisplay(betAmount * -1);
+                    PlayerView displayPlayer = playerMappings.get(player);
+                    displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
+                    //displayPlayer.betDisplay(betAmount * -1);
                 } catch (ModelException e) {
                     betScreenMessage = e.getMessage();
                     indicateBet(player);
@@ -452,8 +496,8 @@ public class Controller {
     private void indicateFold(Player player){
         interactiveActionComplete = true;
         player.fold();
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.foldDisplay();
+        //FrontEndPlayer displayPlayer = playerMappings.get(player);
+        //displayPlayer.foldDisplay();
     }
 
 
@@ -461,15 +505,17 @@ public class Controller {
         interactiveActionComplete = true;
         System.out.println("call");
         player.call(lastBet);
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
+        PlayerView displayPlayer = playerMappings.get(player);
+        displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
+        //FrontEndPlayer displayPlayer = playerMappings.get(player);
 //        displayPlayer.callDisplay();
     }
 
     private void indicateCheck(Player player){
         interactiveActionComplete = true;
         System.out.println("Check");
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.checkDisplay();
+        //FrontEndPlayer displayPlayer = playerMappings.get(player);
+        //displayPlayer.checkDisplay();
     }
 
     private void indicateCashOut(Player player){
