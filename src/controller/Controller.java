@@ -89,7 +89,6 @@ public class Controller {
     private void initializeCardSettings() {
         jsonReader = new JSONReader();
         jsonReader.parse(CARD_SETTINGS);
-
         cardBack = jsonReader.getCardBack();
     }
 
@@ -496,6 +495,9 @@ public class Controller {
     private void indicateFold(Player player){
         interactiveActionComplete = true;
         player.fold();
+        PlayerView displayPlayer = playerMappings.get(player);
+        displayPlayer.getPlayerInfoBox().setPlayerAction(player.toString() + " folded");
+
         //FrontEndPlayer displayPlayer = playerMappings.get(player);
         //displayPlayer.foldDisplay();
     }

@@ -14,6 +14,7 @@ public class PlayerInfoBox extends GridPane {
 
   private Text playerName;
   private Text playerBankroll;
+  private Text playerAction;
   private ImageView playerAvatar;
 
   private static final int INFO_BOX_MIN_WIDTH = 200;
@@ -25,6 +26,7 @@ public class PlayerInfoBox extends GridPane {
   private static final int NAME_POSITION = 0;
   private static final int BANKROLL_POSITION = 1;
   private static final int AVATAR_POSITION = 2;
+  private static final int ACTION_POSITION = 3;
 
 
   public PlayerInfoBox(String name, int bankroll, String avatar) {
@@ -38,6 +40,7 @@ public class PlayerInfoBox extends GridPane {
   }
 
   private void initializePlayerInfo() {
+    playerAction = new Text();
     playerName = new Text(name);
     playerBankroll = new Text("$" + bankroll);
     try {
@@ -63,6 +66,7 @@ public class PlayerInfoBox extends GridPane {
     this.add(playerName, NAME_POSITION,0);
     this.add(playerBankroll, BANKROLL_POSITION, 0);
     this.add(playerAvatar, AVATAR_POSITION,0);
+    this.add(playerAction, ACTION_POSITION,0);
 
     this.setHgap(5);
     this.setStyle("-fx-border-color: red");
@@ -73,6 +77,10 @@ public class PlayerInfoBox extends GridPane {
 
   public void setBankroll(int bankroll) {
     playerBankroll.setText("$" + bankroll);
+  }
+
+  public void setPlayerAction(String action){
+    playerAction.setText(action);
   }
 
 }
