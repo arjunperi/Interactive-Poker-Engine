@@ -52,13 +52,6 @@ class JSONReaderTest {
   }
 
   @Test
-  void getNumberOfPlayers() {
-    int expectedNumberOfPlayers = 3;
-    int actualNumberOfPlayers = reader.getNumberOfPlayers();
-    assertEquals(expectedNumberOfPlayers, actualNumberOfPlayers);
-  }
-
-  @Test
   void getSuitNames() {
     List<String> expectedSuitNames = List.of(
         "CLUBS",

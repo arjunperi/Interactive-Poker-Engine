@@ -71,9 +71,9 @@ public class GameView {
         CardView cc1 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
         CardView cc2 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
         CardView cc3 = new CardView("Yessir", "/heart-suit.png", "/card-back.png", true);
-        t.getCommunityCardGrid().addCardView(cc1);
+        /*t.getCommunityCardGrid().addCardView(cc1);
         t.getCommunityCardGrid().addCardView(cc2);
-        t.getCommunityCardGrid().addCardView(cc3);
+        t.getCommunityCardGrid().addCardView(cc3);*/
 
 
         pane3.getChildren().add(t);
@@ -347,6 +347,12 @@ public class GameView {
         startBox.getChildren().addAll(gameSelectButton);
         centerGroup.getChildren().add(startBox);
     }
+
+    public void addGameObject(Node gameObject) {
+        root.getChildren().add(gameObject);
+    }
+
+
 
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
         clear();

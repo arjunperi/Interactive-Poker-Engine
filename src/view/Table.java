@@ -16,7 +16,7 @@ public class Table extends Group {
   private int playerDistanceFromCenter;
   private Map<Point2D, PlayerView> playerPositions;
   private List<PlayerView> playerViews;
-  private CommunityCardGrid communityCardGrid;
+  //private CommunityCardGrid communityCardGrid;
   private Circle pokerTable;
   List<PlayerView> players;
 
@@ -28,10 +28,10 @@ public class Table extends Group {
     this.centerY = centerY;
     this.numPlayers = numPlayers;
 
-    communityCardGrid = new CommunityCardGrid();
+    /*communityCardGrid = new CommunityCardGrid();
     this.getChildren().add(communityCardGrid);
     communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
-    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));
+    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));*/
 
     this.playerPositions = new HashMap<>();
     this.playerViews = new ArrayList<>();
@@ -48,10 +48,10 @@ public class Table extends Group {
     this.centerY = centerY;
     this.players = players;
 
-    communityCardGrid = new CommunityCardGrid();
+    /*communityCardGrid = new CommunityCardGrid();
     this.getChildren().add(communityCardGrid);
     communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
-    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));
+    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));*/
 
     this.playerPositions = new HashMap<>();
     this.playerViews = new ArrayList<>();
@@ -83,8 +83,16 @@ public class Table extends Group {
     return playerViews;
   }
 
-  public CommunityCardGrid getCommunityCardGrid() {
+  /*public CommunityCardGrid getCommunityCardGrid() {
     return communityCardGrid;
+  }*/
+
+  public int getCenterX() {
+    return centerX;
+  }
+
+  public int getCenterY() {
+    return centerY;
   }
 
 
