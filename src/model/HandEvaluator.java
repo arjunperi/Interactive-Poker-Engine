@@ -368,6 +368,12 @@ public class HandEvaluator {
         return bestPlayers;
     }
 
+    public Hand getBestPlayerHand (Player player){
+        HandCombiner combiner = new HandCombiner();
+        return getBestHands(combiner.getAllHands(player.getTotalHand())).get(0);
+
+    }
+
     private int[] makeNewArray(int size){return new int[size];}
 
 }

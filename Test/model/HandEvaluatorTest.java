@@ -1244,5 +1244,30 @@ public class HandEvaluatorTest {
 
         assertEquals(2,evaluator.getBestPlayers(playerList,false).size());
     }
+
+    @Test
+    void testGetBestPlayerHand(){
+        HandEvaluator evaluator = new HandEvaluator();
+        Player player1 = new Player("Jimmy", 100, new CommunityCards(), new Pot());
+
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
+        Card card6 = new Card(14,"HEARTS");
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1.add(card6);
+        player1.setHand(hand1);
+        player1.updateTotalHand();
+        assertTrue(evaluator.isFlush(evaluator.getBestPlayerHand(player1)));
+
+    }
 }
+
 
