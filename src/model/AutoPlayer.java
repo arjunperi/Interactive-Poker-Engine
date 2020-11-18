@@ -56,23 +56,23 @@ public class AutoPlayer extends Player {
         return action;
     }
 
-    public List<String> decideExchange(){
+    public List<Card> decideExchange(){
         List<Hand> allHands = handCombiner.getAllHands(this.getTotalHand());
         Hand bestHand = handEvaluator.getBestHands(allHands).get(0).sortHand();
         int handStrength = handEvaluator.handStrength(bestHand)[0];
-        List<String> exchangeCards = new ArrayList<>();
+        List<Card> exchangeCards = new ArrayList<>();
         if (handStrength <= HAND_RANK_THRESHOLD) { // if hand strength is less than pair
             List<Card> handCopy = bestHand.getCards();
             Collections.reverse(handCopy);
             int numberExchanged = 0;
-                for (Card card : handCopy) {
-                    if ((card.getRank() > 0 ) && (card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
-                        exchangeCards.add(card.toString()); // why does exchange take in a string instead of card??
-                        numberExchanged++;
-                    }
+            for (Card card : handCopy) {
+                if ((card.getRank() > 0 ) && (card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
+                    exchangeCards.add(card); // why does exchange take in a string instead of card??
+                    numberExchanged++;
                 }
+            }
         }
-       return exchangeCards;
+        return exchangeCards;
     }
 
 

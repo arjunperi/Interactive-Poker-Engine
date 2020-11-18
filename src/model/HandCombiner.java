@@ -24,7 +24,8 @@ public class HandCombiner {
     public void clearAllHands(){
         allHands = new ArrayList<>();
     }
-        public void makeAllPossibleHands(Hand hand, Card[] temporaryHand, int start,
+
+    private void makeAllPossibleHands(Hand hand, Card[] temporaryHand, int start,
                                          int end, int currentIndex)
         {
             int handSize = 5;

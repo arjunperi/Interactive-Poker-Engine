@@ -31,7 +31,7 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
-        assertEquals(100, player.getBankroll());
+        assertEquals(100, player.getBankroll().getValue());
     }
 
     @Test
@@ -60,6 +60,43 @@ public class PlayerTest extends DukeApplicationTest {
         assertTrue(player.isActive());
         player.fold();
         assertFalse(player.isActive());
+    }
+
+    @Test
+    public void testCall1(){
+        CommunityCards communityCards = new CommunityCards();
+        Pot pot = new Pot();
+        Player  autoPlayer= new AutoPlayer("APlayer", 100, communityCards, pot);
+        Player interactivePlayer = new InteractivePlayer("IPlayer", 100, communityCards, pot);
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(autoPlayer,interactivePlayer)));
+
+        interactivePlayer.bet(20);
+        assertTrue(true == playerList.raiseMade(interactivePlayer));
+        autoPlayer.call(playerList.getLastBet());
+        playerList.raiseShift();
+        assertEquals(80,autoPlayer.getBankroll().getValue());
+        assertTrue(false == playerList.raiseMade(autoPlayer));
+
+    }
+
+    @Test
+    public void testCall2(){
+        CommunityCards communityCards = new CommunityCards();
+        Pot pot = new Pot();
+        Player  autoPlayer= new AutoPlayer("APlayer", 100, communityCards, pot);
+        Player interactivePlayer = new InteractivePlayer("IPlayer", 100, communityCards, pot);
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(autoPlayer,interactivePlayer)));
+
+        interactivePlayer.bet(10);
+        assertTrue(true == playerList.raiseMade(interactivePlayer));
+        autoPlayer.bet(20);
+        assertTrue(true == playerList.raiseMade(autoPlayer));
+
+        interactivePlayer.call(playerList.getLastBet());
+        playerList.raiseShift();
+        assertEquals(80,interactivePlayer.getBankroll().getValue());
+        assertTrue(false == playerList.raiseMade(interactivePlayer));
+
     }
 
     @Test
@@ -100,7 +137,7 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
-        dealer.exchangeCards(player, (List.of("14 DIAMONDS")));
+        dealer.exchangeCards(player, (List.of(new Card(14, "DIAMOND"))));
         assertEquals(card1, player.getHand().getCards().get(0));
         assertEquals(card1, player.getHand().getCards().get(0));
     }
@@ -123,15 +160,19 @@ public class PlayerTest extends DukeApplicationTest {
         Card testCard4 = deck.StringToCard("7 DIAMONDS");
         Card testCard5 = deck.StringToCard("14 SPADES");
 
+
+
         player.receiveCard(testCard);
         player.receiveCard(testCard2);
         player.receiveCard(testCard3);
         player.receiveCard(testCard4);
         player.receiveCard(testCard5);
 
+        deck.removeAll(player.getHand().getCards());
+
         assertTrue(player.getHand().getCards().contains(testCard));
         System.out.println(player.getHand().getCards());
-        List<String> cardsToExchange = player.decideExchange();
+        List<Card> cardsToExchange = player.decideExchange();
         System.out.println(cardsToExchange);
         dealer.exchangeCards(player,cardsToExchange);
         System.out.println(player.getHand().getCards());
@@ -167,9 +208,11 @@ public class PlayerTest extends DukeApplicationTest {
         player.receiveCard(otherCard3);
         player.receiveCard(otherCard4);
 
+        deck.removeAll(player.getHand().getCards());
+
         assertTrue(player.getHand().getCards().contains(testCard));
         System.out.println(player.getHand().getCards());
-        List<String> cardsToExchange = player.decideExchange();
+        List<Card> cardsToExchange = player.decideExchange();
         System.out.println(cardsToExchange);
         dealer.exchangeCards(player,cardsToExchange);
         System.out.println(player.getHand().getCards());
@@ -200,9 +243,11 @@ public class PlayerTest extends DukeApplicationTest {
         player.receiveCard(otherCard3);
         player.receiveCard(otherCard4);
 
+        deck.removeAll(player.getHand().getCards());
+
         assertTrue(player.getHand().getCards().contains(testCard));
         System.out.println(player.getHand().getCards());
-        List<String> cardsToExchange = player.decideExchange();
+        List<Card> cardsToExchange = player.decideExchange();
         System.out.println(cardsToExchange);
         dealer.exchangeCards(player, cardsToExchange);
         System.out.println(player.getHand().getCards());
@@ -234,11 +279,14 @@ public class PlayerTest extends DukeApplicationTest {
         player.receiveCard(otherCard3);
         player.receiveCard(otherCard4);
 
+        deck.removeAll(player.getHand().getCards());
+
+
         assertTrue(player.getHand().getCards().contains(testCard));
         assertTrue(player.getHand().getCards().contains(testCard2));
         assertTrue(player.getHand().getCards().contains(testCard3));
         System.out.println(player.getHand().getCards());
-        List<String> cardsToExchange = player.decideExchange();
+        List<Card> cardsToExchange = player.decideExchange();
         System.out.println(cardsToExchange);
         dealer.exchangeCards(player, cardsToExchange);
         System.out.println(player.getHand().getCards());
@@ -272,12 +320,15 @@ public class PlayerTest extends DukeApplicationTest {
         player.receiveCard(testCard4);
         player.receiveCard(otherCard);
 
+        deck.removeAll(player.getHand().getCards());
+
+
         assertTrue(player.getHand().getCards().contains(testCard));
         assertTrue(player.getHand().getCards().contains(testCard2));
         assertTrue(player.getHand().getCards().contains(testCard3));
         assertTrue(player.getHand().getCards().contains(testCard4));
         System.out.println(player.getHand().getCards());
-        List<String> cardsToExchange = player.decideExchange();
+        List<Card> cardsToExchange = player.decideExchange();
         System.out.println(cardsToExchange);
         dealer.exchangeCards(player, cardsToExchange);
         System.out.println(player.getHand().getCards());
@@ -310,7 +361,7 @@ public class PlayerTest extends DukeApplicationTest {
         System.out.println(player.getHand().getCards());
 
         player.decideAction(0);
-        assertEquals(40,pot.getPotTotal());
+        assertEquals(40,pot.getPotTotal().getValue());
 
     }
 

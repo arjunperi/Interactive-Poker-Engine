@@ -1,30 +1,49 @@
 package controller;
 
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import model.*;
-import view.*;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import model.AutoPlayer;
+import model.Card;
+import model.CardRecipient;
+import model.CommunityCards;
+import model.Dealer;
+import model.Game;
+import model.InteractivePlayer;
+import model.Model;
+import model.ModelException;
+import model.Player;
+import model.PlayerList;
+import model.Pot;
+import model.RoundManager;
+import view.CardGrid;
+import view.CardView;
+import view.CommunityCardGrid;
+import view.FrontEndCommunity;
+import view.GameDisplayRecipient;
+import view.GameView;
+import view.PlayerView;
+import view.Table;
 
 public class Controller {
 
@@ -32,8 +51,8 @@ public class Controller {
 
   private static final String RESOURCES = "Resources/";
   public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES.replace("/", ".");
+  private static final String CARD_SETTINGS = "/cardSettings.json";
   private ResourceBundle projectTextResources;
-
   private Model model;
   private RoundManager roundManager;
   private PlayerList playerList;
@@ -46,7 +65,7 @@ public class Controller {
   private int roundNumber;
   private int totalRounds;
   private Map<Player, PlayerView> playerMappings;
-  private Map<String, CardView> frontEndCardMappings;
+  private Map<Card, CardView> frontEndCardMappings;
   private FileReader reader;
   private Writer customWriter;
   private FileWriter writer;
@@ -63,9 +82,8 @@ public class Controller {
   private List<PlayerView> playerViews;
   private String cardBack;
   private JSONReader jsonReader;
-
-  private static final String CARD_SETTINGS = "/cardSettings.json";
   private CommunityCardGrid communityCardGrid;
+  private int maxExchangeCards;
 
   public Controller() {
     betScreenMessage = "Enter a bet:";
@@ -133,7 +151,6 @@ public class Controller {
     for (Player player : playerList.getAllPlayers()) {
       player.clearHand();
       player.enterNewGame(communityCards, pot);
-      //playerMappings.get(player).clearFrontEndCardLocations();
     }
     playerList.updateStartingRoundOrder();
     playerList.resetActivePlayers();
@@ -196,15 +213,15 @@ public class Controller {
     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
     modelProperties = reader.getPropertyFile(fileName);
     totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
+    maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
     if (gameStart) {
       initializePlayerList(fileName);
       initializeFrontEndPlayers();
       gameStart = false;
     }
-    initializeCommunity();
+    view.makeActionLog();
     model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
     initializeGameBoard();
-    view.makeActionLog();
     nextRound();
     if (exitedPoker) {
       exitedPoker = false;
@@ -264,10 +281,6 @@ public class Controller {
     }
   }
 
-  private void initializeCommunity() {
-    displayCommunity = new FrontEndCommunity(200, 400);
-  }
-
   //Everything gets caught here
   private void nextRound() {
     while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
@@ -321,39 +334,29 @@ public class Controller {
     initializeActionMenu();
   }
 
-  public void exchangeRound() {
 
+
+  public void exchangeRound() {
     playerList.updateActivePlayers();
     for (Player player : playerList.getActivePlayers()) {
-
-      //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed by program file
-      List<TextField> exchangeInputs = new ArrayList<>();
-      int maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
-      for (int i = 0; i < maxExchangeCards; i++) {
-        exchangeInputs.add(new TextField());
-      }
       if (!player.isInteractive()) {
         AutoPlayer autoPlayer = (AutoPlayer) player;
         autoPlayer.decideExchange();
         dealer.exchangeCards(autoPlayer, autoPlayer.decideExchange());
-//                exchangeFrontEndCards(autoPlayer, playerMappings.get(autoPlayer));
+        exchangeFrontEndCards(autoPlayer);
       } else {
-
-        Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeInputs);
-
+        Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
         Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
-        if (exchangeBoxResult.isPresent()) {
-          List<String> exchangeCards = new ArrayList<>();
-          for (TextField exchangeInput : exchangeInputs) {
-            exchangeCards.add(exchangeInput.getText());
+        if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {
+          Set<CardView> selectedCards = playerMappings.get(interactivePlayer).getCardGrid()
+              .getSelectedCards();
+          List<Card> exchangeCards = new ArrayList<>();
+          for (CardView card : selectedCards) {
+            Card cardToBeExchanged = getCardFromCardView(card);
+            exchangeCards.add(cardToBeExchanged);
           }
-          List<String> filtered = exchangeCards.stream()
-              .filter(b -> b.equals(""))
-              .collect(Collectors.toList());
-          exchangeCards.removeAll(filtered);
-
           dealer.exchangeCards(player, exchangeCards);
-//                    exchangeFrontEndCards(player, playerMappings.get(player));
+          exchangeFrontEndCards(player);
         }
       }
     }
@@ -370,29 +373,28 @@ public class Controller {
 
     interactiveActionComplete = true;
 
-    if (!oneSolventPlayer) {
+    if(!oneSolventPlayer){
       actionLoop:
-      while (interactiveActionComplete) {
+      while(interactiveActionComplete){
         for (Player player : playersCopy) {
-          if (playerList.getRaiseSeat() != player && player.isSolvent()) {
+          if (playerList.getRaiseSeat()!=player && player.isSolvent()){
             lastBet = playerList.getLastBet();
             if (!player.isInteractive()) {
               AutoPlayer autoPlayer = (AutoPlayer) player;
               autoPlayer.decideAction(lastBet);
               view.addToActionLog(autoPlayer + autoPlayer.getAction());
-            } else {
+            }
+            else {
               interactiveActionComplete = false;
-              while (!interactiveActionComplete) {
-                ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet,
-                    lastBet - player.getTotalBetAmount());
+              while (!interactiveActionComplete){
+                ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet, lastBet - player.getTotalBetAmount());
                 Optional<Button> result = dialog.showAndWait();
-                if (result.isPresent()) {
+                if (result.isPresent()){
                   try {
                     Class<?> c = Class.forName("controller.Controller");
-                    Method method = c
-                        .getDeclaredMethod("indicate" + result.get().getId(), Player.class);
+                    Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
                     method.invoke(this, player);
-                    if (exitedPoker) {
+                    if (exitedPoker){
                       return;
                     }
                     //TODO: fix exceptions
@@ -402,12 +404,12 @@ public class Controller {
                 }
               }
             }
-            if (playerList.raiseMade(player)) {
+            if (playerList.raiseMade(player)){
               initializeActionMenu();
               break;
             }
             roundManager.checkOnePlayerRemains(playerList);
-            if (roundManager.isRoundOver()) {
+            if (roundManager.isRoundOver()){
               transitionRound();
               break actionLoop;
             }
@@ -422,6 +424,7 @@ public class Controller {
     playerList.updateActivePlayers();
   }
 
+
   public void dealFrontEndCardsInRound(CardRecipient recipient, CardGrid cardGrid) {
     for (Card newCard : recipient.getNewCards()) {
       CardView displayCard = getFrontEndCard(newCard);
@@ -429,29 +432,40 @@ public class Controller {
     }
   }
 
-//    public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
-//        int dealLocation = 0;
-//        int cardIndex = 0;
-//        for (Card discardedCard: player.getDiscardedCards()){
-//            FrontEndCard discardedFrontEndCard = frontEndCardMappings.get(discardedCard.toString());
-//            view.remove(discardedFrontEndCard);
-//
-//            int dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
-//            Card newCard = player.getNewCards().get(cardIndex);
-//            FrontEndCard displayCard = getFrontEndCard(newCard);
-//            view.deal(displayCard, displayRecipient, dealLocation);
-//            cardIndex ++;
-//        }
-//    }
+  public void exchangeFrontEndCards(Player player) {
+    int cardIndex = 0;
+    CardGrid playerCardGrid = playerMappings.get(player).getCardGrid();
+    for (Card discardedCard : player.getDiscardedCards()) {
+      CardView discardedCardView = frontEndCardMappings.get(discardedCard);
+      Card cardToBeDealt = player.getNewCards().get(cardIndex);
+      CardView cardViewToBeDealt = getFrontEndCard(cardToBeDealt);
+
+      Point2D locationToDeal = playerCardGrid.removeCard(discardedCardView);
+      playerCardGrid.addCardViewToLocation(cardViewToBeDealt, locationToDeal);
+
+      cardIndex++;
+    }
+  }
+
+  private Card getCardFromCardView(CardView card) {
+    return frontEndCardMappings.entrySet()
+        .stream()
+        .filter(entry -> card.equals(entry.getValue()))
+        .map(Map.Entry::getKey).findFirst().get();
+  }
+
+  private boolean isSelectedCardsExchangeable() {
+    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size()
+        <= maxExchangeCards;
+  }
+
 
   //should this be in View or Controller?
   private CardView getFrontEndCard(Card card) {
     boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
-
-    //FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
     CardView cardView = new CardView(jsonReader.getRanks().get(card.getRank()),
         jsonReader.getSuits().get(card.getCardSuit()), cardBack, isFrontEndVisible);
-    frontEndCardMappings.put(card.toString(), cardView);
+    frontEndCardMappings.put(card, cardView);
     return cardView;
   }
 
@@ -501,9 +515,7 @@ public class Controller {
         }
       }
     }
-    betScreenMessage = "Enter a Bet:";
   }
-
 
   private void indicateFold(Player player) {
     interactiveActionComplete = true;

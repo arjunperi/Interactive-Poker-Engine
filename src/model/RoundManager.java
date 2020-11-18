@@ -29,14 +29,14 @@ public class RoundManager {
             winner = activePlayers.get(0);
             System.out.println("\n" + winner.toString() + " won and received $" + pot.getPotTotal());
             winDialog = winner.toString() + " won and received $" + pot.getPotTotal();
-            pot.dispersePot(winner,pot.getPotTotal());
+            pot.dispersePot(winner,pot.getPotTotal().getValue());
             pot.clearPot();
             roundOver = true;
         }
     }
 
     private int splitAmount(int numberOfWinners){
-        return pot.getPotTotal()/numberOfWinners;
+        return pot.getPotTotal().getValue()/numberOfWinners;
     }
 
     //should we be updating the players' total hands in a better way/ different place?
