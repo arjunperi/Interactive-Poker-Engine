@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HandEvaluatorTest {
-    private Map<Integer,String> handStrengths;
+    private Map<Integer, String> handStrengths;
     private JSONReader reader;
 
 
@@ -38,11 +38,12 @@ public class HandEvaluatorTest {
         hand1.add(card3);
         hand1.add(card4);
         hand1 = hand1.sortHand();
-        assertTrue(false==HandEvaluator.isFiveCardHand(hand1));
+        assertTrue(false == HandEvaluator.isFiveCardHand(hand1));
         hand1.add(card5);
         assertTrue(HandEvaluator.isFiveCardHand(hand1));
 
     }
+
     @Test
     void testIsFlush() {
         Card card1 = new Card(8, "CLUBS");
@@ -469,11 +470,11 @@ public class HandEvaluatorTest {
 
         List<Hand> bestHands = HandEvaluator.getBestHands(hands);
         assertTrue(true == HandEvaluator.isFlush(bestHands.get(0)));
-        assertEquals(4,bestHands.get(0).get(4).getRank());
+        assertEquals(4, bestHands.get(0).get(4).getRank());
     }
 
     @Test
-    void testHighCardWin(){
+    void testHighCardWin() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -482,7 +483,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -497,7 +498,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(9, "CLUBS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(4, "CLUBS");
+        Card card9 = new Card(4, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -509,14 +510,14 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
 
     @Test
-    void testPairWin1(){
+    void testPairWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -525,7 +526,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(10, "CLUBS");
+        Card card4 = new Card(10, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -540,7 +541,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(9, "CLUBS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(4, "CLUBS");
+        Card card9 = new Card(4, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -552,13 +553,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player1,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player1, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testPairWin2(){
+    void testPairWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -567,7 +568,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(-1, "CLUBS");
-        Card  card4 = new Card(14, "CLUBS");
+        Card card4 = new Card(14, "CLUBS");
         Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -582,7 +583,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(9, "CLUBS");
         Card card8 = new Card(14, "CLUBS");
-        Card  card9 = new Card(4, "CLUBS");
+        Card card9 = new Card(4, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -594,13 +595,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testTwoPairWin1(){
+    void testTwoPairWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -609,7 +610,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(10, "CLUBS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -624,7 +625,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(8, "HEARTS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(14, "CLUBS");
+        Card card9 = new Card(14, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -636,13 +637,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testTwoPairWin2(){
+    void testTwoPairWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -651,7 +652,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(2, "CLUBS");
         Card card3 = new Card(8, "HEARTS");
-        Card  card4 = new Card(10, "CLUBS");
+        Card card4 = new Card(10, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -666,7 +667,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(2, "HEARTS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(14, "CLUBS");
+        Card card9 = new Card(14, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -678,13 +679,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testThreeOfAKindWin1(){
+    void testThreeOfAKindWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -693,7 +694,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(4, "HEARTS");
         Card card2 = new Card(10, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -708,7 +709,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(4, "HEARTS");
         Card card8 = new Card(4, "SPADES");
-        Card  card9 = new Card(4, "CLUBS");
+        Card card9 = new Card(4, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -720,13 +721,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testThreeOfAKindWin2(){
+    void testThreeOfAKindWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -735,7 +736,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(12, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(9, "HEARTS");
-        Card  card4 = new Card(9, "DIAMONDS");
+        Card card4 = new Card(9, "DIAMONDS");
         Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -750,7 +751,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(2, "CLUBS");
         Card card8 = new Card(14, "CLUBS");
-        Card  card9 = new Card(14, "DIAMONDS");
+        Card card9 = new Card(14, "DIAMONDS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -762,14 +763,14 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
 
     @Test
-    void testStraightWin1(){
+    void testStraightWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -778,7 +779,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(4, "CLUBS");
         Card card3 = new Card(4, "DIAMONDS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -793,7 +794,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(14, "CLUBS");
         Card card7 = new Card(5, "CLUBS");
         Card card8 = new Card(4, "CLUBS");
-        Card  card9 = new Card(3, "CLUBS");
+        Card card9 = new Card(3, "CLUBS");
         Card card10 = new Card(2, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -805,13 +806,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testStraightWin2(){
+    void testStraightWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -820,7 +821,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(5, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(3, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -835,7 +836,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(10, "CLUBS");
         Card card7 = new Card(11, "CLUBS");
         Card card8 = new Card(12, "CLUBS");
-        Card  card9 = new Card(13, "CLUBS");
+        Card card9 = new Card(13, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -847,13 +848,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testFlushWin1(){
+    void testFlushWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -862,7 +863,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(7, "CLUBS");
-        Card  card4 = new Card(6, "CLUBS");
+        Card card4 = new Card(6, "CLUBS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -877,7 +878,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(9, "CLUBS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(4, "CLUBS");
+        Card card9 = new Card(4, "CLUBS");
         Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -889,13 +890,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testFlushWin2(){
+    void testFlushWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -904,7 +905,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -919,7 +920,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(9, "CLUBS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(4, "CLUBS");
+        Card card9 = new Card(4, "CLUBS");
         Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -931,13 +932,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testHFullHouseWin1(){
+    void testHFullHouseWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -946,7 +947,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(4, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -961,7 +962,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(8, "HEARTS");
         Card card8 = new Card(8, "SPADES");
-        Card  card9 = new Card(14, "CLUBS");
+        Card card9 = new Card(14, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -973,13 +974,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testFullHouseWin2(){
+    void testFullHouseWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -988,7 +989,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(8, "SPADES");
         Card card3 = new Card(8, "DIAMONDS");
-        Card  card4 = new Card(14, "CLUBS");
+        Card card4 = new Card(14, "CLUBS");
         Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -1003,7 +1004,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(10, "CLUBS");
         Card card7 = new Card(10, "DIAMONDS");
         Card card8 = new Card(2, "CLUBS");
-        Card  card9 = new Card(10, "HEARTS");
+        Card card9 = new Card(10, "HEARTS");
         Card card10 = new Card(2, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -1015,13 +1016,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testFourOfAKindWin1(){
+    void testFourOfAKindWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1030,7 +1031,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(8, "HEARTS");
         Card card3 = new Card(8, "SPADES");
-        Card  card4 = new Card(8, "DIAMONDS");
+        Card card4 = new Card(8, "DIAMONDS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -1045,7 +1046,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(8, "DIAMONDS");
         Card card8 = new Card(8, "HEARTS");
-        Card  card9 = new Card(14, "HEARTS");
+        Card card9 = new Card(14, "HEARTS");
         Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -1057,13 +1058,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player1,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player1, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testFourOfAKindWin2(){
+    void testFourOfAKindWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1072,7 +1073,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(8, "DIAMONDS");
         Card card3 = new Card(8, "SPADES");
-        Card  card4 = new Card(8, "HEARTS");
+        Card card4 = new Card(8, "HEARTS");
         Card card5 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -1087,7 +1088,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "CLUBS");
         Card card7 = new Card(14, "SPADES");
         Card card8 = new Card(14, "DIAMONDS");
-        Card  card9 = new Card(14, "CLUBS");
+        Card card9 = new Card(14, "CLUBS");
         Card card10 = new Card(14, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -1099,13 +1100,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testStraightFlushWin1(){
+    void testStraightFlushWin1() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1114,7 +1115,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(8, "HEARTS");
         Card card3 = new Card(8, "DIAMONDS");
-        Card  card4 = new Card(8, "SPADES");
+        Card card4 = new Card(8, "SPADES");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -1129,7 +1130,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(3, "CLUBS");
         Card card7 = new Card(4, "CLUBS");
         Card card8 = new Card(5, "CLUBS");
-        Card  card9 = new Card(14, "CLUBS");
+        Card card9 = new Card(14, "CLUBS");
         Card card10 = new Card(2, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -1141,13 +1142,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testStraightFlushWin2(){
+    void testStraightFlushWin2() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1156,7 +1157,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(4, "CLUBS");
         Card card2 = new Card(3, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
-        Card  card4 = new Card(14, "CLUBS");
+        Card card4 = new Card(14, "CLUBS");
         Card card5 = new Card(5, "CLUBS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -1171,7 +1172,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(11, "CLUBS");
         Card card7 = new Card(10, "CLUBS");
         Card card8 = new Card(12, "CLUBS");
-        Card  card9 = new Card(13, "CLUBS");
+        Card card9 = new Card(13, "CLUBS");
         Card card10 = new Card(14, "CLUBS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -1183,13 +1184,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2, HandEvaluator.getBestPlayers(playerList, false).get(0));
     }
 
     @Test
-    void testIsTie(){
+    void testIsTie() {
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1198,7 +1199,7 @@ public class HandEvaluatorTest {
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "DIAMONDS");
         Card card3 = new Card(12, "CLUBS");
-        Card  card4 = new Card(12, "DIAMONDS");
+        Card card4 = new Card(12, "DIAMONDS");
         Card card5 = new Card(10, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
@@ -1213,7 +1214,7 @@ public class HandEvaluatorTest {
         Card card6 = new Card(8, "DIAMONDS");
         Card card7 = new Card(9, "HEARTS");
         Card card8 = new Card(12, "DIAMONDS");
-        Card  card9 = new Card(12, "HEARTS");
+        Card card9 = new Card(12, "HEARTS");
         Card card10 = new Card(10, "HEARTS");
         Hand hand2 = new Hand();
         hand2.add(card6);
@@ -1225,13 +1226,13 @@ public class HandEvaluatorTest {
         player2.setHand(hand2);
         player2.updateTotalHand();
 
-        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
+        PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1, player2)));
 
-        assertEquals(2,HandEvaluator.getBestPlayers(playerList,false).size());
+        assertEquals(2, HandEvaluator.getBestPlayers(playerList, false).size());
     }
 
     @Test
-    void testGetBestPlayerHand(){
+    void testGetBestPlayerHand() {
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), new Pot());
 
         Card card1 = new Card(8, "CLUBS");
@@ -1239,7 +1240,7 @@ public class HandEvaluatorTest {
         Card card3 = new Card(2, "CLUBS");
         Card card4 = new Card(4, "CLUBS");
         Card card5 = new Card(10, "CLUBS");
-        Card card6 = new Card(14,"HEARTS");
+        Card card6 = new Card(14, "HEARTS");
         Hand hand1 = new Hand();
         hand1.add(card1);
         hand1.add(card2);
@@ -1253,16 +1254,16 @@ public class HandEvaluatorTest {
     }
 
     @Test
-    void testGetHandStrengthRank(){
-        assertEquals(0,HandEvaluator.getHandStrengthRank("High Card"));
-        assertEquals(1,HandEvaluator.getHandStrengthRank("Pair"));
-        assertEquals(2,HandEvaluator.getHandStrengthRank("Two Pair"));
-        assertEquals(3,HandEvaluator.getHandStrengthRank("Three Of A Kind"));
-        assertEquals(4,HandEvaluator.getHandStrengthRank("Straight"));
-        assertEquals(5,HandEvaluator.getHandStrengthRank("Flush"));
-        assertEquals(6,HandEvaluator.getHandStrengthRank("Full House"));
-        assertEquals(7,HandEvaluator.getHandStrengthRank("Four Of A Kind"));
-        assertEquals(8,HandEvaluator.getHandStrengthRank("Straight Flush"));
+    void testGetHandStrengthRank() {
+        assertEquals(0, HandEvaluator.getHandStrengthRank("High Card"));
+        assertEquals(1, HandEvaluator.getHandStrengthRank("Pair"));
+        assertEquals(2, HandEvaluator.getHandStrengthRank("Two Pair"));
+        assertEquals(3, HandEvaluator.getHandStrengthRank("Three Of A Kind"));
+        assertEquals(4, HandEvaluator.getHandStrengthRank("Straight"));
+        assertEquals(5, HandEvaluator.getHandStrengthRank("Flush"));
+        assertEquals(6, HandEvaluator.getHandStrengthRank("Full House"));
+        assertEquals(7, HandEvaluator.getHandStrengthRank("Four Of A Kind"));
+        assertEquals(8, HandEvaluator.getHandStrengthRank("Straight Flush"));
 
     }
 }
