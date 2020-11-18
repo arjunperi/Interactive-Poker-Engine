@@ -243,7 +243,8 @@ public class GameView {
         Dialog exchangeBox = new Alert(type);
         exchangeBox.initModality(Modality.NONE);
         exchangeBox.setTitle("Exchange Cards");
-        exchangeBox.setHeaderText(String.format("%s is up!%nSelect no more than %d card(s) to exchange and then press OK", playerName, maxExchangeCards));
+        exchangeBox.setHeaderText(String.format("%s is up!%nSelect no more than %d card(s) to exchange and then press OK. \nDon't try to cheat! "
+            + " You will be reprompted if you try to selct more than the specified amount.", playerName, maxExchangeCards));
         return exchangeBox;
     }
 
