@@ -1255,6 +1255,15 @@ public class HandEvaluatorTest {
     @Test
     void testGetHandStrengthRank(){
         assertEquals(0,HandEvaluator.getHandStrengthRank("High Card"));
+        assertEquals(1,HandEvaluator.getHandStrengthRank("Pair"));
+        assertEquals(2,HandEvaluator.getHandStrengthRank("Two Pair"));
+        assertEquals(3,HandEvaluator.getHandStrengthRank("Three Of A Kind"));
+        assertEquals(4,HandEvaluator.getHandStrengthRank("Straight"));
+        assertEquals(5,HandEvaluator.getHandStrengthRank("Flush"));
+        assertEquals(6,HandEvaluator.getHandStrengthRank("Full House"));
+        assertEquals(7,HandEvaluator.getHandStrengthRank("Four Of A Kind"));
+        assertEquals(8,HandEvaluator.getHandStrengthRank("Straight Flush"));
+
     }
 }
 
