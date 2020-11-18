@@ -1,6 +1,5 @@
 package model;
 
-import controller.Controller;
 import controller.JSONReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

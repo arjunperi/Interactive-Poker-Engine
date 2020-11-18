@@ -1,5 +1,8 @@
 package model;
 
+import model.Card;
+import model.Hand;
+
 import java.util.ArrayList;
 
 public class HandCombiner {

@@ -285,6 +285,8 @@ public class GameView {
     public void makeActionLog() {
         actionLog = new ListView<>();
         actionLog.setId("ActionLog");
+        actionLog.setMinHeight(300);
+        actionLog.setMinWidth(600);
 //        action.getStyleClass().add("listview");
 //        action.setMinHeight(HISTORY_MIN_HEIGHT);
 //        action.setMinWidth(HISTORY_MIN_WIDTH);

@@ -199,12 +199,12 @@ public class Controller {
         if (gameStart){
             initializePlayerList(fileName);
             initializeFrontEndPlayers();
-            view.makeActionLog();
             gameStart = false;
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
         initializeGameBoard();
+        view.makeActionLog();
         nextRound();
         if (exitedPoker){
             exitedPoker = false;
