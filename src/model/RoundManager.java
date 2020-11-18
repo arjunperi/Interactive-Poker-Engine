@@ -1,6 +1,8 @@
 package model;
 
 import controller.JSONReader;
+import utility.HandCombiner;
+import utility.HandEvaluator;
 
 import java.util.*;
 
@@ -8,11 +10,9 @@ public class RoundManager {
     private Player winner;
     private int currentRound;
     private Pot pot;
-    private HandEvaluator handEvaluator;
     private boolean roundOver;
     private String winDialog;
     private List<Hand> winningHand;
-    private HandCombiner handCombiner;
     private JSONReader reader;
     private Map<Integer,String> handStrengths;
 
@@ -24,8 +24,6 @@ public class RoundManager {
         currentRound = 0;
         this.pot = pot;
         handStrengths= reader.getStrengths();
-        handEvaluator = new HandEvaluator(handStrengths);
-        handCombiner = new HandCombiner();
         roundOver = false;
         winningHand = new ArrayList<>();
     }
@@ -53,11 +51,11 @@ public class RoundManager {
         for (Player player: activePlayers.getActivePlayers()){
             player.updateTotalHand();
         }
-        List<Player> bestPlayers =  handEvaluator.getBestPlayers(activePlayers, false);
+        List<Player> bestPlayers =  HandEvaluator.getBestPlayers(activePlayers, false);
         int winningAmount = splitAmount(bestPlayers.size());
         for (Player player : bestPlayers){
-            Hand bestHand = handEvaluator.getBestHands(handCombiner.getAllHands(player.getTotalHand())).get(0);
-            String handStrength = handStrengths.get(handEvaluator.handStrength(bestHand)[0]);
+            Hand bestHand = HandEvaluator.getBestHands(HandCombiner.getAllHands(player.getTotalHand())).get(0);
+            String handStrength = handStrengths.get(HandEvaluator.handStrength(bestHand)[0]);
             System.out.println("\n" + player.toString() + " won the showdown with a " + handStrength + " and received $" + winningAmount);
             winDialog = player.toString() + " won the showdown with a " + handStrength + " and received $" + winningAmount;
 //            winningHand.add(handEvaluator.getBestHands(handCombiner.getAllHands(player.getTotalHand())).get(0));

@@ -4,6 +4,7 @@ import controller.JSONReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
+import utility.HandCombiner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,7 @@ public class PlayerTest extends DukeApplicationTest {
     private Player player;
     private Deck deck;
     private JSONReader reader;
-    private HandEvaluator handEval;
-    private HandCombiner handCombiner = new HandCombiner();
+
     @BeforeEach
     void setUp(){
         reader = new JSONReader();
@@ -358,7 +358,7 @@ public class PlayerTest extends DukeApplicationTest {
         player.receiveCard(otherCard3);
         player.receiveCard(otherCard4);
         System.out.println(player.getTotalHand().getCards());
-        System.out.println(handCombiner.getAllHands(player.getTotalHand()));
+        System.out.println(HandCombiner.getAllHands(player.getTotalHand()));
         System.out.println(player.getHand().getCards());
 
         player.decideAction(0);

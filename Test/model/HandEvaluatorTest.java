@@ -3,6 +3,8 @@ package model;
 import controller.JSONReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utility.HandCombiner;
+import utility.HandEvaluator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class HandEvaluatorTest {
     private Map<Integer,String> handStrengths;
     private JSONReader reader;
-    private HandEvaluator evaluator;
+
 
     @BeforeEach
     void setUp() {
         reader = new JSONReader();
         reader.parse("/cardSettings.json");
-        evaluator = new HandEvaluator(reader.getStrengths());
         handStrengths = reader.getStrengths();
     }
 
@@ -37,9 +38,9 @@ public class HandEvaluatorTest {
         hand1.add(card3);
         hand1.add(card4);
         hand1 = hand1.sortHand();
-        assertTrue(false==evaluator.isFiveCardHand(hand1));
+        assertTrue(false==HandEvaluator.isFiveCardHand(hand1));
         hand1.add(card5);
-        assertTrue(evaluator.isFiveCardHand(hand1));
+        assertTrue(HandEvaluator.isFiveCardHand(hand1));
 
     }
     @Test
@@ -56,7 +57,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(evaluator.isFlush(hand1));
+        assertTrue(HandEvaluator.isFlush(hand1));
 
         Card card6 = new Card(10, "DIAMONDS");
         Hand hand2 = new Hand();
@@ -66,7 +67,7 @@ public class HandEvaluatorTest {
         hand2.add(card4);
         hand2.add(card6);
         hand2 = hand2.sortHand();
-        assertTrue(!evaluator.isFlush(hand2));
+        assertTrue(!HandEvaluator.isFlush(hand2));
     }
 
 
@@ -84,7 +85,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(evaluator.isStraight(hand1));
+        assertTrue(HandEvaluator.isStraight(hand1));
 
         Card card6 = new Card(1, "DIAMONDS");
         Hand hand2 = new Hand();
@@ -94,7 +95,7 @@ public class HandEvaluatorTest {
         hand2.add(card4);
         hand2.add(card6);
         hand2 = hand2.sortHand();
-        assertTrue(!evaluator.isStraight(hand2));
+        assertTrue(!HandEvaluator.isStraight(hand2));
 
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(13, "CLUBS");
@@ -108,7 +109,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(evaluator.isStraight(hand3));
+        assertTrue(HandEvaluator.isStraight(hand3));
 
 
         Card card12 = new Card(5, "CLUBS");
@@ -122,7 +123,7 @@ public class HandEvaluatorTest {
         hand4.add(card14);
         hand4.add(card15);
         hand4 = hand4.sortHand();
-        assertTrue(evaluator.isStraight(hand4));
+        assertTrue(HandEvaluator.isStraight(hand4));
     }
 
     @Test
@@ -139,7 +140,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(evaluator.isStraightFlush(hand3));
+        assertTrue(HandEvaluator.isStraightFlush(hand3));
     }
 
     @Test
@@ -157,7 +158,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(evaluator.isFourOfAKind(hand3));
+        assertTrue(HandEvaluator.isFourOfAKind(hand3));
 
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(10, "DIAMONDS");
@@ -171,7 +172,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(evaluator.isFourOfAKind(hand1));
+        assertTrue(HandEvaluator.isFourOfAKind(hand1));
 
 
         card1 = new Card(8, "CLUBS");
@@ -186,7 +187,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(!evaluator.isFourOfAKind(hand1));
+        assertTrue(!HandEvaluator.isFourOfAKind(hand1));
     }
 
     @Test
@@ -203,7 +204,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(evaluator.isFullHouse(hand3));
+        assertTrue(HandEvaluator.isFullHouse(hand3));
 
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(14, "DIAMONDS");
@@ -217,7 +218,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isFullHouse(hand1));
+        assertTrue(true == HandEvaluator.isFullHouse(hand1));
 
         card1 = new Card(8, "CLUBS");
         card2 = new Card(9, "CLUBS");
@@ -231,7 +232,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(false == evaluator.isFullHouse(hand1));
+        assertTrue(false == HandEvaluator.isFullHouse(hand1));
     }
 
 
@@ -249,7 +250,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isThreeOfAKind(hand3));
+        assertTrue(true == HandEvaluator.isThreeOfAKind(hand3));
 
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(12, "DIAMONDS");
@@ -263,7 +264,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isThreeOfAKind(hand1));
+        assertTrue(true == HandEvaluator.isThreeOfAKind(hand1));
 
         card1 = new Card(8, "CLUBS");
         card2 = new Card(9, "CLUBS");
@@ -277,7 +278,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(false == evaluator.isThreeOfAKind(hand1));
+        assertTrue(false == HandEvaluator.isThreeOfAKind(hand1));
     }
 
 
@@ -295,7 +296,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isTwoPair(hand3));
+        assertTrue(true == HandEvaluator.isTwoPair(hand3));
 
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(14, "DIAMONDS");
@@ -309,7 +310,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isTwoPair(hand1));
+        assertTrue(true == HandEvaluator.isTwoPair(hand1));
 
         card1 = new Card(8, "CLUBS");
         card2 = new Card(9, "CLUBS");
@@ -323,7 +324,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(false == evaluator.isTwoPair(hand1));
+        assertTrue(false == HandEvaluator.isTwoPair(hand1));
     }
 
     @Test
@@ -340,7 +341,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isPair(hand3));
+        assertTrue(true == HandEvaluator.isPair(hand3));
 
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(12, "DIAMONDS");
@@ -354,7 +355,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isPair(hand1));
+        assertTrue(true == HandEvaluator.isPair(hand1));
 
         card1 = new Card(8, "CLUBS");
         card2 = new Card(9, "CLUBS");
@@ -368,7 +369,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(false == evaluator.isPair(hand1));
+        assertTrue(false == HandEvaluator.isPair(hand1));
     }
 
     @Test
@@ -385,7 +386,7 @@ public class HandEvaluatorTest {
         hand3.add(card10);
         hand3.add(card11);
         hand3 = hand3.sortHand();
-        assertTrue(true == evaluator.isHighCard(hand3));
+        assertTrue(true == HandEvaluator.isHighCard(hand3));
 
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(12, "DIAMONDS");
@@ -399,7 +400,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(true == evaluator.isHighCard(hand1));
+        assertTrue(true == HandEvaluator.isHighCard(hand1));
 
         card1 = new Card(8, "CLUBS");
         card2 = new Card(9, "CLUBS");
@@ -413,7 +414,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        assertTrue(false == evaluator.isPair(hand1));
+        assertTrue(false == HandEvaluator.isPair(hand1));
     }
 
     @Test
@@ -430,7 +431,7 @@ public class HandEvaluatorTest {
         hand1.add(card4);
         hand1.add(card5);
         hand1 = hand1.sortHand();
-        int[] ret = evaluator.handStrength(hand1);
+        int[] ret = HandEvaluator.handStrength(hand1);
         assertEquals(5, ret[0]);
     }
 
@@ -462,12 +463,12 @@ public class HandEvaluatorTest {
         Card data[] = new Card[r];
 
         // Print all combination using temprary array 'data[]'
-        comb.clearAllHands();
 
-        ArrayList<Hand> hands = comb.getAllHands(hand1);
 
-        List<Hand> bestHands = evaluator.getBestHands(hands);
-        assertTrue(true == evaluator.isFlush(bestHands.get(0)));
+        List<Hand> hands = comb.getAllHands(hand1);
+
+        List<Hand> bestHands = HandEvaluator.getBestHands(hands);
+        assertTrue(true == HandEvaluator.isFlush(bestHands.get(0)));
         assertEquals(4,bestHands.get(0).get(4).getRank());
     }
 
@@ -510,7 +511,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
 
@@ -553,7 +554,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player1,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player1,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -595,7 +596,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -637,7 +638,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -679,7 +680,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -721,7 +722,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -763,7 +764,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
 
@@ -806,7 +807,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -848,7 +849,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -890,7 +891,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -932,7 +933,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -974,7 +975,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -1016,7 +1017,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -1058,7 +1059,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player1,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player1,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -1100,7 +1101,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -1142,7 +1143,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -1184,7 +1185,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(player2,evaluator.getBestPlayers(playerList,false).get(0));
+        assertEquals(player2,HandEvaluator.getBestPlayers(playerList,false).get(0));
     }
 
     @Test
@@ -1226,7 +1227,7 @@ public class HandEvaluatorTest {
 
         PlayerList playerList = new StandardPlayerList(new ArrayList<>(List.of(player1,player2)));
 
-        assertEquals(2,evaluator.getBestPlayers(playerList,false).size());
+        assertEquals(2,HandEvaluator.getBestPlayers(playerList,false).size());
     }
 
     @Test
@@ -1248,12 +1249,12 @@ public class HandEvaluatorTest {
         hand1.add(card6);
         player1.setHand(hand1);
         player1.updateTotalHand();
-        assertTrue(evaluator.isFlush(evaluator.getBestPlayerHand(player1)));
+        assertTrue(HandEvaluator.isFlush(HandEvaluator.getBestPlayerHand(player1)));
     }
 
     @Test
     void testGetHandStrengthRank(){
-        assertEquals(0,evaluator.getHandStrengthRank("High Card"));
+        assertEquals(0,HandEvaluator.getHandStrengthRank("High Card"));
     }
 }
 

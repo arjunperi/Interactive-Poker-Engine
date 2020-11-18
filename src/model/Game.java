@@ -15,7 +15,6 @@ public class Game {
     private List<String> suits;
     private List<String> ranks;
     private JSONReader reader;
-    private HandEvaluator handEvaluator;
 
     //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
     public Game(){
@@ -28,7 +27,6 @@ public class Game {
         deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 
         dealer = new Dealer(deck);
-        handEvaluator = new HandEvaluator(reader.getStrengths());
         roundManager = new RoundManager(pot);
     }
 
@@ -52,9 +50,6 @@ public class Game {
         return dealer;
     }
 
-    public HandEvaluator getHandEvaluator(){
-        return handEvaluator;
-    }
 
     public enum AutoPlayerNames{
 
