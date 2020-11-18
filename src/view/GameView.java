@@ -96,13 +96,13 @@ public class GameView {
         clear();
         Dialog dialogBox = new TextInputDialog();
         dialogBox.setHeaderText(prompt);
-
         GridPane grid = new GridPane();
-        grid.setId(prompt);
-
+        grid.setId("Grid");
         GridPane.setConstraints(input, 0,1);
         grid.getChildren().add(input);
+
         dialogBox.getDialogPane().setContent(grid);
+
 
         return dialogBox;
     }
