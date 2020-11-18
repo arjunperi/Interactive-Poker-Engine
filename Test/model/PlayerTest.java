@@ -1,15 +1,15 @@
 package model;
 
-import controller.Controller;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import controller.JSONReader;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest extends DukeApplicationTest {
     private Player player;
@@ -32,7 +32,7 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
-        assertEquals(100, player.getBankroll());
+      assertEquals(100, player.getBankroll().getValue());
     }
 
     @Test

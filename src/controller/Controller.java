@@ -1,30 +1,49 @@
 package controller;
 
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import model.*;
-import view.*;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import model.AutoPlayer;
+import model.Card;
+import model.CardRecipient;
+import model.CommunityCards;
+import model.Dealer;
+import model.Game;
+import model.InteractivePlayer;
+import model.Model;
+import model.ModelException;
+import model.Player;
+import model.PlayerList;
+import model.Pot;
+import model.RoundManager;
+import view.CardGrid;
+import view.CardView;
+import view.CommunityCardGrid;
+import view.FrontEndCommunity;
+import view.GameDisplayRecipient;
+import view.GameView;
+import view.PlayerView;
+import view.Table;
 
 public class Controller {
 
@@ -204,13 +223,14 @@ public class Controller {
         getNumAutoPlayers();
     }
     private void exitPoker(Player player){
-        try{
+        try {
             resetGame();
 
             Properties cashOutProperties = new Properties();
 //            cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
-            cashOutProperties.setProperty("BANKROLL",String.valueOf(player.getBankroll()));
-            cashOutProperties.setProperty("NAME",player.toString());
+            cashOutProperties
+                .setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
+            cashOutProperties.setProperty("NAME", player.toString());
 
             customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
         }
@@ -226,7 +246,7 @@ public class Controller {
         exitedPoker = false;
         view.clear();
         initializeGameObjects();
-        initializeMainMenu();
+        initializePlayerSelectMenu();
         playerViews.clear();
         playerMappings.clear();
     }
@@ -306,12 +326,12 @@ public class Controller {
             Properties modelProperties = reader.getPropertyFile(fileName);
             String playerListType = modelProperties.getProperty("playerListType");
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
-            Player player1 = new InteractivePlayer(interactivePlayerName, interactivePlayerStartingAmount, communityCards, pot);
-            interactivePlayer = player1;
+            interactivePlayer = new InteractivePlayer(interactivePlayerName,
+                interactivePlayerStartingAmount, communityCards, pot);
             List<Player> players = initializeAutoPlayers();
             players.add(interactivePlayer);
             playerList = (PlayerList) cl.getConstructor(List.class)
-                    .newInstance(new ArrayList<>(players));
+                .newInstance(new ArrayList<>(players));
         }
         catch(Exception e){
             e.printStackTrace();
@@ -326,7 +346,8 @@ public class Controller {
             if (!currentPlayer.isInteractive()) {
                 newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
             } else {
-                newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
+                newPlayerView = new PlayerView(interactivePlayerName,
+                    currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
             }
 
             newPlayerView.getPlayerInfoBox().getBankroll().textProperty().bind(currentPlayer.getBankroll().asString());
