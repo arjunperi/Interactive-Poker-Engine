@@ -1,5 +1,8 @@
 package controller;
 
+// limit number of players??
+
+
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
@@ -43,6 +46,8 @@ import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
 import view.Table;
+import java.util.Set;
+import javafx.geometry.Point2D;
 
 public class Controller {
 
@@ -83,6 +88,10 @@ public class Controller {
   private JSONReader jsonReader;
   private CommunityCardGrid communityCardGrid;
   private int maxExchangeCards;
+  private String interactivePlayerName;
+  private int playerStartingAmount;
+  private int numAutoPlayers;
+
 
   public Controller() {
     betScreenMessage = "Enter a bet:";
@@ -100,7 +109,7 @@ public class Controller {
     customWriter = new Writer();
     view = new GameView();
     roundNumber = 1;
-    initializeMainMenu();
+    initializePlayerSelectMenu();
     initializeGameObjects();
   }
 
@@ -159,40 +168,8 @@ public class Controller {
 
   public void initializeMainMenu() {
     EventHandler<ActionEvent> gameSelectEvent = e -> initializeGameSelect();
-    EventHandler<ActionEvent> homeEvent = e -> initializeMainMenu();
+    EventHandler<ActionEvent> homeEvent = e -> initializePlayerSelectMenu();
     view.makeMainMenu(gameSelectEvent, homeEvent);
-  }
-
-  private void exitPoker(Player player) {
-    try {
-      resetGame();
-
-      Properties cashOutProperties = new Properties();
-      cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
-      customWriter.cashOutToProperties(player.toString(), cashOutProperties);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void resetGame() {
-    roundNumber = 1;
-    oneSolventPlayer = false;
-    gameStart = true;
-    exitedPoker = false;
-    view.clear();
-    initializeGameObjects();
-    initializeMainMenu();
-    playerViews.clear();
-    playerMappings.clear();
-  }
-
-  public void initializeGameSelect() {
-    EventHandler<ActionEvent> holdemEvent = e -> initializeProperties("Holdem.properties");
-    EventHandler<ActionEvent> drawEvent = e -> initializeProperties("FiveCardDraw.properties");
-    EventHandler<ActionEvent> studEvent = e -> initializeProperties("SevenCardStud.properties");
-    EventHandler<ActionEvent> customEvent = e -> chooseNewFile();
-    view.makeGameSelectScreen(holdemEvent, drawEvent, studEvent, customEvent);
   }
 
   private void chooseNewFile() {
@@ -226,18 +203,13 @@ public class Controller {
       exitedPoker = false;
       exitPoker(interactivePlayer);
     }
+  }
     public void initializePlayerSelectMenu(){
         EventHandler<ActionEvent> newPlayerSelectEvent = e -> initializeNewPlayer();
         EventHandler<ActionEvent> loadPlayerEvent = e -> initializeLoadPlayer();
         view.makePlayerSelectScreen(newPlayerSelectEvent, loadPlayerEvent);
     }
 
-
-    public void initializeMainMenu(){
-        EventHandler<ActionEvent> gameSelectEvent = e -> initializeGameSelect();
-        EventHandler<ActionEvent> homeEvent = e -> initializeMainMenu();
-        view.makeMainMenu(gameSelectEvent, homeEvent);
-    }
     //TODO: FINISH IMPLEMENTING LOADING FROM SAVE
     public void initializeLoadPlayer(){
         File savedFile = chooseNewFile("PlayerSaveFiles");
@@ -245,7 +217,7 @@ public class Controller {
         String savedFileNameWithoutExtension = savedFileName.substring(0,savedFileName.lastIndexOf('.'));
         Properties savedInfo = reader.getPropertyFile(savedFileNameWithoutExtension);
         interactivePlayerName = savedInfo.getProperty("NAME");
-        interactivePlayerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
+        playerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
         getNumAutoPlayers();
     }
     public void initializeNewPlayer() {
@@ -279,7 +251,7 @@ public class Controller {
         Dialog newPlayerDialog = view.makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
         Optional result = newPlayerDialog.showAndWait();
         if (result.isPresent()) {
-            interactivePlayerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
+            playerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
 
         }
         getNumAutoPlayers();
@@ -290,8 +262,7 @@ public class Controller {
 
             Properties cashOutProperties = new Properties();
 //            cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
-            cashOutProperties
-                .setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
+            cashOutProperties.setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
             cashOutProperties.setProperty("NAME", player.toString());
 
             customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
@@ -339,32 +310,11 @@ public class Controller {
         return null;
     }
 
-    public void initializeProperties(String fileName){
-        currentGame = fileName;
-        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-        modelProperties = reader.getPropertyFile(fileName);
-        totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
-        if (gameStart){
-            initializePlayerList(fileName);
-            initializeFrontEndPlayers();
-            view.makeActionLog();
-            gameStart = false;
-        }
-        initializeCommunity();
-        model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
-        initializeGameBoard();
-        nextRound();
-        if (exitedPoker){
-            exitedPoker = false;
-            exitPoker(interactivePlayer);
-        }
-    }
-
     private List<Player> initializeAutoPlayers() {
         List<Player> autoPlayerList = new ArrayList<>();
         for (int numPlayers = 0; numPlayers < numAutoPlayers; numPlayers++) {
             String autoPlayerName = Game.AutoPlayerNames.values()[numPlayers].getValue();
-            autoPlayerList.add(new AutoPlayer(autoPlayerName, interactivePlayerStartingAmount, communityCards, pot));
+            autoPlayerList.add(new AutoPlayer(autoPlayerName, playerStartingAmount, communityCards, pot));
         }
         return autoPlayerList;
     }
@@ -389,7 +339,7 @@ public class Controller {
             String playerListType = modelProperties.getProperty("playerListType");
             Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
             interactivePlayer = new InteractivePlayer(interactivePlayerName,
-                interactivePlayerStartingAmount, communityCards, pot);
+                playerStartingAmount, communityCards, pot);
             List<Player> players = initializeAutoPlayers();
             players.add(interactivePlayer);
             playerList = (PlayerList) cl.getConstructor(List.class)
@@ -422,7 +372,7 @@ public class Controller {
     private void initializeCommunity(){
         displayCommunity = new FrontEndCommunity(200,400);
     }
-  }
+
 
   //Everything gets caught here
   private void nextRound() {
@@ -617,7 +567,7 @@ public class Controller {
       if (!player.isSolvent()) {
         System.out.println(player.toString());
         if (!player.isInteractive()) {
-          player.updateBankroll(1000);
+          player.updateBankroll(playerStartingAmount);
         } else {
           TextField buyBackInput = new TextField();
           Dialog buyBackBox = view.makeBuyInScreen(buyBackInput);

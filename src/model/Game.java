@@ -60,10 +60,12 @@ public class Game {
 
         Player1("Johnny"),
         player2("Cindy"),
-        player3("Thomas"),
+        player3("Jimmy"),
         player4("Daequan"),
         player5("Lebron"),
-        player6("Metta World Peace");
+        player6("Metta World Peace"),
+        player7("Michael Jordan"),
+        player8("Dinna");
 
         private final String value;
 
