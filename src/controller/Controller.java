@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -419,11 +418,11 @@ public class Controller {
 
         });*/
 
-
         Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
 
         if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {
-          Set<CardView> selectedCards = playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards();
+          Set<CardView> selectedCards = playerMappings.get(interactivePlayer).getCardGrid()
+              .getSelectedCards();
           List<Card> exchangeCards = new ArrayList<>();
           for (CardView card : selectedCards) {
             Card cardToBeExchanged = getCardFromCardView(card);
@@ -463,19 +462,20 @@ public class Controller {
   }
 
   private boolean isSelectedCardsExchangeable() {
-    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size() <= maxExchangeCards;
+    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size()
+        <= maxExchangeCards;
   }
 
   private String getCardString(String text) {
-        return String.valueOf(jsonReader.getRanks()
-            .entrySet()
-            .stream()
-            .filter(entry -> text.equalsIgnoreCase(entry.getValue()))
-            .map(Map.Entry::getKey).findFirst().get());
-    }
+    return String.valueOf(jsonReader.getRanks()
+        .entrySet()
+        .stream()
+        .filter(entry -> text.equalsIgnoreCase(entry.getValue()))
+        .map(Map.Entry::getKey).findFirst().get());
+  }
 
 
-    public void initializeActionMenu() {
+  public void initializeActionMenu() {
     playerList.initializeActivePlayers();
     List<Player> players = playerList.getActivePlayers();
     List<Player> playersCopy = new ArrayList<>(players);
