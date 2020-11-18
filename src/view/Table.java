@@ -59,6 +59,8 @@ public class Table extends Group {
     calculatePlayerPositions();
   }
 
+
+
   private void calculatePlayerPositions() {
     for (int player = 0; player < players.size(); player++) {
       double angle = 2 * player * Math.PI / players.size();

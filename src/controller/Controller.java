@@ -22,6 +22,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AutoPlayer;
@@ -44,6 +45,7 @@ import view.FrontEndCommunity;
 import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
+import view.PotView;
 import view.Table;
 
 public class Controller {
@@ -236,15 +238,22 @@ public class Controller {
 
   private void initializeGameBoard() {
     pokerTable = new Table(300, 300, 150, playerViews);
-    communityCardGrid = new CommunityCardGrid();
-    communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
-    communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
+    communityCardGrid = new CommunityCardGrid(pokerTable.getCenterX(), pokerTable.getCenterY());
+    PotView potView = new PotView("100", "/pot.png", pokerTable.getCenterX(), pokerTable.getCenterY());
+    potView.getGameStat().textProperty()
+        .bind(pot.getPotTotal().asString());
+
+
+    //communityCardGrid.setLayoutX( - (communityCardGrid.getMinWidth() / 2));
+    //communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
     view.addGameObject(pokerTable);
     view.addGameObject(communityCardGrid);
     for (PlayerView playerView : playerViews) {
       view.addGameObject(playerView);
       playerView.getCardGrid().clearCardGrid();
     }
+    view.addGameObject(potView);
+
   }
 
   private void initializePlayerList(String fileName) {
@@ -466,14 +475,6 @@ public class Controller {
         <= maxExchangeCards;
   }
 
-  private String getCardString(String text) {
-    return String.valueOf(jsonReader.getRanks()
-        .entrySet()
-        .stream()
-        .filter(entry -> text.equalsIgnoreCase(entry.getValue()))
-        .map(Map.Entry::getKey).findFirst().get());
-  }
-
 
   public void initializeActionMenu() {
     playerList.initializeActivePlayers();
@@ -617,6 +618,8 @@ public class Controller {
     int betAmount = 0;
     TextField betInput = new TextField();
     Dialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
+    betBox.getDialogPane().getStylesheets().add(getClass().getResource("/dialog.css").toExternalForm());
+    betBox.getDialogPane().getStyleClass().add("myDialog");
     Optional betBoxResult = betBox.showAndWait();
     if (betBoxResult.isPresent()) {
       betAmount = Integer.parseInt(betInput.getText());
