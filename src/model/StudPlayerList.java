@@ -21,7 +21,6 @@ public class StudPlayerList extends PlayerList {
     public void updateActivePlayers() {
         resetActivePlayers();
         initializeActivePlayers();
-
     }
 
     private void studOrder(){

@@ -1,7 +1,5 @@
 package view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -10,15 +8,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pokerSuite.PokerRunner;
 
 import javax.swing.*;
 import javax.swing.tree.ExpandVetoException;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class GameView {
@@ -28,6 +28,7 @@ public class GameView {
     private Group centerGroup;
     private Group bottomGroup;
     private Button homeButton;
+    private VBox gameBox;
 
     public GameView(){
         root = new BorderPane();
@@ -39,6 +40,7 @@ public class GameView {
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
+        gameBox = new VBox();
     }
 
     public void initializeBorderPane(){
@@ -59,6 +61,7 @@ public class GameView {
 
     public void clear(){
         root.getChildren().clear();
+        gameBox = new VBox();
         initializeBorderPane();
     }
 
@@ -82,9 +85,12 @@ public class GameView {
         centerGroup.getChildren().add(startBox);
     }
 
+    public void addGameObject(Node gameObject) {
+        centerGroup.getChildren().add(gameObject);
+    }
+
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
         clear();
-        VBox gameBox = new VBox();
         gameBox.setId("GameBox");
         Button holdEmButton = makeButton("Holdem", holdemEvent);
         holdEmButton.setId("Holdem");
@@ -119,8 +125,12 @@ public class GameView {
         return result;
     }
 
+
     public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount){
-        centerGroup.getChildren().clear();
+        //centerGroup.getChildren().clear();
+        centerGroup.getChildren().remove(gameBox);
+        topGroup.getChildren().remove(homeButton);
+        bottomGroup.getChildren().clear();
 
         Button cashOutButton = new Button("Cash Out");
         cashOutButton.setId("CashOut");
@@ -161,6 +171,7 @@ public class GameView {
     public Dialog makeBetPopUp(TextField input, String message) {
         bottomGroup.getChildren().clear();
 
+
         Dialog betBox = new TextInputDialog();
         betBox.setHeaderText(message);
 
@@ -194,7 +205,32 @@ public class GameView {
         return null;
     }
 
-    public Dialog makeExchangeScreen(String playerName, TextField exchangeCardInput1,TextField exchangeCardInput2, TextField exchangeCardInput3){
+//    public Dialog makeExchangeScreen(String playerName, List<TextField> textFields){
+//        Dialog exchangeBox = new TextInputDialog();
+//        exchangeBox.setTitle("Exchange Cards");
+//        exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
+//
+//        GridPane grid = new GridPane();
+//        grid.setId("ExchangeGrid");
+//
+//        exchangeCardInput1.setPromptText("First card to exchange");
+//        exchangeCardInput1.setId("ExchangeCard1");
+//        GridPane.setConstraints(exchangeCardInput1, 0,0);
+//
+//        exchangeCardInput2.setPromptText("Second card to exchange");
+//        exchangeCardInput2.setId("ExchangeCard2");
+//        GridPane.setConstraints(exchangeCardInput2, 0,1);
+//
+//        exchangeCardInput3.setPromptText("Third card to exchange");
+//        exchangeCardInput3.setId("ExchangeCard3");
+//        GridPane.setConstraints(exchangeCardInput3, 0,2);
+//
+//        grid.getChildren().addAll(exchangeCardInput1,exchangeCardInput2,exchangeCardInput3);
+//        exchangeBox.getDialogPane().setContent(grid);
+//        return exchangeBox;
+//    }
+
+    public Dialog makeExchangeScreen(String playerName, List<TextField> exchangeInputs){
         Dialog exchangeBox = new TextInputDialog();
         exchangeBox.setTitle("Exchange Cards");
         exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
@@ -202,22 +238,20 @@ public class GameView {
         GridPane grid = new GridPane();
         grid.setId("ExchangeGrid");
 
-        exchangeCardInput1.setPromptText("First card to exchange");
-        exchangeCardInput1.setId("ExchangeCard1");
-        GridPane.setConstraints(exchangeCardInput1, 0,0);
+        int inputNumber = 1;
+        for (TextField exchangeCardInput: exchangeInputs){
+            exchangeCardInput.setPromptText("Card to Exchange:");
+            exchangeCardInput.setId("ExchangeCard" + inputNumber);
+            GridPane.setConstraints(exchangeCardInput, 0,inputNumber - 1);
+            grid.getChildren().add(exchangeCardInput);
+            inputNumber ++;
+        }
 
-        exchangeCardInput2.setPromptText("Second card to exchange");
-        exchangeCardInput2.setId("ExchangeCard2");
-        GridPane.setConstraints(exchangeCardInput2, 0,1);
-
-        exchangeCardInput3.setPromptText("Third card to exchange");
-        exchangeCardInput3.setId("ExchangeCard3");
-        GridPane.setConstraints(exchangeCardInput3, 0,2);
-
-        grid.getChildren().addAll(exchangeCardInput1,exchangeCardInput2,exchangeCardInput3);
         exchangeBox.getDialogPane().setContent(grid);
         return exchangeBox;
     }
+
+
 
 
     //maybe combine this with bet screen input
@@ -225,7 +259,7 @@ public class GameView {
 //        bottomGroup.getChildren().clear();
 
         Dialog buyBackBox = new TextInputDialog();
-        buyBackBox.setHeaderText("Would you like to buy back in? If so, please enter an amount: ");
+        buyBackBox.setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing: ");
 
         buyBackInput.setPromptText("Amount: ");
         buyBackInput.setId("BuyBack");
@@ -238,5 +272,13 @@ public class GameView {
         buyBackBox.getDialogPane().setContent(grid);
 
         return buyBackBox;
+    }
+
+    public void makeEndRoundScreen(EventHandler<ActionEvent> nextRoundEvent, EventHandler<ActionEvent> cashOutEvent){
+        HBox nextRoundBox = new HBox();
+        Button nextRoundButton = makeButton("Deal next round", nextRoundEvent);
+        Button cashOutButton = makeButton("Cash Out", cashOutEvent);
+        nextRoundBox.getChildren().addAll(nextRoundButton,cashOutButton);
+        bottomGroup.getChildren().add(nextRoundBox);
     }
 }

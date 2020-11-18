@@ -19,7 +19,7 @@ public class DeckTest {
     @BeforeEach
     void setUp(){
         reader = new JSONReader();
-        reader.parse("/texas_holdem.json");
+        reader.parse("/cardSettings.json");
         List<String> suitNames = new ArrayList<>();
         List<Integer> rankValues = new ArrayList<>();
         rankValues.addAll(reader.getRanks().keySet());
@@ -37,7 +37,6 @@ public class DeckTest {
         deck.replaceTopCard(card3);
         assertEquals(2, deck.getTopCard().getRank());
         assertEquals("DIAMONDS", deck.getTopCard().getCardSuit());
-        assertEquals("J", deck.getTopCard().getCardSymbol());
     }
 
 
@@ -51,7 +50,6 @@ public class DeckTest {
         deck.replaceTopCard(card3);
         assertEquals(2, deck.getTopCard().getRank());
         assertEquals("DIAMONDS", deck.getTopCard().getCardSuit());
-        assertEquals("J", deck.getTopCard().getCardSymbol());
     }
 
     @Test

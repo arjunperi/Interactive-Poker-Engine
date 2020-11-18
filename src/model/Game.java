@@ -23,7 +23,7 @@ public class Game {
         this.communityCards = new CommunityCards();
 
         reader = new JSONReader();
-        reader.parse("/texas_holdem.json");
+        reader.parse("/cardSettings.json");
 
         deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 

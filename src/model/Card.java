@@ -7,13 +7,11 @@ import java.util.Properties;
 public class Card {
 
     private String suit;
-    private String cardSymbol;
     private int rank;
     private boolean isBackEndVisible;
     private boolean isInteractivePlayerCard;
     private FileReader reader;
 
-    private static final String FILENAME = "CardValueMapping";
 
     public Card(int rank, String suit) {
         this.suit = suit;
@@ -21,21 +19,12 @@ public class Card {
         isBackEndVisible = false;
         isInteractivePlayerCard = false;
         reader = new FileReader();
-        initializeCardNumber();
     }
 
-    private void initializeCardNumber(){
-        Properties mappings = reader.getPropertyFile(FILENAME);
-        cardSymbol = mappings.getProperty(String.valueOf(rank));
-    }
-
-    public String getCardSymbol(){
-        return cardSymbol;
-    }
 
     @Override
     public String toString() {
-        return (suit + " " + rank);
+        return (rank + " " + suit);
     }
 
     @Override

@@ -2,6 +2,7 @@ package controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import controller.exceptions.SetUpException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ class JSONReaderTest {
   @BeforeAll
   static void setUp() {
     reader = new JSONReader();
-    reader.parse("/texas_holdem.json");
+    reader.parse("/cardSettings.json");
   }
   @Test
   void getSuits() {
@@ -51,13 +52,6 @@ class JSONReaderTest {
   }
 
   @Test
-  void getNumberOfPlayers() {
-    int expectedNumberOfPlayers = 3;
-    int actualNumberOfPlayers = reader.getNumberOfPlayers();
-    assertEquals(expectedNumberOfPlayers, actualNumberOfPlayers);
-  }
-
-  @Test
   void getSuitNames() {
     List<String> expectedSuitNames = List.of(
         "CLUBS",
@@ -88,5 +82,10 @@ class JSONReaderTest {
 
     List<Integer> actualRankValues = reader.getRankValues();
     assertEquals(expectedRankValues, actualRankValues);
+  }
+
+  @Test
+  void invalidFileNoSuitsTest() {
+    assertThrows(SetUpException.class, () -> reader.parse("incomplete-file-no-suits.json"));
   }
 }

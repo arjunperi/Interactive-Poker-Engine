@@ -11,7 +11,7 @@ public class HandCombiner {
         //update total hand?
         int handSize = 5;
         // A temporary array to store all combination one by one
-        Card temporaryHand[]=new Card[handSize];
+        Card[] temporaryHand =new Card[handSize];
         int totalHandSize  = hand.getHandSize();
         clearAllHands();
         makeAllPossibleHands(hand, temporaryHand, 0, totalHandSize-1, 0);
