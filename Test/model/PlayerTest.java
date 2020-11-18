@@ -1,14 +1,15 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import controller.JSONReader;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest extends DukeApplicationTest {
     private Player player;
@@ -344,6 +345,7 @@ public class PlayerTest extends DukeApplicationTest {
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
+
 
         Card testCard = deck.StringToCard("8 CLUBS");
         Card testCard2 = deck.StringToCard("8 CLUBS");

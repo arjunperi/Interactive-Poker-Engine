@@ -22,6 +22,7 @@ import javafx.stage.Modality;
 import pokerSuite.PokerRunner;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,33 @@ public class GameView {
         gameSelectButton.setId("GameSelect");
         startBox.getChildren().addAll(gameSelectButton);
         centerGroup.getChildren().add(startBox);
+    }
+
+    public Dialog makeDialogBox(TextField input, String prompt){
+        clear();
+        Dialog dialogBox = new TextInputDialog();
+        dialogBox.setHeaderText(prompt);
+
+        GridPane grid = new GridPane();
+        grid.setId(prompt);
+
+        GridPane.setConstraints(input, 0,1);
+        grid.getChildren().add(input);
+        dialogBox.getDialogPane().setContent(grid);
+
+        return dialogBox;
+    }
+
+    public void makePlayerSelectScreen(EventHandler<ActionEvent> newPlayerEvent, EventHandler<ActionEvent> loadPlayerEvent){
+        clear();
+        VBox playerBox = new VBox();
+        playerBox.setId("PlayerBox");
+        Button newPlayerButton = makeButton("New Player", newPlayerEvent);
+        newPlayerButton.setId("New Player");
+        Button loadSavedPlayer = makeButton("Load Player",loadPlayerEvent);
+        playerBox.getChildren().addAll(newPlayerButton, loadSavedPlayer);
+        centerGroup.getChildren().add(playerBox);
+
     }
 
     public void addGameObject(Node gameObject) {
