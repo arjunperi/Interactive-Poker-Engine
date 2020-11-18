@@ -20,11 +20,13 @@ import util.DukeApplicationTest;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.View;
 import java.util.List;
+import java.util.Optional;
 
 public class GameViewTest extends DukeApplicationTest {
     private Controller controller;
     private Stage stage;
     private FrontEndCard testCard;
+    private final GameView view = new GameView();
 
     public void start(final Stage stage) throws Exception {
         controller = new Controller();
@@ -144,6 +146,30 @@ public class GameViewTest extends DukeApplicationTest {
         clickOn(customButton);
         assertTrue(gameBox.getChildrenUnmodifiable().contains(customButton));
         javafxRun(() -> stage.close());
+    }
+    @Test
+    public void testNewPlayerBox()  {
+        javafxRun(() -> controller.initializeNewPlayer());
+        TextField nameInput = lookup("#nameInput").query();
+        clickOn(nameInput);
+        type(KeyCode.C, KeyCode.H, KeyCode.R, KeyCode.I, KeyCode.S);
+        assertEquals(nameInput.getText(), "chris");
+    }
+    @Test
+    public void testGetNumAutoPlayerBox()  {
+        javafxRun(() -> controller.getNumAutoPlayers());
+        TextField numAutoPlayerInput = lookup("#numAutoPlayerInput").query();
+        clickOn(numAutoPlayerInput);
+        type(KeyCode.DIGIT6);
+        assertEquals(numAutoPlayerInput.getText(), "6");
+    }
+    @Test
+    public void testNewPlayerStartingAmount()  {
+        javafxRun(() -> controller.initializeNewPlayerStartingAmount());
+        TextField startingMoneyInput = lookup("#startingMoneyInput").query();
+        clickOn(startingMoneyInput);
+        type(KeyCode.DIGIT6,KeyCode.DIGIT0,KeyCode.DIGIT0);
+        assertEquals(startingMoneyInput.getText(), "600");
     }
 
 //    @Test
