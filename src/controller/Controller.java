@@ -27,6 +27,7 @@ import model.AutoPlayer;
 import model.Card;
 import model.CardRecipient;
 import model.CommunityCards;
+import model.ControllerException;
 import model.Dealer;
 import model.Game;
 import model.InteractivePlayer;
@@ -294,6 +295,7 @@ public class Controller {
       }
       //catches an invocation target exception
       catch (Exception e) {
+        e.printStackTrace();
 //            displayBetMenu(interactivePlayer, e.getCause().getMessage());
         //bad input strings or something do another catch
 //            showError(e.getCause().getMessage());
@@ -358,6 +360,9 @@ public class Controller {
           dealer.exchangeCards(player, exchangeCards);
           exchangeFrontEndCards(player);
         }
+        else{
+          
+        }
       }
     }
     roundNumber++;
@@ -399,7 +404,7 @@ public class Controller {
                     }
                     //TODO: fix exceptions
                   } catch (Exception e) {
-                    e.printStackTrace();
+                    showError(e.getCause().getMessage());
                   }
                 }
               }
@@ -480,7 +485,13 @@ public class Controller {
           Dialog buyBackBox = view.makeBuyInScreen(buyBackInput);
           Optional buyBackBoxResult = buyBackBox.showAndWait();
           if (buyBackBoxResult.isPresent()) {
-            player.updateBankroll(Integer.parseInt(buyBackInput.getText()));
+            try{
+              player.updateBankroll(Integer.parseInt(buyBackInput.getText()));
+            }
+            catch (NumberFormatException e){
+              showError("Invalid buy-in input. Please enter a numeric value");
+              promptBuyIn();
+            }
           } else {
             exitedPoker = true;
           }
@@ -495,27 +506,28 @@ public class Controller {
     Dialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
     Optional betBoxResult = betBox.showAndWait();
     if (betBoxResult.isPresent()) {
-      betAmount = Integer.parseInt(betInput.getText());
-      if (player.getTotalBetAmount() + betAmount < lastBet) {
-        betScreenMessage =
-            "Cannot bet less than the call amount on the table! Please bet at least $" + (lastBet
-                - player.getTotalBetAmount());
-        indicateBet(player);
-      } else {
-        try {
+      try {
+        betAmount = Integer.parseInt(betInput.getText());
+        if (player.getTotalBetAmount() + betAmount < lastBet) {
+          betScreenMessage =
+              "Cannot bet less than the call amount on the table! Please bet at least $" + (lastBet
+                  - player.getTotalBetAmount());
+          indicateBet(player);
+        } else {
           player.bet(betAmount);
           view.addToActionLog(player.toString() + " bet $" + betAmount);
           interactiveActionComplete = true;
           PlayerView displayPlayer = playerMappings.get(player);
-          //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
-          //displayPlayer.betDisplay(betAmount * -1);
-        } catch (ModelException e) {
-          betScreenMessage = e.getMessage();
-          indicateBet(player);
         }
+      } catch (NumberFormatException e) {
+        throw new ControllerException("Invalid bet input. Please enter a numeric value");
+      } catch (ModelException e) {
+        betScreenMessage = e.getMessage();
+        indicateBet(player);
       }
     }
   }
+
 
   private void indicateFold(Player player) {
     interactiveActionComplete = true;

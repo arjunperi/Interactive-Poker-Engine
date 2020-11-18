@@ -215,17 +215,15 @@ public class GameView {
         Dialog exchangeBox = new Alert(type);
         exchangeBox.initModality(Modality.NONE);
         exchangeBox.setTitle("Exchange Cards");
-        exchangeBox.setHeaderText(String.format("%s is up.%nSelect no more than %d card(s) to exchange", playerName, maxExchangeCards));
+        exchangeBox.setHeaderText(String.format("%s is up!%nSelect no more than %d card(s) to exchange and then press OK", playerName, maxExchangeCards));
         return exchangeBox;
     }
 
 
     //maybe combine this with bet screen input
     public Dialog makeBuyInScreen(TextField buyBackInput){
-//        bottomGroup.getChildren().clear();
-
         Dialog buyBackBox = new TextInputDialog();
-        buyBackBox.setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing: ");
+        buyBackBox.setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing, or press cancel to exit: ");
 
         buyBackInput.setPromptText("Amount: ");
         buyBackInput.setId("BuyBack");
