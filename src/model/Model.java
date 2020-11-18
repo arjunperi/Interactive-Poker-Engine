@@ -2,7 +2,9 @@ package model;
 
 //not sure if abstract class is the best way to handle this hierarchy
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class Model {
 

@@ -1,0 +1,16 @@
+.myDialog{
+  -fx-background-color: lightblue;
+}
+.myDialog > *.button-bar > *.container{
+  -fx-background-color: darkblue;
+}
+.myDialog > *.label.content{
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+}
+.myDialog:header *.header-panel{
+  -fx-background-color: skyblue;
+}
+.myDialog:header *.header-panel *.label {
+  -fx-font-size: 18px;
+}
