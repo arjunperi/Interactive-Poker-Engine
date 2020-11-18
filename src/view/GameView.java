@@ -6,6 +6,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -13,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import pokerSuite.PokerRunner;
 
 import javax.swing.*;
@@ -231,8 +234,9 @@ public class GameView {
 //        return exchangeBox;
 //    }
 
-    public Dialog makeExchangeScreen(String playerName, List<TextField> exchangeInputs){
+    /*public Dialog makeExchangeScreen(String playerName, List<TextField> exchangeInputs){
         Dialog exchangeBox = new TextInputDialog();
+        exchangeBox.initModality(Modality.NONE);
         exchangeBox.setTitle("Exchange Cards");
         exchangeBox.setHeaderText(playerName + " is up. Select Cards to Exchange");
 
@@ -249,6 +253,35 @@ public class GameView {
         }
 
         exchangeBox.getDialogPane().setContent(grid);
+        return exchangeBox;
+    }*/
+
+    public Dialog makeExchangeScreen(String playerName, int maxExchangeCards){
+        //Dialog exchangeBox = new Alert();
+        Alert.AlertType type = AlertType.CONFIRMATION;
+        Dialog exchangeBox = new Alert(type);
+
+
+        //ButtonType confirmExchange = new ButtonType("Confirm", ButtonData.OK_DONE);
+        //exchangeBox.getDialogPane().getButtonTypes().add(confirmExchange);
+        exchangeBox.initModality(Modality.NONE);
+        exchangeBox.setTitle("Exchange Cards");
+        //exchangeBox.setHeaderText(playerName + " is up. Select no more than " + maxExchangeCards + "to e");
+        exchangeBox.setHeaderText(String.format("%s is up.%nSelect no more than %d card(s) to exchange", playerName, maxExchangeCards));
+
+        /*GridPane grid = new GridPane();
+        grid.setId("ExchangeGrid");
+
+        int inputNumber = 1;
+        for (TextField exchangeCardInput: exchangeInputs){
+            exchangeCardInput.setPromptText("Card to Exchange:");
+            exchangeCardInput.setId("ExchangeCard" + inputNumber);
+            GridPane.setConstraints(exchangeCardInput, 0,inputNumber - 1);
+            grid.getChildren().add(exchangeCardInput);
+            inputNumber ++;
+        }
+
+        exchangeBox.getDialogPane().setContent(grid);*/
         return exchangeBox;
     }
 

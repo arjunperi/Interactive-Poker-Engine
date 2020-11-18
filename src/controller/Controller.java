@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -84,6 +85,7 @@ public class Controller {
   private String cardBack;
   private JSONReader jsonReader;
   private CommunityCardGrid communityCardGrid;
+  private int maxExchangeCards;
 
   public Controller() {
     betScreenMessage = "Enter a bet:";
@@ -217,6 +219,7 @@ public class Controller {
     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
     modelProperties = reader.getPropertyFile(fileName);
     totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
+    maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
     if (gameStart) {
       initializePlayerList(fileName);
       initializeFrontEndPlayers();
@@ -343,7 +346,7 @@ public class Controller {
   }
 
 
-  public void exchangeRound() {
+  /*public void exchangeRound() {
     playerList.updateActivePlayers();
     for (Player player : playerList.getActivePlayers()) {
 
@@ -389,9 +392,70 @@ public class Controller {
     roundNumber++;
     playerList.updateActivePlayers();
     initializeActionMenu();
+  }*/
+
+  public void exchangeRound() {
+    playerList.updateActivePlayers();
+    for (Player player : playerList.getActivePlayers()) {
+
+      //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed by program file
+
+      if (!player.isInteractive()) {
+
+        // Autoplayer decide exchange
+        AutoPlayer autoPlayer = (AutoPlayer) player;
+        autoPlayer.decideExchange();
+        dealer.exchangeCards(autoPlayer, autoPlayer.decideExchange());
+        exchangeFrontEndCards(autoPlayer);
+      } else {
+
+        Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
+        /*Button confirmExchange = new Button("Confirm Exchange");
+        confirmExchange.setOnMouseClicked(e -> {
+          if (isSelectedCardsExchangeable()) {
+
+          }
+
+
+        });*/
+
+
+        Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
+
+        if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {
+          Set<CardView> selectedCards = playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards();
+          for (CardView card : selectedCards) {
+            String cardToBeExchanged = ;
+          }
+          /*List<String> exchangeCards = new ArrayList<>();
+          for (TextField exchangeInput: exchangeInputs) {
+            if (exchangeInput.getText().contains(" ")) {
+              String cardToBeExchanged = (getCardString(exchangeInput.getText().split(" ")[0]) + " "
+                  + exchangeInput.getText().split(" ")[1]).toUpperCase();
+              System.out.println(cardToBeExchanged);
+              exchangeCards.add(cardToBeExchanged);
+            }
+          }
+          List<String> filtered = exchangeCards.stream()
+              .filter(b -> b.equals(""))
+              .collect(Collectors.toList());
+          exchangeCards.removeAll(filtered);
+
+          dealer.exchangeCards(player, exchangeCards);
+          exchangeFrontEndCards(player);*/
+        }
+      }
+    }
+    roundNumber++;
+    playerList.updateActivePlayers();
+    initializeActionMenu();
   }
 
-    private String getCardString(String text) {
+  private boolean isSelectedCardsExchangeable() {
+    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size() <= maxExchangeCards;
+  }
+
+  private String getCardString(String text) {
         return String.valueOf(jsonReader.getRanks()
             .entrySet()
             .stream()
