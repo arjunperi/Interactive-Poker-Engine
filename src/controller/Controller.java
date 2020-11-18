@@ -173,174 +173,184 @@ public class Controller {
       exitPoker(interactivePlayer);
     }
   }
-    public void initializePlayerSelectMenu(){
-        EventHandler<ActionEvent> newPlayerSelectEvent = e -> initializeNewPlayer();
-        EventHandler<ActionEvent> loadPlayerEvent = e -> initializeLoadPlayer();
-        view.makePlayerSelectScreen(newPlayerSelectEvent, loadPlayerEvent);
+
+  public void initializePlayerSelectMenu() {
+    EventHandler<ActionEvent> newPlayerSelectEvent = e -> initializeNewPlayer();
+    EventHandler<ActionEvent> loadPlayerEvent = e -> initializeLoadPlayer();
+    view.makePlayerSelectScreen(newPlayerSelectEvent, loadPlayerEvent);
+  }
+
+  //TODO: FINISH IMPLEMENTING LOADING FROM SAVE
+  public void initializeLoadPlayer() {
+    File savedFile = chooseNewFile("PlayerSaveFiles");
+    String savedFileName = savedFile.getName();
+    String savedFileNameWithoutExtension = savedFileName
+        .substring(0, savedFileName.lastIndexOf('.'));
+    Properties savedInfo = reader.getPropertyFile(savedFileNameWithoutExtension);
+    interactivePlayerName = savedInfo.getProperty("NAME");
+    playerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
+    getNumAutoPlayers();
+  }
+
+  public void initializeNewPlayer() {
+    TextField nameInput = new TextField();
+    nameInput.setId("nameInput");
+    Dialog newPlayerDialog = view.makeDialogBox(nameInput, "Enter a name: ");
+
+    Optional result = newPlayerDialog.showAndWait();
+    if (result.isPresent()) {
+      interactivePlayerName = nameInput.getText();
+
     }
+    initializeNewPlayerStartingAmount();
+  }
 
-    //TODO: FINISH IMPLEMENTING LOADING FROM SAVE
-    public void initializeLoadPlayer(){
-        File savedFile = chooseNewFile("PlayerSaveFiles");
-        String savedFileName = savedFile.getName();
-        String savedFileNameWithoutExtension = savedFileName.substring(0,savedFileName.lastIndexOf('.'));
-        Properties savedInfo = reader.getPropertyFile(savedFileNameWithoutExtension);
-        interactivePlayerName = savedInfo.getProperty("NAME");
-        playerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
-        getNumAutoPlayers();
+  public void getNumAutoPlayers() {
+    TextField numAutoPlayerInput = new TextField();
+    numAutoPlayerInput.setId("numAutoPlayerInput");
+    Dialog newPlayerDialog = view
+        .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
+    Optional result = newPlayerDialog.showAndWait();
+    if (result.isPresent()) {
+      numAutoPlayers = Integer.parseInt(numAutoPlayerInput.getText());
+
     }
-    public void initializeNewPlayer() {
-        TextField nameInput = new TextField();
-        nameInput.setId("nameInput");
-        Dialog newPlayerDialog = view.makeDialogBox(nameInput,"Enter a name: ");
+    initializeMainMenu();
+  }
 
-        Optional result = newPlayerDialog.showAndWait();
-        if (result.isPresent()) {
-            interactivePlayerName = nameInput.getText();
 
-        }
-        initializeNewPlayerStartingAmount();
+  public void initializeNewPlayerStartingAmount() {
+    TextField startingMoneyInput = new TextField();
+    startingMoneyInput.setId("startingMoneyInput");
+    Dialog newPlayerDialog = view
+        .makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
+    Optional result = newPlayerDialog.showAndWait();
+    if (result.isPresent()) {
+      playerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
+
     }
-    public void getNumAutoPlayers(){
-        TextField numAutoPlayerInput = new TextField();
-        numAutoPlayerInput.setId("numAutoPlayerInput");
-        Dialog newPlayerDialog = view.makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
-        Optional result = newPlayerDialog.showAndWait();
-        if (result.isPresent()) {
-            numAutoPlayers = Integer.parseInt(numAutoPlayerInput.getText());
+    getNumAutoPlayers();
+  }
 
-        }
-        initializeMainMenu();
-    }
+  private void exitPoker(Player player) {
+    try {
+      resetGame();
 
-
-    public void initializeNewPlayerStartingAmount(){
-        TextField startingMoneyInput = new TextField();
-        startingMoneyInput.setId("startingMoneyInput");
-        Dialog newPlayerDialog = view.makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
-        Optional result = newPlayerDialog.showAndWait();
-        if (result.isPresent()) {
-            playerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
-
-        }
-        getNumAutoPlayers();
-    }
-    private void exitPoker(Player player){
-        try {
-            resetGame();
-
-            Properties cashOutProperties = new Properties();
+      Properties cashOutProperties = new Properties();
 //            cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
-            cashOutProperties.setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
-            cashOutProperties.setProperty("NAME", player.toString());
+      cashOutProperties.setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
+      cashOutProperties.setProperty("NAME", player.toString());
 
-            customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+      customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 
-    private void resetGame(){
-        roundNumber=1;
-        oneSolventPlayer = false;
-        gameStart = true;
-        exitedPoker = false;
-        view.clear();
-        initializeGameObjects();
-        initializePlayerSelectMenu();
-        playerViews.clear();
-        playerMappings.clear();
+  private void resetGame() {
+    roundNumber = 1;
+    oneSolventPlayer = false;
+    gameStart = true;
+    exitedPoker = false;
+    view.clear();
+    initializeGameObjects();
+    initializePlayerSelectMenu();
+    playerViews.clear();
+    playerMappings.clear();
+  }
+
+  public void initializeGameSelect() {
+    EventHandler<ActionEvent> holdemEvent = e -> initializeProperties("Holdem.properties");
+    EventHandler<ActionEvent> drawEvent = e -> initializeProperties("FiveCardDraw.properties");
+    EventHandler<ActionEvent> studEvent = e -> initializeProperties("SevenCardStud.properties");
+    EventHandler<ActionEvent> customEvent = e -> chooseFileAndInitializeProperties();
+    view.makeGameSelectScreen(holdemEvent, drawEvent, studEvent, customEvent);
+  }
+
+  private void chooseFileAndInitializeProperties() {
+    File customGame = chooseNewFile("properties");
+    initializeProperties(customGame.getName());
+  }
+
+
+  private File chooseNewFile(String initialDirectory) {
+
+    FileChooser fileChooser = new FileChooser();
+    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)",
+        "*.properties");
+    fileChooser.getExtensionFilters().add(filter);
+    fileChooser.setInitialDirectory(new File(initialDirectory + "/"));
+    File file = fileChooser.showOpenDialog(new Stage());
+    if (file != null) {
+      return file;
     }
+    return null;
+  }
 
-    public void initializeGameSelect(){
-        EventHandler<ActionEvent> holdemEvent = e -> initializeProperties("Holdem.properties");
-        EventHandler<ActionEvent> drawEvent = e -> initializeProperties("FiveCardDraw.properties");
-        EventHandler<ActionEvent> studEvent = e -> initializeProperties("SevenCardStud.properties");
-        EventHandler<ActionEvent> customEvent = e -> chooseFileAndInitializeProperties();
-        view.makeGameSelectScreen(holdemEvent, drawEvent, studEvent, customEvent);
+  private List<Player> initializeAutoPlayers() {
+    List<Player> autoPlayerList = new ArrayList<>();
+    for (int numPlayers = 0; numPlayers < numAutoPlayers; numPlayers++) {
+      String autoPlayerName = Game.AutoPlayerNames.values()[numPlayers].getValue();
+      autoPlayerList.add(new AutoPlayer(autoPlayerName, playerStartingAmount, communityCards, pot));
     }
-    private void chooseFileAndInitializeProperties(){
-        File customGame = chooseNewFile("properties");
-        initializeProperties(customGame.getName());
+    return autoPlayerList;
+  }
+
+  private void initializeGameBoard() {
+    pokerTable = new Table(300, 300, 150, playerViews);
+    communityCardGrid = new CommunityCardGrid();
+    communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
+    communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
+    view.addGameObject(pokerTable);
+    view.addGameObject(communityCardGrid);
+    for (PlayerView playerView : playerViews) {
+      view.addGameObject(playerView);
+      playerView.getCardGrid().clearCardGrid();
     }
+  }
 
-
-    private File chooseNewFile(String initialDirectory) {
-
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)", "*.properties");
-        fileChooser.getExtensionFilters().add(filter);
-        fileChooser.setInitialDirectory(new File(initialDirectory + "/"));
-        File file = fileChooser.showOpenDialog(new Stage());
-        if(file!=null) {
-            return file;
-        }
-        return null;
+  private void initializePlayerList(String fileName) {
+    //TODO: use factory design pattern here to choose what kind of playerList to instantiate
+    //TODO: use configuration files to instantiate the players
+    try {
+      Properties modelProperties = reader.getPropertyFile(fileName);
+      String playerListType = modelProperties.getProperty("playerListType");
+      Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
+      interactivePlayer = new InteractivePlayer(interactivePlayerName,
+          playerStartingAmount, communityCards, pot);
+      List<Player> players = initializeAutoPlayers();
+      players.add(interactivePlayer);
+      playerList = (PlayerList) cl.getConstructor(List.class)
+          .newInstance(new ArrayList<>(players));
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 
-    private List<Player> initializeAutoPlayers() {
-        List<Player> autoPlayerList = new ArrayList<>();
-        for (int numPlayers = 0; numPlayers < numAutoPlayers; numPlayers++) {
-            String autoPlayerName = Game.AutoPlayerNames.values()[numPlayers].getValue();
-            autoPlayerList.add(new AutoPlayer(autoPlayerName, playerStartingAmount, communityCards, pot));
-        }
-        return autoPlayerList;
+  private void initializeFrontEndPlayers() {
+    //Todo: Create abstraction for AutoPlayerView and PlayerView
+    int playerOffset = 30;
+    for (Player currentPlayer : playerList.getActivePlayers()) {
+      PlayerView newPlayerView;
+      if (!currentPlayer.isInteractive()) {
+        newPlayerView = new PlayerView(currentPlayer.toString(),
+            currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
+      } else {
+        newPlayerView = new PlayerView(interactivePlayerName,
+            currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
+      }
+
+      newPlayerView.getPlayerInfoBox().getBankroll().textProperty()
+          .bind(currentPlayer.getBankroll().asString());
+
+      playerMappings.put(currentPlayer, newPlayerView);
+      playerViews.add(newPlayerView);
     }
-    private void initializeGameBoard() {
-        pokerTable = new Table(300, 300, 150, playerViews);
-        communityCardGrid = new CommunityCardGrid();
-        communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
-        communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
-        view.addGameObject(pokerTable);
-        view.addGameObject(communityCardGrid);
-        for (PlayerView playerView: playerViews) {
-            view.addGameObject(playerView);
-            playerView.getCardGrid().clearCardGrid();
-        }
-    }
+  }
 
-    private void initializePlayerList(String fileName){
-        //TODO: use factory design pattern here to choose what kind of playerList to instantiate
-        //TODO: use configuration files to instantiate the players
-        try {
-            Properties modelProperties = reader.getPropertyFile(fileName);
-            String playerListType = modelProperties.getProperty("playerListType");
-            Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
-            interactivePlayer = new InteractivePlayer(interactivePlayerName,
-                playerStartingAmount, communityCards, pot);
-            List<Player> players = initializeAutoPlayers();
-            players.add(interactivePlayer);
-            playerList = (PlayerList) cl.getConstructor(List.class)
-                .newInstance(new ArrayList<>(players));
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void initializeFrontEndPlayers(){
-        //Todo: Create abstraction for AutoPlayerView and PlayerView
-        int playerOffset = 30;
-        for (Player currentPlayer: playerList.getActivePlayers()){
-            PlayerView newPlayerView;
-            if (!currentPlayer.isInteractive()) {
-                newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
-            } else {
-                newPlayerView = new PlayerView(interactivePlayerName,
-                    currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
-            }
-
-            newPlayerView.getPlayerInfoBox().getBankroll().textProperty().bind(currentPlayer.getBankroll().asString());
-
-            playerMappings.put(currentPlayer, newPlayerView);
-            playerViews.add(newPlayerView);
-        }
-    }
-
-    private void initializeCommunity(){
-        displayCommunity = new FrontEndCommunity(200,400);
-    }
+  private void initializeCommunity() {
+    displayCommunity = new FrontEndCommunity(200, 400);
+  }
 
 
   //Everything gets caught here
@@ -397,7 +407,6 @@ public class Controller {
   }
 
 
-
   public void exchangeRound() {
     playerList.updateActivePlayers();
     for (Player player : playerList.getActivePlayers()) {
@@ -435,28 +444,29 @@ public class Controller {
 
     interactiveActionComplete = true;
 
-    if(!oneSolventPlayer){
+    if (!oneSolventPlayer) {
       actionLoop:
-      while(interactiveActionComplete){
+      while (interactiveActionComplete) {
         for (Player player : playersCopy) {
-          if (playerList.getRaiseSeat()!=player && player.isSolvent()){
+          if (playerList.getRaiseSeat() != player && player.isSolvent()) {
             lastBet = playerList.getLastBet();
             if (!player.isInteractive()) {
               AutoPlayer autoPlayer = (AutoPlayer) player;
               autoPlayer.decideAction(lastBet);
               view.addToActionLog(autoPlayer + autoPlayer.getAction());
-            }
-            else {
+            } else {
               interactiveActionComplete = false;
-              while (!interactiveActionComplete){
-                ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet, lastBet - player.getTotalBetAmount());
+              while (!interactiveActionComplete) {
+                ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet,
+                    lastBet - player.getTotalBetAmount());
                 Optional<Button> result = dialog.showAndWait();
-                if (result.isPresent()){
+                if (result.isPresent()) {
                   try {
                     Class<?> c = Class.forName("controller.Controller");
-                    Method method = c.getDeclaredMethod("indicate" + result.get().getId(), Player.class);
+                    Method method = c
+                        .getDeclaredMethod("indicate" + result.get().getId(), Player.class);
                     method.invoke(this, player);
-                    if (exitedPoker){
+                    if (exitedPoker) {
                       return;
                     }
                     //TODO: fix exceptions
@@ -466,12 +476,12 @@ public class Controller {
                 }
               }
             }
-            if (playerList.raiseMade(player)){
+            if (playerList.raiseMade(player)) {
               initializeActionMenu();
               break;
             }
             roundManager.checkOnePlayerRemains(playerList);
-            if (roundManager.isRoundOver()){
+            if (roundManager.isRoundOver()) {
               transitionRound();
               break actionLoop;
             }

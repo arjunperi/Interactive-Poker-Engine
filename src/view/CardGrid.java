@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class CardGrid extends GridPane {
+
   private static final int MAX_NUMBER_OF_ROWS = 2;
   private static final int MAX_NUMBER_OF_COLUMNS = 5;
 
@@ -71,7 +72,6 @@ public class CardGrid extends GridPane {
   }
 
 
-
   public void addCardView(CardView card) {
     addCardViewToLocation(card, new Point2D(currentColumn, currentRow));
   }
@@ -93,7 +93,9 @@ public class CardGrid extends GridPane {
       currentColumn++;
     }
 
-    card.setOnMouseClicked(event -> {card.toggleCardSelected();});
+    card.setOnMouseClicked(event -> {
+      card.toggleCardSelected();
+    });
     //card.setOnMouseClicked(event2 -> countNumberOfCardsHighlighted());
   }
 
@@ -129,14 +131,14 @@ public class CardGrid extends GridPane {
   }
 
   public void clearCardGrid() {
-    for (CardView card: cardLocations.keySet()) {
+    for (CardView card : cardLocations.keySet()) {
       this.getChildren().remove(card);
     }
     initializeCardAddingPosition();
   }
 
   public void flipCards() {
-    for (CardView card: cardLocations.keySet()) {
+    for (CardView card : cardLocations.keySet()) {
       card.setFrontEndVisible(true);
     }
   }

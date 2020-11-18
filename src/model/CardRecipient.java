@@ -4,26 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CardRecipient {
-    protected List<Card> cardsList;
-    protected List<Card> newCardList;
 
-    public CardRecipient(){
-        cardsList = new ArrayList<>();
-        newCardList = new ArrayList<>();
-    }
+  protected List<Card> cardsList;
+  protected List<Card> newCardList;
 
-    abstract void receiveCard(Card card);
+  public CardRecipient() {
+    cardsList = new ArrayList<>();
+    newCardList = new ArrayList<>();
+  }
 
-    public void clearNewCards() {
-        newCardList.clear();
-    }
+  abstract void receiveCard(Card card);
 
-    protected void addNewCards(Card card) {
-        newCardList.add(card);
-    }
+  public void clearNewCards() {
+    newCardList.clear();
+  }
 
-    public List<Card> getNewCards(){
-        return newCardList;
-    }
+  protected void addNewCards(Card card) {
+    newCardList.add(card);
+  }
+
+  public List<Card> getNewCards() {
+    return newCardList;
+  }
 
 }

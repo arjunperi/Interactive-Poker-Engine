@@ -9,13 +9,14 @@ import java.util.*;
 
 
 public class JSONReader {
+
   private Map<String, String> suits;
   private Map<Integer, String> ranks;
   private Map<Integer, String> strengths;
   private JSONObject jo;
   private String cardBack;
 
-  public JSONReader(){
+  public JSONReader() {
     suits = new HashMap<>();
     ranks = new HashMap<>();
     strengths = new HashMap<>();
@@ -79,7 +80,9 @@ public class JSONReader {
     return ranks;
   }
 
-  public Map<Integer, String> getStrengths(){return strengths;}
+  public Map<Integer, String> getStrengths() {
+    return strengths;
+  }
 
   /*public <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
     try {
