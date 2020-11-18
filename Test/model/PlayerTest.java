@@ -320,6 +320,9 @@ public class PlayerTest extends DukeApplicationTest {
         player.receiveCard(testCard4);
         player.receiveCard(otherCard);
 
+        deck.removeAll(player.getHand().getCards());
+
+
         assertTrue(player.getHand().getCards().contains(testCard));
         assertTrue(player.getHand().getCards().contains(testCard2));
         assertTrue(player.getHand().getCards().contains(testCard3));
@@ -358,7 +361,7 @@ public class PlayerTest extends DukeApplicationTest {
         System.out.println(player.getHand().getCards());
 
         player.decideAction(0);
-        assertEquals(40,pot.getPotTotal());
+        assertEquals(40,pot.getPotTotal().getValue());
 
     }
 

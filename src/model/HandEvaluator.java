@@ -14,7 +14,6 @@ public class HandEvaluator {
     private static final int ACERANK = 14;
     private static final int HIGHESTCARDINDEX = 0;
     private static final int SECONDHIGHESTCARDINDEX = 1;
-    private static final int THIRDHIGHESTCARDINDEX = 2;
     private static final int STRENGTHINDEX = 0;
     private static final int STRAIGHTFLUSHRANK = 8;
     private static final int FOUROFAKINDRANK = 7;
@@ -33,7 +32,7 @@ public class HandEvaluator {
         bestHandMapping = new HashMap<>();
     }
 
-    private boolean isFiveCardHand(Hand hand){
+    boolean isFiveCardHand(Hand hand){
         for(Card card : hand.getCards()){
             if(card.getRank()<1 || hand.getHandSize()!=POKERHANDSIZE){
                 return false;
