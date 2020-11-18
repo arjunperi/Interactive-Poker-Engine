@@ -3,22 +3,51 @@ package controller;
 // limit number of players??
 
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.*;
+import model.AutoPlayer;
+import model.Card;
+import model.CardRecipient;
+import model.CommunityCards;
+import model.Dealer;
+import model.Game;
+import model.InteractivePlayer;
+import model.Model;
+import model.ModelException;
+import model.Player;
+import model.PlayerList;
+import model.Pot;
+import model.RoundManager;
 import utility.PropertiesFileReader;
 import utility.PropertiesFileWriter;
-import view.*;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.lang.reflect.Method;
-import java.util.*;
+import view.CardGrid;
+import view.CardView;
+import view.CommunityCardGrid;
+import view.FrontEndCommunity;
+import view.GameDisplayRecipient;
+import view.GameView;
+import view.PlayerView;
+import view.Table;
 
 public class Controller {
 
@@ -41,9 +70,6 @@ public class Controller {
   private int totalRounds;
   private Map<Player, PlayerView> playerMappings;
   private Map<Card, CardView> frontEndCardMappings;
-  private PropertiesFileReader reader;
-  private PropertiesFileWriter customWriter;
-  private FileWriter writer;
   private Properties modelProperties;
   private String currentGame;
   private boolean gameStart;
@@ -74,10 +100,7 @@ public class Controller {
     frontEndCardMappings = new HashMap<>();
     frontEndPlayers = new ArrayList<>();
     playerViews = new ArrayList<>();
-    reader = new PropertiesFileReader();
     initializeCardSettings();
-
-    customWriter = new PropertiesFileWriter();
     view = new GameView();
     roundNumber = 1;
     initializePlayerSelectMenu();
@@ -158,7 +181,7 @@ public class Controller {
   public void initializeProperties(String fileName) {
     currentGame = fileName;
     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-    modelProperties = reader.getPropertyFile(fileName);
+    modelProperties = PropertiesFileReader.getPropertyFile(fileName);
     totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
     maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
     if (gameStart) {
@@ -188,7 +211,7 @@ public class Controller {
     String savedFileName = savedFile.getName();
     String savedFileNameWithoutExtension = savedFileName
         .substring(0, savedFileName.lastIndexOf('.'));
-    Properties savedInfo = reader.getPropertyFile(savedFileNameWithoutExtension);
+    Properties savedInfo = PropertiesFileReader.getPropertyFile(savedFileNameWithoutExtension);
     interactivePlayerName = savedInfo.getProperty("NAME");
     playerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
     getNumAutoPlayers();
@@ -243,7 +266,7 @@ public class Controller {
       cashOutProperties.setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
       cashOutProperties.setProperty("NAME", player.toString());
 
-      customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
+      PropertiesFileWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -315,7 +338,7 @@ public class Controller {
     //TODO: use factory design pattern here to choose what kind of playerList to instantiate
     //TODO: use configuration files to instantiate the players
     try {
-      Properties modelProperties = reader.getPropertyFile(fileName);
+      Properties modelProperties = PropertiesFileReader.getPropertyFile(fileName);
       String playerListType = modelProperties.getProperty("playerListType");
       Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
       interactivePlayer = new InteractivePlayer(interactivePlayerName,
