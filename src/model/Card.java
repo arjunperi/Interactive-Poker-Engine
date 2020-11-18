@@ -1,6 +1,6 @@
 package model;
 
-import controller.FileReader;
+import utility.PropertiesFileReader;
 
 public class Card {
 
@@ -8,7 +8,7 @@ public class Card {
   private int rank;
   private boolean isBackEndVisible;
   private boolean isInteractivePlayerCard;
-  private FileReader reader;
+  private PropertiesFileReader reader;
 
 
   public Card(int rank, String suit) {
@@ -16,7 +16,7 @@ public class Card {
     this.rank = rank;
     isBackEndVisible = false;
     isInteractivePlayerCard = false;
-    reader = new FileReader();
+    reader = new PropertiesFileReader();
   }
 
 

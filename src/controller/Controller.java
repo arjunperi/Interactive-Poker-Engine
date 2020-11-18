@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.*;
+import utility.PropertiesFileReader;
+import utility.PropertiesFileWriter;
 import view.*;
 
 import java.io.File;
@@ -39,8 +41,8 @@ public class Controller {
   private int totalRounds;
   private Map<Player, PlayerView> playerMappings;
   private Map<Card, CardView> frontEndCardMappings;
-  private FileReader reader;
-  private Writer customWriter;
+  private PropertiesFileReader reader;
+  private PropertiesFileWriter customWriter;
   private FileWriter writer;
   private Properties modelProperties;
   private String currentGame;
@@ -72,10 +74,10 @@ public class Controller {
     frontEndCardMappings = new HashMap<>();
     frontEndPlayers = new ArrayList<>();
     playerViews = new ArrayList<>();
-    reader = new FileReader();
+    reader = new PropertiesFileReader();
     initializeCardSettings();
 
-    customWriter = new Writer();
+    customWriter = new PropertiesFileWriter();
     view = new GameView();
     roundNumber = 1;
     initializePlayerSelectMenu();
