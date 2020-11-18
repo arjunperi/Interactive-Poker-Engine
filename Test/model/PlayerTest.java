@@ -296,11 +296,17 @@ public class PlayerTest extends DukeApplicationTest {
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
         AutoPlayer player2 = new AutoPlayer("Player2", 100, communityCards, pot);
-        Card testCard = new Card(8, "CLUBS");
-        Card testCard2 = new Card(8, "CLUBS");
-        Card testCard3 = new Card(8, "HEARTS");
-        Card otherCard3 = new Card(8, "DIAMONDS");
-        Card otherCard4 = new Card(9, "SPADES");
+//        Card testCard = new Card(8, "CLUBS");
+//        Card testCard2 = new Card(8, "CLUBS");
+//        Card testCard3 = new Card(8, "HEARTS");
+//        Card otherCard3 = new Card(8, "DIAMONDS");
+//        Card otherCard4 = new Card(9, "SPADES");
+
+        Card testCard = deck.StringToCard("8 CLUBS");
+        Card testCard2 = deck.StringToCard("8 CLUBS");
+        Card testCard3 = deck.StringToCard("8 HEARTS");
+        Card otherCard3 = deck.StringToCard("8 DIAMONDS");
+        Card otherCard4 = deck.StringToCard("9 SPADES");
 
         player.receiveCard(testCard);
         player.receiveCard(testCard2);
@@ -311,7 +317,7 @@ public class PlayerTest extends DukeApplicationTest {
         System.out.println(handCombiner.getAllHands(player.getTotalHand()));
         System.out.println(player.getHand().getCards());
 
-        //player.decideAction(0);
+        player.decideAction(0);
         assertEquals(40,pot.getPotTotal());
 
     }

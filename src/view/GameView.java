@@ -19,6 +19,7 @@ import javax.swing.*;
 import javax.swing.tree.ExpandVetoException;
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,7 @@ public class GameView {
         initializeBorderPane();
     }
 
+
     public Alert makeCashOutAlert(String playerName, int playerBankroll){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Cash Out");
@@ -84,6 +86,33 @@ public class GameView {
         centerGroup.getChildren().add(startBox);
     }
 
+
+    public Dialog makeDialogBox(TextField input, String prompt){
+        clear();
+        Dialog dialogBox = new TextInputDialog();
+        dialogBox.setHeaderText(prompt);
+
+        GridPane grid = new GridPane();
+        grid.setId(prompt);
+
+        GridPane.setConstraints(input, 0,1);
+        grid.getChildren().add(input);
+        dialogBox.getDialogPane().setContent(grid);
+
+        return dialogBox;
+    }
+
+    public void makePlayerSelectScreen(EventHandler<ActionEvent> newPlayerEvent, EventHandler<ActionEvent> loadPlayerEvent){
+        clear();
+        VBox playerBox = new VBox();
+        playerBox.setId("PlayerBox");
+        Button newPlayerButton = makeButton("New Player", newPlayerEvent);
+        newPlayerButton.setId("New Player");
+        Button loadSavedPlayer = makeButton("Load Player",loadPlayerEvent);
+        playerBox.getChildren().addAll(newPlayerButton, loadSavedPlayer);
+        centerGroup.getChildren().add(playerBox);
+
+    }
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
         clear();
         VBox gameBox = new VBox();

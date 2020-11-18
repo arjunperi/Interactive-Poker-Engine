@@ -56,6 +56,23 @@ public class Game {
         return handEvaluator;
     }
 
+    public enum AutoPlayerNames{
+
+        Player1("Johnny"),
+        player2("Cindy"),
+        player3("Thomas"),
+        player4("Daequan"),
+        player5("Lebron"),
+        player6("Metta World Peace");
+
+        private final String value;
+
+        AutoPlayerNames(final String newValue) {
+            value = newValue;
+        }
+
+        public String getValue() { return value; }
+    }
 
 }
 
