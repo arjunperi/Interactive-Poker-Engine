@@ -28,7 +28,7 @@ import model.AutoPlayer;
 import model.Card;
 import model.CardRecipient;
 import model.CommunityCards;
-import model.ControllerException;
+import controller.ControllerException;
 import model.Dealer;
 import model.Game;
 import model.InteractivePlayer;
@@ -573,17 +573,7 @@ public class Controller {
     }
   }
 
-  private Card getCardFromCardView(CardView card) {
-    return frontEndCardMappings.entrySet()
-        .stream()
-        .filter(entry -> card.equals(entry.getValue()))
-        .map(Map.Entry::getKey).findFirst().get();
-  }
 
-  private boolean isSelectedCardsExchangeable() {
-    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size()
-        <= maxExchangeCards;
-  }
 
 
   //should this be in View or Controller?
