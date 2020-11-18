@@ -4,18 +4,18 @@ import java.util.List;
 
 public class CommunityCards extends CardRecipient {
 
-    public CommunityCards(){
-       super();
-    }
+  public CommunityCards() {
+    super();
+  }
 
-    void receiveCard(Card card) {
-        cardsList.add(card);
-        addNewCards(card);
-    }
+  void receiveCard(Card card) {
+    cardsList.add(card);
+    addNewCards(card);
+  }
 
-    public List<Card> getCommunityCardsList(){
-        return cardsList;
-    }
+  public List<Card> getCommunityCardsList() {
+    return cardsList;
+  }
 
 
 }

@@ -45,18 +45,6 @@ import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
 import view.Table;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import model.*;
-import view.*;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -69,18 +57,18 @@ public class Controller {
   private Model model;
   private RoundManager roundManager;
   private PlayerList playerList;
-  private List<GameDisplayRecipient> frontEndPlayers;
+  private final List<GameDisplayRecipient> frontEndPlayers;
   private CommunityCards communityCards;
   private GameDisplayRecipient displayCommunity;
   private Pot pot;
   private Dealer dealer;
-  private GameView view;
+  private final GameView view;
   private int roundNumber;
   private int totalRounds;
-  private Map<Player, PlayerView> playerMappings;
-  private Map<Card, CardView> frontEndCardMappings;
-  private FileReader reader;
-  private Writer customWriter;
+  private final Map<Player, PlayerView> playerMappings;
+  private final Map<Card, CardView> frontEndCardMappings;
+  private final FileReader reader;
+  private final Writer customWriter;
   private FileWriter writer;
   private Properties modelProperties;
   private String currentGame;
@@ -92,7 +80,7 @@ public class Controller {
   private String betScreenMessage;
   private volatile boolean interactiveActionComplete;
   private Table pokerTable;
-  private List<PlayerView> playerViews;
+  private final List<PlayerView> playerViews;
   private String cardBack;
   private JSONReader jsonReader;
   private CommunityCardGrid communityCardGrid;
@@ -580,7 +568,6 @@ public class Controller {
     for (Card discardedCard : player.getDiscardedCards()) {
       CardView discardedCardView = frontEndCardMappings.get(discardedCard);
       //view.remove(discardedFrontEndCard);
-      ;
 
             /*int dealLocation = displayRecipient.getFrontEndCardLocations()
                 .get(discardedFrontEndCard);*/

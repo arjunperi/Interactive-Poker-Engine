@@ -2,59 +2,59 @@ package model;
 
 
 import controller.JSONReader;
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class Game {
-    private RoundManager roundManager;
-    private Pot pot;
-    private Deck deck;
-    private Dealer dealer;
-    private CommunityCards communityCards;
-    private List<String> suits;
-    private List<String> ranks;
-    private JSONReader reader;
-    private HandEvaluator handEvaluator;
 
-    //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
-    public Game(){
-        pot = new Pot();
-        this.communityCards = new CommunityCards();
+  private final RoundManager roundManager;
+  private final Pot pot;
+  private final Deck deck;
+  private final Dealer dealer;
+  private final CommunityCards communityCards;
+  private List<String> suits;
+  private List<String> ranks;
+  private final JSONReader reader;
+  private final HandEvaluator handEvaluator;
 
-        reader = new JSONReader();
-        reader.parse("/cardSettings.json");
+  //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
+  public Game() {
+    pot = new Pot();
+    this.communityCards = new CommunityCards();
 
-        deck = new Deck(reader.getSuitNames(), reader.getRankValues());
+    reader = new JSONReader();
+    reader.parse("/cardSettings.json");
 
-        dealer = new Dealer(deck);
-        handEvaluator = new HandEvaluator();
-        roundManager = new RoundManager(pot);
-    }
+    deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 
-    public RoundManager getTurnManager(){
-        return roundManager;
-    }
+    dealer = new Dealer(deck);
+    handEvaluator = new HandEvaluator();
+    roundManager = new RoundManager(pot);
+  }
 
-    public Deck getDeck(){
-        return deck;
-    }
+  public RoundManager getTurnManager() {
+    return roundManager;
+  }
 
-    public CommunityCards getCommunityCards(){
-        return communityCards;
-    }
+  public Deck getDeck() {
+    return deck;
+  }
 
-    public Pot getPot(){
-        return pot;
-    }
+  public CommunityCards getCommunityCards() {
+    return communityCards;
+  }
 
-    public Dealer getDealer(){
-        return dealer;
-    }
+  public Pot getPot() {
+    return pot;
+  }
 
-    public HandEvaluator getHandEvaluator(){
-        return handEvaluator;
-    }
+  public Dealer getDealer() {
+    return dealer;
+  }
+
+  public HandEvaluator getHandEvaluator() {
+    return handEvaluator;
+  }
 
 
 }

@@ -10,11 +10,11 @@ import javafx.scene.text.Text;
 
 public class CardView extends StackPane {
 
-  private String rankSymbol;
+  private final String rankSymbol;
   private boolean isFrontEndVisible;
   private ImageView displayedImage;
-  private String suitImage;
-  private String cardBack;
+  private final String suitImage;
+  private final String cardBack;
   private boolean isSelected;
 
   private Text rank;

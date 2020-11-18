@@ -7,16 +7,16 @@ import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
-import model.PlayerList;
 
 public class Table extends Group {
-  private int centerX;
-  private int centerY;
-  private int playerDistanceFromCenter;
-  private Map<Point2D, PlayerView> playerPositions;
-  private List<PlayerView> playerViews;
+
+  private final int centerX;
+  private final int centerY;
+  private final int playerDistanceFromCenter;
+  private final Map<Point2D, PlayerView> playerPositions;
+  private final List<PlayerView> playerViews;
   //private CommunityCardGrid communityCardGrid;
-  private Circle pokerTable;
+  private final Circle pokerTable;
   List<PlayerView> players;
 
   /*public Table (int centerX, int centerY, int radius, int numPlayers) {
@@ -39,7 +39,7 @@ public class Table extends Group {
     calculatePlayerPositions();
   }*/
 
-  public Table (int centerX, int centerY, int radius, List<PlayerView> players) {
+  public Table(int centerX, int centerY, int radius, List<PlayerView> players) {
     super();
     pokerTable = new Circle(centerX, centerY, radius);
     this.getChildren().add(pokerTable);
