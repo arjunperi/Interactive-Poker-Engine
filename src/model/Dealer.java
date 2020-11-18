@@ -20,11 +20,22 @@ public class Dealer {
         }
     }
 
-    public void exchangeCards(Player player, List<String> exchangeCards){
+    /*public void exchangeCards(Player player, List<String> exchangeCards){
         player.clearDiscardedCards();
         player.clearNewCards();
         for (String exchangeCard: exchangeCards){
             player.discardCard(deck.StringToCard(exchangeCard));
+            System.out.println(player.toString() + " gets: " + deck.peekTopCard().toString());
+            Card cardDealt = deck.getTopCard();
+            player.receiveCard(cardDealt);
+        }
+    }*/
+
+    public void exchangeCards(Player player, List<Card> exchangeCards){
+        player.clearDiscardedCards();
+        player.clearNewCards();
+        for (Card exchangeCard: exchangeCards){
+            player.discardCard(exchangeCard);
             System.out.println(player.toString() + " gets: " + deck.peekTopCard().toString());
             Card cardDealt = deck.getTopCard();
             player.receiveCard(cardDealt);

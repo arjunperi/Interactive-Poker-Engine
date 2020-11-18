@@ -67,7 +67,7 @@ public class Controller {
   private int roundNumber;
   private int totalRounds;
   private Map<Player, PlayerView> playerMappings;
-  private Map<String, CardView> frontEndCardMappings;
+  private Map<Card, CardView> frontEndCardMappings;
   private FileReader reader;
   private Writer customWriter;
   private FileWriter writer;
@@ -424,9 +424,13 @@ public class Controller {
 
         if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {
           Set<CardView> selectedCards = playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards();
+          List<Card> exchangeCards = new ArrayList<>();
           for (CardView card : selectedCards) {
-            String cardToBeExchanged = ;
+            Card cardToBeExchanged = getCardFromCardView(card);
+            exchangeCards.add(cardToBeExchanged);
           }
+          dealer.exchangeCards(player, exchangeCards);
+          exchangeFrontEndCards(player);
           /*List<String> exchangeCards = new ArrayList<>();
           for (TextField exchangeInput: exchangeInputs) {
             if (exchangeInput.getText().contains(" ")) {
@@ -449,6 +453,13 @@ public class Controller {
     roundNumber++;
     playerList.updateActivePlayers();
     initializeActionMenu();
+  }
+
+  private Card getCardFromCardView(CardView card) {
+    return frontEndCardMappings.entrySet()
+        .stream()
+        .filter(entry -> card.equals(entry.getValue()))
+        .map(Map.Entry::getKey).findFirst().get();
   }
 
   private boolean isSelectedCardsExchangeable() {
@@ -554,7 +565,7 @@ public class Controller {
     int cardIndex = 0;
     CardGrid playerCardGrid = playerMappings.get(player).getCardGrid();
     for (Card discardedCard : player.getDiscardedCards()) {
-      CardView discardedCardView = frontEndCardMappings.get(discardedCard.toString());
+      CardView discardedCardView = frontEndCardMappings.get(discardedCard);
       //view.remove(discardedFrontEndCard);
       ;
 
@@ -578,7 +589,7 @@ public class Controller {
     //FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
     CardView cardView = new CardView(jsonReader.getRanks().get(card.getRank()),
         jsonReader.getSuits().get(card.getCardSuit()), cardBack, isFrontEndVisible);
-    frontEndCardMappings.put(card.toString(), cardView);
+    frontEndCardMappings.put(card, cardView);
     return cardView;
   }
 
