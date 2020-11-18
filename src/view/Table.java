@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import model.PlayerList;
 
 public class Table extends Group {
+
   private int centerX;
   private int centerY;
   private int playerDistanceFromCenter;
@@ -39,7 +40,7 @@ public class Table extends Group {
     calculatePlayerPositions();
   }*/
 
-  public Table (int centerX, int centerY, int radius, List<PlayerView> players) {
+  public Table(int centerX, int centerY, int radius, List<PlayerView> players) {
     super();
     pokerTable = new Circle(centerX, centerY, radius);
     this.getChildren().add(pokerTable);

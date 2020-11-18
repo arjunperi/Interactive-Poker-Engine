@@ -4,6 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.layout.BorderPane;
 
 public class PlayerView extends BorderPane {
+
   private CardGrid cardGrid;
   private PlayerInfoBox playerInfoBox;
   private Point2D position;
@@ -19,7 +20,7 @@ public class PlayerView extends BorderPane {
     this.setCenter(cardGrid);
     this.setBottom(playerInfoBox);
 
-    }
+  }
 
   public CardGrid getCardGrid() {
     return cardGrid;
@@ -31,6 +32,7 @@ public class PlayerView extends BorderPane {
 
   public void setPosition(Point2D position) {
     this.setLayoutX(position.getX() - (playerInfoBox.getMinWidth() / 2));
-    this.setLayoutY(position.getY() - ((playerInfoBox.getMinHeight() + cardGrid.getMinHeight()) / 2));
+    this.setLayoutY(
+        position.getY() - ((playerInfoBox.getMinHeight() + cardGrid.getMinHeight()) / 2));
   }
 }

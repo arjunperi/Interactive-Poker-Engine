@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -41,7 +40,6 @@ import model.RoundManager;
 import view.CardGrid;
 import view.CardView;
 import view.CommunityCardGrid;
-import view.FrontEndCommunity;
 import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
@@ -260,21 +258,37 @@ public class Controller {
   }
 
   public void initializeProperties(String fileName) {
-    currentGame = fileName;
-    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-    modelProperties = reader.getPropertyFile(fileName);
-    totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
-    maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
-    if (gameStart) {
-      initializePlayerList(fileName);
-      initializeFrontEndPlayers();
-      gameStart = false;
-    }
-    view.makeActionLog();
-    model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
-    initializeGameBoard();
-    nextRound();
-    if (exitedPoker) {
+
+    try {
+      currentGame = fileName;
+      fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+      modelProperties = reader.getPropertyFile(fileName);
+      totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
+      maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
+      if (gameStart) {
+        initializePlayerList(fileName);
+        initializeFrontEndPlayers();
+        gameStart = false;
+      }
+      view.makeActionLog();
+      model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
+      initializeGameBoard();
+      nextRound();
+      if (exitedPoker) {
+        exitedPoker = false;
+        exitPoker(interactivePlayer);
+      }
+    } catch (NumberFormatException e) {
+      showError(
+          "Invalid formatting in properties file. Exit program and enter values in correct format.");
+      exitedPoker = false;
+      exitPoker(interactivePlayer);
+    } catch (ControllerException e) {
+      showError(e.getMessage());
+      exitedPoker = false;
+      exitPoker(interactivePlayer);
+    } catch (ModelException e) {
+      showError(e.getMessage());
       exitedPoker = false;
       exitPoker(interactivePlayer);
     }
@@ -324,7 +338,6 @@ public class Controller {
 
   private void initializePlayerList(String fileName) {
     //TODO: use factory design pattern here to choose what kind of playerList to instantiate
-    //TODO: use configuration files to instantiate the players
     try {
       Properties modelProperties = reader.getPropertyFile(fileName);
       String playerListType = modelProperties.getProperty("playerListType");
@@ -336,7 +349,8 @@ public class Controller {
       playerList = (PlayerList) cl.getConstructor(List.class)
           .newInstance(new ArrayList<>(players));
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new ControllerException(
+          "Invalid player list input in file. Exit program and reconfigure file.");
     }
   }
 
@@ -374,20 +388,17 @@ public class Controller {
   //Everything gets caught here
   private void nextRound() {
     while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
-      String action = model.getAction(roundNumber);
-      System.out.println("\nnext round");
-      model.dealFlow(roundNumber);
       try {
+        String action = model.getAction(roundNumber);
+        System.out.println("\nnext round");
+        model.backEndDeal(roundNumber);
         Class<?> c = Class.forName("controller.Controller");
         Method method = c.getDeclaredMethod(action);
         method.invoke(this);
-      }
-      //catches an invocation target exception
-      catch (Exception e) {
+      } catch (ModelException e) {
+        throw new ControllerException(e.getCause().getMessage());
+      } catch (Exception e) {
         e.printStackTrace();
-//            displayBetMenu(interactivePlayer, e.getCause().getMessage());
-        //bad input strings or something do another catch
-//            showError(e.getCause().getMessage());
       }
     }
     checkShowDown();
@@ -425,7 +436,7 @@ public class Controller {
     initializeActionMenu();
   }
 
-    public void exchangeRound() {
+  public void exchangeRound() {
     playerList.updateActivePlayers();
     for (Player player : playerList.getActivePlayers()) {
       if (!player.isInteractive()) {
@@ -435,7 +446,7 @@ public class Controller {
         exchangeFrontEndCards(autoPlayer);
       } else {
         Optional<ButtonType> exchangeBoxResult;
-        while(!interactiveActionComplete){
+        while (!interactiveActionComplete) {
           Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
           exchangeBoxResult = exchangeBox.showAndWait();
           if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {

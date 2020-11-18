@@ -10,6 +10,7 @@ public class ControllerException extends RuntimeException {
 
   /**
    * Allows throwing a ModelException with custom message.
+   *
    * @param message
    */
   public ControllerException(String message) {
@@ -19,6 +20,7 @@ public class ControllerException extends RuntimeException {
 
   /**
    * Allows throwing a ModelException with custom message and cause.
+   *
    * @param message
    */
   public ControllerException(String message, Throwable cause) {
