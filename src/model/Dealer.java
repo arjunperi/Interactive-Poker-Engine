@@ -31,17 +31,6 @@ public class Dealer {
         }
     }
 
-//    private Card stringToCard(String cardString){
-//        try{
-//            Card exchangeCard = new Card(Integer.parseInt(cardString.split(" ")[0]), cardString.split(" ")[1]);
-//            return exchangeCard;
-//        }
-//        catch (NumberFormatException e){
-//            throw new ModelException("Invalid Card Input");
-//        }
-//    }
-
-
     public void checkDeck(){
         if (deck.isEmpty()){
             System.exit(0);

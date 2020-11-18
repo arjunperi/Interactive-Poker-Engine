@@ -1,5 +1,8 @@
 package view;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -9,16 +12,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import model.Player;
 import pokerSuite.PokerRunner;
 
-import javax.swing.*;
-import javax.swing.tree.ExpandVetoException;
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class GameView {
@@ -27,27 +27,27 @@ public class GameView {
     private Group topGroup;
     private Group centerGroup;
     private Group bottomGroup;
+    private Group rightGroup;
     private Button homeButton;
     private VBox gameBox;
+    private ListView actionLog;
 
     public GameView(){
         root = new BorderPane();
-//        initializeBorderPane();
-        topGroup = new Group();
-        centerGroup = new Group();
-        centerGroup.setId("Center");
-        bottomGroup = new Group();
-        root.setCenter(centerGroup);
-        root.setTop(topGroup);
-        root.setBottom(bottomGroup);
+        initializeBorderPane();
         gameBox = new VBox();
     }
 
     public void initializeBorderPane(){
         topGroup = new Group();
+        topGroup.setId("Top");
         centerGroup = new Group();
         centerGroup.setId("Center");
         bottomGroup = new Group();
+        bottomGroup.setId("Center");
+        rightGroup = new Group();
+        rightGroup.setId("Right");
+        root.setRight(rightGroup);
         root.setCenter(centerGroup);
         root.setTop(topGroup);
         root.setBottom(bottomGroup);
@@ -64,6 +64,7 @@ public class GameView {
         gameBox = new VBox();
         initializeBorderPane();
     }
+
 
     public Alert makeCashOutAlert(String playerName, int playerBankroll){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -90,7 +91,7 @@ public class GameView {
     }
 
     public void makeGameSelectScreen(EventHandler<ActionEvent> holdemEvent, EventHandler<ActionEvent> drawEvent, EventHandler<ActionEvent> studEvent, EventHandler<ActionEvent> customEvent){
-        clear();
+        centerGroup.getChildren().clear();
         gameBox.setId("GameBox");
         Button holdEmButton = makeButton("Holdem", holdemEvent);
         holdEmButton.setId("Holdem");
@@ -124,7 +125,6 @@ public class GameView {
         result.setOnAction(handler);
         return result;
     }
-
 
     public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount){
         //centerGroup.getChildren().clear();
@@ -280,5 +280,18 @@ public class GameView {
         Button cashOutButton = makeButton("Cash Out", cashOutEvent);
         nextRoundBox.getChildren().addAll(nextRoundButton,cashOutButton);
         bottomGroup.getChildren().add(nextRoundBox);
+    }
+
+    public void makeActionLog() {
+        actionLog = new ListView<>();
+        actionLog.setId("ActionLog");
+//        action.getStyleClass().add("listview");
+//        action.setMinHeight(HISTORY_MIN_HEIGHT);
+//        action.setMinWidth(HISTORY_MIN_WIDTH);
+        rightGroup.getChildren().add(actionLog);
+    }
+
+    public void addToActionLog(String playerAction){
+        actionLog.getItems().add(playerAction);
     }
 }

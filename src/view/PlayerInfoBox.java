@@ -66,7 +66,7 @@ public class PlayerInfoBox extends GridPane {
     this.add(playerName, NAME_POSITION,0);
     this.add(playerBankroll, BANKROLL_POSITION, 0);
     this.add(playerAvatar, AVATAR_POSITION,0);
-    this.add(playerAction, ACTION_POSITION,0);
+    this.add(playerAction, NAME_POSITION,1);
 
     this.setHgap(5);
     this.setStyle("-fx-border-color: red");

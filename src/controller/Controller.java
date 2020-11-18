@@ -1,6 +1,8 @@
 package controller;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -62,7 +64,6 @@ public class Controller {
     private String cardBack;
     private JSONReader jsonReader;
 
-
     private static final String CARD_SETTINGS = "/cardSettings.json";
     private CommunityCardGrid communityCardGrid;
 
@@ -118,15 +119,12 @@ public class Controller {
                 exitPoker(interactivePlayer);
             }
         };
-//        EventHandler<ActionEvent> cashOutEvent = e -> indicateCashOut(interactivePlayer);
         view.makeEndRoundScreen(nextRoundEvent, cashOutEvent);
-//        if (exitedPoker) {
-//            exitPoker(interactivePlayer);
-//        }
     }
 
     public void startRound(){
         System.out.println("\nnew hand");
+        view.addToActionLog("NEW HAND");
         roundNumber = 1;
         oneSolventPlayer = false;
         playerList.resetRaiseStats();
@@ -201,6 +199,7 @@ public class Controller {
         if (gameStart){
             initializePlayerList(fileName);
             initializeFrontEndPlayers();
+            view.makeActionLog();
             gameStart = false;
         }
         initializeCommunity();
@@ -260,8 +259,6 @@ public class Controller {
 
             playerMappings.put(currentPlayer, newPlayerView);
             playerViews.add(newPlayerView);
-            //view.addGameObject(newPlayerView);
-            //frontEndPlayers.add(newPlayerView);
         }
     }
 
@@ -294,6 +291,7 @@ public class Controller {
         if (!roundManager.isRoundOver() && !exitedPoker){
             roundManager.showDown(playerList);
             flipActivePlayerCards();
+            view.addToActionLog(roundManager.getWinDialog());
             transitionRound();
         }
     }
@@ -334,8 +332,6 @@ public class Controller {
                 exchangeInputs.add(new TextField());
             }
             if (!player.isInteractive()) {
-
-                // Autoplayer decide exchange
                 AutoPlayer autoPlayer = (AutoPlayer) player;
                 autoPlayer.decideExchange();
                 dealer.exchangeCards(autoPlayer,autoPlayer.decideExchange());
@@ -382,13 +378,8 @@ public class Controller {
                         lastBet = playerList.getLastBet();
                         if (!player.isInteractive()) {
                             AutoPlayer autoPlayer = (AutoPlayer) player;
-                            try{
-                                Thread.sleep(2500);
-                                autoPlayer.decideAction(lastBet);
-                            }
-                            catch (InterruptedException e){
-                                showError(e.getMessage());
-                            }
+                            autoPlayer.decideAction(lastBet);
+                            view.addToActionLog(autoPlayer + autoPlayer.getAction());
                         }
                         else {
                             interactiveActionComplete = false;
@@ -498,6 +489,7 @@ public class Controller {
             else {
                 try {
                     player.bet(betAmount);
+                    view.addToActionLog(player.toString() +  " bet $" + betAmount);
                     interactiveActionComplete = true;
                     PlayerView displayPlayer = playerMappings.get(player);
                     //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
@@ -515,29 +507,20 @@ public class Controller {
     private void indicateFold(Player player){
         interactiveActionComplete = true;
         player.fold();
-        PlayerView displayPlayer = playerMappings.get(player);
-        displayPlayer.getPlayerInfoBox().setPlayerAction(player.toString() + " folded");
-
-        //FrontEndPlayer displayPlayer = playerMappings.get(player);
-        //displayPlayer.foldDisplay();
+        view.addToActionLog(player.toString() +  " folded");
     }
-
 
     private void indicateCall(Player player){
         interactiveActionComplete = true;
         System.out.println("call");
         player.call(lastBet);
-        PlayerView displayPlayer = playerMappings.get(player);
-        //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
-        //FrontEndPlayer displayPlayer = playerMappings.get(player);
-//        displayPlayer.callDisplay();
+        view.addToActionLog(player.toString() +  " called");
     }
 
     private void indicateCheck(Player player){
         interactiveActionComplete = true;
         System.out.println("Check");
-        //FrontEndPlayer displayPlayer = playerMappings.get(player);
-        //displayPlayer.checkDisplay();
+        view.addToActionLog(player.toString() +  " checked");
     }
 
     private void indicateCashOut(Player player){
@@ -556,7 +539,5 @@ public class Controller {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
 }
 
