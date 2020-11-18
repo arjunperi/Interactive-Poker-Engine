@@ -88,9 +88,9 @@ public class CardGrid extends GridPane {
     }
 
     this.add(card, column, row);
-    cardLocations.put(card, location);
+    cardLocations.put(card, new Point2D(column, row));
 
-    if (location.getX() == currentColumn) {
+    if (column == currentColumn) {
       currentColumn++;
     }
 

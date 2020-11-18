@@ -21,10 +21,10 @@ class JSONReaderTest {
   @Test
   void getSuits() {
     Map<String, String> expectedSuits = new HashMap<>();
-    expectedSuits.put("HEARTS", "hearts.png");
-    expectedSuits.put("SPADES", "spades.png");
-    expectedSuits.put("CLUBS", "clubs.png");
-    expectedSuits.put("DIAMONDS", "diamonds.png");
+    expectedSuits.put("HEARTS", "/heart-suit.png");
+    expectedSuits.put("SPADES", "/spade-suit.png");
+    expectedSuits.put("CLUBS", "/club-suit.png");
+    expectedSuits.put("DIAMONDS", "/diamond-suit.png");
 
     Map<String, String> actualSuits = reader.getSuits();
     assertEquals(expectedSuits, actualSuits);
