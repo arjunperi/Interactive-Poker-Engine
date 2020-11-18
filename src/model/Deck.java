@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class Deck {
+public class Deck extends Stack<Card> {
     private Stack<Card> deck;
     private List<String> suits;
     private List<Integer> ranks;

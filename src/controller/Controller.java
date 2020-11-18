@@ -3,15 +3,8 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.*;
@@ -21,7 +14,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -382,13 +374,9 @@ public class Controller {
                         lastBet = playerList.getLastBet();
                         if (!player.isInteractive()) {
                             AutoPlayer autoPlayer = (AutoPlayer) player;
-                            try{
-                                Thread.sleep(2500);
-                                autoPlayer.decideAction(lastBet);
-                            }
-                            catch (InterruptedException e){
-                                showError(e.getMessage());
-                            }
+
+                            autoPlayer.decideAction(lastBet);
+
                         }
                         else {
                             interactiveActionComplete = false;
@@ -508,9 +496,11 @@ public class Controller {
                 }
             }
         }
-        betScreenMessage = "Enter a Bet:";
-    }
 
+
+        betScreenMessage = "Enter a Bet:";
+
+    }
 
     private void indicateFold(Player player){
         interactiveActionComplete = true;
