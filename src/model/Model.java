@@ -65,7 +65,8 @@ public class Model {
       for (Player player : activePlayerList) {
         dealer.dealCards(player, visibilityList);
       }
-    } else {
+    }
+    else {
       throw new ModelException(
           "Invalid dealing round inputs in file. Exit program and reconfigure file inputs");
     }

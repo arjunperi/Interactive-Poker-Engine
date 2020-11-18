@@ -18,6 +18,7 @@ class JSONReaderTest {
     reader = new JSONReader();
     reader.parse("/cardSettings.json");
   }
+
   @Test
   void getSuits() {
     Map<String, String> expectedSuits = new HashMap<>();

@@ -20,7 +20,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import pokerSuite.PokerRunner;
-
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;

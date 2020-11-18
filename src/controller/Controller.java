@@ -396,9 +396,9 @@ public class Controller {
         Method method = c.getDeclaredMethod(action);
         method.invoke(this);
       } catch (ModelException e) {
-        throw new ControllerException(e.getCause().getMessage());
+        throw new ControllerException(e.getMessage());
       } catch (Exception e) {
-        e.printStackTrace();
+        throw new ControllerException("Invalid action inputs in file. Exit program and reconfigure file");
       }
     }
     checkShowDown();
@@ -515,6 +515,7 @@ public class Controller {
             }
             roundManager.checkOnePlayerRemains(playerList);
             if (roundManager.isRoundOver()) {
+              view.addToActionLog(roundManager.getWinDialog());
               transitionRound();
               break actionLoop;
             }

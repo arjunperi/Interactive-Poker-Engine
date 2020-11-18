@@ -68,7 +68,7 @@ public class PlayerInfoBox extends GridPane {
     this.add(playerAvatar, AVATAR_POSITION, 0);
 
     this.setHgap(5);
-    this.setStyle("-fx-border-color: red");
+    this.setStyle("-fx-border-color: #0040ff");
     this.setPadding(new Insets(0, 0, 0, 5));
     this.setMinSize(INFO_BOX_MIN_WIDTH, INFO_BOX_MIN_HEIGHT);
   }
