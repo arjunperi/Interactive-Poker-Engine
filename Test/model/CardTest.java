@@ -39,10 +39,4 @@ public class CardTest {
         card.makeBackEndVisible();
         assertTrue(true == card.isBackEndVisible());
     }
-
-    @Test
-    void testCardSymbol() {
-        Card card = new Card(11, "CLUBS");
-        assertEquals("J", card.getCardSymbol());
-    }
 }

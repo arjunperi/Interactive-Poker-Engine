@@ -1,13 +1,19 @@
 package controller;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.*;
@@ -39,8 +45,8 @@ public class Controller {
     private GameView view;
     private int roundNumber;
     private int totalRounds;
-    private Map<Player, FrontEndPlayer> playerMappings;
-    private Map<String, FrontEndCard> frontEndCardMappings;
+    private Map<Player, PlayerView> playerMappings;
+    private Map<String, CardView> frontEndCardMappings;
     private FileReader reader;
     private Writer customWriter;
     private FileWriter writer;
@@ -57,24 +63,40 @@ public class Controller {
     private String interactivePlayerName;
     private int interactivePlayerStartingAmount;
     private int numAutoPlayers;
+    private Table pokerTable;
+    private List<PlayerView> playerViews;
+    private String cardBack;
+    private JSONReader jsonReader;
+
+    private static final String CARD_SETTINGS = "/cardSettings.json";
+    private CommunityCardGrid communityCardGrid;
+
 
     public Controller() {
         betScreenMessage = "Enter a bet:";
         interactiveActionComplete = true;
-        roundOver = false;
         gameStart = true;
         exitedPoker = false;
         oneSolventPlayer = false;
         playerMappings = new HashMap<>();
         frontEndCardMappings = new HashMap<>();
         frontEndPlayers = new ArrayList<>();
+        playerViews = new ArrayList<>();
         reader = new FileReader();
+        initializeCardSettings();
+
         customWriter = new Writer();
         view = new GameView();
         roundNumber = 1;
         initializePlayerSelectMenu();
         //initializeMainMenu();
         initializeGameObjects();
+    }
+
+    private void initializeCardSettings() {
+        jsonReader = new JSONReader();
+        jsonReader.parse(CARD_SETTINGS);
+        cardBack = jsonReader.getCardBack();
     }
 
     private void initializeGameObjects(){
@@ -90,7 +112,6 @@ public class Controller {
     }
 
     public void transitionRound(){
-//        roundOver = true;
         EventHandler<ActionEvent> nextRoundEvent = e -> {
             promptBuyIn();
             startRound();
@@ -104,25 +125,21 @@ public class Controller {
                 exitPoker(interactivePlayer);
             }
         };
-//        EventHandler<ActionEvent> cashOutEvent = e -> indicateCashOut(interactivePlayer);
         view.makeEndRoundScreen(nextRoundEvent, cashOutEvent);
-//        if (exitedPoker) {
-//            exitPoker(interactivePlayer);
-//        }
     }
 
     public void startRound(){
-        System.out.println("new round");
+        System.out.println("\nnew hand");
+        view.addToActionLog("NEW HAND");
         roundNumber = 1;
         oneSolventPlayer = false;
-//        roundOver = false;
         playerList.resetRaiseStats();
         view.clear();
         initializeGameObjects();
         for (Player player: playerList.getAllPlayers()){
             player.clearHand();
             player.enterNewGame(communityCards, pot);
-            playerMappings.get(player).clearFrontEndCardLocations();
+            //playerMappings.get(player).clearFrontEndCardLocations();
         }
         playerList.updateStartingRoundOrder();
         playerList.resetActivePlayers();
@@ -204,10 +221,14 @@ public class Controller {
 
     private void resetGame(){
         roundNumber=1;
+        oneSolventPlayer = false;
         gameStart = true;
+        exitedPoker = false;
         view.clear();
         initializeGameObjects();
         initializeMainMenu();
+        playerViews.clear();
+        playerMappings.clear();
     }
 
     public void initializeGameSelect(){
@@ -244,10 +265,12 @@ public class Controller {
         if (gameStart){
             initializePlayerList(fileName);
             initializeFrontEndPlayers();
+            view.makeActionLog();
             gameStart = false;
         }
         initializeCommunity();
         model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
+        initializeGameBoard();
         nextRound();
         if (exitedPoker){
             exitedPoker = false;
@@ -262,6 +285,18 @@ public class Controller {
             autoPlayerList.add(new AutoPlayer(autoPlayerName, interactivePlayerStartingAmount, communityCards, pot));
         }
         return autoPlayerList;
+    }
+    private void initializeGameBoard() {
+        pokerTable = new Table(300, 300, 150, playerViews);
+        communityCardGrid = new CommunityCardGrid();
+        communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
+        communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
+        view.addGameObject(pokerTable);
+        view.addGameObject(communityCardGrid);
+        for (PlayerView playerView: playerViews) {
+            view.addGameObject(playerView);
+            playerView.getCardGrid().clearCardGrid();
+        }
     }
 
     private void initializePlayerList(String fileName){
@@ -284,12 +319,20 @@ public class Controller {
     }
 
     private void initializeFrontEndPlayers(){
+        //Todo: Create abstraction for AutoPlayerView and PlayerView
         int playerOffset = 30;
         for (Player currentPlayer: playerList.getActivePlayers()){
-            FrontEndPlayer newPlayer = new FrontEndPlayer(10, playerOffset, currentPlayer.toString(), currentPlayer.getBankroll());
-            playerMappings.put(currentPlayer, newPlayer);
-            frontEndPlayers.add(newPlayer);
-            playerOffset+=50;
+            PlayerView newPlayerView;
+            if (!currentPlayer.isInteractive()) {
+                newPlayerView = new PlayerView(currentPlayer.toString(), currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
+            } else {
+                newPlayerView = new PlayerView("Arjun", currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
+            }
+
+            newPlayerView.getPlayerInfoBox().getBankroll().textProperty().bind(currentPlayer.getBankroll().asString());
+
+            playerMappings.put(currentPlayer, newPlayerView);
+            playerViews.add(newPlayerView);
         }
     }
 
@@ -301,6 +344,7 @@ public class Controller {
     private void nextRound(){
         while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
             String action = model.getAction(roundNumber);
+            System.out.println("\nnext round");
             model.dealFlow(roundNumber);
             try{
                 Class<?> c = Class.forName("controller.Controller");
@@ -314,12 +358,23 @@ public class Controller {
 //            showError(e.getCause().getMessage());
             }
         }
-//        if (!roundManager.isRoundOver()){
-////            roundManager.showDown(playerList);
-////        }
+        checkShowDown();
+    }
+
+    private void checkShowDown() {
         if (!roundManager.isRoundOver() && !exitedPoker){
             roundManager.showDown(playerList);
+            flipActivePlayerCards();
+            view.addToActionLog(roundManager.getWinDialog());
             transitionRound();
+        }
+    }
+
+    private void flipActivePlayerCards() {
+        for (Player player: playerMappings.keySet()) {
+            if (player.isActive()) {
+                playerMappings.get(player).getCardGrid().flipCards();
+            }
         }
     }
 
@@ -327,11 +382,11 @@ public class Controller {
     private void dealingRound() throws InterruptedException {
         String recipient = model.getRecipient();
         if (recipient.equals("Community")){
-            dealFrontEndCardsInRound(communityCards, displayCommunity);
+            dealFrontEndCardsInRound(communityCards, communityCardGrid);
         }
         else {
             for (Player player : playerList.getActivePlayers()){
-                dealFrontEndCardsInRound(player,playerMappings.get(player));
+                dealFrontEndCardsInRound(player, playerMappings.get(player).getCardGrid());
             }
         }
         roundNumber++;
@@ -340,34 +395,39 @@ public class Controller {
     }
 
     public void exchangeRound() {
+
         playerList.updateActivePlayers();
         for (Player player : playerList.getActivePlayers()) {
 
-            //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed as specified by user
-            TextField exchangeCardInput1 = new TextField();
-            TextField exchangeCardInput2 = new TextField();
-            TextField exchangeCardInput3 = new TextField();
+            //TODO: have a way to create the number of text field inputs based on the number of exchange cards allowed by program file
+            List<TextField> exchangeInputs = new ArrayList<>();
+            int maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
+            for (int i=0; i < maxExchangeCards; i++){
+                exchangeInputs.add(new TextField());
+            }
             if (!player.isInteractive()) {
-
-                // Autoplayer decide exchange
                 AutoPlayer autoPlayer = (AutoPlayer) player;
                 autoPlayer.decideExchange();
                 dealer.exchangeCards(autoPlayer,autoPlayer.decideExchange());
-                exchangeFrontEndCards(autoPlayer, playerMappings.get(autoPlayer));
+//                exchangeFrontEndCards(autoPlayer, playerMappings.get(autoPlayer));
             }
             else {
-                Dialog exchangeBox = view.makeExchangeScreen(player.toString(), exchangeCardInput1, exchangeCardInput2, exchangeCardInput3);
+
+                Dialog exchangeBox = view.makeExchangeScreen(player.toString(),exchangeInputs);
 
                 Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
                 if (exchangeBoxResult.isPresent()) {
-                    List<String> exchangeCards = new ArrayList<>(List.of(exchangeCardInput1.getText(), exchangeCardInput2.getText(), exchangeCardInput3.getText()));
+                    List<String> exchangeCards = new ArrayList<>();
+                    for (TextField exchangeInput : exchangeInputs){
+                        exchangeCards.add(exchangeInput.getText());
+                    }
                     List<String> filtered = exchangeCards.stream()
                             .filter(b -> b.equals(""))
                             .collect(Collectors.toList());
                     exchangeCards.removeAll(filtered);
 
                     dealer.exchangeCards(player, exchangeCards);
-                    exchangeFrontEndCards(player, playerMappings.get(player));
+//                    exchangeFrontEndCards(player, playerMappings.get(player));
                 }
             }
         }
@@ -375,6 +435,7 @@ public class Controller {
         playerList.updateActivePlayers();
         initializeActionMenu();
     }
+
 
     public void initializeActionMenu() {
         playerList.initializeActivePlayers();
@@ -392,6 +453,7 @@ public class Controller {
                         if (!player.isInteractive()) {
                             AutoPlayer autoPlayer = (AutoPlayer) player;
                             autoPlayer.decideAction(lastBet);
+                            view.addToActionLog(autoPlayer + autoPlayer.getAction());
                         }
                         else {
                             interactiveActionComplete = false;
@@ -427,49 +489,42 @@ public class Controller {
                 interactiveActionComplete = false;
             }
         }
+        interactiveActionComplete = true;
         oneSolventPlayer = playerList.doesOneSolventPlayerRemain();
         playerList.resetRaiseStats();
         playerList.updateActivePlayers();
     }
 
-    public void dealFrontEndCardsInRound(CardRecipient recipient, GameDisplayRecipient displayRecipient){
-        for (Card newCard: recipient.getNewCards()){
-            FrontEndCard displayCard = getFrontEndCard(newCard);
-            int numberOfFrontEndCards = displayRecipient.getFrontEndCardLocations().size();
-
-            if (numberOfFrontEndCards!= 0){
-                FrontEndCard lastCard = displayRecipient.getLastCard();
-                int lastCardLocation = displayRecipient.getFrontEndCardLocations().get(lastCard);
-                view.deal(displayCard, displayRecipient, lastCardLocation + 80);
-            }
-            else{
-                view.deal(displayCard, displayRecipient, 20);
-            }
+    public void dealFrontEndCardsInRound(CardRecipient recipient, CardGrid cardGrid){
+        for (Card newCard: recipient.getNewCards()) {
+            CardView displayCard = getFrontEndCard(newCard);
+            cardGrid.addCardView(displayCard);
         }
     }
 
-    public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
+//    public void exchangeFrontEndCards(Player player, GameDisplayRecipient displayRecipient){
 //        int dealLocation = 0;
-        int cardIndex = 0;
-        for (Card discardedCard: player.getDiscardedCards()){
-            FrontEndCard discardedFrontEndCard = frontEndCardMappings.get(discardedCard.toString());
-            view.remove(discardedFrontEndCard);
-
-            int dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
-            Card newCard = player.getNewCards().get(cardIndex);
-            FrontEndCard displayCard = getFrontEndCard(newCard);
-            view.deal(displayCard, displayRecipient, dealLocation);
-            cardIndex ++;
-        }
-    }
+//        int cardIndex = 0;
+//        for (Card discardedCard: player.getDiscardedCards()){
+//            FrontEndCard discardedFrontEndCard = frontEndCardMappings.get(discardedCard.toString());
+//            view.remove(discardedFrontEndCard);
+//
+//            int dealLocation = displayRecipient.getFrontEndCardLocations().get(discardedFrontEndCard);
+//            Card newCard = player.getNewCards().get(cardIndex);
+//            FrontEndCard displayCard = getFrontEndCard(newCard);
+//            view.deal(displayCard, displayRecipient, dealLocation);
+//            cardIndex ++;
+//        }
+//    }
 
     //should this be in View or Controller?
-    private FrontEndCard getFrontEndCard(Card card){
+    private CardView getFrontEndCard(Card card){
         boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
 
-        FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
-        frontEndCardMappings.put(card.toString(), frontEndCard);
-        return frontEndCard;
+        //FrontEndCard frontEndCard = new FrontEndCard(card.getCardSymbol(), card.getCardSuit(), isFrontEndVisible);
+        CardView cardView = new CardView(jsonReader.getRanks().get(card.getRank()), jsonReader.getSuits().get(card.getCardSuit()), cardBack, isFrontEndVisible);
+        frontEndCardMappings.put(card.toString(), cardView);
+        return cardView;
     }
 
     public void promptBuyIn(){
@@ -508,9 +563,11 @@ public class Controller {
             else {
                 try {
                     player.bet(betAmount);
+                    view.addToActionLog(player.toString() +  " bet $" + betAmount);
                     interactiveActionComplete = true;
-                    FrontEndPlayer displayPlayer = playerMappings.get(player);
-                    displayPlayer.betDisplay(betAmount * -1);
+                    PlayerView displayPlayer = playerMappings.get(player);
+                    //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
+                    //displayPlayer.betDisplay(betAmount * -1);
                 } catch (ModelException e) {
                     betScreenMessage = e.getMessage();
                     indicateBet(player);
@@ -524,28 +581,24 @@ public class Controller {
     private void indicateFold(Player player){
         interactiveActionComplete = true;
         player.fold();
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.foldDisplay();
+        view.addToActionLog(player.toString() +  " folded");
     }
-
 
     private void indicateCall(Player player){
         interactiveActionComplete = true;
         System.out.println("call");
         player.call(lastBet);
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-//        displayPlayer.callDisplay();
+        view.addToActionLog(player.toString() +  " called");
     }
 
     private void indicateCheck(Player player){
         interactiveActionComplete = true;
         System.out.println("Check");
-        FrontEndPlayer displayPlayer = playerMappings.get(player);
-        displayPlayer.checkDisplay();
+        view.addToActionLog(player.toString() +  " checked");
     }
 
     private void indicateCashOut(Player player){
-        Alert cashOutConfirm = view.makeCashOutAlert(player.toString(), player.getBankroll());
+        Alert cashOutConfirm = view.makeCashOutAlert(player.toString(), player.getBankroll().getValue());
         Optional<ButtonType> cashOutResult = cashOutConfirm.showAndWait();
         if (cashOutResult.get() == ButtonType.OK){
             exitedPoker = true;
@@ -560,7 +613,5 @@ public class Controller {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
 }
 

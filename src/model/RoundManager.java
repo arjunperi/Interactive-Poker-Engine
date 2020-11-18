@@ -8,6 +8,7 @@ public class RoundManager {
     private Pot pot;
     private HandEvaluator handEvaluator;
     private boolean roundOver;
+    private String winDialog;
 
 
     public RoundManager(Pot pot){
@@ -23,6 +24,7 @@ public class RoundManager {
         if (activePlayers.size() == 1){
             winner = activePlayers.get(0);
             System.out.println("\n" + winner.toString() + " won and received $" + pot.getPotTotal());
+            winDialog = winner.toString() + " won and received $" + pot.getPotTotal();
             pot.dispersePot(winner,pot.getPotTotal());
             pot.clearPot();
             roundOver = true;
@@ -43,6 +45,7 @@ public class RoundManager {
         int winningAmount = splitAmount(bestPlayers.size());
         for (Player player : bestPlayers){
             System.out.println("\n" + player.toString() + " won the showdown and received $" + winningAmount);
+            winDialog = player.toString() + " won the showdown and received $" + winningAmount;
             pot.dispersePot(player, winningAmount);
         }
         pot.clearPot();
@@ -51,5 +54,9 @@ public class RoundManager {
 
     public boolean isRoundOver(){
         return roundOver;
+    }
+
+    public String getWinDialog(){
+        return winDialog;
     }
 }

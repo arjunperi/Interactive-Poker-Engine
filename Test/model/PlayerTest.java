@@ -2,7 +2,6 @@ package model;
 
 import controller.Controller;
 import controller.JSONReader;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -21,7 +20,7 @@ public class PlayerTest extends DukeApplicationTest {
     @BeforeEach
     void setUp(){
         reader = new JSONReader();
-        reader.parse("/texas_holdem.json");
+        reader.parse("/cardSettings.json");
         List<String> suitNames = new ArrayList<>();
         List<Integer> rankValues = new ArrayList<>();
         rankValues.addAll(reader.getRanks().keySet());
@@ -42,7 +41,7 @@ public class PlayerTest extends DukeApplicationTest {
         Pot pot = new Pot();
         player = new Player("Player", 100, communityCards, pot);
         player.updateBankroll(-100);
-        assertEquals(0, player.getBankroll());
+        assertEquals(0, player.getBankroll().getValue());
     }
 
     @Test
@@ -288,19 +287,14 @@ public class PlayerTest extends DukeApplicationTest {
         assertFalse(player.getHand().getCards().contains(testCard3));
         assertFalse(player.getHand().getCards().contains(testCard4));
     }
+
     @Test
     public void testAutoPlayerBetAmount(){
-
 
         CommunityCards communityCards = new CommunityCards();
         Pot pot = new Pot();
         AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-        AutoPlayer player2 = new AutoPlayer("Player2", 100, communityCards, pot);
-//        Card testCard = new Card(8, "CLUBS");
-//        Card testCard2 = new Card(8, "CLUBS");
-//        Card testCard3 = new Card(8, "HEARTS");
-//        Card otherCard3 = new Card(8, "DIAMONDS");
-//        Card otherCard4 = new Card(9, "SPADES");
+
 
         Card testCard = deck.StringToCard("8 CLUBS");
         Card testCard2 = deck.StringToCard("8 CLUBS");
