@@ -25,16 +25,8 @@ public class Hand {
     }
 
     public void remove(Card card) {
-        String cardString = card.toString();
-        List<Card> handCopy = new ArrayList<>(hand);
-        for (Card cardInHand: handCopy) {
-            if (cardString.equals(cardInHand.toString())){
-
-                hand.remove(cardInHand);
-                handSize = handSize - 1;
-            }
-
-        }
+        hand.remove(card);
+        handSize -= 1;
     }
 
     public List<Card> getCards() {

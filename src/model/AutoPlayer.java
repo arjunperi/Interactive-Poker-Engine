@@ -15,6 +15,8 @@ public class AutoPlayer extends Player {
     private static final int HAND_RANK_THRESHOLD = 0;
     private static final int EXCHANGE_THRESHOLD = 7;
     private static final int MAX_EXCHANGE = 3;
+    private static final int BET_INCREMENT= 5;
+    private String action;
 
 
     public AutoPlayer(String name, int startingAmount, CommunityCards communityCards, Pot pot) {
@@ -35,22 +37,26 @@ public class AutoPlayer extends Player {
         }
         if (handStrength > HAND_RANK_THRESHOLD || isHighEnough) {
             if(lastBet==0){
-                int betAmount = computerBetAmount(DEFAULTBETAMOUNT);
+                int betAmount = computerBetAmount(DEFAULTBETAMOUNT+ (BET_INCREMENT*(handStrength - 1)));
                 bet(betAmount);
+                action = " bet " + betAmount;
             }
             else {
                 call(lastBet);
+                action = " called";
             }
-
         }
         else {
             fold();
+            action = " folded";
         }
     }
 
+    public String getAction(){
+        return action;
+    }
+
     public List<String> decideExchange(){
-
-
         List<Hand> allHands = handCombiner.getAllHands(this.getTotalHand());
         Hand bestHand = handEvaluator.getBestHands(allHands).get(0).sortHand();
         int handStrength = handEvaluator.handStrength(bestHand)[0];
@@ -60,7 +66,7 @@ public class AutoPlayer extends Player {
             Collections.reverse(handCopy);
             int numberExchanged = 0;
                 for (Card card : handCopy) {
-                    if ((card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
+                    if ((card.getRank() > 0 ) && (card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
                         exchangeCards.add(card.toString()); // why does exchange take in a string instead of card??
                         numberExchanged++;
                     }
@@ -72,8 +78,8 @@ public class AutoPlayer extends Player {
 
     private int computerBetAmount(int defaultBetAmount){
         int betAmount = defaultBetAmount;
-        if(betAmount>this.getBankroll()){
-            betAmount = this.getBankroll();
+        if (betAmount > this.getBankroll().getValue()){
+            betAmount = this.getBankroll().getValue();
         }
         return betAmount;
     }

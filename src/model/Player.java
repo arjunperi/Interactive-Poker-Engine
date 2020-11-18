@@ -2,10 +2,12 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
-public class Player extends CardRecipient{
+public class Player extends CardRecipient {
     private String playerName;
-    private int moneyCount;
+    //private int moneyCount;
     private boolean hasFolded;
     private Hand playerHand;
     private List<Card> discardedCardList;
@@ -16,6 +18,7 @@ public class Player extends CardRecipient{
     protected boolean isInteractive;
     private int totalBetAmount;
     private int currentBetAmount;
+    private IntegerProperty moneyAmount;
     //have a player's hand strength
     //update it after every deal
 
@@ -23,7 +26,8 @@ public class Player extends CardRecipient{
         super();
         this.pot = pot;
         playerName = name;
-        moneyCount = startingAmount;
+       // moneyCount = startingAmount;
+        moneyAmount = new SimpleIntegerProperty(startingAmount);
         playerHand = new Hand();
         this.communityCards = communityCards;
         totalHand = new Hand();
@@ -32,21 +36,24 @@ public class Player extends CardRecipient{
     }
 
 
-    public int getBankroll(){
+    /*public int getBankroll(){
         return moneyCount;
+    }*/
+
+    public IntegerProperty getBankroll() {
+        return moneyAmount;
     }
 
-    public boolean isSolvent(){
+    /*public boolean isSolvent(){
         return moneyCount > 0;
+    }*/
+
+    public boolean isSolvent() {
+        return moneyAmount.getValue() > 0;
     }
 
     public boolean isActive(){
-        if (hasFolded){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return !hasFolded;
     }
 
     public void enterNewGame(CommunityCards communityCards, Pot pot){
@@ -81,8 +88,9 @@ public class Player extends CardRecipient{
     }
 
     public void updateBankroll(int amount){
-        moneyCount += amount;
-        System.out.println(this.toString()  + " has $"  + moneyCount);
+        //moneyCount += amount;
+        moneyAmount.setValue(moneyAmount.getValue() + amount);
+        System.out.println(this.toString()  + " has $"  + moneyAmount.getValue());
     }
 
     //use sets of cards instead of lists?
@@ -126,7 +134,7 @@ public class Player extends CardRecipient{
     }
 
 
-    public void bet(int amountToBet){
+    /*public void bet(int amountToBet){
         if (amountToBet <= moneyCount){
             System.out.print(this.toString() + " bets " + amountToBet + "\n");
             currentBetAmount = amountToBet;
@@ -134,8 +142,21 @@ public class Player extends CardRecipient{
             pot.addToPot(currentBetAmount);
             updateBankroll(currentBetAmount * -1);
         }
-        else{
-            throw new ModelException("Cannot bet more money than you have!");
+        else {
+            throw new ModelException("Cannot bet more money than you have! You only have $" + getBankroll());
+        }
+    }*/
+
+    public void bet(int amountToBet){
+        if (amountToBet <= moneyAmount.getValue()){
+            System.out.print(this.toString() + " bets " + amountToBet + "\n");
+            currentBetAmount = amountToBet;
+            totalBetAmount = totalBetAmount + currentBetAmount;
+            pot.addToPot(currentBetAmount);
+            updateBankroll(currentBetAmount * -1);
+        }
+        else {
+            throw new ModelException("Cannot bet more money than you have! You only have $" + getBankroll().getValue());
         }
     }
 
@@ -157,11 +178,22 @@ public class Player extends CardRecipient{
         hasFolded = true;
     }
 
-    public void call(int lastBet){
+    /*public void call(int lastBet){
         System.out.println(this.toString() + " has called");
         int callAmount = lastBet-totalBetAmount;
         if(callAmount>=moneyCount){
             bet(moneyCount);
+        }
+        else{
+            bet(callAmount);
+        }
+    }*/
+
+    public void call(int lastBet){
+        System.out.println(this.toString() + " has called");
+        int callAmount = lastBet - totalBetAmount;
+        if(callAmount >= moneyAmount.getValue()){
+            bet(moneyAmount.getValue());
         }
         else{
             bet(callAmount);

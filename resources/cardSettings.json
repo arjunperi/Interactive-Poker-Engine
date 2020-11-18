@@ -1,0 +1,26 @@
+{
+  "gameSettings": {
+    "cardBack" : "/card-back.png"
+  },
+  "suits": {
+    "HEARTS": "/heart-suit.png",
+    "SPADES": "/spade-suit.png",
+    "CLUBS": "/club-suit.png",
+    "DIAMONDS": "/diamond-suit.png"
+  },
+  "ranks": {
+    "2": "DEUCE",
+    "3": "THREE",
+    "4": "FOUR",
+    "5": "FIVE",
+    "6": "SIX",
+    "7": "SEVEN",
+    "8": "EIGHT",
+    "9": "NINE",
+    "10": "TEN",
+    "11": "JACK",
+    "12": "QUEEN",
+    "13": "KING",
+    "14": "ACE"
+  }
+}

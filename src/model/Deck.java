@@ -36,6 +36,7 @@ public class Deck {
         }
     }*/
 
+    //get the Card from KING HEARTS
     public void createDeck2() {
         for (String suit: suits) {
             for (int rank: ranks) {
@@ -45,6 +46,9 @@ public class Deck {
             }
         }
     }
+
+    //14 HEARTS
+
 
 
     public void replaceTopCard(Card card){

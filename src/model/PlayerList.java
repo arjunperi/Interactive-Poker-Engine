@@ -35,6 +35,17 @@ public abstract class PlayerList {
         return allPlayers;
     }
 
+    public boolean doesOneSolventPlayerRemain(){
+        int SolventPlayerCount = 0;
+        for(Player player : this.getActivePlayers()){
+            if(player.isSolvent()){
+                SolventPlayerCount++;
+            }
+        }
+        return SolventPlayerCount==1;
+    }
+
+
     public void updateStartingRoundOrder(){
         Collections.rotate(allPlayers, -1);
     }
