@@ -2,7 +2,6 @@ package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import model.Game;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 

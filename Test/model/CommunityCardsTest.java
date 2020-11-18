@@ -1,12 +1,17 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import controller.JSONReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<<<<<<< HEAD
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+=======
+>>>>>>> 437efc4a68d665b5a257f1df244fe6afdaf42a41
 
 public class CommunityCardsTest {
 

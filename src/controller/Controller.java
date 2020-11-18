@@ -21,13 +21,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AutoPlayer;
 import model.Card;
 import model.CardRecipient;
 import model.CommunityCards;
-import model.ControllerException;
+import controller.ControllerException;
 import model.Dealer;
 import model.Game;
 import model.InteractivePlayer;
@@ -43,6 +44,7 @@ import view.CommunityCardGrid;
 import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
+import view.PotView;
 import view.Table;
 
 public class Controller {
@@ -56,18 +58,18 @@ public class Controller {
   private Model model;
   private RoundManager roundManager;
   private PlayerList playerList;
-  private List<GameDisplayRecipient> frontEndPlayers;
+  private final List<GameDisplayRecipient> frontEndPlayers;
   private CommunityCards communityCards;
   private GameDisplayRecipient displayCommunity;
   private Pot pot;
   private Dealer dealer;
-  private GameView view;
+  private final GameView view;
   private int roundNumber;
   private int totalRounds;
-  private Map<Player, PlayerView> playerMappings;
-  private Map<Card, CardView> frontEndCardMappings;
-  private FileReader reader;
-  private Writer customWriter;
+  private final Map<Player, PlayerView> playerMappings;
+  private final Map<Card, CardView> frontEndCardMappings;
+  private final FileReader reader;
+  private final Writer customWriter;
   private FileWriter writer;
   private Properties modelProperties;
   private String currentGame;
@@ -79,7 +81,7 @@ public class Controller {
   private String betScreenMessage;
   private volatile boolean interactiveActionComplete;
   private Table pokerTable;
-  private List<PlayerView> playerViews;
+  private final List<PlayerView> playerViews;
   private String cardBack;
   private JSONReader jsonReader;
   private CommunityCardGrid communityCardGrid;
@@ -325,15 +327,22 @@ public class Controller {
 
   private void initializeGameBoard() {
     pokerTable = new Table(300, 300, 150, playerViews);
-    communityCardGrid = new CommunityCardGrid();
-    communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
-    communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
+    communityCardGrid = new CommunityCardGrid(pokerTable.getCenterX(), pokerTable.getCenterY());
+    PotView potView = new PotView("100", "/pot.png", pokerTable.getCenterX(), pokerTable.getCenterY());
+    potView.getGameStat().textProperty()
+        .bind(pot.getPotTotal().asString());
+
+
+    //communityCardGrid.setLayoutX( - (communityCardGrid.getMinWidth() / 2));
+    //communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
     view.addGameObject(pokerTable);
     view.addGameObject(communityCardGrid);
     for (PlayerView playerView : playerViews) {
       view.addGameObject(playerView);
       playerView.getCardGrid().clearCardGrid();
     }
+    view.addGameObject(potView);
+
   }
 
   private void initializePlayerList(String fileName) {
@@ -469,6 +478,18 @@ public class Controller {
     initializeActionMenu();
   }
 
+  private Card getCardFromCardView(CardView card) {
+    return frontEndCardMappings.entrySet()
+        .stream()
+        .filter(entry -> card.equals(entry.getValue()))
+        .map(Map.Entry::getKey).findFirst().get();
+  }
+
+  private boolean isSelectedCardsExchangeable() {
+    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size()
+        <= maxExchangeCards;
+  }
+
 
   public void initializeActionMenu() {
     playerList.initializeActivePlayers();
@@ -553,17 +574,7 @@ public class Controller {
     }
   }
 
-  private Card getCardFromCardView(CardView card) {
-    return frontEndCardMappings.entrySet()
-        .stream()
-        .filter(entry -> card.equals(entry.getValue()))
-        .map(Map.Entry::getKey).findFirst().get();
-  }
 
-  private boolean isSelectedCardsExchangeable() {
-    return playerMappings.get(interactivePlayer).getCardGrid().getSelectedCards().size()
-        <= maxExchangeCards;
-  }
 
 
   //should this be in View or Controller?
@@ -604,6 +615,8 @@ public class Controller {
     int betAmount = 0;
     TextField betInput = new TextField();
     Dialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
+    betBox.getDialogPane().getStylesheets().add(getClass().getResource("/dialog.css").toExternalForm());
+    betBox.getDialogPane().getStyleClass().add("myDialog");
     Optional betBoxResult = betBox.showAndWait();
     if (betBoxResult.isPresent()) {
       try {

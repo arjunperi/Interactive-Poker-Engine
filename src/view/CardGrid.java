@@ -1,9 +1,7 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javafx.geometry.Insets;
@@ -23,11 +21,11 @@ public class CardGrid extends GridPane {
   private int currentRow;
   private int currentColumn;
 
-  private int numberOfCardsHighlighted;
+  private final int numberOfCardsHighlighted;
 
   private Set<CardView> selectedCards;
 
-  private Map<CardView, Point2D> cardLocations;
+  private final Map<CardView, Point2D> cardLocations;
 
   public CardGrid() {
     super();

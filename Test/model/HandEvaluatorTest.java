@@ -1,12 +1,11 @@
 package model;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 public class HandEvaluatorTest {
 
@@ -455,7 +454,11 @@ public class HandEvaluatorTest {
     int n = hand1.getHandSize();
     int r = 5;
     // A temporary array to store all combination one by one
+<<<<<<< HEAD
     Card data[] = new Card[r];
+=======
+    Card[] data = new Card[r];
+>>>>>>> 437efc4a68d665b5a257f1df244fe6afdaf42a41
 
     // Print all combination using temprary array 'data[]'
     comb.clearAllHands();
