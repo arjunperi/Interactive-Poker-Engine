@@ -1,14 +1,21 @@
 package model;
 
+import controller.JSONReader;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class StudPlayerList extends PlayerList {
     private HandEvaluator handEvaluator;
+    private Map<Integer,String> handStrengths;
+    private JSONReader reader;
 
-    public StudPlayerList(List<Player> players){
+    public StudPlayerList(List<Player> players) {
         super(players);
-        handEvaluator = new HandEvaluator();
+        reader = new JSONReader();
+        reader.parse("/cardSettings.json");
+        handEvaluator = new HandEvaluator(reader.getStrengths());
     }
 
 

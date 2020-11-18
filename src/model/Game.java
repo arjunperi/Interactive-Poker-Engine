@@ -28,7 +28,7 @@ public class Game {
         deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 
         dealer = new Dealer(deck);
-        handEvaluator = new HandEvaluator();
+        handEvaluator = new HandEvaluator(reader.getStrengths());
         roundManager = new RoundManager(pot);
     }
 

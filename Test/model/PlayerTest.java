@@ -1,21 +1,20 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import controller.JSONReader;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest extends DukeApplicationTest {
     private Player player;
     private Deck deck;
     private JSONReader reader;
-    private HandEvaluator handEval = new HandEvaluator();
+    private HandEvaluator handEval;
     private HandCombiner handCombiner = new HandCombiner();
     @BeforeEach
     void setUp(){

@@ -1,19 +1,31 @@
 package model;
 
+import controller.JSONReader;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HandEvaluatorTest {
+    private Map<Integer,String> handStrengths;
+    private JSONReader reader;
+    private HandEvaluator evaluator;
 
+    @BeforeEach
+    void setUp() {
+        reader = new JSONReader();
+        reader.parse("/cardSettings.json");
+        evaluator = new HandEvaluator(reader.getStrengths());
+        handStrengths = reader.getStrengths();
+    }
 
     @Test
     void testIsFiveCardHand() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
@@ -32,7 +44,6 @@ public class HandEvaluatorTest {
     }
     @Test
     void testIsFlush() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(2, "CLUBS");
@@ -61,7 +72,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsStraight() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(11, "CLUBS");
@@ -117,7 +127,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsStraightFlush() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(13, "CLUBS");
         Card card9 = new Card(12, "CLUBS");
@@ -135,7 +144,7 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsFourOfAKind() {
-        HandEvaluator evaluator = new HandEvaluator();
+
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(14, "DIAMONDS");
         Card card9 = new Card(14, "SPADES");
@@ -182,7 +191,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsFullHouse() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(14, "DIAMONDS");
         Card card9 = new Card(14, "SPADES");
@@ -229,7 +237,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsThreeOfAKind() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(14, "DIAMONDS");
         Card card9 = new Card(14, "SPADES");
@@ -276,7 +283,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsTwoPair() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(14, "DIAMONDS");
         Card card9 = new Card(1, "SPADES");
@@ -322,7 +328,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsPair() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(14, "DIAMONDS");
         Card card9 = new Card(1, "SPADES");
@@ -368,7 +373,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsHighCard() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card7 = new Card(14, "CLUBS");
         Card card8 = new Card(12, "DIAMONDS");
         Card card9 = new Card(4, "SPADES");
@@ -414,7 +418,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testHandStrength() {
-        HandEvaluator evaluator = new HandEvaluator();
         Card card1 = new Card(8, "CLUBS");
         Card card2 = new Card(9, "CLUBS");
         Card card3 = new Card(3, "CLUBS");
@@ -433,7 +436,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testGetBestHand() {
-        HandEvaluator evaluator = new HandEvaluator();
         HandCombiner comb = new HandCombiner();
         Card card1 = new Card(14, "CLUBS");
         Card card2 = new Card(13, "CLUBS");
@@ -471,7 +473,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testHighCardWin(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -515,7 +516,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testPairWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -558,7 +558,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testPairWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -601,7 +600,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testTwoPairWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -644,7 +642,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testTwoPairWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -687,7 +684,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testThreeOfAKindWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -730,7 +726,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testThreeOfAKindWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -774,7 +769,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testStraightWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -817,7 +811,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testStraightWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -860,7 +853,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testFlushWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -903,7 +895,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testFlushWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -946,7 +937,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testHFullHouseWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -989,7 +979,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testFullHouseWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1032,7 +1021,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testFourOfAKindWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1075,7 +1063,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testFourOfAKindWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1118,7 +1105,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testStraightFlushWin1(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1161,7 +1147,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testStraightFlushWin2(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1204,7 +1189,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testIsTie(){
-        HandEvaluator evaluator = new HandEvaluator();
         Pot pot = new Pot();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), pot);
         Player player2 = new Player("Dinna", 100, new CommunityCards(), pot);
@@ -1247,7 +1231,6 @@ public class HandEvaluatorTest {
 
     @Test
     void testGetBestPlayerHand(){
-        HandEvaluator evaluator = new HandEvaluator();
         Player player1 = new Player("Jimmy", 100, new CommunityCards(), new Pot());
 
         Card card1 = new Card(8, "CLUBS");
@@ -1266,7 +1249,11 @@ public class HandEvaluatorTest {
         player1.setHand(hand1);
         player1.updateTotalHand();
         assertTrue(evaluator.isFlush(evaluator.getBestPlayerHand(player1)));
+    }
 
+    @Test
+    void testGetHandStrengthRank(){
+        assertEquals(0,evaluator.getHandStrengthRank("High Card"));
     }
 }
 

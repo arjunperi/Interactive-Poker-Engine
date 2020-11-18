@@ -1,5 +1,7 @@
 package model;
 
+import controller.JSONReader;
+
 import java.util.*;
 
 public class RoundManager {
@@ -11,12 +13,18 @@ public class RoundManager {
     private String winDialog;
     private List<Hand> winningHand;
     private HandCombiner handCombiner;
+    private JSONReader reader;
+    private Map<Integer,String> handStrengths;
+
 
 
     public RoundManager(Pot pot){
+        reader = new JSONReader();
+        reader.parse("/cardSettings.json");
         currentRound = 0;
         this.pot = pot;
-        handEvaluator = new HandEvaluator();
+        handStrengths= reader.getStrengths();
+        handEvaluator = new HandEvaluator(handStrengths);
         handCombiner = new HandCombiner();
         roundOver = false;
         winningHand = new ArrayList<>();
@@ -48,8 +56,10 @@ public class RoundManager {
         List<Player> bestPlayers =  handEvaluator.getBestPlayers(activePlayers, false);
         int winningAmount = splitAmount(bestPlayers.size());
         for (Player player : bestPlayers){
-            System.out.println("\n" + player.toString() + " won the showdown and received $" + winningAmount);
-            winDialog = player.toString() + " won the showdown and received $" + winningAmount;
+            Hand bestHand = handEvaluator.getBestHands(handCombiner.getAllHands(player.getTotalHand())).get(0);
+            String handStrength = handStrengths.get(handEvaluator.handStrength(bestHand)[0]);
+            System.out.println("\n" + player.toString() + " won the showdown with a " + handStrength + " and received $" + winningAmount);
+            winDialog = player.toString() + " won the showdown with a " + handStrength + " and received $" + winningAmount;
 //            winningHand.add(handEvaluator.getBestHands(handCombiner.getAllHands(player.getTotalHand())).get(0));
             pot.dispersePot(player, winningAmount);
         }

@@ -3,51 +3,20 @@ package controller;
 // limit number of players??
 
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import model.*;
+import view.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import model.AutoPlayer;
-import model.Card;
-import model.CardRecipient;
-import model.CommunityCards;
-import model.Dealer;
-import model.Game;
-import model.InteractivePlayer;
-import model.Model;
-import model.ModelException;
-import model.Player;
-import model.PlayerList;
-import model.Pot;
-import model.RoundManager;
-import view.CardGrid;
-import view.CardView;
-import view.CommunityCardGrid;
-import view.FrontEndCommunity;
-import view.GameDisplayRecipient;
-import view.GameView;
-import view.PlayerView;
-import view.Table;
-import java.util.Set;
-import javafx.geometry.Point2D;
+import java.util.*;
 
 public class Controller {
 

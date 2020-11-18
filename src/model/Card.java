@@ -2,8 +2,6 @@ package model;
 
 import controller.FileReader;
 
-import java.util.Properties;
-
 public class Card {
 
     private String suit;
@@ -60,9 +58,6 @@ public class Card {
     public boolean isBackEndVisible(){
         return isBackEndVisible;
     }
-
-
-
 
     public void makeBackEndVisible(){
         isBackEndVisible =true;

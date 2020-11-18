@@ -1,18 +1,14 @@
 package model;
 
-import model.Card;
-import model.Hand;
-import model.Player;
-import model.PlayerList;
-import model.HandCombiner;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HandEvaluator {
     private HandCombiner combiner;
+    private Map<Integer, String> handStrength;
     private Map<Hand, Player> bestHandMapping;
 
     private static final int POKERHANDSIZE = 5;
@@ -21,21 +17,13 @@ public class HandEvaluator {
     private static final int HIGHESTCARDINDEX = 0;
     private static final int SECONDHIGHESTCARDINDEX = 1;
     private static final int STRENGTHINDEX = 0;
-    private static final int STRAIGHTFLUSHRANK = 8;
-    private static final int FOUROFAKINDRANK = 7;
-    private static final int FULLHOUSERANK = 6;
-    private static final int FLUSHRANK = 5;
-    private static final int STRAIGHTRANK = 4;
-    private static final int THREEOFAKINDRANK = 3;
-    private static final int TWOPAIRRANK = 2;
-    private static final int PAIRRANK = 1;
-    private static final int HIGHCARDRANK = 0;
 
 
 
-    public HandEvaluator(){
+    public HandEvaluator(Map<Integer,String> handStrengths){
         combiner = new HandCombiner();
         bestHandMapping = new HashMap<>();
+        this.handStrength = handStrengths;
     }
 
     boolean isFiveCardHand(Hand hand){
@@ -242,7 +230,7 @@ public class HandEvaluator {
     public int[] handStrength(Hand hand) {
         int[] handRank = makeNewArray(6);
         if (isStraightFlush(hand)) {
-            handRank[STRENGTHINDEX] = STRAIGHTFLUSHRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Straight Flush");
             int[] formattedHand = formatStraightFlush(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -250,7 +238,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isFourOfAKind(hand)) {
-            handRank[STRENGTHINDEX] = FOUROFAKINDRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Four Of A Kind");
             int[] formattedHand = formatFourOfAKind(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -258,7 +246,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isFullHouse(hand)) {
-            handRank[STRENGTHINDEX] = FULLHOUSERANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Full House");
             int[] formattedHand = formatFullHouse(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -266,7 +254,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isFlush(hand)) {
-            handRank[STRENGTHINDEX] = FLUSHRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Flush");
             int[] formattedHand = formatFlush(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -274,7 +262,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isStraight(hand)) {
-            handRank[STRENGTHINDEX] = STRAIGHTRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Straight");
             int[] formattedHand = formatStraight(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -282,7 +270,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isThreeOfAKind(hand)) {
-            handRank[STRENGTHINDEX] = THREEOFAKINDRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Three Of A Kind");
             int[] formattedHand = formatThreeOfAKind(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -290,7 +278,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isTwoPair(hand)) {
-            handRank[STRENGTHINDEX] = TWOPAIRRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Two Pair");
             int[] formattedHand = formatTwoPair(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -298,7 +286,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isPair(hand)) {
-            handRank[STRENGTHINDEX] = PAIRRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("Pair");
             int[] formattedHand = formatPair(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -306,7 +294,7 @@ public class HandEvaluator {
             return handRank;
         }
         if (isHighCard(hand)) {
-            handRank[STRENGTHINDEX] = HIGHCARDRANK;
+            handRank[STRENGTHINDEX] = getHandStrengthRank("High Card");
             int[] formattedHand = formatHighCard(hand);
             for (int index = 0; index < formattedHand.length; index++) {
                 handRank[index + 1] = formattedHand[index];
@@ -381,5 +369,21 @@ public class HandEvaluator {
     }
 
     private int[] makeNewArray(int size){return new int[size];}
+
+
+//    public <K, V> Stream<Object> getHandStrengthRank( V value) {
+//        return handStrength
+//                .entrySet()
+//                .stream()
+//                .filter(entry -> value.equals(entry.getValue()))
+//                .map(Map.Entry::getKey);
+//    }
+
+    public int getHandStrengthRank(String value) {
+        List<Integer> keys = handStrength.keySet().stream()
+                .filter(s -> handStrength.get(s).equals(value))
+                .collect(Collectors.toList());
+        return keys.get(0);
+    }
 
 }

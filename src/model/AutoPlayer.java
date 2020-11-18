@@ -1,5 +1,7 @@
 package model;
 
+import controller.JSONReader;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,12 +19,16 @@ public class AutoPlayer extends Player {
     private static final int MAX_EXCHANGE = 3;
     private static final int BET_INCREMENT= 5;
     private String action;
+    private JSONReader reader;
+
 
 
     public AutoPlayer(String name, int startingAmount, CommunityCards communityCards, Pot pot) {
         super(name, startingAmount, communityCards, pot);
+        reader = new JSONReader();
+        reader.parse("/cardSettings.json");
         isInteractive = false;
-        handEvaluator = new HandEvaluator();
+        handEvaluator = new HandEvaluator(reader.getStrengths());
         handCombiner = new HandCombiner();
     }
 
