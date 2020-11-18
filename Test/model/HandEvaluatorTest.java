@@ -10,6 +10,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HandEvaluatorTest {
 
+
+    @Test
+    void testIsFiveCardHand() {
+        HandEvaluator evaluator = new HandEvaluator();
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1 = hand1.sortHand();
+        assertTrue(false==evaluator.isFiveCardHand(hand1));
+        hand1.add(card5);
+        assertTrue(evaluator.isFiveCardHand(hand1));
+
+    }
     @Test
     void testIsFlush() {
         HandEvaluator evaluator = new HandEvaluator();
@@ -442,7 +462,6 @@ public class HandEvaluatorTest {
         // Print all combination using temprary array 'data[]'
         comb.clearAllHands();
 
-        comb.makeAllPossibleHands(hand1, data, 0, n - 1, 0);
         ArrayList<Hand> hands = comb.getAllHands(hand1);
 
         List<Hand> bestHands = evaluator.getBestHands(hands);
@@ -1225,5 +1244,30 @@ public class HandEvaluatorTest {
 
         assertEquals(2,evaluator.getBestPlayers(playerList,false).size());
     }
+
+    @Test
+    void testGetBestPlayerHand(){
+        HandEvaluator evaluator = new HandEvaluator();
+        Player player1 = new Player("Jimmy", 100, new CommunityCards(), new Pot());
+
+        Card card1 = new Card(8, "CLUBS");
+        Card card2 = new Card(9, "CLUBS");
+        Card card3 = new Card(2, "CLUBS");
+        Card card4 = new Card(4, "CLUBS");
+        Card card5 = new Card(10, "CLUBS");
+        Card card6 = new Card(14,"HEARTS");
+        Hand hand1 = new Hand();
+        hand1.add(card1);
+        hand1.add(card2);
+        hand1.add(card3);
+        hand1.add(card4);
+        hand1.add(card5);
+        hand1.add(card6);
+        player1.setHand(hand1);
+        player1.updateTotalHand();
+        assertTrue(evaluator.isFlush(evaluator.getBestPlayerHand(player1)));
+
+    }
 }
+
 

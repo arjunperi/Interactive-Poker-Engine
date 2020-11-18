@@ -1,18 +1,17 @@
 package model;
 
-import org.w3c.dom.ls.LSInput;
-
-import java.util.List;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class Pot {
-    private int potTotal;
+    private IntegerProperty potTotal;
 
     public Pot(){
-        potTotal = 0;
+        potTotal = new SimpleIntegerProperty(0);
     }
 
     public void addToPot(int amount) {
-        potTotal += amount;
+        potTotal.setValue(potTotal.getValue()+amount);
         System.out.println("Pot total is: $" + potTotal);
     }
 
@@ -22,10 +21,10 @@ public class Pot {
     }
 
     public void clearPot(){
-        potTotal = 0;
+        potTotal.setValue(0);
     }
 
-    public int getPotTotal(){
+    public IntegerProperty getPotTotal(){
         return potTotal;
     }
 }
