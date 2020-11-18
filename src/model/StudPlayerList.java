@@ -5,7 +5,7 @@ import java.util.List;
 
 public class StudPlayerList extends PlayerList {
 
-  private final HandEvaluator handEvaluator;
+  private HandEvaluator handEvaluator;
 
   public StudPlayerList(List<Player> players) {
     super(players);

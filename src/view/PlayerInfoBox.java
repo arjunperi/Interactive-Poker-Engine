@@ -9,13 +9,12 @@ import javafx.scene.text.Text;
 
 public class PlayerInfoBox extends GridPane {
 
-  private final String name;
-  private final int bankroll;
-  private final String avatar;
+  private String name;
+  private int bankroll;
+  private String avatar;
 
   private Text playerName;
   private Text playerBankroll;
-  private Text playerAction;
   private ImageView playerAvatar;
 
   private static final int INFO_BOX_MIN_WIDTH = 200;
@@ -41,7 +40,6 @@ public class PlayerInfoBox extends GridPane {
   }
 
   private void initializePlayerInfo() {
-    playerAction = new Text();
     playerName = new Text(name);
     playerBankroll = new Text("$" + bankroll);
     try {
@@ -68,7 +66,6 @@ public class PlayerInfoBox extends GridPane {
     this.add(playerName, NAME_POSITION, 0);
     this.add(playerBankroll, BANKROLL_POSITION, 0);
     this.add(playerAvatar, AVATAR_POSITION, 0);
-    this.add(playerAction, ACTION_POSITION, 0);
 
     this.setHgap(5);
     this.setStyle("-fx-border-color: red");
@@ -81,9 +78,6 @@ public class PlayerInfoBox extends GridPane {
     playerBankroll.setText("$" + bankroll);
   }
 
-  public void setPlayerAction(String action) {
-    playerAction.setText(action);
-  }
 
   public Text getBankroll() {
     return playerBankroll;

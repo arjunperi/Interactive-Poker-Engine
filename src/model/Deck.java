@@ -8,10 +8,10 @@ import java.util.Stack;
 
 public class Deck extends Stack<Card> {
 
-  private final Stack<Card> deck;
-  private final List<String> suits;
-  private final List<Integer> ranks;
-  private final Map<String, Card> stringToCardMap;
+  private Stack<Card> deck;
+  private List<String> suits;
+  private List<Integer> ranks;
+  private Map<String, Card> stringToCardMap;
 
     /*public Deck() {
         deck = new Stack();
@@ -32,15 +32,6 @@ public class Deck extends Stack<Card> {
     return deck.pop();
   }
 
-    /*public void createDeck(){
-        for (Suit suit : Suit.values()){
-            for (int r = 2; r<15; r++){
-                Card card = new Card(r,suit);
-                deck.add(card);
-            }
-        }
-    }*/
-
   public void createDeck2() {
     for (String suit : suits) {
       for (int rank : ranks) {
@@ -58,7 +49,7 @@ public class Deck extends Stack<Card> {
 
   //temporary, just for print methods
   public Card peekTopCard() {
-    return deck.peek();
+    return (Card) deck.peek();
   }
 
   public boolean isEmpty() {

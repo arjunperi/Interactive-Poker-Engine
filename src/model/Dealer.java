@@ -21,17 +21,6 @@ public class Dealer {
     }
   }
 
-    /*public void exchangeCards(Player player, List<String> exchangeCards){
-        player.clearDiscardedCards();
-        player.clearNewCards();
-        for (String exchangeCard: exchangeCards){
-            player.discardCard(deck.StringToCard(exchangeCard));
-            System.out.println(player.toString() + " gets: " + deck.peekTopCard().toString());
-            Card cardDealt = deck.getTopCard();
-            player.receiveCard(cardDealt);
-        }
-    }*/
-
   public void exchangeCards(Player player, List<Card> exchangeCards) {
     player.clearDiscardedCards();
     player.clearNewCards();
@@ -42,17 +31,6 @@ public class Dealer {
       player.receiveCard(cardDealt);
     }
   }
-
-//    private Card stringToCard(String cardString){
-//        try{
-//            Card exchangeCard = new Card(Integer.parseInt(cardString.split(" ")[0]), cardString.split(" ")[1]);
-//            return exchangeCard;
-//        }
-//        catch (NumberFormatException e){
-//            throw new ModelException("Invalid Card Input");
-//        }
-//    }
-
 
   public void checkDeck() {
     if (deck.isEmpty()) {

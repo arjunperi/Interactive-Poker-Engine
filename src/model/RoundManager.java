@@ -5,17 +5,22 @@ import java.util.List;
 public class RoundManager {
 
   private Player winner;
-  private final int currentRound;
-  private final Pot pot;
-  private final HandEvaluator handEvaluator;
+  private int currentRound;
+  private Pot pot;
+  private HandEvaluator handEvaluator;
   private boolean roundOver;
+  private String winDialog;
+  private List<Hand> winningHand;
+  private HandCombiner handCombiner;
 
 
   public RoundManager(Pot pot) {
     currentRound = 0;
     this.pot = pot;
     handEvaluator = new HandEvaluator();
+    handCombiner = new HandCombiner();
     roundOver = false;
+    winningHand = new ArrayList<>();
   }
 
   public void checkOnePlayerRemains(PlayerList playerList) {
@@ -24,6 +29,7 @@ public class RoundManager {
     if (activePlayers.size() == 1) {
       winner = activePlayers.get(0);
       System.out.println("\n" + winner.toString() + " won and received $" + pot.getPotTotal());
+      winDialog = winner.toString() + " won and received $" + pot.getPotTotal();
       pot.dispersePot(winner, pot.getPotTotal().getValue());
       pot.clearPot();
       roundOver = true;
@@ -45,6 +51,8 @@ public class RoundManager {
     for (Player player : bestPlayers) {
       System.out
           .println("\n" + player.toString() + " won the showdown and received $" + winningAmount);
+      winDialog = player.toString() + " won the showdown and received $" + winningAmount;
+//            winningHand.add(handEvaluator.getBestHands(handCombiner.getAllHands(player.getTotalHand())).get(0));
       pot.dispersePot(player, winningAmount);
     }
     pot.clearPot();
@@ -54,4 +62,16 @@ public class RoundManager {
   public boolean isRoundOver() {
     return roundOver;
   }
+
+  public String getWinDialog() {
+    return winDialog;
+  }
+
+  //we want to be able to say ROYAL FLUSH
+//    public String getWinningHand(){
+//        String hand
+//        for (Hand hand : winningHand){
+//
+//        }
+//    }
 }

@@ -1,5 +1,11 @@
 package model;
 
+import model.Card;
+import model.Hand;
+import model.Player;
+import model.PlayerList;
+import model.HandCombiner;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +13,8 @@ import java.util.Map;
 
 public class HandEvaluator {
 
-  private final HandCombiner combiner;
-  private final Map<Hand, Player> bestHandMapping;
+  private HandCombiner combiner;
+  private Map<Hand, Player> bestHandMapping;
 
   private static final int POKERHANDSIZE = 5;
   private static final int DUMMYCARDRANK = -1;

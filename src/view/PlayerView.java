@@ -5,8 +5,8 @@ import javafx.scene.layout.BorderPane;
 
 public class PlayerView extends BorderPane {
 
-  private final CardGrid cardGrid;
-  private final PlayerInfoBox playerInfoBox;
+  private CardGrid cardGrid;
+  private PlayerInfoBox playerInfoBox;
   private Point2D position;
 
 

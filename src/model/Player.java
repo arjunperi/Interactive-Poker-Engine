@@ -7,11 +7,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class Player extends CardRecipient {
 
-  private final String playerName;
+  private String playerName;
   //private int moneyCount;
   private boolean hasFolded;
   private Hand playerHand;
-  private final List<Card> discardedCardList;
+  private List<Card> discardedCardList;
   private CommunityCards communityCards;
   private Hand totalHand;
   private Hand totalVisibleHand;
@@ -19,7 +19,7 @@ public class Player extends CardRecipient {
   protected boolean isInteractive;
   private int totalBetAmount;
   private int currentBetAmount;
-  private final IntegerProperty moneyAmount;
+  private IntegerProperty moneyAmount;
   //have a player's hand strength
   //update it after every deal
 

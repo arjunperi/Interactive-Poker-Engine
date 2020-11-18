@@ -58,15 +58,18 @@ public class Model {
     }
   }
 
-  public void dealFlow(int currentRound) {
+  public void backEndDeal(int currentRound) {
     //TODO: find a way around this conditional
     dealStats(currentRound);
     if (recipient.equals("Community")) {
       dealer.dealCards(communityCards, visibilityList);
-    } else {
+    } else if (recipient.equals("Players")) {
       for (Player player : activePlayerList) {
         dealer.dealCards(player, visibilityList);
       }
+    } else {
+      throw new ModelException(
+          "Invalid dealing round inputs in file. Exit program and reconfigure file inputs");
     }
   }
 

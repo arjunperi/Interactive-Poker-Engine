@@ -7,7 +7,7 @@ public abstract class GameDisplayRecipient {
 
   protected int xLocation;
   protected int yLocation;
-  private final Map<FrontEndCard, Integer> frontEndCardLocations;
+  private Map<FrontEndCard, Integer> frontEndCardLocations;
   private FrontEndCard lastCard;
 
   public GameDisplayRecipient(int xLocation, int yLocation) {

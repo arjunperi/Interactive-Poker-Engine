@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Hand {
 
-  private final List<Card> hand;
+  private List<Card> hand;
 
   //for temporary hand evaluation logic -> won't exist later
   private int handSize;

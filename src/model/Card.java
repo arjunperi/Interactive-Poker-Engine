@@ -4,11 +4,11 @@ import controller.FileReader;
 
 public class Card {
 
-  private final String suit;
-  private final int rank;
+  private String suit;
+  private int rank;
   private boolean isBackEndVisible;
   private boolean isInteractivePlayerCard;
-  private final FileReader reader;
+  private FileReader reader;
 
 
   public Card(int rank, String suit) {
@@ -24,6 +24,9 @@ public class Card {
   public String toString() {
     return (rank + " " + suit);
   }
+
+  //get the associated value of rank
+
 
   @Override
   public boolean equals(Object obj) {
