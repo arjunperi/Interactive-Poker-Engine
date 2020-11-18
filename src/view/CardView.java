@@ -10,7 +10,6 @@ import javafx.scene.text.Text;
 
 public class CardView extends StackPane {
 
-
   private String rankSymbol;
   private boolean isFrontEndVisible;
   private ImageView displayedImage;
@@ -93,5 +92,14 @@ public class CardView extends StackPane {
 
   public boolean getIsSelected() {
     return isSelected;
+  }
+
+
+  public String getRankSymbol() {
+    return rankSymbol;
+  }
+
+  public String getSuitImage() {
+    return suitImage;
   }
 }

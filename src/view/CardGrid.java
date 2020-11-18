@@ -1,7 +1,11 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.GridPane;
@@ -20,12 +24,15 @@ public class CardGrid extends GridPane {
 
   private int numberOfCardsHighlighted;
 
+  private Set<CardView> selectedCards;
+
   private Map<CardView, Point2D> cardLocations;
 
   public CardGrid() {
     super();
 
     cardLocations = new HashMap<>();
+    selectedCards = new HashSet<>();
     numberOfCardsHighlighted = 0;
 
     initializeCardAddingPosition();
@@ -63,15 +70,7 @@ public class CardGrid extends GridPane {
     currentColumn = 0;
   }
 
-  public void countNumberOfCardsHighlighted() {
-    numberOfCardsHighlighted = 0;
-    for (CardView card: cardLocations.keySet()) {
-      if (card.getIsSelected()) {
-        numberOfCardsHighlighted++;
-      }
-    }
-    System.out.println(numberOfCardsHighlighted);
-  }
+
 
   public void addCardView(CardView card) {
     addCardViewToLocation(card, new Point2D(currentColumn, currentRow));
@@ -88,15 +87,27 @@ public class CardGrid extends GridPane {
     }
 
     this.add(card, column, row);
-    cardLocations.put(card, location);
+    cardLocations.put(card, new Point2D(column, row));
 
-    if (location.getX() == currentColumn) {
+    if (column == currentColumn) {
       currentColumn++;
     }
 
-    card.setOnMouseClicked(event -> {card.toggleCardSelected(); countNumberOfCardsHighlighted();});
+    card.setOnMouseClicked(event -> {card.toggleCardSelected();});
     //card.setOnMouseClicked(event2 -> countNumberOfCardsHighlighted());
   }
+
+
+  private void checkCardsSelected() {
+    selectedCards = new HashSet<>();
+    for (CardView card : cardLocations.keySet()) {
+      if (card.getIsSelected()) {
+        selectedCards.add(card);
+      }
+    }
+    System.out.println(selectedCards.size());
+  }
+
 
   private void checkGridConstraints() {
     if (currentColumn == MAX_NUMBER_OF_COLUMNS) {
@@ -128,6 +139,11 @@ public class CardGrid extends GridPane {
     for (CardView card: cardLocations.keySet()) {
       card.setFrontEndVisible(true);
     }
+  }
+
+  public Set<CardView> getSelectedCards() {
+    checkCardsSelected();
+    return selectedCards;
   }
 
 }

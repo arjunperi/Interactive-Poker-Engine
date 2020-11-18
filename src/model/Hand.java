@@ -50,6 +50,16 @@ public class Hand {
         return null;
     }
 
+    public int getIndex(Card card){
+        int index;
+        for( index = 0; index<handSize; index++){
+            if (this.get(index).equals(card)){
+                return index;
+            }
+        }
+        return index;
+    }
+
     public Hand sortHand() {
         Hand sortedHand = new Hand();
         while (this.getHandSize() > 0) {

@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class Deck {
+public class Deck extends Stack<Card> {
     private Stack<Card> deck;
     private List<String> suits;
     private List<Integer> ranks;
@@ -27,16 +27,6 @@ public class Deck {
         return deck.pop();
     }
 
-    /*public void createDeck(){
-        for (Suit suit : Suit.values()){
-            for (int r = 2; r<15; r++){
-                Card card = new Card(r,suit);
-                deck.add(card);
-            }
-        }
-    }*/
-
-    //get the Card from KING HEARTS
     public void createDeck2() {
         for (String suit: suits) {
             for (int rank: ranks) {
@@ -46,9 +36,6 @@ public class Deck {
             }
         }
     }
-
-    //14 HEARTS
-
 
 
     public void replaceTopCard(Card card){

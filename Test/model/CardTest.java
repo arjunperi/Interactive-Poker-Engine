@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CardTest {
 
     @Test
-    public void testToString(){
+    public void testToString() {
         Card card = new Card(2, "CLUBS");
         assertEquals("2 CLUBS", card.toString());
     }
 
     @Test
-    public void testCardRank(){
+    public void testCardRank() {
         Card card = new Card(2, "CLUBS");
         assertEquals(2, card.getRank());
     }
@@ -38,5 +38,20 @@ public class CardTest {
         assertTrue(false == card.isBackEndVisible());
         card.makeBackEndVisible();
         assertTrue(true == card.isBackEndVisible());
+    }
+
+    @Test
+    void testCardInteractivity() {
+        Card card = new Card(2, "CLUBS");
+        assertTrue(false == card.isInteractivePlayerCard());
+        card.setInteractivePlayerCard();
+        assertTrue(true == card.isInteractivePlayerCard());
+    }
+
+    @Test
+    void testCardEquals() {
+        Card card = new Card(2, "CLUBS");
+        assertTrue(false == card.equals(null));
+        assertTrue(card.equals(card));
     }
 }
