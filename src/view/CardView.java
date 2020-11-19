@@ -13,10 +13,10 @@ public class CardView extends StackPane {
   public static final int CARD_WIDTH = 35;
   public static final int CARD_HEIGHT = 50;
   private final String rankSymbol;
-  private final String suitImage;
-  private final String cardBack;
   private boolean isFrontEndVisible;
   private ImageView displayedImage;
+  private final String suitImage;
+  private final String cardBack;
   private boolean isSelected;
   private Text rank;
   private Rectangle cardBackground;

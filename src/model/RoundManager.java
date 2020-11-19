@@ -8,10 +8,10 @@ public class RoundManager {
 
   private final Pot pot;
   private final HandEvaluator handEvaluator;
-  private final List<Hand> winningHand;
-  private final HandCombiner handCombiner;
   private boolean roundOver;
   private String winDialog;
+  private final List<Hand> winningHand;
+  private final HandCombiner handCombiner;
 
 
   public RoundManager(Pot pot) {

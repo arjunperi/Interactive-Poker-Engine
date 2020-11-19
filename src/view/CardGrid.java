@@ -17,11 +17,15 @@ public class CardGrid extends GridPane {
 
   private static final int CARD_GRID_MIN_WIDTH = 200;
   private static final int CARD_GRID_MIN_HEIGHT = CardView.CARD_HEIGHT * 2 + 10;
-  private final int numberOfCardsHighlighted;
-  private final Map<CardView, Point2D> cardLocations;
+
   private int currentRow;
   private int currentColumn;
+
+  private final int numberOfCardsHighlighted;
+
   private Set<CardView> selectedCards;
+
+  private final Map<CardView, Point2D> cardLocations;
 
   public CardGrid() {
     super();

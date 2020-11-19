@@ -54,9 +54,9 @@ public class Controller {
   private final GameView view;
   private final Map<Player, PlayerView> playerMappings;
   private final Map<Card, CardView> frontEndCardMappings;
+  private FileReader reader;
+  private Writer customWriter;
   private final List<PlayerView> playerViews;
-  private final FileReader reader;
-  private final Writer customWriter;
   private Model model;
   private RoundManager roundManager;
   private PlayerList playerList;
@@ -217,7 +217,8 @@ public class Controller {
         String nameEntered = nameInput.getText();
         if (invalidNameEntered(nameEntered)) {
           throw new InvalidNameEnteredException();
-        } else {
+        }
+        else {
           interactivePlayerName = nameInput.getText();
           initializeNewPlayerStartingAmount();
         }
@@ -258,9 +259,8 @@ public class Controller {
           numAutoPlayers = numEntered;
           initializeMainMenu();
         }
-      } else {
-        initializePlayerSelectMenu();
       }
+      else {initializePlayerSelectMenu();}
     } catch (InvalidNumberPlayersException | NumberFormatException e) {
       InvalidNumberPlayersException invalidError = new InvalidNumberPlayersException();
       showError(invalidError.getMessage());
@@ -294,9 +294,8 @@ public class Controller {
           playerStartingAmount = amountEntered;
           getNumAutoPlayers();
         }
-      } else {
-        initializePlayerSelectMenu();
       }
+      else {initializePlayerSelectMenu();}
     } catch (NumberFormatException | InvalidStartingAmountException e) {
       InvalidStartingAmountException invalidAmount = new InvalidStartingAmountException();
       showError(invalidAmount.getMessage());
@@ -308,6 +307,7 @@ public class Controller {
 
   private void exitPoker(Player player) {
     try {
+
 
       Properties cashOutProperties = new Properties();
 //            cashOutProperties.setProperty(player.toString(), String.valueOf(player.getBankroll()));
