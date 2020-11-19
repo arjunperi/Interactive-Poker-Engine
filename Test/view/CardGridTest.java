@@ -46,7 +46,7 @@ class CardGridTest extends DukeApplicationTest {
     cardView = new CardView("4", "/heart-suit.png", "/card-back.png", true);
     cardGrid.addCardView(cardView);
     cardGrid.removeCard(cardView);
-    assertEquals(new Point2D(1, 0), cardGrid.removeCard(cardView));
+    assertEquals(new Point2D(1, 1), cardGrid.removeCard(cardView));
   }
 
   @Test

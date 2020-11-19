@@ -1,6 +1,6 @@
 package view;
 
-public class CommunityCardGrid extends CardGrid {
+public class CommunityCardGrid extends CardGrid{
 
   public CommunityCardGrid(int pokerTableX, int pokerTableY) {
     super();

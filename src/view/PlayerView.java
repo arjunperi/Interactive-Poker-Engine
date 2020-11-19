@@ -33,4 +33,5 @@ public class PlayerView extends BorderPane {
     this.setLayoutY(
         position.getY() - ((playerInfoBox.getMinHeight() + cardGrid.getMinHeight()) / 2));
   }
+
 }
