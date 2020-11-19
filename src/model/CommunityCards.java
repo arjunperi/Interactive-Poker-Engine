@@ -17,5 +17,4 @@ public class CommunityCards extends CardRecipient {
     return cardsList;
   }
 
-
 }
