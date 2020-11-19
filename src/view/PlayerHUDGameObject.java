@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public abstract class PlayerHUDGameObject extends VBox {
+
   private String displayedGameStat;
   private String displayedGameImage;
 

@@ -42,7 +42,6 @@ public class Deck extends Stack<Card> {
     }
   }
 
-
   public void replaceTopCard(Card card) {
     deck.push(card);
   }
