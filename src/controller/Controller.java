@@ -90,6 +90,9 @@ public class Controller {
   private String interactivePlayerName;
   private int playerStartingAmount;
   private int numAutoPlayers;
+  private static int MINIMUM_STARTING_AMOUNT = 0;
+  private static int MAXIMUM_STARTING_AMOUNT = 10000;
+
 
 
   public Controller() {
@@ -202,7 +205,7 @@ public class Controller {
   }
 
 
-  //TODO: FINISH IMPLEMENTING LOADING FROM SAVE
+
   public void initializeLoadPlayer() {
     File savedFile = chooseNewFile("PlayerSaveFiles");
     if (savedFile != null) {
@@ -252,7 +255,7 @@ public class Controller {
       return false;
     }
     int amountEntered = (int) o;
-    return (amountEntered >= 50) && (amountEntered <= 10000);
+    return (amountEntered >= MINIMUM_STARTING_AMOUNT) && (amountEntered <= MAXIMUM_STARTING_AMOUNT);
   }
 
 
@@ -399,6 +402,7 @@ public class Controller {
         pokerTable.getCenterY());
     potView.getGameStat().textProperty()
         .bind(pot.getPotTotal().asString());
+
     view.addGameObject(pokerTable);
     view.addGameObject(communityCardGrid);
     for (PlayerView playerView : playerViews) {
@@ -442,7 +446,6 @@ public class Controller {
 
   private void initializeFrontEndPlayers() {
     //Todo: Create abstraction for AutoPlayerView and PlayerView
-    int playerOffset = 30;
     for (Player currentPlayer : playerList.getActivePlayers()) {
       PlayerView newPlayerView;
       if (!currentPlayer.isInteractive()) {
@@ -498,8 +501,8 @@ public class Controller {
     }
   }
 
-  //don't like this conditional
-  private void dealingRound() throws InterruptedException {
+
+  private void dealingRound() {
     String recipient = model.getRecipient();
     if (recipient.equals("Community")) {
       dealFrontEndCardsInRound(communityCards, communityCardGrid);

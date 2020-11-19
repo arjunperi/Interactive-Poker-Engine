@@ -71,5 +71,6 @@ public class CardView extends PlayerHUDGameObject {
   public String getSuitImage() {
     return suitImage;
   }
+
 }
 

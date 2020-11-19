@@ -137,13 +137,14 @@ public class GameView {
 
     playerBox.setId("PlayerBox");
     Button newPlayerButton = makeButton("New Player", newPlayerEvent);
-    newPlayerButton.setId("New Player");
+
     Button loadSavedPlayer = makeButton("Load Player", loadPlayerEvent);
 
     playerBox.getChildren().addAll(newPlayerButton, loadSavedPlayer);
 
     menuScreen.getChildren().addAll(titleBox, playerBox);
-
+    loadSavedPlayer.setId("Load Player");
+    newPlayerButton.setId("New Player");
     centerGroup.getChildren().addAll(menuScreen);
 
   }
