@@ -1,4 +1,4 @@
-package controller;
+package controller.exceptions;
 
 /**
  * Exception class to throw when an exception occurs in the model class

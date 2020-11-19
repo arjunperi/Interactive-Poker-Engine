@@ -2,6 +2,7 @@ package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import controller.Controller;
 import javafx.scene.Group;
@@ -17,17 +18,11 @@ import model.*;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
-import javax.swing.table.TableCellEditor;
-import javax.swing.text.View;
-import java.util.List;
-import java.util.Optional;
 
 public class GameViewTest extends DukeApplicationTest {
 
   private Controller controller;
   private Stage stage;
-  private FrontEndCard testCard;
-  private final GameView view = new GameView();
 
   public void start(final Stage stage) throws Exception {
     controller = new Controller();
@@ -158,6 +153,8 @@ public class GameViewTest extends DukeApplicationTest {
     assertEquals(nameInput.getText(), "chris");
   }
 
+
+
   @Test
   public void testGetNumAutoPlayerBox() {
     javafxRun(() -> controller.getNumAutoPlayers());
@@ -234,11 +231,40 @@ public class GameViewTest extends DukeApplicationTest {
 //    assertTrue(exchangeGrid.getChildren()
 //        .containsAll(List.of(exchangeCardInput1, exchangeCardInput2, exchangeCardInput3)));
 //  }
+  
+  @Test
+  public void testInvalidNumberPlayersExceptionThrown() {
+    javafxRun(() -> controller.getNumAutoPlayers());
+    TextField numAutoPlayerInput = lookup("#numAutoPlayerInput").query();
+    clickOn(numAutoPlayerInput);
+    type(KeyCode.DIGIT8);
+    type(KeyCode.ENTER);
+    assertTrue(controller.invalidPlayersEntered(Integer.parseInt(numAutoPlayerInput.getText())));
+    //assertThrows(InvalidNumberPlayersException.class, () -> javafxRun(() -> controller.getNumAutoPlayers()));
+  }
 
   @Test
-  public void testStartNewGame() {
-    Controller controller = new Controller();
-    javafxRun(() -> controller.initializeProperties("Holdem.properties"));
-    javafxRun(() -> controller.startRound());
+  public void testInvalidNameEnteredThrown() {
+    javafxRun(() -> controller.initializeNewPlayer());
+    TextField nameInput = lookup("#nameInput").query();
+    clickOn(nameInput);
+    type(KeyCode.DIGIT8);
+    type(KeyCode.ENTER);
+    assertTrue(controller.invalidNameEntered(nameInput.getText()));
+
   }
+
+  @Test
+  public void testInvalidStartingAmount() {
+    javafxRun(() -> controller.initializeNewPlayerStartingAmount());
+    TextField amountInput = lookup("#startingMoneyInput").query();
+    clickOn(amountInput);
+    type(KeyCode.DIGIT8); //8 dollars is not enough
+    type(KeyCode.ENTER);
+
+    assertFalse(controller.isValidInteger(Integer.parseInt(amountInput.getText())));
+  }
+
+
+
 }

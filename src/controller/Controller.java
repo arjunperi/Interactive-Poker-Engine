@@ -1,7 +1,10 @@
 package controller;
 
+import controller.exceptions.InvalidNameEnteredException;
+import controller.exceptions.InvalidNumberPlayersException;
+import controller.exceptions.InvalidStartingAmountException;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,14 +24,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AutoPlayer;
 import model.Card;
 import model.CardRecipient;
 import model.CommunityCards;
-import controller.ControllerException;
+import controller.exceptions.ControllerException;
 import model.Dealer;
 import model.Game;
 import model.InteractivePlayer;
@@ -136,55 +139,121 @@ public class Controller {
   }
 
   public void initializeNewPlayer() {
-    TextField nameInput = new TextField();
-    nameInput.setId("nameInput");
-    Dialog newPlayerDialog = view.makeDialogBox(nameInput, "Enter a name: ");
+    try {
+      TextField nameInput = new TextField();
+      nameInput.setId("nameInput");
+      TextInputDialog newPlayerDialog = view.makeDialogBox(nameInput, "Enter a name: ");
 
-    Optional result = newPlayerDialog.showAndWait();
-    if (result.isPresent()) {
-      interactivePlayerName = nameInput.getText();
-
+      Optional<String> result = newPlayerDialog.showAndWait();
+      if (result.isPresent()) {
+        String nameEntered = nameInput.getText();
+        if (invalidNameEntered(nameEntered)) {
+          throw new InvalidNameEnteredException();
+        } else {
+          interactivePlayerName = nameInput.getText();
+          initializeNewPlayerStartingAmount();
+        }
+      } else {
+        initializePlayerSelectMenu();
+      }
+    } catch (InvalidNameEnteredException e) {
+      showError(e.getMessage());
+      initializeNewPlayer();
     }
-    initializeNewPlayerStartingAmount();
   }
 
+  public boolean invalidNameEntered(String nameEntered) {
+    String regex = "^[a-zA-Z]+$"; //only A-Z characters can be entered
+    //if only A-Z characters entered
+    return !nameEntered.matches(regex);
+  }
+
+  public boolean invalidPlayersEntered(int numberOfPlayers) {
+
+    int MAX_AUTOPLAYERS = 7;
+    return ((numberOfPlayers > MAX_AUTOPLAYERS) || (numberOfPlayers < 1));
+  }
+
+
   public void initializeNewPlayerStartingAmount() {
-    TextField startingMoneyInput = new TextField();
-    startingMoneyInput.setId("startingMoneyInput");
-    Dialog newPlayerDialog = view
-        .makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
-    Optional result = newPlayerDialog.showAndWait();
-    if (result.isPresent()) {
-      interactivePlayerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
+    try {
+
+      TextField startingMoneyInput = new TextField();
+      startingMoneyInput.setId("startingMoneyInput");
+      TextInputDialog newPlayerDialog = view
+          .makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
+      Optional<String> result = newPlayerDialog.showAndWait();
+      if (result.isPresent()) {
+        Integer amountEntered = Integer.parseInt(startingMoneyInput.getText());
+        if (!isValidInteger(amountEntered)) {
+          throw new InvalidStartingAmountException();
+        } else {
+          playerStartingAmount = amountEntered;
+          getNumAutoPlayers();
+        }
+      } else {
+        initializePlayerSelectMenu();
+      }
+    } catch (NumberFormatException | InvalidStartingAmountException e) {
+      InvalidStartingAmountException invalidAmount = new InvalidStartingAmountException();
+      showError(invalidAmount.getMessage());
+      initializeNewPlayerStartingAmount();
     }
-    getNumAutoPlayers();
   }
 
 
   //TODO: FINISH IMPLEMENTING LOADING FROM SAVE
   public void initializeLoadPlayer() {
     File savedFile = chooseNewFile("PlayerSaveFiles");
-    String savedFileName = savedFile.getName();
-    String savedFileNameWithoutExtension = savedFileName
-        .substring(0, savedFileName.lastIndexOf('.'));
-    Properties savedInfo = PropertiesFileReader.getPropertyFile(savedFileNameWithoutExtension);
-    interactivePlayerName = savedInfo.getProperty("NAME");
-    interactivePlayerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
-    getNumAutoPlayers();
+    if (savedFile != null) {
+      String savedFileName = savedFile.getName();
+      String savedFileNameWithoutExtension = savedFileName
+          .substring(0, savedFileName.lastIndexOf('.'));
+
+      Properties savedInfo = PropertiesFileReader.getPropertyFile(savedFileNameWithoutExtension);
+      interactivePlayerName = savedInfo.getProperty("NAME");
+      playerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
+      getNumAutoPlayers();
+    } else {
+      initializePlayerSelectMenu();
+    }
   }
 
 
   public void getNumAutoPlayers() {
-    TextField numAutoPlayerInput = new TextField();
-    numAutoPlayerInput.setId("numAutoPlayerInput");
-    Dialog newPlayerDialog = view
-        .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
-    Optional result = newPlayerDialog.showAndWait();
-    if (result.isPresent()) {
-      numAutoPlayers = Integer.parseInt(numAutoPlayerInput.getText());
+    try {
+      TextField numAutoPlayerInput = new TextField();
+      numAutoPlayerInput.setId("numAutoPlayerInput");
+      TextInputDialog newPlayerDialog = view
+          .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
+      Optional<String> result = newPlayerDialog.showAndWait();
+      if (result.isPresent()) {
+        int numEntered = Integer.parseInt(numAutoPlayerInput.getText());
+        if (invalidPlayersEntered(numEntered)) {
+          throw new InvalidNumberPlayersException();
+        } else {
+          numAutoPlayers = numEntered;
+          initializeMainMenu();
+        }
+      } else {
+        initializePlayerSelectMenu();
+      }
+    } catch (InvalidNumberPlayersException | NumberFormatException e) {
+      InvalidNumberPlayersException invalidError = new InvalidNumberPlayersException();
+      showError(invalidError.getMessage());
+      getNumAutoPlayers();
     }
-    initializeMainMenu();
   }
+
+  public boolean isValidInteger(Object o) {
+
+    if (!o.getClass().getName().equals("java.lang.Integer")) {
+      return false;
+    }
+    int amountEntered = (int) o;
+    return (amountEntered >= 50) && (amountEntered <= 10000);
+  }
+
 
 
   public void initializeMainMenu() {
@@ -303,23 +372,23 @@ public class Controller {
 
   private void chooseFileAndInitializeProperties() {
     File customGame = chooseNewFile("properties");
-    initializeProperties(customGame.getName());
+    if (customGame != null) {
+      initializeProperties(customGame.getName());
+    } else {
+      initializePlayerSelectMenu();
+    }
   }
 
-
   private File chooseNewFile(String initialDirectory) {
-
     FileChooser fileChooser = new FileChooser();
     FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)",
         "*.properties");
     fileChooser.getExtensionFilters().add(filter);
     fileChooser.setInitialDirectory(new File(initialDirectory + "/"));
-    File file = fileChooser.showOpenDialog(new Stage());
-    if (file != null) {
-      return file;
-    }
-    return null;
+    return fileChooser.showOpenDialog(new Stage());
   }
+
+
 
 
   private void initializeGameBoard() {
@@ -329,9 +398,6 @@ public class Controller {
         pokerTable.getCenterY());
     potView.getGameStat().textProperty()
         .bind(pot.getPotTotal().asString());
-
-    //communityCardGrid.setLayoutX( - (communityCardGrid.getMinWidth() / 2));
-    //communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
     view.addGameObject(pokerTable);
     view.addGameObject(communityCardGrid);
     for (PlayerView playerView : playerViews) {
