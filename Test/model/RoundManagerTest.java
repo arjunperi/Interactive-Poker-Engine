@@ -22,7 +22,6 @@ public class RoundManagerTest {
     assertEquals(player1.getBankroll().getValue(), 150);
   }
 
-
   @Test
   public void testWinOnShowdown() {
     Pot pot = new Pot();

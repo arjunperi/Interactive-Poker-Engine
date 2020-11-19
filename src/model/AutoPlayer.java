@@ -1,12 +1,10 @@
 package model;
 
-import controller.JSONReader;
-import utility.HandCombiner;
-import utility.HandEvaluator;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import utility.HandCombiner;
+import utility.HandEvaluator;
 
 /*
 Computer-controlled poker player

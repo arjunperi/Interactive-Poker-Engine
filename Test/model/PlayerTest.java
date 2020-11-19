@@ -1,15 +1,17 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import controller.JSONReader;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 import utility.HandCombiner;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import utility.HandEvaluator;
 
 public class PlayerTest extends DukeApplicationTest {
 
@@ -267,11 +269,6 @@ public class PlayerTest extends DukeApplicationTest {
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
     AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-//        Card testCard = new Card(2, "CLUBS");
-//        Card testCard2 = new Card(6, "CLUBS");
-//        Card testCard3 = new Card(3, "HEARTS");
-//        Card otherCard3 = new Card(7, "DIAMONDS");
-//        Card otherCard4 = new Card(9, "SPADES");
 
     Card testCard = new Card(2, "CLUBS");
     Card testCard2 = new Card(6, "CLUBS");
@@ -361,15 +358,8 @@ public class PlayerTest extends DukeApplicationTest {
     player.receiveCard(testCard3);
     player.receiveCard(otherCard3);
     player.receiveCard(otherCard4);
-    System.out.println(player.getTotalHand().getCards());
-
-    System.out.println(HandCombiner.getAllHands(player.getTotalHand()));
-
-    System.out.println(player.getHand().getCards());
-
     player.decideAction(0);
     assertEquals(40, pot.getPotTotal().getValue());
-
   }
 
 

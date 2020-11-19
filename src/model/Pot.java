@@ -13,7 +13,6 @@ public class Pot {
 
   public void addToPot(int amount) {
     potTotal.setValue(potTotal.getValue() + amount);
-
     System.out.println("Pot total is: $" + potTotal.getValue());
   }
 

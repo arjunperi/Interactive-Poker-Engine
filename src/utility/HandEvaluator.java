@@ -1,13 +1,13 @@
 package utility;
 
 import controller.JSONReader;
+import controller.exceptions.ControllerException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import model.ControllerException;
 import model.Hand;
 import model.ModelException;
 import model.Player;
@@ -15,18 +15,6 @@ import model.PlayerList;
 
 public final class HandEvaluator {
 
-
-
-
-  //put in a hand and a rank and returns how many times that rank was in the hand
-
-
-//Hands need to be sorted in descending order before put into formatting methods
-
-  // handStrength returns int array of length 6: first int is the strength of the hand and the next five ints are
-//the ranks of the hand formatted in the correct order based on the hand strength
-// the comparison method that picks the best hand needs the hand to be in this format for comparing
-// hands to one another
   public static int[] handStrength(Hand hand) {
     int[] handRank = new int[6];
     JSONReader reader = new JSONReader();
@@ -43,9 +31,6 @@ public final class HandEvaluator {
           Method format = f
               .getDeclaredMethod("format" + handType.replaceAll("\\s", ""), Hand.class);
           int[] formattedHand = (int[]) format.invoke(HandFormatter.class, hand);
-//          List formattedHandList = Arrays.asList(formattedHandObject);
-//          Object[] formattedHandList = (Object[])formattedHandObject;
-//          List<Object> formattedHandList = List.class.cast(formattedHandObject);
           for (int index = 0; index < formattedHand.length; index++) {
             handRank[index + 1] = (Integer) formattedHand[index];
           }
@@ -60,81 +45,6 @@ public final class HandEvaluator {
     }
       return handRank;
   }
-
-//      if (isStraightFlush(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Straight Flush");
-//        int[] formattedHand = formatStraightFlush(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isFourOfAKind(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Four Of A Kind");
-//        int[] formattedHand = formatFourOfAKind(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isFullHouse(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Full House");
-//        int[] formattedHand = formatFullHouse(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isFlush(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Flush");
-//        int[] formattedHand = formatFlush(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isStraight(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Straight");
-//        int[] formattedHand = formatStraight(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isThreeOfAKind(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Three Of A Kind");
-//        int[] formattedHand = formatThreeOfAKind(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isTwoPair(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Two Pair");
-//        int[] formattedHand = formatTwoPair(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isPair(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("Pair");
-//        int[] formattedHand = formatPair(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      if (isHighCard(hand)) {
-//        handRank[STRENGTHINDEX] = getHandStrengthRank("High Card");
-//        int[] formattedHand = formatHighCard(hand);
-//        for (int index = 0; index < formattedHand.length; index++) {
-//          handRank[index + 1] = formattedHand[index];
-//        }
-//        return handRank;
-//      }
-//      return handRank;
-
 
     public static List<Hand> getBestHands (List < Hand > hands) {
       int[] bestHand = new int[6];
@@ -171,7 +81,6 @@ public final class HandEvaluator {
       return bestHands;
     }
 
-    //maybe sort here instead of when updating the total hands
     public static List<Player> getBestPlayers (PlayerList playerList,boolean isVisibleHand){
       Map<Hand, Player> bestHandMapping = new HashMap<>();
       {
@@ -199,14 +108,6 @@ public final class HandEvaluator {
 
     }
 
-//    public <K, V> Stream<Object> getHandStrengthRank( V value) {
-//        return handStrength
-//                .entrySet()
-//                .stream()
-//                .filter(entry -> value.equals(entry.getValue()))
-//                .map(Map.Entry::getKey);
-//    }
-
   public static int getHandStrengthRank(String value) {
     JSONReader reader = new JSONReader();
     reader.parse("/cardSettings.json");
@@ -216,5 +117,4 @@ public final class HandEvaluator {
         .collect(Collectors.toList());
     return keys.get(0);
   }
-
 }

@@ -1,6 +1,5 @@
 package view;
 
-import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -26,7 +25,11 @@ public class PlayerInfoBox extends GridPane {
   private static final int NAME_POSITION = 0;
   private static final int BANKROLL_POSITION = 1;
   private static final int AVATAR_POSITION = 2;
-  private static final int ACTION_POSITION = 3;
+
+  private static final int NAME_COLUMN_WIDTH_PERCENTAGE = 40;
+  private static final int BANKROLL_COLUMN_WIDTH_PERCENTAGE = 40;
+  private static final int AVATAR_COLUMN_WIDTH_PERCENTAGE = 20;
+
 
 
   public PlayerInfoBox(String name, int bankroll, String avatar) {
@@ -53,13 +56,13 @@ public class PlayerInfoBox extends GridPane {
   }
 
   private void initializePlayerInfoSpacing() {
-    ColumnConstraints col1 = new ColumnConstraints();
-    col1.setPercentWidth(40);
-    ColumnConstraints col2 = new ColumnConstraints();
-    col2.setPercentWidth(40);
-    ColumnConstraints col3 = new ColumnConstraints();
-    col3.setPercentWidth(20);
-    this.getColumnConstraints().addAll(col1, col2, col3);
+    ColumnConstraints nameColumn = new ColumnConstraints();
+    nameColumn.setPercentWidth(NAME_COLUMN_WIDTH_PERCENTAGE);
+    ColumnConstraints bankrollColumn = new ColumnConstraints();
+    bankrollColumn.setPercentWidth(BANKROLL_COLUMN_WIDTH_PERCENTAGE);
+    ColumnConstraints avatarColumn = new ColumnConstraints();
+    avatarColumn.setPercentWidth(AVATAR_COLUMN_WIDTH_PERCENTAGE);
+    this.getColumnConstraints().addAll(nameColumn, bankrollColumn, avatarColumn);
   }
 
   private void initializePlayerGridPane() {
@@ -67,17 +70,9 @@ public class PlayerInfoBox extends GridPane {
     this.add(playerBankroll, BANKROLL_POSITION, 0);
     this.add(playerAvatar, AVATAR_POSITION, 0);
 
-    this.setHgap(5);
-    this.setStyle("-fx-border-color: red");
-    this.setPadding(new Insets(0, 0, 0, 5));
+    this.getStyleClass().add("playerInfoBox");
     this.setMinSize(INFO_BOX_MIN_WIDTH, INFO_BOX_MIN_HEIGHT);
   }
-
-
-  public void setBankroll(int bankroll) {
-    playerBankroll.setText("$" + bankroll);
-  }
-
 
   public Text getBankroll() {
     return playerBankroll;

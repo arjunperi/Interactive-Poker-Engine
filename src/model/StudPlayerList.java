@@ -1,9 +1,8 @@
 package model;
 
-import utility.HandEvaluator;
-
 import java.util.Collections;
 import java.util.List;
+import utility.HandEvaluator;
 
 public class StudPlayerList extends PlayerList {
 
