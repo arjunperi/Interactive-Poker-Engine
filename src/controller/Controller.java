@@ -14,6 +14,7 @@ import java.util.Set;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -141,7 +142,8 @@ public class Controller {
   public void initializeNewPlayer() {
     TextField nameInput = new TextField();
     nameInput.setId("nameInput");
-    Dialog newPlayerDialog = view.makeDialogBox(nameInput, "Enter a name: ");
+    Dialog newPlayerDialog = view.makeDialogBox(nameInput, "What's Your Name?", "Name: ");
+    styleDialogBox(newPlayerDialog);
 
     Optional result = newPlayerDialog.showAndWait();
     if (result.isPresent()) {
@@ -155,7 +157,9 @@ public class Controller {
     TextField startingMoneyInput = new TextField();
     startingMoneyInput.setId("startingMoneyInput");
     Dialog newPlayerDialog = view
-        .makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
+        .makeDialogBox(startingMoneyInput, "How much money would you like to start with?", "Starting Amount: ");
+    styleDialogBox(newPlayerDialog);
+
     Optional result = newPlayerDialog.showAndWait();
     if (result.isPresent()) {
       interactivePlayerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
@@ -182,7 +186,8 @@ public class Controller {
     TextField numAutoPlayerInput = new TextField();
     numAutoPlayerInput.setId("numAutoPlayerInput");
     Dialog newPlayerDialog = view
-        .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
+        .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?", "Number of Opponents: ");
+    styleDialogBox(newPlayerDialog);
     Optional result = newPlayerDialog.showAndWait();
     if (result.isPresent()) {
       numAutoPlayers = Integer.parseInt(numAutoPlayerInput.getText());
@@ -454,9 +459,10 @@ public class Controller {
         dealer.exchangeCards(autoPlayer, autoPlayer.decideExchange());
         exchangeFrontEndCards(autoPlayer);
       } else {
-        Optional<ButtonType> exchangeBoxResult;
+        Optional<ButtonType> exchangeBoxResult = null;
         while (!interactiveActionComplete) {
           Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
+          styleDialogBox(exchangeBox);
           exchangeBoxResult = exchangeBox.showAndWait();
           if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {
             interactiveActionComplete = true;
@@ -513,6 +519,8 @@ public class Controller {
               while (!interactiveActionComplete) {
                 ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet,
                     lastBet - player.getTotalBetAmount());
+                styleDialogBox(dialog);
+
                 Optional<Button> result = dialog.showAndWait();
                 if (result.isPresent()) {
                   try {
@@ -594,6 +602,7 @@ public class Controller {
         } else {
           TextField buyBackInput = new TextField();
           Dialog buyBackBox = view.makeBuyInScreen(buyBackInput);
+          styleDialogBox(buyBackBox);
           Optional buyBackBoxResult = buyBackBox.showAndWait();
           if (buyBackBoxResult.isPresent()) {
             try {
@@ -614,8 +623,8 @@ public class Controller {
     int betAmount = 0;
     TextField betInput = new TextField();
     Dialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
-    betBox.getDialogPane().getStylesheets().add(getClass().getResource("/dialog.css").toExternalForm());
-    betBox.getDialogPane().getStyleClass().add("myDialog");
+    styleDialogBox(betBox);
+
     Optional betBoxResult = betBox.showAndWait();
     if (betBoxResult.isPresent()) {
       try {
@@ -638,6 +647,11 @@ public class Controller {
         indicateBet(player);
       }
     }
+  }
+
+  private void styleDialogBox(Dialog dialogBox) {
+    dialogBox.getDialogPane().getStylesheets().add(getClass().getResource("/dukeTheme.css").toExternalForm());
+    dialogBox.getDialogPane().getStyleClass().add("dialog-pane");
   }
 
 

@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,6 +21,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javax.swing.ButtonGroup;
 import model.Player;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -66,10 +69,12 @@ public class GameView {
   }
 
   public Scene setupScene() {
-    this.scene = new Scene(root, PokerRunner.SCENE_WIDTH, PokerRunner.SCENE_HEIGHT,
+    scene = new Scene(root, PokerRunner.SCENE_WIDTH, PokerRunner.SCENE_HEIGHT,
         PokerRunner.BACKGROUND);
+    scene.getStylesheets().add(getClass().getResource("/dukeTheme.css").toExternalForm());
     return this.scene;
   }
+
 
   public void clear() {
     root.getChildren().clear();
@@ -99,10 +104,12 @@ public class GameView {
     centerGroup.getChildren().add(startBox);
   }
 
-  public Dialog makeDialogBox(TextField input, String prompt) {
+  public Dialog makeDialogBox(TextField input, String prompt, String promptText) {
     clear();
     Dialog dialogBox = new TextInputDialog();
     dialogBox.setHeaderText(prompt);
+    input.setPromptText(promptText);
+
 
     GridPane grid = new GridPane();
     grid.setId(prompt);
@@ -117,13 +124,43 @@ public class GameView {
   public void makePlayerSelectScreen(EventHandler<ActionEvent> newPlayerEvent,
       EventHandler<ActionEvent> loadPlayerEvent) {
     clear();
+    VBox menuScreen = new VBox();
+    menuScreen.getStyleClass().add("menuBox");
+
+
+    HBox titleBox = new HBox();
+    titleBox.getStyleClass().add("titleBox");
+
+    Text title = new Text("Poker Player");
+    titleBox.getChildren().add(title);
+    title.getStyleClass().add("title");
+
+
+
     VBox playerBox = new VBox();
+    playerBox.getStyleClass().add("vBox");
+
+
+
     playerBox.setId("PlayerBox");
     Button newPlayerButton = makeButton("New Player", newPlayerEvent);
     newPlayerButton.setId("New Player");
     Button loadSavedPlayer = makeButton("Load Player", loadPlayerEvent);
+
     playerBox.getChildren().addAll(newPlayerButton, loadSavedPlayer);
-    centerGroup.getChildren().add(playerBox);
+
+    menuScreen.getChildren().addAll(titleBox, playerBox);
+
+    centerGroup.getChildren().addAll(menuScreen);
+
+
+
+
+    /*menuScreen.setStyle("-fx-spacing: 200");
+
+    title.setStyle("    -fx-font-family: \"Optima\";\n"
+        + "    -fx-font-size: 80px;");
+    playerBox.setStyle("-fx-alignment: center; -fx-spacing: 10");*/
 
   }
 
@@ -139,6 +176,7 @@ public class GameView {
       EventHandler<ActionEvent> customEvent) {
     centerGroup.getChildren().clear();
     gameBox.setId("GameBox");
+    gameBox.getStyleClass().add("vBox");
     Button holdEmButton = makeButton("Holdem", holdemEvent);
     holdEmButton.setId("Holdem");
     Button drawButton = makeButton("Draw", drawEvent);
@@ -205,6 +243,9 @@ public class GameView {
     dialog.setHeaderText(playerName + ", you're up! What would you like to do?");
     dialog.setContentText("Choose your action:");
 
+    setDialogOnTop(dialog);
+
+
     return dialog;
   }
 
@@ -215,7 +256,7 @@ public class GameView {
     Dialog betBox = new TextInputDialog();
     betBox.setHeaderText(message);
 
-    input.setPromptText("Enter a Bet: ");
+    input.setPromptText("Bet Amount");
     input.setId("Bet");
 
     GridPane grid = new GridPane();
@@ -224,6 +265,9 @@ public class GameView {
     GridPane.setConstraints(input, 0, 1);
     grid.getChildren().add(input);
     betBox.getDialogPane().setContent(grid);
+
+    setDialogOnTop(betBox);
+
 
     return betBox;
   }
@@ -256,9 +300,17 @@ public class GameView {
     exchangeBox.setTitle("Exchange Cards");
     exchangeBox.setHeaderText(String.format(
         "%s is up!%nSelect no more than %d card(s) to exchange and then press OK. \nDon't try to cheat! "
-            + " You will be reprompted if you try to selct more than the specified amount.",
+            + " You will be reprompted if you try to select more than the specified amount.",
         playerName, maxExchangeCards));
+    setDialogOnTop(exchangeBox);
     return exchangeBox;
+  }
+
+  private void setDialogOnTop(Dialog exchangeBox) {
+    Stage dialogStage = (Stage) exchangeBox.getDialogPane().getScene().getWindow();
+    dialogStage.setX(900);
+    dialogStage.setY(900);
+    dialogStage.setAlwaysOnTop(true);
   }
 
 
@@ -277,6 +329,7 @@ public class GameView {
     GridPane.setConstraints(buyBackInput, 0, 1);
     grid.getChildren().add(buyBackInput);
     buyBackBox.getDialogPane().setContent(grid);
+    setDialogOnTop(buyBackBox);
 
     return buyBackBox;
   }
