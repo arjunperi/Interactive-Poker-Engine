@@ -498,7 +498,7 @@ public class Controller {
   }
 
   //don't like this conditional
-  private void dealingRound() throws InterruptedException {
+  private void dealingRound()  {
     String recipient = model.getRecipient();
     if (recipient.equals("Community")) {
       dealFrontEndCardsInRound(communityCards, communityCardGrid);
@@ -521,7 +521,7 @@ public class Controller {
         dealer.exchangeCards(autoPlayer, autoPlayer.decideExchange());
         exchangeFrontEndCards(autoPlayer);
       } else {
-        Optional<ButtonType> exchangeBoxResult = null;
+        Optional<ButtonType> exchangeBoxResult;
         while (!interactiveActionComplete) {
           Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
           styleDialogBox(exchangeBox);

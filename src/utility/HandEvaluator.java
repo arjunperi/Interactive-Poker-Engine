@@ -32,7 +32,7 @@ public final class HandEvaluator {
               .getDeclaredMethod("format" + handType.replaceAll("\\s", ""), Hand.class);
           int[] formattedHand = (int[]) format.invoke(HandFormatter.class, hand);
           for (int index = 0; index < formattedHand.length; index++) {
-            handRank[index + 1] = (Integer) formattedHand[index];
+            handRank[index + 1] = formattedHand[index];
           }
           return handRank;
         }
@@ -72,6 +72,7 @@ public final class HandEvaluator {
         for (int j = 0; j < handStrength.length; j++) {
           if (handStrength[j] != bestHand[j]) {
             shouldAdd = false;
+            break;
           }
         }
         if (shouldAdd) {

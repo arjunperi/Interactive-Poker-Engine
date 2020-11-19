@@ -6,11 +6,8 @@ import model.Hand;
 public final class HandFormatter {
 
   private static final int POKERHANDSIZE = 5;
-  private static final int DUMMYCARDRANK = -1;
   private static final int ACERANK = 14;
-  private static final int HIGHESTCARDINDEX = 0;
-  private static final int SECONDHIGHESTCARDINDEX = 1;
-  private static final int STRENGTHINDEX = 0;
+
 
 
   public static int[] formatStraightFlush(Hand hand) {

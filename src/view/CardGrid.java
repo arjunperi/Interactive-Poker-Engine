@@ -79,9 +79,7 @@ public class CardGrid extends GridPane {
       currentColumn++;
     }
 
-    card.setOnMouseClicked(event -> {
-      card.toggleCardSelected();
-    });
+    card.setOnMouseClicked(event -> card.toggleCardSelected());
     //card.setOnMouseClicked(event2 -> countNumberOfCardsHighlighted());
   }
 

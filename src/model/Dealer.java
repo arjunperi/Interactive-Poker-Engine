@@ -26,7 +26,6 @@ public class Dealer {
     player.clearNewCards();
     for (Card exchangeCard : exchangeCards) {
       player.discardCard(exchangeCard);
-      System.out.println(player.toString() + " gets: " + deck.peekTopCard().toString());
       Card cardDealt = deck.getTopCard();
       player.receiveCard(cardDealt);
     }

@@ -8,10 +8,10 @@ import java.util.Stack;
 
 public class Deck extends Stack<Card> {
 
-  private Stack<Card> deck;
-  private List<String> suits;
-  private List<Integer> ranks;
-  private Map<String, Card> stringToCardMap;
+  private final Stack<Card> deck;
+  private final List<String> suits;
+  private final List<Integer> ranks;
+  private final Map<String, Card> stringToCardMap;
 
     /*public Deck() {
         deck = new Stack();
@@ -46,18 +46,10 @@ public class Deck extends Stack<Card> {
     deck.push(card);
   }
 
-  //temporary, just for print methods
-  public Card peekTopCard() {
-    return (Card) deck.peek();
-  }
-
   public boolean isEmpty() {
     return deck.isEmpty();
   }
 
-  public void shuffle() {
-    Collections.shuffle(deck);
-  }
 
   public Card StringToCard(String cardString) {
     return stringToCardMap.get(cardString);
