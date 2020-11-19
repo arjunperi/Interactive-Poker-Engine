@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +20,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AutoPlayer;
@@ -396,6 +394,7 @@ public class Controller {
     while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
       try {
         String action = model.getAction(roundNumber);
+        //dealingRound
         System.out.println("\nnext round");
         model.backEndDeal(roundNumber);
         Class<?> c = Class.forName("controller.Controller");

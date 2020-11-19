@@ -72,6 +72,7 @@ public class JSONReader {
     }
   }
 
+
   public Map<String, String> getSuits() {
     return suits;
   }
@@ -92,6 +93,7 @@ public class JSONReader {
     }
   }*/
 
+
   public List<String> getSuitNames() {
     List<String> suitNames = new ArrayList<>(getSuits().keySet());
     Collections.sort(suitNames);
@@ -106,8 +108,17 @@ public class JSONReader {
 
   public List<Integer> getStrengthValues() {
     List<Integer> strengthValues = new ArrayList<>(getStrengths().keySet());
-    Collections.sort(strengthValues);
+    Collections.sort(strengthValues, Collections.reverseOrder());
     return strengthValues;
+  }
+
+  public List<String> getHandTypes() {
+    List<Integer> strengthValues = getStrengthValues();
+    List<String> handTypes = new ArrayList<>();
+    for(int strength : strengthValues){
+      handTypes.add(strengths.get(strength));
+    }
+    return handTypes;
   }
 
 

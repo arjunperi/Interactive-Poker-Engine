@@ -16,7 +16,6 @@ public class RoundManager {
   private Pot pot;
   private boolean roundOver;
   private String winDialog;
-  private List<Hand> winningHand;
   private JSONReader reader;
   private Map<Integer, String> handStrengths;
 
@@ -28,7 +27,6 @@ public class RoundManager {
     this.pot = pot;
     handStrengths = reader.getStrengths();
     roundOver = false;
-    winningHand = new ArrayList<>();
   }
 
   public void checkOnePlayerRemains(PlayerList playerList) {
