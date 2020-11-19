@@ -145,3 +145,7 @@
 .pokerTable {
   -fx-fill: darkgreen;
 }
+
+.scroll-pane {
+  -fx-background-color: red;
+}
