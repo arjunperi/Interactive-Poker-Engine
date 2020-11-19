@@ -27,7 +27,7 @@ public class CommunityCardsTest {
   @Test
   public void testAddToCommunity() {
     CommunityCards communityCards = new CommunityCards();
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     communityCards.receiveCard(card1);
     assertEquals(card1, communityCards.getCommunityCardsList().get(0));
   }

@@ -18,6 +18,7 @@ public class PokerRunner extends Application {
     Controller mainController = new Controller();
     stage.setScene(mainController.setupScene());
     stage.setTitle(TITLE);
+    stage.setMaximized(true);
     stage.show();
   }
 

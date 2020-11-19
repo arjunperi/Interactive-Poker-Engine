@@ -7,11 +7,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class Player extends CardRecipient {
 
-  private String playerName;
-  //private int moneyCount;
+  private final String playerName;
   private boolean hasFolded;
   private Hand playerHand;
-  private List<Card> discardedCardList;
+  private final List<Card> discardedCardList;
   private CommunityCards communityCards;
   private Hand totalHand;
   private Hand totalVisibleHand;

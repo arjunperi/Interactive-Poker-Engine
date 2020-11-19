@@ -3,8 +3,8 @@ package model;
 
 public class Card {
 
-  private String suit;
-  private int rank;
+  private final String suit;
+  private final int rank;
   private boolean isBackEndVisible;
   private boolean isInteractivePlayerCard;
 

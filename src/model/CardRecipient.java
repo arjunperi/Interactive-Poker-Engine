@@ -26,5 +26,4 @@ public abstract class CardRecipient {
   public List<Card> getNewCards() {
     return newCardList;
   }
-
 }

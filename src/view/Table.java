@@ -10,34 +10,13 @@ import javafx.scene.shape.Circle;
 
 public class Table extends Group {
 
-  private int centerX;
-  private int centerY;
-  private int playerDistanceFromCenter;
-  private Map<Point2D, PlayerView> playerPositions;
-  private List<PlayerView> playerViews;
-  //private CommunityCardGrid communityCardGrid;
+  private final int centerX;
+  private final int centerY;
+  private final int playerDistanceFromCenter;
+  private final Map<Point2D, PlayerView> playerPositions;
+  private final List<PlayerView> playerViews;
   private final Circle pokerTable;
   List<PlayerView> players;
-
-  /*public Table (int centerX, int centerY, int radius, int numPlayers) {
-    super();
-    pokerTable = new Circle(centerX, centerY, radius);
-    this.getChildren().add(pokerTable);
-    this.centerX = centerX;
-    this.centerY = centerY;
-    this.numPlayers = numPlayers;
-
-    /*communityCardGrid = new CommunityCardGrid();
-    this.getChildren().add(communityCardGrid);
-    communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
-    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));*/
-
-    /*this.playerPositions = new HashMap<>();
-    this.playerViews = new ArrayList<>();
-    this.playerDistanceFromCenter = radius * 2;
-    pokerTable.setStyle("-fx-fill: darkgreen");
-    calculatePlayerPositions();
-  }*/
 
   public Table(int centerX, int centerY, int radius, List<PlayerView> players) {
     super();
@@ -47,18 +26,12 @@ public class Table extends Group {
     this.centerY = centerY;
     this.players = players;
 
-    /*communityCardGrid = new CommunityCardGrid();
-    this.getChildren().add(communityCardGrid);
-    communityCardGrid.setLayoutX(centerX - (communityCardGrid.getMinWidth() / 2));
-    communityCardGrid.setLayoutY(centerY - (communityCardGrid.getMinHeight() / 2));*/
-
     this.playerPositions = new HashMap<>();
     this.playerViews = new ArrayList<>();
     this.playerDistanceFromCenter = radius * 2;
-    pokerTable.setStyle("-fx-fill: darkgreen");
+    pokerTable.getStyleClass().add("pokerTable");
     calculatePlayerPositions();
   }
-
 
   private void calculatePlayerPositions() {
     for (int player = 0; player < players.size(); player++) {
@@ -75,17 +48,7 @@ public class Table extends Group {
     }
   }
 
-  public Map<Point2D, PlayerView> getPlayerPositions() {
-    return playerPositions;
-  }
 
-  public List<PlayerView> getPlayerViews() {
-    return playerViews;
-  }
-
-  /*public CommunityCardGrid getCommunityCardGrid() {
-    return communityCardGrid;
-  }*/
 
   public int getCenterX() {
     return centerX;
@@ -94,6 +57,5 @@ public class Table extends Group {
   public int getCenterY() {
     return centerY;
   }
-
 
 }

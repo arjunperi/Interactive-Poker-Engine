@@ -1,12 +1,10 @@
 package view;
 
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public abstract class PlayerHUDGameObject extends VBox {
@@ -30,8 +28,7 @@ public abstract class PlayerHUDGameObject extends VBox {
 
   public void setUp() {
     gameStat = new Text(displayedGameStat);
-    //gameStat.setStroke(Color.BLACK);
-    gameStat.setStyle("-fx-fill: white ; -fx-stroke: black; -fx-stroke-width: .7;  ");
+    gameStat.getStyleClass().add("playerHUDObject");
 
     gameImage = new ImageView();
     gameImage.setFitHeight(IMAGE_HEIGHT);
@@ -49,9 +46,6 @@ public abstract class PlayerHUDGameObject extends VBox {
     return gameStat;
   }
 
-  public ImageView getGameImage() {
-    return gameImage;
-  }
 
   public void setImage(String newImage) {
     try {
@@ -60,6 +54,10 @@ public abstract class PlayerHUDGameObject extends VBox {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public ImageView getGameImage() {
+    return gameImage;
   }
 
 

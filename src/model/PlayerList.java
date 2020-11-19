@@ -46,7 +46,6 @@ public abstract class PlayerList {
     return SolventPlayerCount == 1;
   }
 
-
   public void updateStartingRoundOrder() {
     Collections.rotate(allPlayers, -1);
   }
@@ -79,8 +78,6 @@ public abstract class PlayerList {
       int shiftIndex = activePlayers.indexOf(playerUp) + 1;
       Collections.rotate(activePlayers, -shiftIndex);
     }
-    //we only want to do this once the betting round is over
-//        lastBet = 0;
     raiseMade = false;
   }
 
