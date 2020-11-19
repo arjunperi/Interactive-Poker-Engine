@@ -354,7 +354,7 @@ public class Controller {
       players.add(interactivePlayer);
       playerList = (PlayerList) cl.getConstructor(List.class)
           .newInstance(new ArrayList<>(players));
-      if (interactivePlayerStartingAmount == 0){
+      if (interactivePlayerStartingAmount == 0) {
         promptBuyIn();
       }
     } catch (Exception e) {
