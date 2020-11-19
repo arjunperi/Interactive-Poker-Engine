@@ -2,7 +2,9 @@ package model;
 
 //not sure if abstract class is the best way to handle this hierarchy
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class Model {
 
@@ -56,15 +58,19 @@ public class Model {
     }
   }
 
-  public void dealFlow(int currentRound) {
+
+  public void backEndDeal(int currentRound) {
     //TODO: find a way around this conditional
     dealStats(currentRound);
     if (recipient.equals("Community")) {
       dealer.dealCards(communityCards, visibilityList);
-    } else {
+    } else if (recipient.equals("Players")) {
       for (Player player : activePlayerList) {
         dealer.dealCards(player, visibilityList);
       }
+    } else {
+      throw new ModelException(
+          "Invalid dealing round inputs in file. Exit program and reconfigure file inputs");
     }
   }
 

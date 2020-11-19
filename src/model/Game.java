@@ -63,6 +63,7 @@ public class Game {
     player7("Michael Jordan"),
     player8("Dinna");
 
+
     private final String value;
 
     AutoPlayerNames(final String newValue) {

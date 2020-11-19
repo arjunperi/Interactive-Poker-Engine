@@ -17,6 +17,7 @@ public class PlayerTest extends DukeApplicationTest {
   private Deck deck;
   private JSONReader reader;
 
+
   @BeforeEach
   void setUp() {
     reader = new JSONReader();
@@ -272,11 +273,11 @@ public class PlayerTest extends DukeApplicationTest {
 //        Card otherCard3 = new Card(7, "DIAMONDS");
 //        Card otherCard4 = new Card(9, "SPADES");
 
-    Card testCard = deck.StringToCard("2 CLUBS");
-    Card testCard2 = deck.StringToCard("6 CLUBS");
-    Card testCard3 = deck.StringToCard("3 HEARTS");
-    Card otherCard3 = deck.StringToCard("7 DIAMONDS");
-    Card otherCard4 = deck.StringToCard("9 SPADES");
+    Card testCard = new Card(2, "CLUBS");
+    Card testCard2 = new Card(6, "CLUBS");
+    Card testCard3 = new Card(3, "HEARTS");
+    Card otherCard3 = new Card(7, "DIAMONDS");
+    Card otherCard4 = new Card(9, "SPADES");
 
     player.receiveCard(testCard);
     player.receiveCard(testCard2);
@@ -361,7 +362,9 @@ public class PlayerTest extends DukeApplicationTest {
     player.receiveCard(otherCard3);
     player.receiveCard(otherCard4);
     System.out.println(player.getTotalHand().getCards());
+
     System.out.println(HandCombiner.getAllHands(player.getTotalHand()));
+
     System.out.println(player.getHand().getCards());
 
     player.decideAction(0);

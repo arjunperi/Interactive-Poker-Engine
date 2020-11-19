@@ -9,7 +9,8 @@ public final class PropertiesFileReader {
     Properties propertyFile = new Properties();
     try {
       propertyFile
-          .load(PropertiesFileReader.class.getClassLoader().getResourceAsStream(fileName + ".properties"));
+          .load(PropertiesFileReader.class.getClassLoader()
+              .getResourceAsStream(fileName + ".properties"));
     } catch (Exception e) {
       e.printStackTrace();
     }

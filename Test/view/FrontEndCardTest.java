@@ -2,9 +2,6 @@ package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import controller.Controller;
-import javafx.stage.Stage;
-import model.Card;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 

@@ -1,6 +1,10 @@
 package model;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 public class Deck extends Stack<Card> {
 

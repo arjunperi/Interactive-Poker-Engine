@@ -1,30 +1,26 @@
 package view;
 
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Player;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import pokerSuite.PokerRunner;
-
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class GameView {
@@ -71,7 +67,6 @@ public class GameView {
     gameBox = new VBox();
     initializeBorderPane();
   }
-
 
   public Alert makeCashOutAlert(String playerName, int playerBankroll) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -124,6 +119,9 @@ public class GameView {
   }
 
   public void addGameObject(Node gameObject) {
+    centerGroup.getChildren().remove(gameBox);
+    topGroup.getChildren().remove(homeButton);
+    bottomGroup.getChildren().clear();
     centerGroup.getChildren().add(gameObject);
   }
 
@@ -167,9 +165,6 @@ public class GameView {
 
   public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount) {
     //centerGroup.getChildren().clear();
-    centerGroup.getChildren().remove(gameBox);
-    topGroup.getChildren().remove(homeButton);
-    bottomGroup.getChildren().clear();
 
     Button cashOutButton = new Button("Cash Out");
     cashOutButton.setId("CashOut");
@@ -204,7 +199,6 @@ public class GameView {
 
     return dialog;
   }
-
 
   public Dialog makeBetPopUp(TextField input, String message) {
     bottomGroup.getChildren().clear();
@@ -251,20 +245,19 @@ public class GameView {
     Dialog exchangeBox = new Alert(type);
     exchangeBox.initModality(Modality.NONE);
     exchangeBox.setTitle("Exchange Cards");
-    exchangeBox.setHeaderText(String
-        .format("%s is up.%nSelect no more than %d card(s) to exchange", playerName,
-            maxExchangeCards));
+    exchangeBox.setHeaderText(String.format(
+        "%s is up!%nSelect no more than %d card(s) to exchange and then press OK. \nDon't try to cheat! "
+            + " You will be reprompted if you try to selct more than the specified amount.",
+        playerName, maxExchangeCards));
     return exchangeBox;
   }
 
 
   //maybe combine this with bet screen input
   public Dialog makeBuyInScreen(TextField buyBackInput) {
-//        bottomGroup.getChildren().clear();
-
     Dialog buyBackBox = new TextInputDialog();
-    buyBackBox
-        .setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing: ");
+    buyBackBox.setHeaderText(
+        "Out of money!\nPlease enter your buy-back-in amount to continue playing, or press cancel to exit: ");
 
     buyBackInput.setPromptText("Amount: ");
     buyBackInput.setId("BuyBack");
@@ -293,9 +286,6 @@ public class GameView {
     actionLog.setId("ActionLog");
     actionLog.setMinHeight(300);
     actionLog.setMinWidth(600);
-//        action.getStyleClass().add("listview");
-//        action.setMinHeight(HISTORY_MIN_HEIGHT);
-//        action.setMinWidth(HISTORY_MIN_WIDTH);
     rightGroup.getChildren().add(actionLog);
   }
 
