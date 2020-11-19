@@ -181,17 +181,7 @@ public class GameView {
     topGroup.getChildren().add(homeButton);
   }
 
-  public void deal(FrontEndCard card, GameDisplayRecipient displayRecipient, int xLocation) {
-    topGroup.getChildren().clear();
-    card.setX(xLocation);
-    displayRecipient.updateFrontEndCards(card, xLocation);
-    card.setY(displayRecipient.getY());
-    root.getChildren().add(card);
-  }
 
-  public void remove(FrontEndCard card) {
-    root.getChildren().remove(card);
-  }
 
   public Button makeButton(String property, EventHandler<ActionEvent> handler) {
     Button result = new Button();

@@ -42,7 +42,6 @@ import model.RoundManager;
 import view.CardGrid;
 import view.CardView;
 import view.CommunityCardGrid;
-import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
 import view.PotView;
@@ -59,9 +58,7 @@ public class Controller {
   private Model model;
   private RoundManager roundManager;
   private PlayerList playerList;
-  private final List<GameDisplayRecipient> frontEndPlayers;
   private CommunityCards communityCards;
-  private GameDisplayRecipient displayCommunity;
   private Pot pot;
   private Dealer dealer;
   private final GameView view;
@@ -101,7 +98,6 @@ public class Controller {
     oneSolventPlayer = false;
     playerMappings = new HashMap<>();
     frontEndCardMappings = new HashMap<>();
-    frontEndPlayers = new ArrayList<>();
     playerViews = new ArrayList<>();
     reader = new FileReader();
     initializeCardSettings();
