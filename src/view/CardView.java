@@ -10,18 +10,16 @@ import javafx.scene.text.Text;
 
 public class CardView extends StackPane {
 
-  private String rankSymbol;
-  private boolean isFrontEndVisible;
-  private ImageView displayedImage;
-  private String suitImage;
-  private String cardBack;
-  private boolean isSelected;
-
-  private Text rank;
-  private Rectangle cardBackground;
-
   public static final int CARD_WIDTH = 35;
   public static final int CARD_HEIGHT = 50;
+  private final String rankSymbol;
+  private boolean isFrontEndVisible;
+  private ImageView displayedImage;
+  private final String suitImage;
+  private final String cardBack;
+  private boolean isSelected;
+  private Text rank;
+  private Rectangle cardBackground;
 
   public CardView(String rankSymbol, String suitImage, String cardBack, boolean isFrontEndVisible) {
     super();

@@ -1,36 +1,22 @@
-
 package view;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import controller.Controller;
-import controller.exceptions.InvalidNumberPlayersException;
-import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.*;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
-import javax.swing.table.TableCellEditor;
-import javax.swing.text.View;
-import java.util.List;
-import java.util.Optional;
-
 public class GameViewTest extends DukeApplicationTest {
 
+  private final GameView view = new GameView();
   private Controller controller;
   private Stage stage;
   private FrontEndCard testCard;
-  private final GameView view = new GameView();
 
   public void start(final Stage stage) throws Exception {
     controller = new Controller();
@@ -258,6 +244,7 @@ public class GameViewTest extends DukeApplicationTest {
     assertTrue(controller.invalidPlayersEntered(Integer.parseInt(numAutoPlayerInput.getText())));
     //assertThrows(InvalidNumberPlayersException.class, () -> javafxRun(() -> controller.getNumAutoPlayers()));
   }
+
   @Test
   public void testInvalidNameEnteredThrown() {
     javafxRun(() -> controller.initializeNewPlayer());
@@ -267,9 +254,10 @@ public class GameViewTest extends DukeApplicationTest {
     type(KeyCode.ENTER);
     assertTrue(controller.invalidNameEntered(nameInput.getText()));
 
-    }
+  }
+
   @Test
-  public void testInvalidStartingAmount(){
+  public void testInvalidStartingAmount() {
     javafxRun(() -> controller.initializeNewPlayerStartingAmount());
     TextField amountInput = lookup("#startingMoneyInput").query();
     clickOn(amountInput);
@@ -279,6 +267,6 @@ public class GameViewTest extends DukeApplicationTest {
     assertFalse(controller.isValidInteger(Integer.parseInt(amountInput.getText())));
 
   }
-  }
+}
 
 

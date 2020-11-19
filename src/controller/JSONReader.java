@@ -13,12 +13,13 @@ import org.json.JSONTokener;
 
 
 public class JSONReader {
+
   private final Map<String, String> suits;
   private final Map<Integer, String> ranks;
   private JSONObject jo;
   private String cardBack;
 
-  public JSONReader(){
+  public JSONReader() {
     suits = new HashMap<>();
     ranks = new HashMap<>();
   }
