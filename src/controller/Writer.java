@@ -6,14 +6,16 @@ import java.util.Properties;
 
 public class Writer {
 
-    public void cashOutToPlayerSaves(String playerName,  Properties propertyFile) {
-        try {
-            FileWriter fileWriter = new FileWriter("PlayerSaveFiles/" + playerName + "Player.properties");
-            propertyFile.store(fileWriter, null);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+  public void cashOutToPlayerSaves(String playerName, Properties propertyFile) {
+    try {
+      FileWriter fileWriter = new FileWriter("PlayerSaveFiles/" + playerName + "Player.properties");
+
+      propertyFile.store(fileWriter, null);
+      fileWriter.close();
+    } catch (IOException ex) {
+      ex.printStackTrace();
     }
+  }
 
 }
 

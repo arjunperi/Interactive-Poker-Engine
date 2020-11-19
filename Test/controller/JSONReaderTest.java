@@ -1,6 +1,7 @@
 package controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import controller.exceptions.SetUpException;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ class JSONReaderTest {
     reader = new JSONReader();
     reader.parse("/cardSettings.json");
   }
+
   @Test
   void getSuits() {
     Map<String, String> expectedSuits = new HashMap<>();
