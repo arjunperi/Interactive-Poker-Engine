@@ -231,7 +231,7 @@ public class GameViewTest extends DukeApplicationTest {
 //    assertTrue(exchangeGrid.getChildren()
 //        .containsAll(List.of(exchangeCardInput1, exchangeCardInput2, exchangeCardInput3)));
 //  }
-  
+
   @Test
   public void testInvalidNumberPlayersExceptionThrown() {
     javafxRun(() -> controller.getNumAutoPlayers());

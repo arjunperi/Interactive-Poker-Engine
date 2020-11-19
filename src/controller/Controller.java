@@ -34,6 +34,7 @@ import model.CommunityCards;
 import controller.exceptions.ControllerException;
 import model.Dealer;
 import model.Game;
+import model.Game.AutoPlayerNames;
 import model.InteractivePlayer;
 import model.Model;
 import model.ModelException;
@@ -91,7 +92,6 @@ public class Controller {
   private String interactivePlayerName;
   private int playerStartingAmount;
   private int numAutoPlayers;
-  private int interactivePlayerStartingAmount;
 
 
   public Controller() {
@@ -225,7 +225,7 @@ public class Controller {
       TextField numAutoPlayerInput = new TextField();
       numAutoPlayerInput.setId("numAutoPlayerInput");
       TextInputDialog newPlayerDialog = view
-          .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
+          .makeDialogBox(numAutoPlayerInput, "How many opponents would you like? You can choose between 1 and 7 opponents.");
       Optional<String> result = newPlayerDialog.showAndWait();
       if (result.isPresent()) {
         int numEntered = Integer.parseInt(numAutoPlayerInput.getText());
@@ -415,12 +415,12 @@ public class Controller {
       String playerListType = modelProperties.getProperty("playerListType");
       Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
       interactivePlayer = new InteractivePlayer(interactivePlayerName,
-          interactivePlayerStartingAmount, communityCards, pot);
+          playerStartingAmount, communityCards, pot);
       List<Player> players = initializeAutoPlayers();
       players.add(interactivePlayer);
       playerList = (PlayerList) cl.getConstructor(List.class)
           .newInstance(new ArrayList<>(players));
-      if (interactivePlayerStartingAmount == 0) {
+      if (playerStartingAmount == 0) {
         promptBuyIn();
       }
     } catch (Exception e) {
@@ -432,9 +432,9 @@ public class Controller {
   private List<Player> initializeAutoPlayers() {
     List<Player> autoPlayerList = new ArrayList<>();
     for (int numPlayers = 0; numPlayers < numAutoPlayers; numPlayers++) {
-      String autoPlayerName = Game.AutoPlayerNames.values()[numPlayers].getValue();
+      String autoPlayerName = AutoPlayerNames.values()[numPlayers].getValue();
       autoPlayerList.add(
-          new AutoPlayer(autoPlayerName, interactivePlayerStartingAmount, communityCards, pot));
+          new AutoPlayer(autoPlayerName, playerStartingAmount, communityCards, pot));
     }
     return autoPlayerList;
   }
