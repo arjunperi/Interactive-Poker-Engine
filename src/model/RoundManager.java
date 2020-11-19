@@ -29,8 +29,11 @@ public class RoundManager {
     List<Player> activePlayers = playerList.getActivePlayers();
     if (activePlayers.size() == 1) {
       winner = activePlayers.get(0);
-      System.out.println("\n" + winner.toString() + " and received $" + pot.getPotTotal().getValue());
-      winDialog = "Everyone else folded! " + winner.toString() + " won and received $" + pot.getPotTotal().getValue();
+      System.out
+          .println("\n" + winner.toString() + " and received $" + pot.getPotTotal().getValue());
+      winDialog =
+          "Everyone else folded! " + winner.toString() + " won and received $" + pot.getPotTotal()
+              .getValue();
       pot.dispersePot(winner, pot.getPotTotal().getValue());
       pot.clearPot();
       roundOver = true;

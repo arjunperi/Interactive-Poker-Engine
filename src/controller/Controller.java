@@ -186,10 +186,10 @@ public class Controller {
     Optional result = newPlayerDialog.showAndWait();
     if (result.isPresent()) {
       numAutoPlayers = Integer.parseInt(numAutoPlayerInput.getText());
-
     }
     initializeMainMenu();
   }
+
 
   public void initializeMainMenu() {
     EventHandler<ActionEvent> gameSelectEvent = e -> initializeGameSelect();
@@ -243,7 +243,8 @@ public class Controller {
 
       customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
     } catch (Exception e) {
-      e.printStackTrace();
+      showError(e.getMessage());
+//      e.printStackTrace();
     }
   }
 
@@ -260,7 +261,6 @@ public class Controller {
   }
 
   public void initializeProperties(String fileName) {
-
     try {
       currentGame = fileName;
       fileName = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -273,7 +273,8 @@ public class Controller {
         gameStart = false;
       }
       view.makeActionLog();
-      model = new Model(totalRounds, playerList, communityCards, dealer, modelProperties);
+      model = new Model(playerList, communityCards, dealer, modelProperties);
+      model.checkInvalidNumberOfCards(numAutoPlayers, totalRounds);
       initializeGameBoard();
       nextRound();
       if (exitedPoker) {
@@ -328,10 +329,10 @@ public class Controller {
   private void initializeGameBoard() {
     pokerTable = new Table(300, 300, 150, playerViews);
     communityCardGrid = new CommunityCardGrid(pokerTable.getCenterX(), pokerTable.getCenterY());
-    PotView potView = new PotView("100", "/pot.png", pokerTable.getCenterX(), pokerTable.getCenterY());
+    PotView potView = new PotView("100", "/pot.png", pokerTable.getCenterX(),
+        pokerTable.getCenterY());
     potView.getGameStat().textProperty()
         .bind(pot.getPotTotal().asString());
-
 
     //communityCardGrid.setLayoutX( - (communityCardGrid.getMinWidth() / 2));
     //communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
@@ -407,7 +408,8 @@ public class Controller {
       } catch (ModelException e) {
         throw new ControllerException(e.getMessage());
       } catch (Exception e) {
-        throw new ControllerException("Invalid action inputs in file. Exit program and reconfigure file");
+        throw new ControllerException(
+            "Invalid action inputs in file. Exit program and reconfigure file");
       }
     }
     checkShowDown();
@@ -575,8 +577,6 @@ public class Controller {
   }
 
 
-
-
   //should this be in View or Controller?
   private CardView getFrontEndCard(Card card) {
     boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
@@ -615,7 +615,8 @@ public class Controller {
     int betAmount = 0;
     TextField betInput = new TextField();
     Dialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
-    betBox.getDialogPane().getStylesheets().add(getClass().getResource("/dialog.css").toExternalForm());
+    betBox.getDialogPane().getStylesheets()
+        .add(getClass().getResource("/dialog.css").toExternalForm());
     betBox.getDialogPane().getStyleClass().add("myDialog");
     Optional betBoxResult = betBox.showAndWait();
     if (betBoxResult.isPresent()) {

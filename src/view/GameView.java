@@ -229,9 +229,9 @@ public class GameView {
 
   public GridPane getGrid(Dialog betBox) {
     Node grid = betBox.getDialogPane().getContent();
-      if (grid.getId().equals("OptionPane")) {
-          ;
-      }
+    if (grid.getId().equals("OptionPane")) {
+      ;
+    }
     {
       return (GridPane) grid;
     }
@@ -239,12 +239,12 @@ public class GameView {
 
   public Button getButton(Dialog betBox, String buttonName) {
     GridPane grid = getGrid(betBox);
-      for (Node node : grid.getChildrenUnmodifiable()) {
-          if (node.getId().equals(buttonName)) {
-              Button desiredButton = (Button) node;
-              return desiredButton;
-          }
+    for (Node node : grid.getChildrenUnmodifiable()) {
+      if (node.getId().equals(buttonName)) {
+        Button desiredButton = (Button) node;
+        return desiredButton;
       }
+    }
     return null;
   }
 

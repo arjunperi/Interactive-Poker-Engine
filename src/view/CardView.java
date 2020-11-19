@@ -155,7 +155,6 @@ public class CardView extends PlayerHUDGameObject {
     rank = new Text(rankSymbol);
     rank.setStroke(Color.WHITE);
 
-
     displayedImage = new ImageView();
     displayedImage.setFitHeight(CARD_HEIGHT);
     displayedImage.setFitWidth(CARD_WIDTH);

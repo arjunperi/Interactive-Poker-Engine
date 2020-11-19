@@ -454,11 +454,8 @@ public class HandEvaluatorTest {
     int n = hand1.getHandSize();
     int r = 5;
     // A temporary array to store all combination one by one
-<<<<<<< HEAD
-    Card data[] = new Card[r];
-=======
+
     Card[] data = new Card[r];
->>>>>>> 437efc4a68d665b5a257f1df244fe6afdaf42a41
 
     // Print all combination using temprary array 'data[]'
     comb.clearAllHands();

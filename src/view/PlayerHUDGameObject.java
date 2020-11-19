@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public abstract class PlayerHUDGameObject extends VBox {
+
   private String displayedGameStat;
   private String displayedGameImage;
 
