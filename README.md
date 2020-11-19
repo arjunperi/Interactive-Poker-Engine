@@ -1,4 +1,5 @@
-FINAL TEAM T6
+FINAL TEAM 6
+Rock SOLID
 ====
 
 This project implements a poker player for multiple related games.
@@ -6,7 +7,7 @@ This project implements a poker player for multiple related games.
 Names: Noah Besner, Yasser Elmzoudi, Arjun Peri, Christian Welch
 
 
-### Timeline
+### Timeline :calendar:
 
 Start Date: October 23, 2020
 
@@ -14,37 +15,40 @@ Finish Date: November 19, 2020
 
 Hours Spent: 400
 
-### Primary Roles
+### Primary Roles :pencil:
+
 - Noah Besner : Deep back-end poker game logic (hand evaluation, betting orders and raise seats, etc). 
-- Yasser Elmzoudi: Front-end GUI setup and implementation (table, cardview, playerview, CSS styling, etc).
+- Yasser Elmzoudi: Front-end GUI setup and implementation (`Table`, `CardView`, `PlayerView`, CSS styling, etc).
 - Arjun Peri: Dynamic poker variant implementation and backend-frontend integration (different poker game types, data file configuration, controller, etc).
 - Chrisitan Welch: Interactive game setup and implementation (player select screen, file saving and loading, autoplayer funcionality, etc). 
 
-### Resources Used
+### Resources Used :books:
 - Class lectures and readings
-- TA's and Professor Duvall assistance
+- TA's and Professor Duvall's assistance
 - Online resources (Stack OverFlow, GeeksForGeeks, etc.)
 
 
-### Running the Program
+### Running the Program :computer:
 
-To run the program, run the main class, PokerRunner which is located in the PokerSuite package.
+To run the program, run the main class, `PokerRunner` which is located in the PokerSuite package.
 
 Data files needed: 
-- Card files  
-    - spade-suit.png
-    - pot.png 
-    - heart-suit.png
-    - diamond-suit.png
-    - dialog.css
-    - default-profile-pic.png
-    - club-suit.png
-    - cardSettings.json
-    - card-back.png
+- Maven Dependency: org.json:json:202005182
+
+- Card files 
+    - Images for suits  
+    - Card Back Image
+    - Profile Picture Images
+    - Pot Image
+    - CSS Styling File
+    - Card Settings File
+
 - Poker game property files 
     - Texas Holdem: HoldEm.properties   
     - Five Card Draw: FiveCardDraw.properties  
     - Seven Card Stud: SevenCardStud.properties
+
+    - And any more of your choosing!
 
 Features implemented:
 - 3 poker "archetypes": Stud, Draw, and Community Card games
@@ -68,7 +72,7 @@ players at the table) can be accounted for.
 
 
 
-### Notes/Assumptions
+### Notes/Assumptions :clipboard: 
 
 Assumptions or Simplifications:
 - You can only chose between 1 and 7 opponents
@@ -92,11 +96,12 @@ Known Bugs:
 - 
 
 Extra credit:
-- Loading and saving
-- autoplayers
-- player profiles
-- Preferences
+- Loading and Saving
+- Smart Autoplayer
+- Player Profiles
+- Preferences (`CardView` suit image, `CardView` back, `PotView` Image, Languages, Amount of Players, and difficulty all customizable)
 
 
-### Impressions
+### Impressions :thumbsup:
+
 Poker is on its own merit a very complicated and intricate game. Thus, most of the work on this project came during our implementation of the back end logic and progression that make up the model APIs. However, our group came in with a significant amount of background knowledge that helped us to work through the most difficult aspects of the project. This project has given us a new appreciation for and understanding of the amount of time and effort that goes into developing deliverable software. 
