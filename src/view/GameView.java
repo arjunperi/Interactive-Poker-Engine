@@ -1,11 +1,7 @@
 package view;
 
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,17 +18,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javax.swing.ButtonGroup;
-import model.Player;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import pokerSuite.PokerRunner;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class GameView {
@@ -337,6 +328,7 @@ public class GameView {
   public void makeEndRoundScreen(EventHandler<ActionEvent> nextRoundEvent,
       EventHandler<ActionEvent> cashOutEvent) {
     HBox nextRoundBox = new HBox();
+    nextRoundBox.getStyleClass().add("hBox");
     Button nextRoundButton = makeButton("Deal next round", nextRoundEvent);
     Button cashOutButton = makeButton("Cash Out", cashOutEvent);
     nextRoundBox.getChildren().addAll(nextRoundButton, cashOutButton);

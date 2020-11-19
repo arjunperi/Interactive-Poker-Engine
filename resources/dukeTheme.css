@@ -102,3 +102,46 @@
   -fx-text-fill:black;
   -fx-font-weight:bold;
 }
+
+.cardGrid {
+  -fx-vgap: 5;
+  -fx-hgap: 5;
+  -fx-padding: 5, 0, 5, 0;
+  -fx-min-width: 200;
+  -fx-min-height: 110;
+}
+
+.hBox {
+-fx-spacing: 5;
+}
+
+.cardGridHolder {
+  -fx-stroke: transparent;
+  -fx-fill: transparent;
+}
+
+.cardSelected {
+  -fx-border-color: red;
+  -fx-border-width: 2px;
+}
+
+.card {
+  -fx-border-color: black;
+  -fx-border-width: 2px;
+}
+
+.playerHUDObject {
+  -fx-fill: white ;
+  -fx-stroke: black;
+  -fx-stroke-width: .7;
+}
+
+.playerInfoBox {
+  -fx-hgap: 5;
+  -fx-border-color: red;
+  -fx-padding: 0, 0, 0, 5;
+}
+
+.pokerTable {
+  -fx-fill: darkgreen;
+}

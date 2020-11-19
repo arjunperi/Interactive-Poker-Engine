@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class CardGrid extends GridPane {
@@ -21,7 +19,6 @@ public class CardGrid extends GridPane {
   private int currentRow;
   private int currentColumn;
 
-  private final int numberOfCardsHighlighted;
 
   private Set<CardView> selectedCards;
 
@@ -32,7 +29,6 @@ public class CardGrid extends GridPane {
 
     cardLocations = new HashMap<>();
     selectedCards = new HashSet<>();
-    numberOfCardsHighlighted = 0;
 
     initializeCardAddingPosition();
     initializeCardHolders();
@@ -40,16 +36,9 @@ public class CardGrid extends GridPane {
   }
 
 
-  //TODO: Add to CSS File
   private void initializeProperties() {
-    /*this.setStyle("-fx-vgap: 5");
-    this.setStyle("-fx-hgap: 5");
-    this.setStyle("-fx-padding: 5, 0, 5, 0");
-    this.setGridLinesVisible(true);*/
-    this.setVgap(5);
-    this.setHgap(5);
-    this.setPadding(new Insets(5, 0, 5, 0));
     this.setMinSize(CARD_GRID_MIN_WIDTH, CARD_GRID_MIN_HEIGHT);
+    this.getStyleClass().add("cardGrid");
 
   }
 
@@ -57,8 +46,7 @@ public class CardGrid extends GridPane {
     for (int row = 0; row < MAX_NUMBER_OF_ROWS; row++) {
       for (int column = 0; column < MAX_NUMBER_OF_COLUMNS; column++) {
         Rectangle card = new Rectangle(CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
-        card.setStroke(Color.TRANSPARENT);
-        card.setFill(Color.TRANSPARENT);
+        card.getStyleClass().add("cardGridHolder");
         this.add(card, column, row);
       }
     }
