@@ -1,7 +1,5 @@
 package view;
 
-import javafx.scene.text.Text;
-
 public class CardView extends PlayerHUDGameObject {
 
   private final String rankSymbol;
@@ -10,7 +8,6 @@ public class CardView extends PlayerHUDGameObject {
   private final String cardBack;
   private boolean isSelected;
 
-  private Text rank;
 
   public static final int CARD_WIDTH = 35;
   public static final int CARD_HEIGHT = 50;
@@ -62,15 +59,5 @@ public class CardView extends PlayerHUDGameObject {
   public boolean getIsSelected() {
     return isSelected;
   }
-
-
-  public String getRankSymbol() {
-    return rankSymbol;
-  }
-
-  public String getSuitImage() {
-    return suitImage;
-  }
-
 }
 

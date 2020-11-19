@@ -34,6 +34,7 @@ public class AutoPlayer extends Player {
     for (int rank : HandEvaluator.handStrength(bestHand)) {
       if (rank > PLAY_THRESHOLD) {
         isHighEnough = true;
+        break;
       }
     }
     if (handStrength > HAND_RANK_THRESHOLD || isHighEnough) {

@@ -1,6 +1,4 @@
 package model;
-
-import java.util.ArrayList;
 import java.util.List;
 import controller.JSONReader;
 
@@ -15,11 +13,10 @@ public class RoundManager {
   private Player winner;
   private int currentRound;
   private Pot pot;
-  private HandEvaluator handEvaluator;
   private boolean roundOver;
   private String winDialog;
-  private JSONReader reader;
-  private Map<Integer, String> handStrengths;
+  private final JSONReader reader;
+  private final Map<Integer, String> handStrengths;
 
 
   public RoundManager(Pot pot) {

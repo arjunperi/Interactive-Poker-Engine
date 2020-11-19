@@ -46,9 +46,6 @@ public abstract class PlayerHUDGameObject extends VBox {
     return gameStat;
   }
 
-  public ImageView getGameImage() {
-    return gameImage;
-  }
 
   public void setImage(String newImage) {
     try {

@@ -1,10 +1,10 @@
 package controller;
 
+import controller.exceptions.ControllerException;
 import controller.exceptions.InvalidNameEnteredException;
 import controller.exceptions.InvalidNumberPlayersException;
 import controller.exceptions.InvalidStartingAmountException;
 import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import java.util.Set;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -32,7 +31,6 @@ import model.AutoPlayer;
 import model.Card;
 import model.CardRecipient;
 import model.CommunityCards;
-import controller.exceptions.ControllerException;
 import model.Dealer;
 import model.Game;
 import model.Game.AutoPlayerNames;
@@ -469,6 +467,7 @@ public class Controller {
     while (roundNumber < totalRounds + 1 && !roundManager.isRoundOver() && !exitedPoker) {
       try {
         String action = model.getAction(roundNumber);
+        //dealingRound
         System.out.println("\nnext round");
         model.backEndDeal(roundNumber);
         Class<?> c = Class.forName("controller.Controller");
@@ -525,7 +524,7 @@ public class Controller {
         dealer.exchangeCards(autoPlayer, autoPlayer.decideExchange());
         exchangeFrontEndCards(autoPlayer);
       } else {
-        Optional<ButtonType> exchangeBoxResult = null;
+        Optional<ButtonType> exchangeBoxResult;
         while (!interactiveActionComplete) {
           Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
           styleDialogBox(exchangeBox);

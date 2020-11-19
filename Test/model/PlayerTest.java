@@ -10,8 +10,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
-import utility.HandCombiner;
-import utility.HandEvaluator;
 
 public class PlayerTest extends DukeApplicationTest {
 
@@ -139,7 +137,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testInteractiveExchangeCards() {
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -151,7 +149,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeZeroCard() {
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -187,7 +185,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeOneCard() {
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -218,7 +216,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeTwoCards() {
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -249,7 +247,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeThreeCards() {
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -284,7 +282,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeMoreThanThreeCards() {
-    Card card1 = deck.peekTopCard();
+    Card card1 = deck.getTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
