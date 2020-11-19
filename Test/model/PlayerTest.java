@@ -10,14 +10,15 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
+import utility.HandCombiner;
+import utility.HandEvaluator;
 
 public class PlayerTest extends DukeApplicationTest {
 
   private Player player;
   private Deck deck;
   private JSONReader reader;
-  private final HandEvaluator handEval = new HandEvaluator();
-  private final HandCombiner handCombiner = new HandCombiner();
+
 
   @BeforeEach
   void setUp() {
@@ -268,6 +269,7 @@ public class PlayerTest extends DukeApplicationTest {
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
     AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
+
     Card testCard = new Card(2, "CLUBS");
     Card testCard2 = new Card(6, "CLUBS");
     Card testCard3 = new Card(3, "HEARTS");
@@ -356,10 +358,6 @@ public class PlayerTest extends DukeApplicationTest {
     player.receiveCard(testCard3);
     player.receiveCard(otherCard3);
     player.receiveCard(otherCard4);
-    System.out.println(player.getTotalHand().getCards());
-    System.out.println(handCombiner.getAllHands(player.getTotalHand()));
-    System.out.println(player.getHand().getCards());
-
     player.decideAction(0);
     assertEquals(40, pot.getPotTotal().getValue());
 

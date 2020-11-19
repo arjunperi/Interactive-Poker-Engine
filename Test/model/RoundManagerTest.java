@@ -67,7 +67,6 @@ public class RoundManagerTest {
     assertEquals(player2.getBankroll().getValue(), 150);
   }
 
-
   @Test
   public void testTieOnShowdown() {
     Pot pot = new Pot();

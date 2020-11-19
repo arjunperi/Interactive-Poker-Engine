@@ -1,6 +1,5 @@
 package model;
 
-import controller.FileReader;
 
 public class Card {
 
@@ -8,7 +7,6 @@ public class Card {
   private int rank;
   private boolean isBackEndVisible;
   private boolean isInteractivePlayerCard;
-  private FileReader reader;
 
 
   public Card(int rank, String suit) {
@@ -16,7 +14,6 @@ public class Card {
     this.rank = rank;
     isBackEndVisible = false;
     isInteractivePlayerCard = false;
-    reader = new FileReader();
   }
 
 
@@ -60,7 +57,6 @@ public class Card {
   public boolean isBackEndVisible() {
     return isBackEndVisible;
   }
-
 
   public void makeBackEndVisible() {
     isBackEndVisible = true;

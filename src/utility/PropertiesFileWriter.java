@@ -1,12 +1,12 @@
-package controller;
+package utility;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Writer {
+public final class PropertiesFileWriter {
 
-  public void cashOutToPlayerSaves(String playerName, Properties propertyFile) {
+  public static void cashOutToPlayerSaves(String playerName, Properties propertyFile) {
     try {
       FileWriter fileWriter = new FileWriter("PlayerSaveFiles/" + playerName + "Player.properties");
       propertyFile.store(fileWriter, null);

@@ -38,6 +38,8 @@ import model.Player;
 import model.PlayerList;
 import model.Pot;
 import model.RoundManager;
+import utility.PropertiesFileReader;
+import utility.PropertiesFileWriter;
 import view.CardGrid;
 import view.CardView;
 import view.CommunityCardGrid;
@@ -68,9 +70,6 @@ public class Controller {
   private int totalRounds;
   private final Map<Player, PlayerView> playerMappings;
   private final Map<Card, CardView> frontEndCardMappings;
-  private final FileReader reader;
-  private final Writer customWriter;
-  private FileWriter writer;
   private Properties modelProperties;
   private String currentGame;
   private boolean gameStart;
@@ -102,10 +101,8 @@ public class Controller {
     frontEndCardMappings = new HashMap<>();
     frontEndPlayers = new ArrayList<>();
     playerViews = new ArrayList<>();
-    reader = new FileReader();
     initializeCardSettings();
 
-    customWriter = new Writer();
     view = new GameView();
     roundNumber = 1;
     initializePlayerSelectMenu();
@@ -159,7 +156,6 @@ public class Controller {
     Optional result = newPlayerDialog.showAndWait();
     if (result.isPresent()) {
       interactivePlayerStartingAmount = Integer.parseInt(startingMoneyInput.getText());
-
     }
     getNumAutoPlayers();
   }
@@ -171,7 +167,7 @@ public class Controller {
     String savedFileName = savedFile.getName();
     String savedFileNameWithoutExtension = savedFileName
         .substring(0, savedFileName.lastIndexOf('.'));
-    Properties savedInfo = reader.getPropertyFile(savedFileNameWithoutExtension);
+    Properties savedInfo = PropertiesFileReader.getPropertyFile(savedFileNameWithoutExtension);
     interactivePlayerName = savedInfo.getProperty("NAME");
     interactivePlayerStartingAmount = Integer.parseInt(savedInfo.getProperty("BANKROLL"));
     getNumAutoPlayers();
@@ -241,7 +237,7 @@ public class Controller {
           .setProperty("BANKROLL", String.valueOf(player.getBankroll().getValue()));
       cashOutProperties.setProperty("NAME", player.toString());
 
-      customWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
+      PropertiesFileWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
     } catch (Exception e) {
       showError(e.getMessage());
 //      e.printStackTrace();
@@ -264,7 +260,7 @@ public class Controller {
     try {
       currentGame = fileName;
       fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-      modelProperties = reader.getPropertyFile(fileName);
+      modelProperties = PropertiesFileReader.getPropertyFile(fileName);
       totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
       maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
       if (gameStart) {
@@ -349,7 +345,7 @@ public class Controller {
   private void initializePlayerList(String fileName) {
     //TODO: use factory design pattern here to choose what kind of playerList to instantiate
     try {
-      Properties modelProperties = reader.getPropertyFile(fileName);
+      Properties modelProperties = PropertiesFileReader.getPropertyFile(fileName);
       String playerListType = modelProperties.getProperty("playerListType");
       Class<?> cl = Class.forName("model." + playerListType + "PlayerList");
       interactivePlayer = new InteractivePlayer(interactivePlayerName,
@@ -358,6 +354,9 @@ public class Controller {
       players.add(interactivePlayer);
       playerList = (PlayerList) cl.getConstructor(List.class)
           .newInstance(new ArrayList<>(players));
+      if (interactivePlayerStartingAmount == 0){
+        promptBuyIn();
+      }
     } catch (Exception e) {
       throw new ControllerException(
           "Invalid player list input in file. Exit program and reconfigure file.");
@@ -547,7 +546,6 @@ public class Controller {
         interactiveActionComplete = false;
       }
     }
-//    interactiveActionComplete = true;
     oneSolventPlayer = playerList.doesOneSolventPlayerRemain();
     playerList.resetRaiseStats();
     playerList.updateActivePlayers();
@@ -576,7 +574,6 @@ public class Controller {
     }
   }
 
-
   //should this be in View or Controller?
   private CardView getFrontEndCard(Card card) {
     boolean isFrontEndVisible = (card.isBackEndVisible() || card.isInteractivePlayerCard());
@@ -591,7 +588,7 @@ public class Controller {
       if (!player.isSolvent()) {
         System.out.println(player.toString());
         if (!player.isInteractive()) {
-          player.updateBankroll(1000);
+          player.updateBankroll(1000 - player.getBankroll().getValue());
         } else {
           TextField buyBackInput = new TextField();
           Dialog buyBackBox = view.makeBuyInScreen(buyBackInput);

@@ -90,10 +90,12 @@ public class Model {
       }
     }
     if (totalGameCards > 52) {
-      throw new ModelException("Deck will empty");
+      throw new ModelException("Deck will empty with specified number of players and cards being dealt in game.\nPlease choose a fewer number of players"
+          + " or exit program and reconfigure file. \nThe number of total cards dealt can not be greater than 52.");
     }
     if (totalCommunityCards > 10 || totalPlayerCards > 10) {
-      throw new ModelException("Can't deal more than 10 cards to a location");
+      throw new ModelException("Can't deal more than 10 cards to a recipient. \nPlease exit exit program and reconfigure file.\nThe table "
+          + "as well as each player can receive 10 cards maximum.");
     }
   }
 }

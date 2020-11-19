@@ -61,7 +61,6 @@ public class PlayerListTest extends DukeApplicationTest {
     assertEquals(player2, studList.getActivePlayers().get(0));
   }
 
-
   @Test
   public void testUpdateStartingRoundOrder() {
     Pot pot = new Pot();

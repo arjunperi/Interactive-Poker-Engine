@@ -1,8 +1,7 @@
 package view;
 
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -20,15 +19,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Player;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import pokerSuite.PokerRunner;
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class GameView {
@@ -206,7 +198,6 @@ public class GameView {
 
     return dialog;
   }
-
 
   public Dialog makeBetPopUp(TextField input, String message) {
     bottomGroup.getChildren().clear();
