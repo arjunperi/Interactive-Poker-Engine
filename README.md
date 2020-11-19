@@ -15,15 +15,15 @@ Finish Date: November 19, 2020
 Hours Spent: 400
 
 ### Primary Roles
-Noah Besner : Deep back-end poker game logic (hand evaluation, betting orders and raise seats, etc). 
-Yasser Elmzoudi: Front-end GUI setup and implementation (table, cardview, playerview, CSS styling, etc).
-Arjun Peri: Dynamic poker variant implementation and backend-frontend integration (different poker game types, data file configuration, controller, etc).
-Chrisitan Welch: Interactive game setup and implementation (player select screen, file saving and loading, autoplayer funcionality, etc). 
+- Noah Besner : Deep back-end poker game logic (hand evaluation, betting orders and raise seats, etc). 
+- Yasser Elmzoudi: Front-end GUI setup and implementation (table, cardview, playerview, CSS styling, etc).
+- Arjun Peri: Dynamic poker variant implementation and backend-frontend integration (different poker game types, data file configuration, controller, etc).
+- Chrisitan Welch: Interactive game setup and implementation (player select screen, file saving and loading, autoplayer funcionality, etc). 
 
 ### Resources Used
-Class lectures and readings
-TA's and Professor Duvall assistance
-Online resources (Stack OverFlow, GeeksForGeeks, etc.)
+- Class lectures and readings
+- TA's and Professor Duvall assistance
+- Online resources (Stack OverFlow, GeeksForGeeks, etc.)
 
 
 ### Running the Program
