@@ -148,7 +148,6 @@ public class GameViewTest extends DukeApplicationTest {
     assertEquals(startingMoneyInput.getText(), "600");
   }
 
-  
   @Test
   public void testInvalidNumberPlayersExceptionThrown() {
     javafxRun(() -> controller.getNumAutoPlayers());

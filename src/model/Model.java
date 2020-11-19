@@ -37,7 +37,6 @@ public class Model {
 
   public void dealStats(int currentRound) {
     recipient = modelProperties.getProperty(String.valueOf(currentRound));
-
     String[] roundVisibility = modelProperties.getProperty("visibility" + currentRound).split(",");
     visibilityList.clear();
     faceDownCards = Integer.parseInt(roundVisibility[0]);
@@ -79,25 +78,30 @@ public class Model {
 
 
   public void checkInvalidNumberOfCards(int numAutoPlayers, int totalRounds) {
-    for (int i = 1; i <= totalRounds; i++) {
-      dealStats(i);
-      if (recipient.equals("Players")) {
-        totalGameCards += ((numAutoPlayers + 1) * numberOfCards);
-        totalPlayerCards += numberOfCards;
-      } else if (recipient.equals("Community")) {
-        totalGameCards += numberOfCards;
-        totalCommunityCards += numberOfCards;
+    try{
+      for (int i = 1; i <= totalRounds; i++) {
+        dealStats(i);
+        if (recipient.equals("Players")) {
+          totalGameCards += ((numAutoPlayers + 1) * numberOfCards);
+          totalPlayerCards += numberOfCards;
+        } else if (recipient.equals("Community")) {
+          totalGameCards += numberOfCards;
+          totalCommunityCards += numberOfCards;
+        }
+      }
+      if (totalGameCards > 52) {
+        throw new ModelException(
+            "Deck will empty with specified number of players and cards being dealt in game.\nPlease choose a fewer number of players"
+                + " or exit program and reconfigure file. \nThe number of total cards dealt can not be greater than 52.");
+      }
+      if (totalCommunityCards > 10 || totalPlayerCards > 10) {
+        throw new ModelException(
+            "Can't deal more than 10 cards to a recipient. \nPlease exit exit program and reconfigure file.\nThe table "
+                + "as well as each player can receive 10 cards maximum.");
       }
     }
-    if (totalGameCards > 52) {
-      throw new ModelException(
-          "Deck will empty with specified number of players and cards being dealt in game.\nPlease choose a fewer number of players"
-              + " or exit program and reconfigure file. \nThe number of total cards dealt can not be greater than 52.");
-    }
-    if (totalCommunityCards > 10 || totalPlayerCards > 10) {
-      throw new ModelException(
-          "Can't deal more than 10 cards to a recipient. \nPlease exit exit program and reconfigure file.\nThe table "
-              + "as well as each player can receive 10 cards maximum.");
+    catch (NullPointerException e){
+      throw new ModelException("File configuration error.\nPlease make sure the round totals, round recipients, visibility specifications, and action specifications line up.");
     }
   }
 }

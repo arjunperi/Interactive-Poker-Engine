@@ -360,7 +360,6 @@ public class PlayerTest extends DukeApplicationTest {
     player.receiveCard(otherCard4);
     player.decideAction(0);
     assertEquals(40, pot.getPotTotal().getValue());
-
   }
 
 
