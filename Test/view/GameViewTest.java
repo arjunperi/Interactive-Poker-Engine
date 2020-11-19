@@ -1,10 +1,13 @@
 package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import controller.Controller;
+import controller.exceptions.ControllerException;
+import java.net.ConnectException;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -128,8 +131,6 @@ public class GameViewTest extends DukeApplicationTest {
     assertEquals(nameInput.getText(), "chris");
   }
 
-
-
   @Test
   public void testGetNumAutoPlayerBox() {
     javafxRun(() -> controller.getNumAutoPlayers());
@@ -177,8 +178,23 @@ public class GameViewTest extends DukeApplicationTest {
     clickOn(amountInput);
     type(KeyCode.DIGIT8); //8 dollars is not enough
     type(KeyCode.ENTER);
-
     assertFalse(controller.isValidInteger(Integer.parseInt(amountInput.getText())));
+  }
+
+  @Test
+  public void testHoldemProgression(){
+    Controller controller = new Controller();
+    javafxRun(() -> controller.setInteractivePlayerStats("Arjun",100));
+    javafxRun(() -> controller.initializeProperties("HoldEm.properties"));
+  }
+
+  @Test
+  public void testInvalidCustomGameProgression(){
+    Controller controller = new Controller();
+    javafxRun(() -> controller.setInteractivePlayerStats("Arjun",100));
+    javafxRun(() -> controller.setAlterState());
+    javafxRun(() -> controller.changeInteractiveActionCompletion());
+    assertThrows(IllegalStateException.class, () -> controller.initializeProperties("HoldEmDrawCombo.properties"));
   }
 
 

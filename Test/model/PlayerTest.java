@@ -304,12 +304,6 @@ public class PlayerTest extends DukeApplicationTest {
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
     AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-//
-//        Card testCard = new Card(2, "CLUBS");
-//        Card testCard2 = new Card(6, "CLUBS");
-//        Card testCard3 = new Card(5, "HEARTS");
-//        Card testCard4 = new Card(3, "DIAMONDS");
-//        Card otherCard = new Card(9, "SPADES");
 
     Card testCard = deck.StringToCard("2 CLUBS");
     Card testCard2 = deck.StringToCard("6 CLUBS");

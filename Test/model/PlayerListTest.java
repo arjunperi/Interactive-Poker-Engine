@@ -1,7 +1,8 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -77,5 +78,35 @@ public class PlayerListTest extends DukeApplicationTest {
     playerList.updateStartingRoundOrder();
     playerList.resetActivePlayers();
     assertEquals(player3, playerList.getActivePlayers().get(0));
+  }
+
+  @Test
+  public void testRaiseShift(){
+    Pot pot = new Pot();
+    CommunityCards communityCards = new CommunityCards();
+    Player player1 = new Player("Jimmy", 100, communityCards, pot);
+    Player player2 = new Player("Dinna", 100, communityCards, pot);
+    Player player3 = new Player("Yasser", 100, communityCards, pot);
+    PlayerList playerList = new StandardPlayerList(
+        new ArrayList<>(List.of(player1, player2, player3)));
+    player1.bet(100);
+    playerList.raiseMade(player1);
+    playerList.initializeActivePlayers();
+    assertEquals(playerList.getActivePlayers().get(0), player2);
+  }
+
+  @Test
+  public void testOneSolventPlayer(){
+    Pot pot = new Pot();
+    CommunityCards communityCards = new CommunityCards();
+    Player player1 = new Player("Jimmy", 100, communityCards, pot);
+    Player player2 = new Player("Dinna", 100, communityCards, pot);
+    Player player3 = new Player("Yasser", 100, communityCards, pot);
+    PlayerList playerList = new StandardPlayerList(
+        new ArrayList<>(List.of(player1, player2, player3)));
+    assertFalse(playerList.doesOneSolventPlayerRemain());
+    player1.updateBankroll(-1 * (player1.getBankroll().getValue()));
+    player2.updateBankroll(-1 * (player2.getBankroll().getValue()));
+    assertTrue(playerList.doesOneSolventPlayerRemain());
   }
 }
