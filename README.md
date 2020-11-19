@@ -99,7 +99,7 @@ Extra credit:
 - Loading and Saving
 - Smart Autoplayer
 - Player Profiles
-- Preferences (`CardView` suit image, `CardView` back, `PotView` Image, Languages, Amount of Players, and difficulty all customizable)
+- Preferences (`CardView` suit image, `CardView` back, `PotView` Image, Languages, Amount of Players, and Difficulty are all customizable)
 
 
 ### Impressions :thumbsup:
