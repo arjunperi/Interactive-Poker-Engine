@@ -1,6 +1,7 @@
 package view;
 
 import javafx.scene.text.Text;
+import model.Card;
 
 public class CardView extends PlayerHUDGameObject {
 
@@ -70,6 +71,10 @@ public class CardView extends PlayerHUDGameObject {
 
   public String getSuitImage() {
     return suitImage;
+  }
+
+  public boolean getIsFrontEndVisible() {
+    return isFrontEndVisible;
   }
 }
 

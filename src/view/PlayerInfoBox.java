@@ -78,4 +78,8 @@ public class PlayerInfoBox extends GridPane {
     return playerBankroll;
   }
 
+  public Text getPlayerName() {
+    return playerName;
+  }
+
 }

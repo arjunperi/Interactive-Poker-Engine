@@ -120,6 +120,7 @@ public class CardGrid extends GridPane {
     for (CardView card : cardLocations.keySet()) {
       this.getChildren().remove(card);
     }
+    cardLocations.clear();
     initializeCardAddingPosition();
   }
 
