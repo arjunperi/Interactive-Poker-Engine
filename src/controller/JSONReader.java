@@ -85,15 +85,6 @@ public class JSONReader {
     return strengths;
   }
 
-  /*public <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
-    try {
-      return clazz.cast(o);
-    } catch(ClassCastException e) {
-      return null;
-    }
-  }*/
-
-
   public List<String> getSuitNames() {
     List<String> suitNames = new ArrayList<>(getSuits().keySet());
     Collections.sort(suitNames);
