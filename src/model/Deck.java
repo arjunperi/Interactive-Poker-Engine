@@ -13,10 +13,6 @@ public class Deck extends Stack<Card> {
   private List<Integer> ranks;
   private Map<String, Card> stringToCardMap;
 
-    /*public Deck() {
-        deck = new Stack();
-        createDeck();
-    }*/
 
   public Deck(List<String> suits, List<Integer> ranks) {
     this.suits = suits;

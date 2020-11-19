@@ -19,7 +19,6 @@ public class CardTest {
     assertEquals(2, card.getRank());
   }
 
-
   @Test
   void testCardValue() {
     Card card = new Card(2, "CLUBS");

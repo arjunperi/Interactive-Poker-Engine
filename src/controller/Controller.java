@@ -4,7 +4,6 @@ import controller.exceptions.InvalidNameEnteredException;
 import controller.exceptions.InvalidNumberPlayersException;
 import controller.exceptions.InvalidStartingAmountException;
 import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,6 +91,7 @@ public class Controller {
   private String interactivePlayerName;
   private int playerStartingAmount;
   private int numAutoPlayers;
+  private boolean alterHands;
 
 
   public Controller() {
@@ -100,6 +100,7 @@ public class Controller {
     gameStart = true;
     exitedPoker = false;
     oneSolventPlayer = false;
+    alterHands = false;
     playerMappings = new HashMap<>();
     frontEndCardMappings = new HashMap<>();
     frontEndPlayers = new ArrayList<>();
@@ -122,7 +123,6 @@ public class Controller {
     jsonReader.parse(CARD_SETTINGS);
     cardBack = jsonReader.getCardBack();
   }
-
 
   private void initializeGameObjects() {
     Game game = new Game();
@@ -163,13 +163,11 @@ public class Controller {
   }
 
   public boolean invalidNameEntered(String nameEntered) {
-    String regex = "^[a-zA-Z]+$"; //only A-Z characters can be entered
-    //if only A-Z characters entered
+    String regex = "^[a-zA-Z]+$";
     return !nameEntered.matches(regex);
   }
 
   public boolean invalidPlayersEntered(int numberOfPlayers) {
-
     int MAX_AUTOPLAYERS = 7;
     return ((numberOfPlayers > MAX_AUTOPLAYERS) || (numberOfPlayers < 1));
   }
@@ -309,7 +307,6 @@ public class Controller {
       PropertiesFileWriter.cashOutToPlayerSaves(player.toString(), cashOutProperties);
     } catch (Exception e) {
       showError(e.getMessage());
-//      e.printStackTrace();
     }
   }
 
@@ -389,8 +386,6 @@ public class Controller {
   }
 
 
-
-
   private void initializeGameBoard() {
     pokerTable = new Table(300, 300, 150, playerViews);
     communityCardGrid = new CommunityCardGrid(pokerTable.getCenterX(), pokerTable.getCenterY());
@@ -422,6 +417,9 @@ public class Controller {
           .newInstance(new ArrayList<>(players));
       if (playerStartingAmount == 0) {
         promptBuyIn();
+      }
+      if (alterHands){
+        alterPlayerHands(new Card(2, "CLUBS"));
       }
     } catch (Exception e) {
       throw new ControllerException(
@@ -562,9 +560,7 @@ public class Controller {
     playerList.initializeActivePlayers();
     List<Player> players = playerList.getActivePlayers();
     List<Player> playersCopy = new ArrayList<>(players);
-
     interactiveActionComplete = true;
-
     if (!oneSolventPlayer) {
       actionLoop:
       while (interactiveActionComplete) {
@@ -741,6 +737,24 @@ public class Controller {
     alert.setTitle("Controller Error");
     alert.setContentText(message);
     alert.showAndWait();
+  }
+
+  public void setInteractivePlayerStats(String name, int value){
+    interactivePlayerName = name;
+    playerStartingAmount = value;
+  }
+
+  public void setAlterState(){
+    alterHands = true;
+  }
+  private void alterPlayerHands(Card card){
+    for (Player player: playerList.getActivePlayers()){
+      player.receiveCard(card);
+    }
+  }
+
+  public void changeInteractiveActionCompletion(){
+    interactiveActionComplete = false;
   }
 }
 
