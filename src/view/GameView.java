@@ -85,6 +85,8 @@ public class GameView {
   private static final String DEAL_NEXT_ROUND_BUTTON_TEXT = "Deal next round";
   private static final String CASH_OUT_BUTTON_TEXT = "Cash Out";
   private static final String ACTION_LOG_ID = "ActionLog";
+  private static final String PLAYER_HISTORY = "playerHistory";
+  private static final String PLAYER_HISTORY_BOX = "playerHistoryList";
 
 
 
@@ -355,9 +357,13 @@ public class GameView {
   public void makeActionLog() {
     actionLog = new ListView<>();
     actionLog.setId(ACTION_LOG_ID);
+    actionLog.getStyleClass().add(PLAYER_HISTORY);
     actionLog.setMinHeight(300);
     actionLog.setMinWidth(600);
-    rightGroup.getChildren().add(actionLog);
+    HBox actionLogBox = new HBox();
+    actionLogBox.getStyleClass().add(PLAYER_HISTORY_BOX);
+    actionLogBox.getChildren().add(actionLog);
+    rightGroup.getChildren().add(actionLogBox);
   }
 
   public void addToActionLog(String playerAction) {
