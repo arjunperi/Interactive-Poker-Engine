@@ -24,8 +24,8 @@ import pokerSuite.PokerRunner;
 
 public class GameView {
 
-  private Scene scene;
   private final BorderPane root;
+  private Scene scene;
   private Group topGroup;
   private Group centerGroup;
   private Group bottomGroup;

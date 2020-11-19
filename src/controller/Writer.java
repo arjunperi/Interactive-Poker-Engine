@@ -10,7 +10,6 @@ public class Writer {
     try {
       FileWriter fileWriter = new FileWriter("PlayerSaveFiles/" + playerName + "Player.properties");
 
-
       propertyFile.store(fileWriter, null);
       fileWriter.close();
     } catch (IOException ex) {
