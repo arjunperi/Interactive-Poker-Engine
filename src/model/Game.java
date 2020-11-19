@@ -2,33 +2,25 @@ package model;
 
 
 import controller.JSONReader;
-
-import java.util.List;
-
-
 public class Game {
-    private RoundManager roundManager;
-    private Pot pot;
-    private Deck deck;
-    private Dealer dealer;
-    private CommunityCards communityCards;
-    private List<String> suits;
-    private List<String> ranks;
-    private JSONReader reader;
-    private HandEvaluator handEvaluator;
+    private final RoundManager roundManager;
+    private final Pot pot;
+    private final Deck deck;
+    private final Dealer dealer;
+    private final CommunityCards communityCards;
+
 
     //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
     public Game(){
         pot = new Pot();
         this.communityCards = new CommunityCards();
 
-        reader = new JSONReader();
+        JSONReader reader = new JSONReader();
         reader.parse("/cardSettings.json");
 
         deck = new Deck(reader.getSuitNames(), reader.getRankValues());
 
         dealer = new Dealer(deck);
-        handEvaluator = new HandEvaluator();
         roundManager = new RoundManager(pot);
     }
 
@@ -50,10 +42,6 @@ public class Game {
 
     public Dealer getDealer(){
         return dealer;
-    }
-
-    public HandEvaluator getHandEvaluator(){
-        return handEvaluator;
     }
 
     public enum AutoPlayerNames{

@@ -44,8 +44,7 @@ public class Model {
 
 
     public String getAction(int roundNumber){
-        String action = modelProperties.getProperty("action" + roundNumber);
-        return action;
+        return modelProperties.getProperty("action" + roundNumber);
     }
 
     private void populateVisibilityList(int numberOfCards, boolean isVisible){

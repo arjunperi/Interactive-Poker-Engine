@@ -13,8 +13,8 @@ import org.json.JSONTokener;
 
 
 public class JSONReader {
-  private Map<String, String> suits;
-  private Map<Integer, String> ranks;
+  private final Map<String, String> suits;
+  private final Map<Integer, String> ranks;
   private JSONObject jo;
   private String cardBack;
 

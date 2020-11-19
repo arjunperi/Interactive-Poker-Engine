@@ -37,6 +37,4 @@ public class Dealer {
         }
     }
 
-    public void burnCards(int numberToBurn){}
-
 }

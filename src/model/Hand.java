@@ -1,11 +1,11 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 public class Hand {
-    private List<Card> hand;
+    private final List<Card> hand;
 
     //for temporary hand evaluation logic -> won't exist later
     private int handSize;
@@ -50,15 +50,15 @@ public class Hand {
         return null;
     }
 
-    public int getIndex(Card card){
-        int index;
-        for( index = 0; index<handSize; index++){
-            if (this.get(index).equals(card)){
-                return index;
-            }
-        }
-        return index;
-    }
+//    public int getIndex(Card card){
+//        int index;
+//        for( index = 0; index<handSize; index++){
+//            if (this.get(index).equals(card)){
+//                return index;
+//            }
+//        }
+//        return index;
+//    }
 
     public Hand sortHand() {
         Hand sortedHand = new Hand();

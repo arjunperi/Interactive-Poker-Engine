@@ -1,16 +1,13 @@
 package model;
 
-import controller.FileReader;
-
-import java.util.Properties;
 
 public class Card {
 
-    private String suit;
-    private int rank;
+    private final String suit;
+    private final int rank;
     private boolean isBackEndVisible;
     private boolean isInteractivePlayerCard;
-    private FileReader reader;
+
 
 
     public Card(int rank, String suit) {
@@ -18,7 +15,7 @@ public class Card {
         this.rank = rank;
         isBackEndVisible = false;
         isInteractivePlayerCard = false;
-        reader = new FileReader();
+
     }
 
 

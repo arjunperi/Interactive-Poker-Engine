@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public abstract class PlayerList {
     protected List<Player> activePlayers;
     protected List<Player> allPlayers;
-    private List<Player> removedPlayers;
+    private final List<Player> removedPlayers;
     private Player playerUp;
     private int lastBet;
     private boolean raiseMade;

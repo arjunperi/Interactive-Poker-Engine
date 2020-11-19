@@ -1,16 +1,17 @@
 package model;
 
+import controller.exceptions.ModelException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Player extends CardRecipient {
-    private String playerName;
+    private final String playerName;
     //private int moneyCount;
     private boolean hasFolded;
     private Hand playerHand;
-    private List<Card> discardedCardList;
+    private final List<Card> discardedCardList;
     private CommunityCards communityCards;
     private Hand totalHand;
     private Hand totalVisibleHand;
@@ -18,7 +19,7 @@ public class Player extends CardRecipient {
     protected boolean isInteractive;
     private int totalBetAmount;
     private int currentBetAmount;
-    private IntegerProperty moneyAmount;
+    private final IntegerProperty moneyAmount;
     //have a player's hand strength
     //update it after every deal
 

@@ -3,10 +3,10 @@ package model;
 import java.util.*;
 
 public class RoundManager {
-    private Player winner;
-    private int currentRound;
-    private Pot pot;
-    private HandEvaluator handEvaluator;
+
+
+    private final Pot pot;
+    private final HandEvaluator handEvaluator;
     private boolean roundOver;
     private String winDialog;
     private List<Hand> winningHand;
@@ -14,7 +14,7 @@ public class RoundManager {
 
 
     public RoundManager(Pot pot){
-        currentRound = 0;
+
         this.pot = pot;
         handEvaluator = new HandEvaluator();
         handCombiner = new HandCombiner();
@@ -26,7 +26,7 @@ public class RoundManager {
         playerList.removeFoldedPlayers();
         List<Player> activePlayers = playerList.getActivePlayers();
         if (activePlayers.size() == 1){
-            winner = activePlayers.get(0);
+            Player winner = activePlayers.get(0);
             System.out.println("\n" + winner.toString() + " won and received $" + pot.getPotTotal());
             winDialog = winner.toString() + " won and received $" + pot.getPotTotal();
             pot.dispersePot(winner,pot.getPotTotal().getValue());

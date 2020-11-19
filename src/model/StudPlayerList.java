@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class StudPlayerList extends PlayerList {
-    private HandEvaluator handEvaluator;
+    private final HandEvaluator handEvaluator;
 
     public StudPlayerList(List<Player> players){
         super(players);

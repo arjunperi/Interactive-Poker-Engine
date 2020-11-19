@@ -8,8 +8,8 @@ import java.util.List;
 Computer-controlled poker player
  */
 public class AutoPlayer extends Player {
-    private HandEvaluator handEvaluator;
-    private HandCombiner handCombiner;
+    private final HandEvaluator handEvaluator;
+    private final HandCombiner handCombiner;
     private static final int DEFAULTBETAMOUNT = 10;
     private static final int PLAY_THRESHOLD = 10;
     private static final int HAND_RANK_THRESHOLD = 0;

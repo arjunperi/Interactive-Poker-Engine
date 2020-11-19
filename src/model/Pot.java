@@ -4,7 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class Pot {
-    private IntegerProperty potTotal;
+    private final IntegerProperty potTotal;
 
     public Pot(){
         potTotal = new SimpleIntegerProperty(0);

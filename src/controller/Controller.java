@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -24,8 +22,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AutoPlayer;
@@ -36,7 +34,7 @@ import model.Dealer;
 import model.Game;
 import model.InteractivePlayer;
 import model.Model;
-import model.ModelException;
+import controller.exceptions.ModelException;
 import model.Player;
 import model.PlayerList;
 import model.Pot;
@@ -44,8 +42,6 @@ import model.RoundManager;
 import view.CardGrid;
 import view.CardView;
 import view.CommunityCardGrid;
-import view.FrontEndCommunity;
-import view.GameDisplayRecipient;
 import view.GameView;
 import view.PlayerView;
 import view.Table;
@@ -54,29 +50,21 @@ import javafx.geometry.Point2D;
 
 public class Controller {
 
-  private static final String ENGLISH = "English";
-
-  private static final String RESOURCES = "Resources/";
-  public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES.replace("/", ".");
   private static final String CARD_SETTINGS = "/cardSettings.json";
-  private ResourceBundle projectTextResources;
   private Model model;
   private RoundManager roundManager;
   private PlayerList playerList;
-  private List<GameDisplayRecipient> frontEndPlayers;
   private CommunityCards communityCards;
-  private GameDisplayRecipient displayCommunity;
   private Pot pot;
   private Dealer dealer;
-  private GameView view;
+  private final GameView view;
   private int roundNumber;
   private int totalRounds;
-  private Map<Player, PlayerView> playerMappings;
-  private Map<Card, CardView> frontEndCardMappings;
-  private FileReader reader;
-  private Writer customWriter;
+  private final Map<Player, PlayerView> playerMappings;
+  private final Map<Card, CardView> frontEndCardMappings;
+  private final FileReader reader;
+  private final Writer customWriter;
   private FileWriter writer;
-  private Properties modelProperties;
   private String currentGame;
   private boolean gameStart;
   private int lastBet;
@@ -85,8 +73,7 @@ public class Controller {
   private boolean oneSolventPlayer;
   private String betScreenMessage;
   private volatile boolean interactiveActionComplete;
-  private Table pokerTable;
-  private List<PlayerView> playerViews;
+  private final List<PlayerView> playerViews;
   private String cardBack;
   private JSONReader jsonReader;
   private CommunityCardGrid communityCardGrid;
@@ -94,7 +81,6 @@ public class Controller {
   private String interactivePlayerName;
   private int playerStartingAmount;
   private int numAutoPlayers;
-  private int MAX_AUTOPLAYERS = 7;
 
 
   public Controller() {
@@ -105,7 +91,6 @@ public class Controller {
     oneSolventPlayer = false;
     playerMappings = new HashMap<>();
     frontEndCardMappings = new HashMap<>();
-    frontEndPlayers = new ArrayList<>();
     playerViews = new ArrayList<>();
     reader = new FileReader();
     initializeCardSettings();
@@ -180,7 +165,7 @@ public class Controller {
   public void initializeProperties(String fileName) {
     currentGame = fileName;
     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-    modelProperties = reader.getPropertyFile(fileName);
+    Properties modelProperties = reader.getPropertyFile(fileName);
     totalRounds = Integer.parseInt(modelProperties.getProperty("maxRounds"));
     maxExchangeCards = Integer.parseInt(modelProperties.getProperty("maxExchangeCards"));
     if (gameStart) {
@@ -223,9 +208,9 @@ public class Controller {
         try {
         TextField nameInput = new TextField();
         nameInput.setId("nameInput");
-        Dialog newPlayerDialog = view.makeDialogBox(nameInput,"Enter a name: ");
+        TextInputDialog newPlayerDialog = view.makeDialogBox(nameInput,"Enter a name: ");
 
-        Optional result = newPlayerDialog.showAndWait();
+        Optional<String> result = newPlayerDialog.showAndWait();
         if (result.isPresent()) {
           String nameEntered = nameInput.getText();
           if (invalidNameEntered(nameEntered)) {
@@ -251,15 +236,16 @@ public class Controller {
     }
     public boolean invalidPlayersEntered(int numberOfPlayers){
 
-        return ((numberOfPlayers > MAX_AUTOPLAYERS) || (numberOfPlayers < 1));
+      int MAX_AUTOPLAYERS = 7;
+      return ((numberOfPlayers > MAX_AUTOPLAYERS) || (numberOfPlayers < 1));
     }
     public void getNumAutoPlayers()  {
         try{
           TextField numAutoPlayerInput = new TextField();
           numAutoPlayerInput.setId("numAutoPlayerInput");
-          Dialog newPlayerDialog = view
+          TextInputDialog newPlayerDialog = view
               .makeDialogBox(numAutoPlayerInput, "How many opponents would you like?");
-          Optional result = newPlayerDialog.showAndWait();
+          Optional<String> result = newPlayerDialog.showAndWait();
           if (result.isPresent()) {
             int numEntered = Integer.parseInt(numAutoPlayerInput.getText());
             if (invalidPlayersEntered(numEntered)) {
@@ -290,9 +276,9 @@ public class Controller {
 
       TextField startingMoneyInput = new TextField();
       startingMoneyInput.setId("startingMoneyInput");
-      Dialog newPlayerDialog = view
+      TextInputDialog newPlayerDialog = view
           .makeDialogBox(startingMoneyInput, "How much money would you like to start with?");
-      Optional result = newPlayerDialog.showAndWait();
+      Optional<String> result = newPlayerDialog.showAndWait();
       if (result.isPresent()) {
         Integer amountEntered = Integer.parseInt(startingMoneyInput.getText());
         if (!isValidInteger(amountEntered)) {
@@ -357,15 +343,11 @@ public class Controller {
 
     private File chooseNewFile(String initialDirectory) {
 
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)", "*.properties");
-        fileChooser.getExtensionFilters().add(filter);
-        fileChooser.setInitialDirectory(new File(initialDirectory + "/"));
-        File file = fileChooser.showOpenDialog(new Stage());
-        if(file!=null) {
-            return file;
-        }
-        return null;
+      FileChooser fileChooser = new FileChooser();
+      FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Game Type (*.properties)", "*.properties");
+      fileChooser.getExtensionFilters().add(filter);
+      fileChooser.setInitialDirectory(new File(initialDirectory + "/"));
+      return fileChooser.showOpenDialog(new Stage());
     }
 
     private List<Player> initializeAutoPlayers() {
@@ -377,7 +359,7 @@ public class Controller {
         return autoPlayerList;
     }
     private void initializeGameBoard() {
-        pokerTable = new Table(300, 300, 150, playerViews);
+      Table pokerTable = new Table(300, 300, 150, playerViews);
         communityCardGrid = new CommunityCardGrid();
         communityCardGrid.setLayoutX(pokerTable.getCenterX() - (communityCardGrid.getMinWidth() / 2));
         communityCardGrid.setLayoutY(pokerTable.getCenterY() - (communityCardGrid.getMinHeight() / 2));
@@ -410,7 +392,7 @@ public class Controller {
 
     private void initializeFrontEndPlayers(){
         //Todo: Create abstraction for AutoPlayerView and PlayerView
-        int playerOffset = 30;
+
         for (Player currentPlayer: playerList.getActivePlayers()){
             PlayerView newPlayerView;
             if (!currentPlayer.isInteractive()) {
@@ -426,11 +408,6 @@ public class Controller {
             playerViews.add(newPlayerView);
         }
     }
-
-    private void initializeCommunity(){
-        displayCommunity = new FrontEndCommunity(200,400);
-    }
-
 
   //Everything gets caught here
   private void nextRound() {
@@ -471,7 +448,7 @@ public class Controller {
   }
 
   //don't like this conditional
-  private void dealingRound() throws InterruptedException {
+  private void dealingRound() {
     String recipient = model.getRecipient();
     if (recipient.equals("Community")) {
       dealFrontEndCardsInRound(communityCards, communityCardGrid);
@@ -496,9 +473,9 @@ public class Controller {
         dealer.exchangeCards(autoPlayer, autoPlayer.decideExchange());
         exchangeFrontEndCards(autoPlayer);
       } else {
-        Dialog exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
+        Alert exchangeBox = view.makeExchangeScreen(player.toString(), maxExchangeCards);
         Optional<ButtonType> exchangeBoxResult = exchangeBox.showAndWait();
-        if (exchangeBoxResult.get() == ButtonType.OK && isSelectedCardsExchangeable()) {
+        if (exchangeBoxResult.isPresent() && isSelectedCardsExchangeable()) {
           Set<CardView> selectedCards = playerMappings.get(interactivePlayer).getCardGrid()
               .getSelectedCards();
           List<Card> exchangeCards = new ArrayList<>();
@@ -538,7 +515,7 @@ public class Controller {
             else {
               interactiveActionComplete = false;
               while (!interactiveActionComplete){
-                ChoiceDialog dialog = view.makeActionScreen(player.toString(), lastBet, lastBet - player.getTotalBetAmount());
+                ChoiceDialog<Button> dialog = view.makeActionScreen(player.toString(), lastBet, lastBet - player.getTotalBetAmount());
                 Optional<Button> result = dialog.showAndWait();
                 if (result.isPresent()){
                   try {
@@ -628,8 +605,8 @@ public class Controller {
           player.updateBankroll(playerStartingAmount);
         } else {
           TextField buyBackInput = new TextField();
-          Dialog buyBackBox = view.makeBuyInScreen(buyBackInput);
-          Optional buyBackBoxResult = buyBackBox.showAndWait();
+          TextInputDialog buyBackBox = view.makeBuyInScreen(buyBackInput);
+          Optional<String> buyBackBoxResult = buyBackBox.showAndWait();
           if (buyBackBoxResult.isPresent()) {
             player.updateBankroll(Integer.parseInt(buyBackInput.getText()));
           } else {
@@ -641,12 +618,12 @@ public class Controller {
   }
 
   private void indicateBet(Player player) {
-    int betAmount = 0;
+//    int betAmount = 0;
     TextField betInput = new TextField();
-    Dialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
-    Optional betBoxResult = betBox.showAndWait();
+    TextInputDialog betBox = view.makeBetPopUp(betInput, betScreenMessage);
+    Optional<String> betBoxResult = betBox.showAndWait();
     if (betBoxResult.isPresent()) {
-      betAmount = Integer.parseInt(betInput.getText());
+      int betAmount = Integer.parseInt(betInput.getText());
       if (player.getTotalBetAmount() + betAmount < lastBet) {
         betScreenMessage =
             "Cannot bet less than the call amount on the table! Please bet at least $" + (lastBet
@@ -657,7 +634,7 @@ public class Controller {
           player.bet(betAmount);
           view.addToActionLog(player.toString() + " bet $" + betAmount);
           interactiveActionComplete = true;
-          PlayerView displayPlayer = playerMappings.get(player);
+          //PlayerView displayPlayer = playerMappings.get(player);
           //displayPlayer.getPlayerInfoBox().setBankroll(player.getBankroll());
           //displayPlayer.betDisplay(betAmount * -1);
         } catch (ModelException e) {
@@ -691,7 +668,7 @@ public class Controller {
     Alert cashOutConfirm = view
         .makeCashOutAlert(player.toString(), player.getBankroll().getValue());
     Optional<ButtonType> cashOutResult = cashOutConfirm.showAndWait();
-    if (cashOutResult.get() == ButtonType.OK) {
+    if (cashOutResult.isPresent()) {
       exitedPoker = true;
     } else {
       System.out.println("Did not cash out");
