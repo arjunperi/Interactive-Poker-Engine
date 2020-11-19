@@ -32,10 +32,4 @@ public class Dealer {
     }
   }
 
-  public void checkDeck() {
-    if (deck.isEmpty()) {
-      System.exit(0);
-    }
-  }
-
 }

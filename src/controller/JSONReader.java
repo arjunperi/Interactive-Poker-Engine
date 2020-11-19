@@ -1,27 +1,25 @@
 package controller;
 
 import controller.exceptions.SetUpException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import java.io.InputStream;
+import java.util.*;
 
 
 public class JSONReader {
 
-  private final Map<String, String> suits;
-  private final Map<Integer, String> ranks;
+  private Map<String, String> suits;
+  private Map<Integer, String> ranks;
+  private Map<Integer, String> strengths;
   private JSONObject jo;
   private String cardBack;
 
   public JSONReader() {
     suits = new HashMap<>();
     ranks = new HashMap<>();
+    strengths = new HashMap<>();
   }
 
   public void parse(String directory) {
@@ -31,6 +29,7 @@ public class JSONReader {
       jo = new JSONObject(tokener);
       parseCardSuits();
       parseCardRanks();
+      parseHandStrengths();
       parseGameSettings();
 
     } catch (Exception e) {
@@ -65,12 +64,24 @@ public class JSONReader {
     }
   }
 
+  private void parseHandStrengths() {
+    JSONObject handStrengths = jo.getJSONObject("hand strengths");
+    for (Iterator<String> it = handStrengths.keys(); it.hasNext(); ) {
+      String strength = it.next();
+      strengths.put(Integer.parseInt(strength), (String) handStrengths.get(strength));
+    }
+  }
+
   public Map<String, String> getSuits() {
     return suits;
   }
 
   public Map<Integer, String> getRanks() {
     return ranks;
+  }
+
+  public Map<Integer, String> getStrengths() {
+    return strengths;
   }
 
   /*public <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
@@ -91,6 +102,12 @@ public class JSONReader {
     List<Integer> rankValues = new ArrayList<>(getRanks().keySet());
     Collections.sort(rankValues);
     return rankValues;
+  }
+
+  public List<Integer> getStrengthValues() {
+    List<Integer> strengthValues = new ArrayList<>(getStrengths().keySet());
+    Collections.sort(strengthValues);
+    return strengthValues;
   }
 
 

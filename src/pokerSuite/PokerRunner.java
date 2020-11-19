@@ -13,15 +13,16 @@ public class PokerRunner extends Application {
   public static final double SCENE_WIDTH = 800;
   public static final double SCENE_HEIGHT = 800;
 
-  public static void main(String[] args) {
-    launch(args);
-  }
-
   @Override
   public void start(final Stage stage) {
     Controller mainController = new Controller();
     stage.setScene(mainController.setupScene());
     stage.setTitle(TITLE);
     stage.show();
+  }
+
+
+  public static void main(String[] args) {
+    launch(args);
   }
 }

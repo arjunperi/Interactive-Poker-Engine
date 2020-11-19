@@ -5,9 +5,9 @@ import javafx.scene.text.Text;
 
 public class FrontEndCard extends Text {
 
-  private final String symbol;
-  private final String suit;
-  private final boolean isVisible;
+  private String symbol;
+  private String suit;
+  private boolean isVisible;
 
   //TODO: take the suit and symbol, and get the associated image
   public FrontEndCard(String symbol, String suit, boolean isVisible) {

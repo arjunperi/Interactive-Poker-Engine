@@ -5,9 +5,9 @@ import java.util.Map;
 
 public abstract class GameDisplayRecipient {
 
-  private final Map<FrontEndCard, Integer> frontEndCardLocations;
   protected int xLocation;
   protected int yLocation;
+  private Map<FrontEndCard, Integer> frontEndCardLocations;
   private FrontEndCard lastCard;
 
   public GameDisplayRecipient(int xLocation, int yLocation) {

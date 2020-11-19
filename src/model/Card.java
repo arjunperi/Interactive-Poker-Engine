@@ -3,8 +3,8 @@ package model;
 
 public class Card {
 
-  private final String suit;
-  private final int rank;
+  private String suit;
+  private int rank;
   private boolean isBackEndVisible;
   private boolean isInteractivePlayerCard;
 
@@ -14,7 +14,6 @@ public class Card {
     this.rank = rank;
     isBackEndVisible = false;
     isInteractivePlayerCard = false;
-
   }
 
 
@@ -58,7 +57,6 @@ public class Card {
   public boolean isBackEndVisible() {
     return isBackEndVisible;
   }
-
 
   public void makeBackEndVisible() {
     isBackEndVisible = true;

@@ -2,34 +2,45 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import controller.JSONReader;
+
+import java.util.*;
+
+import utility.HandCombiner;
+import utility.HandEvaluator;
+
 
 public class RoundManager {
 
-
-  private final Pot pot;
-  private final HandEvaluator handEvaluator;
-  private final List<Hand> winningHand;
-  private final HandCombiner handCombiner;
+  private Player winner;
+  private int currentRound;
+  private Pot pot;
+  private HandEvaluator handEvaluator;
   private boolean roundOver;
   private String winDialog;
+  private JSONReader reader;
+  private Map<Integer, String> handStrengths;
 
 
   public RoundManager(Pot pot) {
-
+    reader = new JSONReader();
+    reader.parse("/cardSettings.json");
+    currentRound = 0;
     this.pot = pot;
-    handEvaluator = new HandEvaluator();
-    handCombiner = new HandCombiner();
+    handStrengths = reader.getStrengths();
     roundOver = false;
-    winningHand = new ArrayList<>();
   }
 
   public void checkOnePlayerRemains(PlayerList playerList) {
     playerList.removeFoldedPlayers();
     List<Player> activePlayers = playerList.getActivePlayers();
     if (activePlayers.size() == 1) {
-      Player winner = activePlayers.get(0);
-      System.out.println("\n" + winner.toString() + " won and received $" + pot.getPotTotal());
-      winDialog = winner.toString() + " won and received $" + pot.getPotTotal();
+      winner = activePlayers.get(0);
+      System.out
+          .println("\n" + winner.toString() + " and received $" + pot.getPotTotal().getValue());
+      winDialog =
+          "Everyone else folded! " + winner.toString() + " won and received $" + pot.getPotTotal()
+              .getValue();
       pot.dispersePot(winner, pot.getPotTotal().getValue());
       pot.clearPot();
       roundOver = true;
@@ -46,13 +57,17 @@ public class RoundManager {
     for (Player player : activePlayers.getActivePlayers()) {
       player.updateTotalHand();
     }
-    List<Player> bestPlayers = handEvaluator.getBestPlayers(activePlayers, false);
+    List<Player> bestPlayers = HandEvaluator.getBestPlayers(activePlayers, false);
     int winningAmount = splitAmount(bestPlayers.size());
     for (Player player : bestPlayers) {
-      System.out
-          .println("\n" + player.toString() + " won the showdown and received $" + winningAmount);
-      winDialog = player.toString() + " won the showdown and received $" + winningAmount;
-//            winningHand.add(handEvaluator.getBestHands(handCombiner.getAllHands(player.getTotalHand())).get(0));
+      Hand bestHand = HandEvaluator.getBestHands(HandCombiner.getAllHands(player.getTotalHand()))
+          .get(0);
+      String handStrength = handStrengths.get(HandEvaluator.handStrength(bestHand)[0]);
+      System.out.println(
+          "\n" + player.toString() + " won the showdown with a " + handStrength + " and received $"
+              + winningAmount);
+      winDialog = player.toString() + " won the showdown with a " + handStrength + " and received $"
+          + winningAmount;
       pot.dispersePot(player, winningAmount);
     }
     pot.clearPot();
@@ -67,11 +82,4 @@ public class RoundManager {
     return winDialog;
   }
 
-  //we want to be able to say ROYAL FLUSH
-//    public String getWinningHand(){
-//        String hand
-//        for (Hand hand : winningHand){
-//
-//        }
-//    }
 }

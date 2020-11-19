@@ -10,18 +10,24 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
+import utility.HandCombiner;
+import utility.HandEvaluator;
 
 public class PlayerTest extends DukeApplicationTest {
 
   private Player player;
   private Deck deck;
+  private JSONReader reader;
+
 
   @BeforeEach
   void setUp() {
-    JSONReader reader = new JSONReader();
+    reader = new JSONReader();
     reader.parse("/cardSettings.json");
-    List<Integer> rankValues = new ArrayList<>(reader.getRanks().keySet());
-    List<String> suitNames = new ArrayList<>(reader.getSuits().keySet());
+    List<String> suitNames = new ArrayList<>();
+    List<Integer> rankValues = new ArrayList<>();
+    rankValues.addAll(reader.getRanks().keySet());
+    suitNames.addAll(reader.getSuits().keySet());
     deck = new Deck(suitNames, rankValues);
   }
 
@@ -71,11 +77,11 @@ public class PlayerTest extends DukeApplicationTest {
         new ArrayList<>(List.of(autoPlayer, interactivePlayer)));
 
     interactivePlayer.bet(20);
-    assertTrue(playerList.raiseMade(interactivePlayer));
+    assertTrue(true == playerList.raiseMade(interactivePlayer));
     autoPlayer.call(playerList.getLastBet());
     playerList.raiseShift();
     assertEquals(80, autoPlayer.getBankroll().getValue());
-    assertFalse(playerList.raiseMade(autoPlayer));
+    assertTrue(false == playerList.raiseMade(autoPlayer));
 
   }
 
@@ -89,14 +95,14 @@ public class PlayerTest extends DukeApplicationTest {
         new ArrayList<>(List.of(autoPlayer, interactivePlayer)));
 
     interactivePlayer.bet(10);
-    assertTrue(playerList.raiseMade(interactivePlayer));
+    assertTrue(true == playerList.raiseMade(interactivePlayer));
     autoPlayer.bet(20);
-    assertTrue(playerList.raiseMade(autoPlayer));
+    assertTrue(true == playerList.raiseMade(autoPlayer));
 
     interactivePlayer.call(playerList.getLastBet());
     playerList.raiseShift();
     assertEquals(80, interactivePlayer.getBankroll().getValue());
-    assertFalse(playerList.raiseMade(interactivePlayer));
+    assertTrue(false == playerList.raiseMade(interactivePlayer));
 
   }
 
@@ -145,7 +151,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeZeroCard() {
-    deck.peekTopCard();
+    Card card1 = deck.peekTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -186,6 +192,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeOneCard() {
+    Card card1 = deck.peekTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -221,6 +228,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeTwoCards() {
+    Card card1 = deck.peekTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -256,21 +264,17 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeThreeCards() {
+    Card card1 = deck.peekTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
     AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
-//        Card testCard = new Card(2, "CLUBS");
-//        Card testCard2 = new Card(6, "CLUBS");
-//        Card testCard3 = new Card(3, "HEARTS");
-//        Card otherCard3 = new Card(7, "DIAMONDS");
-//        Card otherCard4 = new Card(9, "SPADES");
 
-    Card testCard = deck.StringToCard("2 CLUBS");
-    Card testCard2 = deck.StringToCard("6 CLUBS");
-    Card testCard3 = deck.StringToCard("3 HEARTS");
-    Card otherCard3 = deck.StringToCard("7 DIAMONDS");
-    Card otherCard4 = deck.StringToCard("9 SPADES");
+    Card testCard = new Card(2, "CLUBS");
+    Card testCard2 = new Card(6, "CLUBS");
+    Card testCard3 = new Card(3, "HEARTS");
+    Card otherCard3 = new Card(7, "DIAMONDS");
+    Card otherCard4 = new Card(9, "SPADES");
 
     player.receiveCard(testCard);
     player.receiveCard(testCard2);
@@ -295,6 +299,7 @@ public class PlayerTest extends DukeApplicationTest {
 
   @Test
   public void testAutoPlayerExchangeMoreThanThreeCards() {
+    Card card1 = deck.peekTopCard();
     Dealer dealer = new Dealer(deck);
     CommunityCards communityCards = new CommunityCards();
     Pot pot = new Pot();
@@ -353,10 +358,6 @@ public class PlayerTest extends DukeApplicationTest {
     player.receiveCard(testCard3);
     player.receiveCard(otherCard3);
     player.receiveCard(otherCard4);
-//        System.out.println(player.getTotalHand().getCards());
-//        System.out.println(handCombiner.getAllHands(player.getTotalHand()));
-//        System.out.println(player.getHand().getCards());
-
     player.decideAction(0);
     assertEquals(40, pot.getPotTotal().getValue());
 

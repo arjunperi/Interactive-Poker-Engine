@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -24,15 +25,15 @@ import pokerSuite.PokerRunner;
 
 public class GameView {
 
-  private final BorderPane root;
   private Scene scene;
+  private BorderPane root;
   private Group topGroup;
   private Group centerGroup;
   private Group bottomGroup;
   private Group rightGroup;
   private Button homeButton;
   private VBox gameBox;
-  private ListView<String> actionLog;
+  private ListView actionLog;
 
   public GameView() {
     root = new BorderPane();
@@ -67,7 +68,6 @@ public class GameView {
     initializeBorderPane();
   }
 
-
   public Alert makeCashOutAlert(String playerName, int playerBankroll) {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     alert.setTitle("Cash Out");
@@ -90,15 +90,16 @@ public class GameView {
     centerGroup.getChildren().add(startBox);
   }
 
-  public TextInputDialog makeDialogBox(TextField input, String prompt) {
+  public Dialog makeDialogBox(TextField input, String prompt) {
     clear();
-    TextInputDialog dialogBox = new TextInputDialog();
+    Dialog dialogBox = new TextInputDialog();
     dialogBox.setHeaderText(prompt);
+
     GridPane grid = new GridPane();
-    grid.setId("Grid");
+    grid.setId(prompt);
+
     GridPane.setConstraints(input, 0, 1);
     grid.getChildren().add(input);
-
     dialogBox.getDialogPane().setContent(grid);
 
     return dialogBox;
@@ -118,6 +119,9 @@ public class GameView {
   }
 
   public void addGameObject(Node gameObject) {
+    centerGroup.getChildren().remove(gameBox);
+    topGroup.getChildren().remove(homeButton);
+    bottomGroup.getChildren().clear();
     centerGroup.getChildren().add(gameObject);
   }
 
@@ -159,12 +163,8 @@ public class GameView {
     return result;
   }
 
-  public ChoiceDialog<Button> makeActionScreen(String playerName, int lastBet, int callAmount) {
+  public ChoiceDialog makeActionScreen(String playerName, int lastBet, int callAmount) {
     //centerGroup.getChildren().clear();
-    centerGroup.getChildren().remove(gameBox);
-    topGroup.getChildren().remove(homeButton);
-    bottomGroup.getChildren().clear();
-
     Button cashOutButton = new Button("Cash Out");
     cashOutButton.setId("CashOut");
 
@@ -191,7 +191,7 @@ public class GameView {
       choices.add(checkButton);
     }
 
-    ChoiceDialog<Button> dialog = new ChoiceDialog<>(foldButton, choices);
+    ChoiceDialog<Button> dialog = new ChoiceDialog<Button>(foldButton, choices);
     dialog.setTitle("Select Action");
     dialog.setHeaderText(playerName + ", you're up! What would you like to do?");
     dialog.setContentText("Choose your action:");
@@ -199,11 +199,10 @@ public class GameView {
     return dialog;
   }
 
-
-  public TextInputDialog makeBetPopUp(TextField input, String message) {
+  public Dialog makeBetPopUp(TextField input, String message) {
     bottomGroup.getChildren().clear();
 
-    TextInputDialog betBox = new TextInputDialog();
+    Dialog betBox = new TextInputDialog();
     betBox.setHeaderText(message);
 
     input.setPromptText("Enter a Bet: ");
@@ -219,42 +218,45 @@ public class GameView {
     return betBox;
   }
 
-//    public GridPane getGrid(TextInputDialog betBox){
-//        Node grid = betBox.getDialogPane().getContent();
-//            if (grid.getId().equals("OptionPane"));{
-//                return (GridPane) grid;
-//            }
-//    }
+  public GridPane getGrid(Dialog betBox) {
+    Node grid = betBox.getDialogPane().getContent();
+    if (grid.getId().equals("OptionPane")) {
+      ;
+    }
+    {
+      return (GridPane) grid;
+    }
+  }
 
-//    public Button getButton(TextInputDialog betBox, String buttonName){
-//        GridPane grid = getGrid(betBox);
-//        for (Node node: grid.getChildrenUnmodifiable())
-//            if (node.getId().equals(buttonName)){
-//                Button desiredButton = (Button) node;
-//                return desiredButton;
-//            }
-//        return null;
-//    }
+  public Button getButton(Dialog betBox, String buttonName) {
+    GridPane grid = getGrid(betBox);
+    for (Node node : grid.getChildrenUnmodifiable()) {
+      if (node.getId().equals(buttonName)) {
+        Button desiredButton = (Button) node;
+        return desiredButton;
+      }
+    }
+    return null;
+  }
 
-  public Alert makeExchangeScreen(String playerName, int maxExchangeCards) {
+  public Dialog makeExchangeScreen(String playerName, int maxExchangeCards) {
     Alert.AlertType type = AlertType.CONFIRMATION;
-    Alert exchangeBox = new Alert(type);
+    Dialog exchangeBox = new Alert(type);
     exchangeBox.initModality(Modality.NONE);
     exchangeBox.setTitle("Exchange Cards");
-    exchangeBox.setHeaderText(String
-        .format("%s is up.%nSelect no more than %d card(s) to exchange", playerName,
-            maxExchangeCards));
+    exchangeBox.setHeaderText(String.format(
+        "%s is up!%nSelect no more than %d card(s) to exchange and then press OK. \nDon't try to cheat! "
+            + " You will be reprompted if you try to selct more than the specified amount.",
+        playerName, maxExchangeCards));
     return exchangeBox;
   }
 
 
   //maybe combine this with bet screen input
-  public TextInputDialog makeBuyInScreen(TextField buyBackInput) {
-//        bottomGroup.getChildren().clear();
-
-    TextInputDialog buyBackBox = new TextInputDialog();
-    buyBackBox
-        .setHeaderText("Out of money!\nPlease enter your buy-back-in amount to continue playing: ");
+  public Dialog makeBuyInScreen(TextField buyBackInput) {
+    Dialog buyBackBox = new TextInputDialog();
+    buyBackBox.setHeaderText(
+        "Out of money!\nPlease enter your buy-back-in amount to continue playing, or press cancel to exit: ");
 
     buyBackInput.setPromptText("Amount: ");
     buyBackInput.setId("BuyBack");
@@ -283,9 +285,6 @@ public class GameView {
     actionLog.setId("ActionLog");
     actionLog.setMinHeight(300);
     actionLog.setMinWidth(600);
-//        action.getStyleClass().add("listview");
-//        action.setMinHeight(HISTORY_MIN_HEIGHT);
-//        action.setMinWidth(HISTORY_MIN_WIDTH);
     rightGroup.getChildren().add(actionLog);
   }
 

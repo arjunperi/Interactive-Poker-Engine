@@ -1,22 +1,33 @@
 package view;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import controller.Controller;
+import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.*;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
+import javax.swing.table.TableCellEditor;
+import javax.swing.text.View;
+import java.util.List;
+import java.util.Optional;
+
 public class GameViewTest extends DukeApplicationTest {
 
-  private final GameView view = new GameView();
   private Controller controller;
   private Stage stage;
   private FrontEndCard testCard;
+  private final GameView view = new GameView();
 
   public void start(final Stage stage) throws Exception {
     controller = new Controller();
@@ -25,7 +36,6 @@ public class GameViewTest extends DukeApplicationTest {
     this.stage.show();
   }
 
-  //
 //    @Test
 //    public void testFrontEndDeal() {
 //        CommunityCards communityCards = new CommunityCards();
@@ -50,94 +60,95 @@ public class GameViewTest extends DukeApplicationTest {
 //        testCard = lookup("#JDIAMONDS").query();
 //        assertEquals(100, testCard.getX());
 //    }
-//
-//    @Test
-//    public void testStartBox(){
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//    }
-//
-//    @Test
-//    public void testGameSelectButton(){
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//        Button selectButton = lookup("#GameSelect").query();
-//        assertTrue(startBox.getChildren().contains(selectButton));
-//    }
-//
-//    @Test
-//    public void testSelectionBox() {
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//        Button selectButton = lookup("#GameSelect").query();
-//        clickOn(selectButton);
-//        CenterGroup = lookup("#Center").query();
-//        VBox gameBox = lookup("#GameBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(gameBox));
-//    }
-//
-//    @Test
-//    public void testGameSelectHoldem() {
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//        Button selectButton = lookup("#GameSelect").query();
-//        clickOn(selectButton);
-//        VBox gameBox = lookup("#GameBox").query();
-//        Button holdemButton = lookup("#Holdem").query();
-//        clickOn(holdemButton);
-//        assertTrue(gameBox.getChildrenUnmodifiable().contains(holdemButton));
-//    }
-//
-//    @Test
-//    public void testGameSelectStud() {
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//        Button selectButton = lookup("#GameSelect").query();
-//        clickOn(selectButton);
-//        VBox gameBox = lookup("#GameBox").query();
-//        Button studButton = lookup("#Stud").query();
-//        clickOn(studButton);
-//        assertTrue(gameBox.getChildrenUnmodifiable().contains(studButton));
-//    }
-//
-//    @Test
-//    public void testGameSelectDraw() {
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//        Button selectButton = lookup("#GameSelect").query();
-//        clickOn(selectButton);
-//        VBox gameBox = lookup("#GameBox").query();
-//        Button drawButton = lookup("#Draw").query();
-//        clickOn(drawButton);
-//        assertTrue(gameBox.getChildrenUnmodifiable().contains(drawButton));
-//    }
-//
-//    @Test
-//    public void testGameSelectCustom() {
-//        javafxRun(() -> controller.initializeMainMenu());
-//        Group CenterGroup = lookup("#Center").query();
-//        VBox startBox = lookup("#StartBox").query();
-//        assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
-//        Button selectButton = lookup("#GameSelect").query();
-//        clickOn(selectButton);
-//        VBox gameBox = lookup("#GameBox").query();
-//        Button customButton = lookup("#Custom").query();
-//        clickOn(customButton);
-//        assertTrue(gameBox.getChildrenUnmodifiable().contains(customButton));
-//        javafxRun(() -> stage.close());
-//    }
+
+  @Test
+  public void testStartBox() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+  }
+
+  @Test
+  public void testGameSelectButton() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+    Button selectButton = lookup("#GameSelect").query();
+    assertTrue(startBox.getChildren().contains(selectButton));
+  }
+
+  @Test
+  public void testSelectionBox() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+    Button selectButton = lookup("#GameSelect").query();
+    clickOn(selectButton);
+    CenterGroup = lookup("#Center").query();
+    VBox gameBox = lookup("#GameBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(gameBox));
+  }
+
+  @Test
+  public void testGameSelectHoldem() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+    Button selectButton = lookup("#GameSelect").query();
+    clickOn(selectButton);
+    VBox gameBox = lookup("#GameBox").query();
+    Button holdemButton = lookup("#Holdem").query();
+    clickOn(holdemButton);
+    assertTrue(gameBox.getChildrenUnmodifiable().contains(holdemButton));
+  }
+
+  @Test
+  public void testGameSelectStud() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+    Button selectButton = lookup("#GameSelect").query();
+    clickOn(selectButton);
+    VBox gameBox = lookup("#GameBox").query();
+    Button studButton = lookup("#Stud").query();
+    clickOn(studButton);
+    assertTrue(gameBox.getChildrenUnmodifiable().contains(studButton));
+  }
+
+  @Test
+  public void testGameSelectDraw() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+    Button selectButton = lookup("#GameSelect").query();
+    clickOn(selectButton);
+    VBox gameBox = lookup("#GameBox").query();
+    Button drawButton = lookup("#Draw").query();
+    clickOn(drawButton);
+    assertTrue(gameBox.getChildrenUnmodifiable().contains(drawButton));
+  }
+
+  @Test
+  public void testGameSelectCustom() {
+    javafxRun(() -> controller.initializeMainMenu());
+    Group CenterGroup = lookup("#Center").query();
+    VBox startBox = lookup("#StartBox").query();
+    assertTrue(CenterGroup.getChildrenUnmodifiable().contains(startBox));
+    Button selectButton = lookup("#GameSelect").query();
+    clickOn(selectButton);
+    VBox gameBox = lookup("#GameBox").query();
+    Button customButton = lookup("#Custom").query();
+    clickOn(customButton);
+    assertTrue(gameBox.getChildrenUnmodifiable().contains(customButton));
+    javafxRun(() -> stage.close());
+  }
+
   @Test
   public void testNewPlayerBox() {
     javafxRun(() -> controller.initializeNewPlayer());
@@ -149,14 +160,11 @@ public class GameViewTest extends DukeApplicationTest {
 
   @Test
   public void testGetNumAutoPlayerBox() {
-    javafxRun(() ->
-        controller.getNumAutoPlayers());
+    javafxRun(() -> controller.getNumAutoPlayers());
     TextField numAutoPlayerInput = lookup("#numAutoPlayerInput").query();
     clickOn(numAutoPlayerInput);
     type(KeyCode.DIGIT6);
     assertEquals(numAutoPlayerInput.getText(), "6");
-
-
   }
 
   @Test
@@ -168,23 +176,21 @@ public class GameViewTest extends DukeApplicationTest {
     assertEquals(startingMoneyInput.getText(), "600");
   }
 
-
-  //
-////    @Test
-////    public void testBettingMenu() {
-////        CommunityCards communityCards = new CommunityCards();
-////        Pot pot = new Pot();
-////        Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
-////        javafxRun(() -> controller.initializeGameSelect());
-////        Button startButton = lookup("#Holdem").queryButton();
-////        clickOn(startButton);
-////        javafxRun(() -> {
-////            controller.displayBetMenu(player);
-////        });
-////        TextField betInput = lookup("#Bet").query();
-////        GridPane optionPane = lookup("#OptionPane").query();
-////        assertTrue(optionPane.getChildren().contains(betInput));
-////    }
+//    @Test
+//    public void testBettingMenu() {
+//        CommunityCards communityCards = new CommunityCards();
+//        Pot pot = new Pot();
+//        Player player = new InteractivePlayer("Arjun", 100, communityCards, pot);
+//        javafxRun(() -> controller.initializeGameSelect());
+//        Button startButton = lookup("#Holdem").queryButton();
+//        clickOn(startButton);
+//        javafxRun(() -> {
+//            controller.displayBetMenu(player);
+//        });
+//        TextField betInput = lookup("#Bet").query();
+//        GridPane optionPane = lookup("#OptionPane").query();
+//        assertTrue(optionPane.getChildren().contains(betInput));
+//    }
 //
 //    @Test
 //    public void testFrontEndExchange() {
@@ -212,61 +218,27 @@ public class GameViewTest extends DukeApplicationTest {
 //        testCard = lookup("#JDIAMONDS").query();
 //        assertEquals(100, testCard.getX());
 //    }
-//
-//    @Test
-//    public void testExchangeInputScreen(){
-//        javafxRun(() -> controller.initializeGameSelect());
-//        Button startButton = lookup("#Holdem").queryButton();
-//        clickOn(startButton);
-//        javafxRun(() -> {
-//            controller.exchangeRound();
-//        });
-//        GridPane exchangeGrid = lookup("#ExchangeGrid").query();
-//        TextField exchangeCardInput1 = lookup("#ExchangeCard1").query();
-//        TextField exchangeCardInput2 = lookup("#ExchangeCard2").query();
-//        TextField exchangeCardInput3 = lookup("#ExchangeCard3").query();
-//        assertTrue(exchangeGrid.getChildren().containsAll(List.of(exchangeCardInput1, exchangeCardInput2, exchangeCardInput3)));
-//    }
-//
-//    @Test
-//    public void testStartNewGame(){
-//        Controller controller = new Controller();
-//        javafxRun(() -> controller.initializeProperties("Holdem.properties"));
-//        javafxRun(() -> controller.startRound());
-//    }
-  @Test
-  public void testInvalidNumberPlayersExceptionThrown() {
-    javafxRun(() -> controller.getNumAutoPlayers());
-    TextField numAutoPlayerInput = lookup("#numAutoPlayerInput").query();
-    clickOn(numAutoPlayerInput);
-    type(KeyCode.DIGIT8);
-    type(KeyCode.ENTER);
-    assertTrue(controller.invalidPlayersEntered(Integer.parseInt(numAutoPlayerInput.getText())));
-    //assertThrows(InvalidNumberPlayersException.class, () -> javafxRun(() -> controller.getNumAutoPlayers()));
-  }
+
+//  @Test
+//  public void testExchangeInputScreen() {
+//    javafxRun(() -> controller.initializeGameSelect());
+//    Button startButton = lookup("#Holdem").queryButton();
+//    clickOn(startButton);
+//    javafxRun(() -> {
+//      controller.exchangeRound();
+//    });
+//    GridPane exchangeGrid = lookup("#ExchangeGrid").query();
+//    TextField exchangeCardInput1 = lookup("#ExchangeCard1").query();
+//    TextField exchangeCardInput2 = lookup("#ExchangeCard2").query();
+//    TextField exchangeCardInput3 = lookup("#ExchangeCard3").query();
+//    assertTrue(exchangeGrid.getChildren()
+//        .containsAll(List.of(exchangeCardInput1, exchangeCardInput2, exchangeCardInput3)));
+//  }
 
   @Test
-  public void testInvalidNameEnteredThrown() {
-    javafxRun(() -> controller.initializeNewPlayer());
-    TextField nameInput = lookup("#nameInput").query();
-    clickOn(nameInput);
-    type(KeyCode.DIGIT8);
-    type(KeyCode.ENTER);
-    assertTrue(controller.invalidNameEntered(nameInput.getText()));
-
-  }
-
-  @Test
-  public void testInvalidStartingAmount() {
-    javafxRun(() -> controller.initializeNewPlayerStartingAmount());
-    TextField amountInput = lookup("#startingMoneyInput").query();
-    clickOn(amountInput);
-    type(KeyCode.DIGIT8); //8 dollars is not enough
-    type(KeyCode.ENTER);
-
-    assertFalse(controller.isValidInteger(Integer.parseInt(amountInput.getText())));
-
+  public void testStartNewGame() {
+    Controller controller = new Controller();
+    javafxRun(() -> controller.initializeProperties("Holdem.properties"));
+    javafxRun(() -> controller.startRound());
   }
 }
-
-
