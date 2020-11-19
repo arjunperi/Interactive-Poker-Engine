@@ -8,9 +8,9 @@ import javafx.scene.text.Text;
 
 public class PlayerInfoBox extends GridPane {
 
-  private String name;
-  private int bankroll;
-  private String avatar;
+  private final String name;
+  private final int bankroll;
+  private final String avatar;
 
   private Text playerName;
   private Text playerBankroll;
