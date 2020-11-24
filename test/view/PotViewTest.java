@@ -29,14 +29,6 @@ class PotViewTest extends DukeApplicationTest {
 
   }
 
-  @Test
-  void potViewGetImage() {
-    String expectedPotImage = "file:/C:/Users/16095/Desktop/CS307/final_team06/out/production/final_team06/pot.png";
-    String actualPotImage = pot.getGameImage().getImage().getUrl();
-
-    assertEquals(expectedPotImage, actualPotImage);
-  }
-
 
   @Test
   void getPotViewLocationX() {
