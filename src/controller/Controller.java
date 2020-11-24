@@ -35,7 +35,7 @@ import model.Game;
 import model.Game.AutoPlayerNames;
 import model.InteractivePlayer;
 import model.PokerModel;
-import model.ModelException;
+import controller.exceptions.ModelException;
 import model.Player;
 import model.PlayerList;
 import model.Pot;

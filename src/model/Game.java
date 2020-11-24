@@ -3,7 +3,9 @@ package model;
 
 import controller.JSONReader;
 
-
+/**
+ *
+ */
 public class Game {
 
   private final RoundManager roundManager;
@@ -11,6 +13,7 @@ public class Game {
   private final Deck deck;
   private final Dealer dealer;
   private final CommunityCards communityCards;
+
 
   public Game() {
     pot = new Pot();
@@ -25,27 +28,50 @@ public class Game {
     roundManager = new RoundManager(pot);
   }
 
+  /**
+   * Returns the roundManager manager within the current game
+   * @return RoundManager
+   */
   public RoundManager getTurnManager() {
     return roundManager;
   }
 
+  /**
+   * Returns the deck within the current game
+   * @return Deck object
+   */
   public Deck getDeck() {
     return deck;
   }
 
+  /**
+   * Returns the community cards within the current game
+   * @return CommunityCards object
+   */
   public CommunityCards getCommunityCards() {
     return communityCards;
   }
 
+  /**
+   * Returns the pot within the current game
+   * @return Pot object
+   */
   public Pot getPot() {
     return pot;
   }
 
+  /**
+   * Returns the dealer within the current game
+   * @return Dealer
+   */
   public Dealer getDealer() {
     return dealer;
   }
 
 
+  /**
+   *
+   */
   public enum AutoPlayerNames {
 
     Player1("Johnny"),

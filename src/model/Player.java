@@ -1,10 +1,15 @@
 package model;
 
+import controller.exceptions.ModelException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+/**
+ * Superclass of AutoPlayer and InteractivePlayer
+ * Represents a general player within the game
+ */
 public class Player extends CardRecipient {
 
   private final String playerName;
@@ -36,18 +41,35 @@ public class Player extends CardRecipient {
   }
 
 
+  /**
+   * Returns the amount of money the player currently has in the format of an integer property
+   * @return IntegerProperty
+   */
   public IntegerProperty getBankroll() {
     return moneyAmount;
   }
 
+  /**
+   * If the player has no money remaining, returns true. Returns false otherwise
+   * @return Boolean
+   */
   public boolean isSolvent() {
     return moneyAmount.getValue() > 0;
   }
 
+  /**
+   * If the player has not folded in the current round, returns true
+   * @return Boolean
+   */
   public boolean isActive() {
     return !hasFolded;
   }
 
+  /**
+   * Enters the player into a new game by resetting their solvency indicator and assigning the new community cards and pot for the new round
+   * @param communityCards community cards for new round
+   * @param pot pot for new round
+   */
   public void enterNewGame(CommunityCards communityCards, Pot pot) {
     if (isSolvent()) {
       hasFolded = false;
@@ -56,29 +78,52 @@ public class Player extends CardRecipient {
     this.pot = pot;
   }
 
+  /**
+   * Discards the card passed in from the player's hand
+   * @param card Card to be discarded
+   */
   public void discardCard(Card card) {
     playerHand.remove(card);
     discardedCardList.add(card);
   }
 
 
+  /**
+   * Returns the list of cards the player has discarded this round
+   * @return List of Cards
+   */
   public List<Card> getDiscardedCards() {
     return discardedCardList;
   }
 
+  /**
+   * Clears the list of cards the player has exchanged this round
+   */
   public void clearDiscardedCards() {
     discardedCardList.clear();
   }
 
+  /**
+   * Returns the hand of the player
+   * @return Hand object
+   */
   public Hand getHand() {
     return playerHand;
   }
 
 
+  /**
+   * Sets the players hand to the hand passed in
+   * @param hand Hand object
+   */
   public void setHand(Hand hand) {
     playerHand = hand;
   }
 
+  /**
+   * Updates player's bankroll by adding the amount passed in
+   * @param amount amount to add to bankroll
+   */
   public void updateBankroll(int amount) {
     moneyAmount.setValue(moneyAmount.getValue() + amount);
   }

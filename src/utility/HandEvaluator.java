@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import model.Hand;
-import model.ModelException;
+import controller.exceptions.ModelException;
 import model.Player;
 import model.PlayerList;
 

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+/**
+ * Represents the deck that holds the cards to be dealt
+ */
 public class Deck extends Stack<Card> {
 
   private final Stack<Card> deck;
@@ -24,6 +27,10 @@ public class Deck extends Stack<Card> {
     Collections.shuffle(deck);
   }
 
+  /**
+   * Returns the top card in the deck, i.e the next card to be dealt
+   * @return Card object
+   */
   public Card getTopCard() {
     return deck.pop();
   }
@@ -38,14 +45,27 @@ public class Deck extends Stack<Card> {
     }
   }
 
+  /**
+   * Puts the card passed in on the top of the deck
+   * @param card Card object
+   */
   public void replaceTopCard(Card card) {
     deck.push(card);
   }
 
+  /**
+   * If the deck is empty, returns true, returns false otherwise
+   * @return Boolean
+   */
   public boolean isEmpty() {
     return deck.isEmpty();
   }
 
+  /**
+   * Converts the String passed into a Card object in the deck
+   * @param cardString String format of card to be converted into Card object. Must be in format "Rank Suit".
+   * @return Card object
+   */
   public Card StringToCard(String cardString) {
     return stringToCardMap.get(cardString);
   }
