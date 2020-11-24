@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//Encapsulaton problems?
 public abstract class PlayerList {
 
   protected List<Player> activePlayers;
@@ -64,8 +63,6 @@ public abstract class PlayerList {
   public boolean raiseMade(Player player) {
     playerUp = player;
     if (playerUp.getTotalBetAmount() > lastBet) {
-      System.out.println(playerUp.toString() + " has raised");
-      System.out.println(playerUp.getTotalBetAmount());
       raiseMade = true;
       lastBet = playerUp.getTotalBetAmount();
       raiseSeat = player;

@@ -10,9 +10,9 @@ import java.util.*;
 
 public class JSONReader {
 
-  private Map<String, String> suits;
-  private Map<Integer, String> ranks;
-  private Map<Integer, String> strengths;
+  private final Map<String, String> suits;
+  private final Map<Integer, String> ranks;
+  private final Map<Integer, String> strengths;
   private JSONObject jo;
   private String cardBack;
 
@@ -72,6 +72,7 @@ public class JSONReader {
     }
   }
 
+
   public Map<String, String> getSuits() {
     return suits;
   }
@@ -83,14 +84,6 @@ public class JSONReader {
   public Map<Integer, String> getStrengths() {
     return strengths;
   }
-
-  /*public <T> T convertInstanceOfObject(Object o, Class<T> clazz) {
-    try {
-      return clazz.cast(o);
-    } catch(ClassCastException e) {
-      return null;
-    }
-  }*/
 
   public List<String> getSuitNames() {
     List<String> suitNames = new ArrayList<>(getSuits().keySet());
@@ -106,8 +99,17 @@ public class JSONReader {
 
   public List<Integer> getStrengthValues() {
     List<Integer> strengthValues = new ArrayList<>(getStrengths().keySet());
-    Collections.sort(strengthValues);
+    strengthValues.sort(Collections.reverseOrder());
     return strengthValues;
+  }
+
+  public List<String> getHandTypes() {
+    List<Integer> strengthValues = getStrengthValues();
+    List<String> handTypes = new ArrayList<>();
+    for(int strength : strengthValues){
+      handTypes.add(strengths.get(strength));
+    }
+    return handTypes;
   }
 
 

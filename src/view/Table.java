@@ -10,24 +10,21 @@ import javafx.scene.shape.Circle;
 
 public class Table extends Group {
 
-  private int centerX;
-  private int centerY;
-  private int playerDistanceFromCenter;
-  private Map<Point2D, PlayerView> playerPositions;
-  private List<PlayerView> playerViews;
-  private final Circle pokerTable;
+  private final int centerX;
+  private final int centerY;
+  private final int playerDistanceFromCenter;
+  private final Map<Point2D, PlayerView> playerPositions;
   List<PlayerView> players;
 
   public Table(int centerX, int centerY, int radius, List<PlayerView> players) {
     super();
-    pokerTable = new Circle(centerX, centerY, radius);
+    Circle pokerTable = new Circle(centerX, centerY, radius);
     this.getChildren().add(pokerTable);
     this.centerX = centerX;
     this.centerY = centerY;
     this.players = players;
 
     this.playerPositions = new HashMap<>();
-    this.playerViews = new ArrayList<>();
     this.playerDistanceFromCenter = radius * 2;
     pokerTable.getStyleClass().add("pokerTable");
     calculatePlayerPositions();
@@ -48,13 +45,7 @@ public class Table extends Group {
     }
   }
 
-  public Map<Point2D, PlayerView> getPlayerPositions() {
-    return playerPositions;
-  }
 
-  public List<PlayerView> getPlayerViews() {
-    return playerViews;
-  }
 
   public int getCenterX() {
     return centerX;

@@ -6,18 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import controller.Controller;
-import controller.exceptions.ControllerException;
-import java.net.ConnectException;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.*;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -27,7 +21,7 @@ public class GameViewTest extends DukeApplicationTest {
   private Controller controller;
   private Stage stage;
 
-  public void start(final Stage stage) throws Exception {
+  public void start(final Stage stage){
     controller = new Controller();
     this.stage = stage;
     this.stage.setScene(controller.setupScene());
@@ -192,8 +186,8 @@ public class GameViewTest extends DukeApplicationTest {
   public void testInvalidCustomGameProgression(){
     Controller controller = new Controller();
     javafxRun(() -> controller.setInteractivePlayerStats("Arjun",100));
-    javafxRun(() -> controller.setAlterState());
-    javafxRun(() -> controller.changeInteractiveActionCompletion());
+    javafxRun(controller::setAlterState);
+    javafxRun(controller::changeInteractiveActionCompletion);
     assertThrows(IllegalStateException.class, () -> controller.initializeProperties("HoldEmDrawCombo.properties"));
   }
 

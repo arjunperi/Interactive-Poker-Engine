@@ -1,6 +1,4 @@
 package model;
-
-import java.util.ArrayList;
 import java.util.List;
 import controller.JSONReader;
 
@@ -12,20 +10,19 @@ import utility.HandEvaluator;
 
 public class RoundManager {
 
-  private Player winner;
-  private int currentRound;
-  private Pot pot;
-  private HandEvaluator handEvaluator;
+  private final Pot pot;
   private boolean roundOver;
   private String winDialog;
-  private JSONReader reader;
-  private Map<Integer, String> handStrengths;
-
+  private final Map<Integer, String> handStrengths;
+  private final static String CARD_SETTINGS_PATH = "/cardSettings.json";
+  private final static String WON_SHOWDOWN_TEXT = " won the showdown with a ";
+  private final static String RECEIVED_CASH_SHOWDOWN_TEXT = " and received $";
+  private final static String EVERYONE_FOLDED_TEXT = "Everyone else folded! ";
+  private final static String RECEIVED_CASH_FOLDED = " won and received $";
 
   public RoundManager(Pot pot) {
-    reader = new JSONReader();
-    reader.parse("/cardSettings.json");
-    currentRound = 0;
+    JSONReader reader = new JSONReader();
+    reader.parse(CARD_SETTINGS_PATH);
     this.pot = pot;
     handStrengths = reader.getStrengths();
     roundOver = false;
@@ -35,11 +32,9 @@ public class RoundManager {
     playerList.removeFoldedPlayers();
     List<Player> activePlayers = playerList.getActivePlayers();
     if (activePlayers.size() == 1) {
-      winner = activePlayers.get(0);
-      System.out
-          .println("\n" + winner.toString() + " and received $" + pot.getPotTotal().getValue());
+      Player winner = activePlayers.get(0);
       winDialog =
-          "Everyone else folded! " + winner.toString() + " won and received $" + pot.getPotTotal()
+          EVERYONE_FOLDED_TEXT + winner.toString() + RECEIVED_CASH_FOLDED + pot.getPotTotal()
               .getValue();
       pot.dispersePot(winner, pot.getPotTotal().getValue());
       pot.clearPot();
@@ -51,8 +46,6 @@ public class RoundManager {
     return pot.getPotTotal().getValue() / numberOfWinners;
   }
 
-  //should we be updating the players' total hands in a better way/ different place?
-  //AI updating?
   public void showDown(PlayerList activePlayers) {
     for (Player player : activePlayers.getActivePlayers()) {
       player.updateTotalHand();
@@ -63,10 +56,7 @@ public class RoundManager {
       Hand bestHand = HandEvaluator.getBestHands(HandCombiner.getAllHands(player.getTotalHand()))
           .get(0);
       String handStrength = handStrengths.get(HandEvaluator.handStrength(bestHand)[0]);
-      System.out.println(
-          "\n" + player.toString() + " won the showdown with a " + handStrength + " and received $"
-              + winningAmount);
-      winDialog = player.toString() + " won the showdown with a " + handStrength + " and received $"
+      winDialog = player.toString() + WON_SHOWDOWN_TEXT + handStrength + RECEIVED_CASH_SHOWDOWN_TEXT
           + winningAmount;
       pot.dispersePot(player, winningAmount);
     }
@@ -81,5 +71,4 @@ public class RoundManager {
   public String getWinDialog() {
     return winDialog;
   }
-
 }

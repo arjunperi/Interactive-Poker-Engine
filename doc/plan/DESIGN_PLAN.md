@@ -37,7 +37,7 @@ hand that must be used to create a valid combination. Within the engine module, 
  games, but could potentially be implemented in custom poker games. For example, changing the values of cards, 
  changing the actions of players, or changing the possible win combinations are all poker variations that we 
  felt our code should be able to support. The data module and its APIs will allow us to easily change certain
- attributes intrinsic to a poker game, and again, the engine model with classes and APIs such as 
+ attributes intrinsic to a poker game, and again, the engine pokerModel with classes and APIs such as 
  Player (which is designed for abstraction so that an AI player can make actions like betting in 
  different ways) will enable for this flexibility to be implemented on the Model level. 
 

@@ -8,10 +8,10 @@ import java.util.Stack;
 
 public class Deck extends Stack<Card> {
 
-  private Stack<Card> deck;
-  private List<String> suits;
-  private List<Integer> ranks;
-  private Map<String, Card> stringToCardMap;
+  private final Stack<Card> deck;
+  private final List<String> suits;
+  private final List<Integer> ranks;
+  private final Map<String, Card> stringToCardMap;
 
 
   public Deck(List<String> suits, List<Integer> ranks) {
@@ -19,7 +19,7 @@ public class Deck extends Stack<Card> {
     this.ranks = ranks;
     stringToCardMap = new HashMap<>();
     deck = new Stack<>();
-    createDeck2();
+    createDeck();
 
     Collections.shuffle(deck);
   }
@@ -28,7 +28,7 @@ public class Deck extends Stack<Card> {
     return deck.pop();
   }
 
-  public void createDeck2() {
+  private void createDeck() {
     for (String suit : suits) {
       for (int rank : ranks) {
         Card card = new Card(rank, suit);
@@ -42,17 +42,8 @@ public class Deck extends Stack<Card> {
     deck.push(card);
   }
 
-  //temporary, just for print methods
-  public Card peekTopCard() {
-    return (Card) deck.peek();
-  }
-
   public boolean isEmpty() {
     return deck.isEmpty();
-  }
-
-  public void shuffle() {
-    Collections.shuffle(deck);
   }
 
   public Card StringToCard(String cardString) {

@@ -1,12 +1,10 @@
 package model;
 
-//not sure if abstract class is the best way to handle this hierarchy
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class Model {
+public class PokerModel {
 
   protected Dealer dealer;
   protected PlayerList playerList;
@@ -21,9 +19,18 @@ public class Model {
   private int totalPlayerCards;
   private int totalCommunityCards;
   private int totalGameCards;
+  private final static String VISIBILITY_PROPERTY = "visibility";
+  private final static String ACTION_PROPERTY = "action";
+  private final static String COMMUNITY = "Community";
+  private final static String PLAYERS = "Players";
+  private final static String DEALING_ROUND_ERROR =  "Invalid dealing round inputs in file. Exit program and reconfigure file inputs";
+  private final static String DECK_EMPTY_ERROR = "Deck will empty with specified number of players and cards being dealt in game.\nPlease choose a fewer number of players"
+      + " or exit program and reconfigure file. \nThe number of total cards dealt can not be greater than 52.";
+  private final static String TEN_CARDS_MAX_ERROR = "Can't deal more than 10 cards to a recipient. \nPlease exit exit program and reconfigure file.\nThe table "
+      + "as well as each player can receive 10 cards maximum.";
+  private final static String CONFIGURATION_ERROR = "File configuration error.\nPlease make sure the round totals, round recipients, visibility specifications, and action specifications line up.";
 
-
-  public Model(PlayerList players, CommunityCards communityCards, Dealer dealer,
+  public PokerModel(PlayerList players, CommunityCards communityCards, Dealer dealer,
       Properties modelProperties) {
     this.communityCards = communityCards;
     activePlayerList = players.getActivePlayers();
@@ -37,7 +44,7 @@ public class Model {
 
   public void dealStats(int currentRound) {
     recipient = modelProperties.getProperty(String.valueOf(currentRound));
-    String[] roundVisibility = modelProperties.getProperty("visibility" + currentRound).split(",");
+    String[] roundVisibility = modelProperties.getProperty(VISIBILITY_PROPERTY + currentRound).split(",");
     visibilityList.clear();
     faceDownCards = Integer.parseInt(roundVisibility[0]);
     populateVisibilityList(faceDownCards, false);
@@ -47,8 +54,7 @@ public class Model {
   }
 
   public String getAction(int roundNumber) {
-    String action = modelProperties.getProperty("action" + roundNumber);
-    return action;
+    return modelProperties.getProperty(ACTION_PROPERTY + roundNumber);
   }
 
   private void populateVisibilityList(int numberOfCards, boolean isVisible) {
@@ -58,17 +64,15 @@ public class Model {
   }
 
   public void backEndDeal(int currentRound) {
-    //TODO: find a way around this conditional
     dealStats(currentRound);
-    if (recipient.equals("Community")) {
+    if (recipient.equals(COMMUNITY)) {
       dealer.dealCards(communityCards, visibilityList);
-    } else if (recipient.equals("Players")) {
+    } else if (recipient.equals(PLAYERS)) {
       for (Player player : activePlayerList) {
         dealer.dealCards(player, visibilityList);
       }
     } else {
-      throw new ModelException(
-          "Invalid dealing round inputs in file. Exit program and reconfigure file inputs");
+      throw new ModelException(DEALING_ROUND_ERROR);
     }
   }
 
@@ -76,32 +80,27 @@ public class Model {
     return recipient;
   }
 
-
   public void checkInvalidNumberOfCards(int numAutoPlayers, int totalRounds) {
     try{
       for (int i = 1; i <= totalRounds; i++) {
         dealStats(i);
-        if (recipient.equals("Players")) {
+        if (recipient.equals(PLAYERS)) {
           totalGameCards += ((numAutoPlayers + 1) * numberOfCards);
           totalPlayerCards += numberOfCards;
-        } else if (recipient.equals("Community")) {
+        } else if (recipient.equals(COMMUNITY)) {
           totalGameCards += numberOfCards;
           totalCommunityCards += numberOfCards;
         }
       }
       if (totalGameCards > 52) {
-        throw new ModelException(
-            "Deck will empty with specified number of players and cards being dealt in game.\nPlease choose a fewer number of players"
-                + " or exit program and reconfigure file. \nThe number of total cards dealt can not be greater than 52.");
+        throw new ModelException(DECK_EMPTY_ERROR);
       }
       if (totalCommunityCards > 10 || totalPlayerCards > 10) {
-        throw new ModelException(
-            "Can't deal more than 10 cards to a recipient. \nPlease exit exit program and reconfigure file.\nThe table "
-                + "as well as each player can receive 10 cards maximum.");
+        throw new ModelException(TEN_CARDS_MAX_ERROR);
       }
     }
     catch (NullPointerException e){
-      throw new ModelException("File configuration error.\nPlease make sure the round totals, round recipients, visibility specifications, and action specifications line up.");
+      throw new ModelException(CONFIGURATION_ERROR);
     }
   }
 }

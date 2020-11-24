@@ -1,7 +1,5 @@
 package view;
 
-import javafx.scene.text.Text;
-
 public class CardView extends PlayerHUDGameObject {
 
   private final String rankSymbol;
@@ -10,7 +8,6 @@ public class CardView extends PlayerHUDGameObject {
   private final String cardBack;
   private boolean isSelected;
 
-  private Text rank;
 
   public static final int CARD_WIDTH = 35;
   public static final int CARD_HEIGHT = 50;
@@ -33,13 +30,11 @@ public class CardView extends PlayerHUDGameObject {
     if (isSelected) {
       this.getStyleClass().remove("card");
       this.getStyleClass().add("cardSelected");
-      //this.setStyle("-fx-border-color: black; -fx-border-width: 2px");
     } else {
       this.getStyleClass().remove("cardSelected");
       this.getStyleClass().add("card");
     }
   }
-
 
   public void setFrontEndVisible(boolean isFrontEndVisible) {
     this.isFrontEndVisible = isFrontEndVisible;
@@ -63,7 +58,6 @@ public class CardView extends PlayerHUDGameObject {
     return isSelected;
   }
 
-
   public String getRankSymbol() {
     return rankSymbol;
   }
@@ -72,5 +66,8 @@ public class CardView extends PlayerHUDGameObject {
     return suitImage;
   }
 
+  public boolean getIsFrontEndVisible() {
+    return isFrontEndVisible;
+  }
 }
 

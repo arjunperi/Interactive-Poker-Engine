@@ -5,8 +5,8 @@ package model;
  */
 public class Card {
 
-  private String suit;
-  private int rank;
+  private final String suit;
+  private final int rank;
   private boolean isBackEndVisible;
   private boolean isInteractivePlayerCard;
 
@@ -23,8 +23,6 @@ public class Card {
   public String toString() {
     return (rank + " " + suit);
   }
-
-  //get the associated value of rank
 
 
   @Override

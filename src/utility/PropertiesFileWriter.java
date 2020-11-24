@@ -14,6 +14,5 @@ public final class PropertiesFileWriter {
       ex.printStackTrace();
     }
   }
-
 }
 

@@ -3,8 +3,8 @@
 
 We plan to be in a constant flow of communication in order to make sure that every aspect of the project is being accounted for. 
 Noah will work mostly on the back-end algorithms as well as helping with the property file configuration. 
-Yasser will be in charge of configuration of the data as well as the model engine set up. 
-Arjun will be in charge of the visualization and GUI as well as helping out with the model interactions. 
+Yasser will be in charge of configuration of the data as well as the pokerModel engine set up. 
+Arjun will be in charge of the visualization and GUI as well as helping out with the pokerModel interactions. 
 Christian will be in charge of checking for edge cases with exceptions in addition to helping out with implementation assignments. 
 
 ##Timeline

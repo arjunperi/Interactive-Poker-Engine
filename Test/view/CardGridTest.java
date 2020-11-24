@@ -1,8 +1,12 @@
 package view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import controller.Controller;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,23 +49,31 @@ class CardGridTest extends DukeApplicationTest {
   void removeCard() {
     cardView = new CardView("4", "/heart-suit.png", "/card-back.png", true);
     cardGrid.addCardView(cardView);
-    cardGrid.removeCard(cardView);
-    assertEquals(new Point2D(1, 1), cardGrid.removeCard(cardView));
+    assertEquals(new Point2D(0, 1), cardGrid.removeCard(cardView));
   }
 
   @Test
   void getCardLocations() {
+    cardView = new CardView("4", "/heart-suit.png", "/card-back.png", true);
+    cardGrid.addCardView(cardView);
+    Map<CardView, Point2D> expectedCardLocations = new HashMap<>();
+    expectedCardLocations.put(cardView, new Point2D(0, 1));
+    assertEquals(expectedCardLocations, cardGrid.getCardLocations());
   }
 
   @Test
   void clearCardGrid() {
+    cardView = new CardView("4", "/heart-suit.png", "/card-back.png", true);
+    cardGrid.addCardView(cardView);
+    cardGrid.clearCardGrid();
+    assertEquals(0, cardGrid.getCardLocations().size());
   }
 
   @Test
   void flipCards() {
-  }
-
-  @Test
-  void getSelectedCards() {
+    cardView = new CardView("4", "/heart-suit.png", "/card-back.png", false);
+    cardGrid.addCardView(cardView);
+    cardGrid.flipCards();
+    assertTrue(cardView.getIsFrontEndVisible());
   }
 }

@@ -5,9 +5,8 @@ import javafx.scene.layout.BorderPane;
 
 public class PlayerView extends BorderPane {
 
-  private CardGrid cardGrid;
-  private PlayerInfoBox playerInfoBox;
-  private Point2D position;
+  private final CardGrid cardGrid;
+  private final PlayerInfoBox playerInfoBox;
 
 
   public PlayerView(String name, int bankroll, String avatar) {
@@ -16,7 +15,6 @@ public class PlayerView extends BorderPane {
     cardGrid = new CardGrid();
     playerInfoBox = new PlayerInfoBox(name, bankroll, avatar);
 
-    this.position = position;
     this.setCenter(cardGrid);
     this.setBottom(playerInfoBox);
 
