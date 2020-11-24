@@ -290,7 +290,6 @@ public class PlayerTest extends DukeApplicationTest {
     Pot pot = new Pot();
     AutoPlayer player = new AutoPlayer("Player", 100, communityCards, pot);
 
-
     Card testCard = deck.StringToCard("2 CLUBS");
     Card testCard2 = deck.StringToCard("6 CLUBS");
     Card testCard3 = deck.StringToCard("5 HEARTS");
