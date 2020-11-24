@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 
 public abstract class PlayerHUDGameObject extends VBox {
 
-  private String displayedGameStat;
+  private final String displayedGameStat;
   private String displayedGameImage;
 
   private Text gameStat;
@@ -26,7 +26,7 @@ public abstract class PlayerHUDGameObject extends VBox {
     setUp();
   }
 
-  public void setUp() {
+  private void setUp() {
     gameStat = new Text(displayedGameStat);
     gameStat.getStyleClass().add("playerHUDObject");
 
@@ -46,7 +46,6 @@ public abstract class PlayerHUDGameObject extends VBox {
     return gameStat;
   }
 
-
   public void setImage(String newImage) {
     try {
       gameImage.setImage(new Image(getClass().getResource(newImage).toExternalForm()));
@@ -59,6 +58,4 @@ public abstract class PlayerHUDGameObject extends VBox {
   public ImageView getGameImage() {
     return gameImage;
   }
-
-
 }

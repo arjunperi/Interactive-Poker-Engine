@@ -1,10 +1,15 @@
 package model;
 
+import controller.exceptions.ModelException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+/**
+ * Superclass of AutoPlayer and InteractivePlayer
+ * Represents a general player within the game
+ */
 public class Player extends CardRecipient {
 
   private final String playerName;
@@ -18,15 +23,15 @@ public class Player extends CardRecipient {
   protected boolean isInteractive;
   private int totalBetAmount;
   private int currentBetAmount;
-  private IntegerProperty moneyAmount;
-  //have a player's hand strength
-  //update it after every deal
+  private final IntegerProperty moneyAmount;
+  private static final String DUMMY_SUIT = "CLUBS";
+  private static final int DUMMY_RANK = -1;
+  private static final String INVALID_BET = "Cannot bet more money than you have! You only have $";
 
   public Player(String name, int startingAmount, CommunityCards communityCards, Pot pot) {
     super();
     this.pot = pot;
     playerName = name;
-    // moneyCount = startingAmount;
     moneyAmount = new SimpleIntegerProperty(startingAmount);
     playerHand = new Hand();
     this.communityCards = communityCards;
@@ -36,26 +41,35 @@ public class Player extends CardRecipient {
   }
 
 
-    /*public int getBankroll(){
-        return moneyCount;
-    }*/
-
+  /**
+   * Returns the amount of money the player currently has in the format of an integer property
+   * @return IntegerProperty
+   */
   public IntegerProperty getBankroll() {
     return moneyAmount;
   }
 
-    /*public boolean isSolvent(){
-        return moneyCount > 0;
-    }*/
-
+  /**
+   * If the player has no money remaining, returns true. Returns false otherwise
+   * @return Boolean
+   */
   public boolean isSolvent() {
     return moneyAmount.getValue() > 0;
   }
 
+  /**
+   * If the player has not folded in the current round, returns true
+   * @return Boolean
+   */
   public boolean isActive() {
     return !hasFolded;
   }
 
+  /**
+   * Enters the player into a new game by resetting their solvency indicator and assigning the new community cards and pot for the new round
+   * @param communityCards community cards for new round
+   * @param pot pot for new round
+   */
   public void enterNewGame(CommunityCards communityCards, Pot pot) {
     if (isSolvent()) {
       hasFolded = false;
@@ -64,36 +78,57 @@ public class Player extends CardRecipient {
     this.pot = pot;
   }
 
+  /**
+   * Discards the card passed in from the player's hand
+   * @param card Card to be discarded
+   */
   public void discardCard(Card card) {
     playerHand.remove(card);
     discardedCardList.add(card);
   }
 
 
+  /**
+   * Returns the list of cards the player has discarded this round
+   * @return List of Cards
+   */
   public List<Card> getDiscardedCards() {
     return discardedCardList;
   }
 
+  /**
+   * Clears the list of cards the player has exchanged this round
+   */
   public void clearDiscardedCards() {
     discardedCardList.clear();
   }
 
+  /**
+   * Returns the hand of the player
+   * @return Hand object
+   */
   public Hand getHand() {
     return playerHand;
   }
 
 
+  /**
+   * Sets the players hand to the hand passed in
+   * @param hand Hand object
+   */
   public void setHand(Hand hand) {
     playerHand = hand;
   }
 
+  /**
+   * Updates player's bankroll by adding the amount passed in
+   * @param amount amount to add to bankroll
+   */
   public void updateBankroll(int amount) {
-    //moneyCount += amount;
     moneyAmount.setValue(moneyAmount.getValue() + amount);
-    System.out.println(this.toString() + " has $" + moneyAmount.getValue());
   }
 
-  //use sets of cards instead of lists?
+
   public void updateTotalHand() {
     totalHand.clear();
     for (Card playerCard : playerHand.getCards()) {
@@ -123,7 +158,7 @@ public class Player extends CardRecipient {
     if (handSize < 5) {
       int fiveCardHandDifference = 5 - handSize;
       for (int i = 0; i < fiveCardHandDifference; i++) {
-        Card dummyCard = new Card(-1, "CLUBS");
+        Card dummyCard = new Card(DUMMY_RANK, DUMMY_SUIT);
         hand.add(dummyCard);
       }
     }
@@ -133,64 +168,43 @@ public class Player extends CardRecipient {
     return totalHand;
   }
 
-
-    /*public void bet(int amountToBet){
-        if (amountToBet <= moneyCount){
-            System.out.print(this.toString() + " bets " + amountToBet + "\n");
-            currentBetAmount = amountToBet;
-            totalBetAmount = totalBetAmount + currentBetAmount;
-            pot.addToPot(currentBetAmount);
-            updateBankroll(currentBetAmount * -1);
-        }
-        else {
-            throw new ModelException("Cannot bet more money than you have! You only have $" + getBankroll());
-        }
-    }*/
-
   public void bet(int amountToBet) {
     if (amountToBet <= moneyAmount.getValue()) {
-      System.out.print(this.toString() + " bets " + amountToBet + "\n");
       currentBetAmount = amountToBet;
       totalBetAmount = totalBetAmount + currentBetAmount;
       pot.addToPot(currentBetAmount);
       updateBankroll(currentBetAmount * -1);
     } else {
       throw new ModelException(
-          "Cannot bet more money than you have! You only have $" + getBankroll().getValue());
+         INVALID_BET + getBankroll().getValue());
     }
   }
+
 
   public int getTotalBetAmount() {
     return totalBetAmount;
   }
 
-  public int getCurrentBetAmount() {
-    return currentBetAmount;
-  }
-
+  /**
+   * Clears the current bet amount
+   */
   public void clearBetAmount() {
     totalBetAmount = 0;
     currentBetAmount = 0;
   }
 
+  /**
+   * Player folds in current game
+   */
   public void fold() {
-    System.out.println(this.toString() + " has folded");
     hasFolded = true;
   }
 
-    /*public void call(int lastBet){
-        System.out.println(this.toString() + " has called");
-        int callAmount = lastBet-totalBetAmount;
-        if(callAmount>=moneyCount){
-            bet(moneyCount);
-        }
-        else{
-            bet(callAmount);
-        }
-    }*/
-
+  /**
+   * Matches the last bet made in the current round
+   * @param lastBet last bet made
+   */
   public void call(int lastBet) {
-    System.out.println(this.toString() + " has called");
     int callAmount = lastBet - totalBetAmount;
     if (callAmount >= moneyAmount.getValue()) {
       bet(moneyAmount.getValue());
@@ -199,15 +213,27 @@ public class Player extends CardRecipient {
     }
   }
 
+  /**
+   * If the player is the interactive player, returns true
+   * @return Boolean
+   */
   public boolean isInteractive() {
-    return isInteractive;
+    return !isInteractive;
   }
 
 
+  /**
+   * Returns the player represented as a string of their name
+   * @return String player name
+   */
   public String toString() {
     return playerName;
   }
 
+  /**
+   * adds the card passed in to the player's hand
+   * @param card card to be added to hand
+   */
   public void receiveCard(Card card) {
     if (isInteractive) {
       card.setInteractivePlayerCard();
@@ -217,6 +243,9 @@ public class Player extends CardRecipient {
     updateTotalHand();
   }
 
+  /**
+   * Clears the player's current hand
+   */
   public void clearHand() {
     playerHand.clear();
   }

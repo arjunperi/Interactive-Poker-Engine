@@ -57,7 +57,6 @@ public class CardGrid extends GridPane {
     currentColumn = 0;
   }
 
-
   public void addCardView(CardView card) {
     addCardViewToLocation(card, new Point2D(currentColumn, currentRow));
   }
@@ -80,7 +79,6 @@ public class CardGrid extends GridPane {
     }
 
     card.setOnMouseClicked(event -> card.toggleCardSelected());
-    //card.setOnMouseClicked(event2 -> countNumberOfCardsHighlighted());
   }
 
 
@@ -91,7 +89,6 @@ public class CardGrid extends GridPane {
         selectedCards.add(card);
       }
     }
-    System.out.println(selectedCards.size());
   }
 
 

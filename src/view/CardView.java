@@ -33,12 +33,11 @@ public class CardView extends PlayerHUDGameObject {
   public void toggleCardSelected() {
     isSelected = !isSelected;
     if (isSelected) {
-      this.getStyleClass().remove(NONSELECTED_CARD);
-      this.getStyleClass().add(SELECTED_CARD);
-      //this.setStyle("-fx-border-color: black; -fx-border-width: 2px");
+      this.getStyleClass().remove("card");
+      this.getStyleClass().add("cardSelected");
     } else {
-      this.getStyleClass().remove(SELECTED_CARD);
-      this.getStyleClass().add(NONSELECTED_CARD);
+      this.getStyleClass().remove("cardSelected");
+      this.getStyleClass().add("card");
     }
   }
 
@@ -64,7 +63,6 @@ public class CardView extends PlayerHUDGameObject {
   public boolean getIsSelected() {
     return isSelected;
   }
-
 
   public String getRankSymbol() {
     return rankSymbol;

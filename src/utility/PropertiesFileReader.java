@@ -2,9 +2,16 @@ package utility;
 
 import java.util.Properties;
 
+/**
+ * This class is responsible for reading the properties files
+ */
 public final class PropertiesFileReader {
 
-  //TODO: Remove this and property file and retrieve cardSymbol from either JSON or manually based on unique characters
+  /**
+   * Method returns the properties file that corresponds to the string of the file name
+   * @param fileName - string of the file name
+   * @return a properties object of the corresponding file name
+   */
   public static Properties getPropertyFile(String fileName) {
     Properties propertyFile = new Properties();
     try {

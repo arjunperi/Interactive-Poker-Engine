@@ -14,20 +14,17 @@ public class Table extends Group {
   private final int centerY;
   private final int playerDistanceFromCenter;
   private final Map<Point2D, PlayerView> playerPositions;
-  private final List<PlayerView> playerViews;
-  private final Circle pokerTable;
   List<PlayerView> players;
 
   public Table(int centerX, int centerY, int radius, List<PlayerView> players) {
     super();
-    pokerTable = new Circle(centerX, centerY, radius);
+    Circle pokerTable = new Circle(centerX, centerY, radius);
     this.getChildren().add(pokerTable);
     this.centerX = centerX;
     this.centerY = centerY;
     this.players = players;
 
     this.playerPositions = new HashMap<>();
-    this.playerViews = new ArrayList<>();
     this.playerDistanceFromCenter = radius * 2;
     pokerTable.getStyleClass().add("pokerTable");
     calculatePlayerPositions();

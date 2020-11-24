@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//Encapsulaton problems?
+/**
+ * Represents a list of the players in the game.
+ */
 public abstract class PlayerList {
 
   protected List<Player> activePlayers;
@@ -32,10 +34,18 @@ public abstract class PlayerList {
     activePlayers.removeAll(filtered);
   }
 
+  /**
+   *  Returns the list of all player's in the game
+   * @return List of Player objects
+   */
   public List<Player> getAllPlayers() {
     return allPlayers;
   }
 
+  /**
+   * If only one player who has not gone bankrupt remains, returns true
+   * @return Boolean
+   */
   public boolean doesOneSolventPlayerRemain() {
     int SolventPlayerCount = 0;
     for (Player player : this.getActivePlayers()) {
@@ -46,14 +56,26 @@ public abstract class PlayerList {
     return SolventPlayerCount == 1;
   }
 
+  /**
+   * Rotates the player order so that the first person to act changes each round
+   */
   public void updateStartingRoundOrder() {
     Collections.rotate(allPlayers, -1);
   }
 
+  /**
+   * updates the active player list
+   */
   public abstract void updateActivePlayers();
 
+  /**
+   * initializes the active playerlist
+   */
   public abstract void initializeActivePlayers();
 
+  /**
+   * resets the active player list so that folded players are re-added.
+   */
   public void resetActivePlayers() {
     activePlayers = new ArrayList<>(allPlayers);
     for (Player player : getActivePlayers()) {
@@ -61,11 +83,14 @@ public abstract class PlayerList {
     }
   }
 
+  /**
+   * if the player has raised the current bet amount, returns true
+   * @param player Player to determine if has raised
+   * @return Boolean
+   */
   public boolean raiseMade(Player player) {
     playerUp = player;
     if (playerUp.getTotalBetAmount() > lastBet) {
-      System.out.println(playerUp.toString() + " has raised");
-      System.out.println(playerUp.getTotalBetAmount());
       raiseMade = true;
       lastBet = playerUp.getTotalBetAmount();
       raiseSeat = player;
@@ -81,9 +106,14 @@ public abstract class PlayerList {
     raiseMade = false;
   }
 
+  /**
+   * returns the last bet made
+   * @return integer
+   */
   public int getLastBet() {
     return lastBet;
   }
+
 
   public Player getRaiseSeat() {
     return raiseSeat;
@@ -94,6 +124,10 @@ public abstract class PlayerList {
     raiseSeat = null;
   }
 
+  /**
+   * returns a list of the player's who are currently active in the game
+   * @return List of Player objects
+   */
   public List<Player> getActivePlayers() {
     return activePlayers;
   }

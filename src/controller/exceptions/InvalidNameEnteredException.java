@@ -6,11 +6,6 @@ public class InvalidNameEnteredException extends RuntimeException {
     super();
   }
 
-  public InvalidNameEnteredException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-
   @Override
   public String getMessage() {
     return "Names can only contain letters";

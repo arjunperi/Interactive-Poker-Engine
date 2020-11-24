@@ -11,7 +11,7 @@ import utility.PropertiesFileReader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ModelTest extends DukeApplicationTest {
+public class PokerModelTest extends DukeApplicationTest {
 
   @Test
   public void testBackEndDeal(){
@@ -25,8 +25,8 @@ public class ModelTest extends DukeApplicationTest {
     Player player1 = new Player("Jimmy", 100, communityCards, pot);
     PlayerList playerList = new StandardPlayerList(
         new ArrayList<>(List.of(player1)));
-    Model model = new Model(playerList, communityCards, dealer, modelProperties);
-    model.backEndDeal(1);
+    PokerModel pokerModel = new PokerModel(playerList, communityCards, dealer, modelProperties);
+    pokerModel.backEndDeal(1);
     assertEquals(2, player1.getHand().getCards().size());
   }
 

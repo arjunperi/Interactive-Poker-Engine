@@ -20,7 +20,7 @@ Christian Welch -  cw356
 ### Project Emphasis
 
 - Strong emphasis on utilizing all of the class material in the program
-- Strong emphasis on the model, backend, portion of the program
+- Strong emphasis on the pokerModel, backend, portion of the program
 - Equal or lesser importance on the view, or frontend, of the program
 
 

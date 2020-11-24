@@ -1,8 +1,8 @@
 package view;
 
 public class CommunityCardGrid extends CardGrid {
-  private double communityCardX;
-  private double communityCardY;
+  private final double communityCardX;
+  private final double communityCardY;
 
 
   public CommunityCardGrid(int pokerTableX, int pokerTableY) {
