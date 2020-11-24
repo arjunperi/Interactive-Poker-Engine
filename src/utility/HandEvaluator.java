@@ -13,8 +13,20 @@ import controller.exceptions.ModelException;
 import model.Player;
 import model.PlayerList;
 
+/**
+ * This class evaluates the strength of a hand and determines which hand and
+ * player is best amongst other hands or players
+ */
 public final class HandEvaluator {
 
+  /**
+   * This class returns an int array of the hand in the correct format with
+   * the first digit corresponding to the strength of the given hand
+   * @param hand - A five card hand
+   * @return an int array: the first digit corresponds to the strength of the hand type
+   * and the next five digits correspond to the ranks of the cards in the hand formatted in the correct
+   * configuration for each hand type.
+   */
   public static int[] handStrength(Hand hand) {
     int[] handRank = new int[6];
     JSONReader reader = new JSONReader();
@@ -46,6 +58,13 @@ public final class HandEvaluator {
     return handRank;
   }
 
+  /**
+   * This method returns a list of the best hands from a list of hands
+   * @param hands - a list of hands that are being compared to each other
+   * @return -  a list of the best hands in the parameter hands list. List exceeds
+   * length one when hands are of equal strength and ranks. This is done by comparing
+   * hand strength int arrays index by index
+   */
   public static List<Hand> getBestHands (List < Hand > hands) {
     int[] bestHand = new int[6];
     boolean isSame;
@@ -82,6 +101,13 @@ public final class HandEvaluator {
     return bestHands;
   }
 
+  /**
+   * This method returns the player or players with the best hand
+   * @param playerList - the list of players of whose hands are being compared
+   * @param isVisibleHand - boolean that relates to if we are determining the strength of a players entire hand or
+   *                      just their visible hand (used for stud games to determine betting order)
+   * @return - A list of players with the best hand. Multiple players in list if they have the same hand.
+   */
   public static List<Player> getBestPlayers (PlayerList playerList,boolean isVisibleHand){
     Map<Hand, Player> bestHandMapping = new HashMap<>();
     {
@@ -104,11 +130,22 @@ public final class HandEvaluator {
     }
   }
 
+  /**
+   * Returns a players best hand
+   * @param player - the player for who we are finding their best hand
+   * @return - the best hand that player has from all the possible five card hands
+   * they could have
+   */
   public static Hand getBestPlayerHand (Player player){
     return getBestHands(HandCombiner.getAllHands(player.getTotalHand())).get(0);
 
   }
 
+  /**
+   * This method gets the strength of a hand type from the string of the hand type
+   * @param value - The string of the name of the hand type
+   * @return - the strength of the hand type that corresponds with the string name (from JSON)
+   */
   public static int getHandStrengthRank(String value) {
     JSONReader reader = new JSONReader();
     reader.parse("/cardSettings.json");
