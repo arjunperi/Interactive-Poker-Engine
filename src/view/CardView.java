@@ -12,6 +12,11 @@ public class CardView extends PlayerHUDGameObject {
   public static final int CARD_WIDTH = 35;
   public static final int CARD_HEIGHT = 50;
 
+  private static final String NONSELECTED_CARD = "card";
+  private static final String SELECTED_CARD = "cardSelected";
+
+
+
   public CardView(String rankSymbol, String suitImage, String cardBack, boolean isFrontEndVisible) {
     super(rankSymbol, suitImage);
 
@@ -21,19 +26,19 @@ public class CardView extends PlayerHUDGameObject {
 
     isSelected = false;
 
-    this.getStyleClass().add("card");
+    this.getStyleClass().add(NONSELECTED_CARD);
     setFrontEndVisible(isFrontEndVisible);
   }
 
   public void toggleCardSelected() {
     isSelected = !isSelected;
     if (isSelected) {
-      this.getStyleClass().remove("card");
-      this.getStyleClass().add("cardSelected");
+      this.getStyleClass().remove(NONSELECTED_CARD);
+      this.getStyleClass().add(SELECTED_CARD);
       //this.setStyle("-fx-border-color: black; -fx-border-width: 2px");
     } else {
-      this.getStyleClass().remove("cardSelected");
-      this.getStyleClass().add("card");
+      this.getStyleClass().remove(SELECTED_CARD);
+      this.getStyleClass().add(NONSELECTED_CARD);
     }
   }
 

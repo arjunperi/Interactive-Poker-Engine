@@ -51,7 +51,7 @@
 .title {
   -fx-font-family: "Times New Roman";
   -fx-font-size: 80px;
-  -fx-text-fill: blue;
+  -fx-fill: white;
 }
 
 .titleBox {
@@ -184,4 +184,9 @@
 
 .list-cell {
   -fx-alignment: center;
+}
+
+.playerInfo {
+  -fx-font: "Times New Roman";
+  -fx-fill: #72a7ef;
 }

@@ -1,6 +1,6 @@
 {
   "gameSettings": {
-    "cardBack" : "/card-back.png"
+    "cardBack" : "/duvall_card_back.png"
   },
   "suits": {
     "HEARTS": "/heart-suit.png",

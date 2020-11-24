@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.event.ActionEvent;
@@ -408,7 +409,6 @@ public class Controller {
   }
 
   private void initializePlayerList(String fileName) {
-    //TODO: use factory design pattern here to choose what kind of playerList to instantiate
     try {
       Properties modelProperties = PropertiesFileReader.getPropertyFile(fileName);
       String playerListType = modelProperties.getProperty("playerListType");
@@ -434,7 +434,7 @@ public class Controller {
   private List<Player> initializeAutoPlayers() {
     List<Player> autoPlayerList = new ArrayList<>();
     for (int numPlayers = 0; numPlayers < numAutoPlayers; numPlayers++) {
-      String autoPlayerName = AutoPlayerNames.values()[numPlayers].getValue();
+      String autoPlayerName = AutoPlayerNames.values()[numPlayers].getName();
       autoPlayerList.add(
           new AutoPlayer(autoPlayerName, playerStartingAmount, communityCards, pot));
     }
@@ -442,12 +442,12 @@ public class Controller {
   }
 
   private void initializeFrontEndPlayers() {
-    //Todo: Create abstraction for AutoPlayerView and PlayerView
     for (Player currentPlayer : playerList.getActivePlayers()) {
       PlayerView newPlayerView;
       if (!currentPlayer.isInteractive()) {
+        Random autoplayerImage = new Random();
         newPlayerView = new PlayerView(currentPlayer.toString(),
-            currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
+            currentPlayer.getBankroll().getValue(), AutoPlayerNames.values()[autoplayerImage.nextInt(numAutoPlayers)].getImage());
       } else {
         newPlayerView = new PlayerView(interactivePlayerName,
             currentPlayer.getBankroll().getValue(), "/default-profile-pic.png");
