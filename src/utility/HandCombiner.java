@@ -6,9 +6,19 @@ import model.Hand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for making five card hand combinations
+ * of hands that are five or more cards large
+ */
 public final class HandCombiner {
 
-
+  /**
+   * This method returns a list of all possible five card hand combinations
+   * of hands that consist of five or more cards
+   * @param hand - A hand that consists of all the cards a player has access to.
+   * @return - A list of all the five card hands that are possible from the total
+   * hand of a player
+   */
   public static List<Hand> getAllHands(Hand hand) {
     List<Hand> allHands = new ArrayList<>();
     int handSize = 5;

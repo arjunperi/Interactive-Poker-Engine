@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * This class is responsible for the flow of the game
+ * of poker on the back end
+ */
 public class PokerModel {
 
   protected Dealer dealer;
@@ -43,6 +47,11 @@ public class PokerModel {
     totalGameCards = 0;
   }
 
+  /**
+   * This method sets the deal stats for the current round
+   * @param currentRound - the number corresponding to what round the game
+   *                     of poker is currently in
+   */
   public void dealStats(int currentRound) {
     recipient = modelProperties.getProperty(String.valueOf(currentRound));
     String[] roundVisibility = modelProperties.getProperty(VISIBILITY_PROPERTY + currentRound).split(",");
@@ -54,6 +63,12 @@ public class PokerModel {
     populateVisibilityList(faceUpCards, true);
   }
 
+  /**
+   * Method returns the string of the type of round the round number is
+   * @param roundNumber - the round number that we wish to determine the type of round it is
+   * @return a string of the round type from the properties file based on the round number.
+   * Either a dealing round or an exchange round
+   */
   public String getAction(int roundNumber) {
     return modelProperties.getProperty(ACTION_PROPERTY + roundNumber);
   }
@@ -64,6 +79,12 @@ public class PokerModel {
     }
   }
 
+  /**
+   * Deals correctly in the back end to the correct card
+   * recipient based on the current round number
+   * @param currentRound - the number corresponding to what round the game
+   *    *                     of poker is currently in
+   */
   public void backEndDeal(int currentRound) {
     dealStats(currentRound);
     if (recipient.equals(COMMUNITY)) {
@@ -77,10 +98,20 @@ public class PokerModel {
     }
   }
 
+  /**
+   * This method returns a string of the recipient
+   * @return a string of the card recipient type
+   */
   public String getRecipient() {
     return recipient;
   }
 
+  /**
+   * This method throws an exception if the calculated amount of cards needed exceed 52
+   * based on the number of auto players and based on the amount of rounds
+   * @param numAutoPlayers - the number of autoplayers in the hand
+   * @param totalRounds - the total number of rounds in one hand of poker
+   */
   public void checkInvalidNumberOfCards(int numAutoPlayers, int totalRounds) {
     try{
       for (int i = 1; i <= totalRounds; i++) {

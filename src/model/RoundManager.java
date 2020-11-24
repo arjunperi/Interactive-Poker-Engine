@@ -7,7 +7,10 @@ import java.util.*;
 import utility.HandCombiner;
 import utility.HandEvaluator;
 
-
+/**
+ * This class is responsible for managing round completion (i.e. all players folded
+ * or showdown)
+ */
 public class RoundManager {
 
   private final Pot pot;
@@ -28,6 +31,11 @@ public class RoundManager {
     roundOver = false;
   }
 
+  /**
+   * This method checks if there is only one active player left and if so
+   * that player wins the pot
+   * @param playerList - The list of the players in the game
+   */
   public void checkOnePlayerRemains(PlayerList playerList) {
     playerList.removeFoldedPlayers();
     List<Player> activePlayers = playerList.getActivePlayers();
@@ -46,6 +54,11 @@ public class RoundManager {
     return pot.getPotTotal().getValue() / numberOfWinners;
   }
 
+  /**
+   * This method gives the active player with the best hand its winnings
+   * from the pot
+   * @param activePlayers - a list of the active players (players that have not folded)
+   */
   public void showDown(PlayerList activePlayers) {
     for (Player player : activePlayers.getActivePlayers()) {
       player.updateTotalHand();
@@ -64,10 +77,19 @@ public class RoundManager {
     roundOver = true;
   }
 
+  /**
+   * This method checks if the round is over
+   * @return - boolean if the round is over not
+   */
   public boolean isRoundOver() {
     return roundOver;
   }
 
+  /**
+   * This method returns the win dialog
+   * @return - a string that is to be displayed on the action log that shows who
+   * won the round
+   */
   public String getWinDialog() {
     return winDialog;
   }

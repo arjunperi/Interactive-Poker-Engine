@@ -50,6 +50,9 @@ import view.PlayerView;
 import view.PotView;
 import view.Table;
 
+/**
+ * This class dictates the interactions between the view and the model
+ */
 public class Controller {
 
   private static final String CARD_SETTINGS = "/cardSettings.json";
@@ -102,7 +105,10 @@ public class Controller {
     initializeGameObjects();
   }
 
-
+  /**
+   * This method initializes the scene and returns the scene
+   * @return scene - the initialized scene
+   */
   public Scene setupScene() {
     return view.setupScene();
   }
@@ -127,6 +133,9 @@ public class Controller {
     view.makePlayerSelectScreen(newPlayerSelectEvent, loadPlayerEvent);
   }
 
+  /**
+   * This method initializes a new player
+   */
   public void initializeNewPlayer() {
     try {
       TextField nameInput = new TextField();
@@ -153,17 +162,31 @@ public class Controller {
     }
   }
 
+  /**
+   * This method returns if the name entered is a valid name. Valid names consist of only letter.
+   * @param nameEntered - the string of the name that is entered into the dialog box
+   * @return boolean if the string is made up of only letters or not
+   */
   public boolean invalidNameEntered(String nameEntered) {
     String regex = "^[a-zA-Z]+$";
     return !nameEntered.matches(regex);
   }
 
+  /**
+   * This method returns if the number of players entered is a valid number. A valid number is any number that is less than max
+   * number of auto player.
+   * @param numberOfPlayers - the number that is entered into the dialog box
+   * @return boolean if the number is a valid opponent amount
+   */
   public boolean invalidPlayersEntered(int numberOfPlayers) {
     int MAX_AUTOPLAYERS = 7;
     return ((numberOfPlayers > MAX_AUTOPLAYERS) || (numberOfPlayers < 1));
   }
 
-
+  /**
+   * This method initializes the starting amount for a new player
+   * based on the input of the dialog box
+   */
   public void initializeNewPlayerStartingAmount() {
     try {
       TextField startingMoneyInput = new TextField();
@@ -206,7 +229,9 @@ public class Controller {
     }
   }
 
-
+  /**
+   * This method gets the number of auto players from the input of the dialog box
+   */
   public void getNumAutoPlayers() {
     try {
       TextField numAutoPlayerInput = new TextField();
@@ -234,6 +259,14 @@ public class Controller {
     }
   }
 
+  /**
+   * This method returns a boolean if the object is a valid integer for the starting
+   * amount of money a player can have. The number needs to be between
+   * the min and max starting amount
+   * @param o - an object
+   * @return whether the object is a number within the correct range of numbers.
+   * False if object not integer as well
+   */
   public boolean isValidInteger(Object o) {
     if (!o.getClass().getName().equals("java.lang.Integer")) {
       return false;
@@ -242,6 +275,9 @@ public class Controller {
     return (amountEntered >= MINIMUM_STARTING_AMOUNT) && (amountEntered <= MAXIMUM_STARTING_AMOUNT);
   }
 
+  /**
+   * The main menu is initialized
+   */
   public void initializeMainMenu() {
     EventHandler<ActionEvent> gameSelectEvent = e -> initializeGameSelect();
     EventHandler<ActionEvent> homeEvent = e -> initializePlayerSelectMenu();
@@ -308,6 +344,10 @@ public class Controller {
     playerMappings.clear();
   }
 
+  /**
+   * Initializes the properties of a game based on the string of the name of the file.
+   * @param fileName - A string that corresponds with the name of the file
+   */
   public void initializeProperties(String fileName) {
     try {
       currentGame = fileName;
@@ -717,11 +757,19 @@ public class Controller {
     alert.showAndWait();
   }
 
+  /**
+   * This method sets an interactive player's name and starting amount
+   * @param name - a string of the name of the player
+   * @param value - An integer that is set to be the starting amount of the player
+   */
   public void setInteractivePlayerStats(String name, int value){
     interactivePlayerName = name;
     playerStartingAmount = value;
   }
 
+  /**
+   * This method sets alterHands to true
+   */
   public void setAlterState(){
     alterHands = true;
   }
@@ -731,6 +779,9 @@ public class Controller {
     }
   }
 
+  /**
+   * This method sets interactiveActionComplete to false
+   */
   public void changeInteractiveActionCompletion(){
     interactiveActionComplete = false;
   }

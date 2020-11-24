@@ -2,6 +2,10 @@ package model;
 
 import java.util.List;
 
+/**
+ * This class initializes player in a standard game of poker
+ * The order is shifted after each round one position
+ */
 public class StandardPlayerList extends PlayerList {
 
 
@@ -17,6 +21,9 @@ public class StandardPlayerList extends PlayerList {
     raiseShift();
   }
 
+  /**
+   * This method updates the active players
+   */
   public void updateActivePlayers() {
     resetActivePlayers();
     initializeActivePlayers();
