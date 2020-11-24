@@ -6,8 +6,8 @@ import java.util.List;
 import utility.HandCombiner;
 import utility.HandEvaluator;
 
-/*
-Computer-controlled poker player
+/**
+ * This class represents a computer-controlled poker player
  */
 public class AutoPlayer extends Player {
 
@@ -25,7 +25,11 @@ public class AutoPlayer extends Player {
     isInteractive = false;
   }
 
-
+  /**
+   * Decides what action the AutoPlayer should make during a betting round using an algorithm based on hand strength.
+   * After deciding, it carries out this action.
+   * @param lastBet - the last bet made in the game, needed in order to complete bet or call action
+   */
   public void decideAction(int lastBet) {
     boolean isHighEnough = false;
     Hand bestHand = HandEvaluator.getBestHands(HandCombiner.getAllHands(this.getTotalHand()))
@@ -51,10 +55,21 @@ public class AutoPlayer extends Player {
     }
   }
 
+  /**
+   * Returns the last action that the player decided
+   * @return String of action
+   */
   public String getAction() {
     return action;
   }
 
+  /**
+   *  Decides if the player should exchange cards or not based on algorithm. The AutoPlayer chooses to exchange
+   *  if they do not have at least a pair (hand of rank 2). In this case, the AutoPlayer attempts to exchange up to 3 cards with values less than 8,
+   *  beginning with the lowest valued card.
+   *  If it has none, it does not exchange.
+   * @return List<Card> List of card objects to exchange for new cards
+   */
   public List<Card> decideExchange() {
     List<Hand> allHands = HandCombiner.getAllHands(this.getTotalHand());
     Hand bestHand = HandEvaluator.getBestHands(allHands).get(0).sortHand();
@@ -75,9 +90,8 @@ public class AutoPlayer extends Player {
     return exchangeCards;
   }
 
-
-  private int computerBetAmount(int defaultBetAmount) {
-    int betAmount = defaultBetAmount;
+  private int computerBetAmount(int desiredBetAmount) {
+    int betAmount = desiredBetAmount;
     if (betAmount > this.getBankroll().getValue()) {
       betAmount = this.getBankroll().getValue();
     }
