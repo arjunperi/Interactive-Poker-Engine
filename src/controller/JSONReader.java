@@ -99,7 +99,7 @@ public class JSONReader {
 
   public List<Integer> getStrengthValues() {
     List<Integer> strengthValues = new ArrayList<>(getStrengths().keySet());
-    Collections.sort(strengthValues, Collections.reverseOrder());
+    strengthValues.sort(Collections.reverseOrder());
     return strengthValues;
   }
 

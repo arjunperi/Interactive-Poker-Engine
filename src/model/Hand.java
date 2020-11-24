@@ -7,7 +7,6 @@ public class Hand {
 
   private final List<Card> hand;
 
-  //for temporary hand evaluation logic -> won't exist later
   private int handSize;
 
   public Hand() {
@@ -54,7 +53,7 @@ public class Hand {
 
   public Hand sortHand() {
     Hand sortedHand = new Hand();
-    while (this.getHandSize() > 0) {
+    while (handSize > 0) {
       int max = -2;
       Card maxCard = null;
       for (Card card : this.getCards()) {

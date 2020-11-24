@@ -6,9 +6,6 @@ import java.util.List;
 import utility.HandCombiner;
 import utility.HandEvaluator;
 
-/*
-Computer-controlled poker player
- */
 public class AutoPlayer extends Player {
 
   private static final int DEFAULTBETAMOUNT = 10;
@@ -48,6 +45,10 @@ public class AutoPlayer extends Player {
       }
     } else {
       fold();
+      System.out.println(this.toString());
+      for (Card card: this.getHand().getCards()){
+        System.out.println(card.toString());
+      }
       action = " folded";
     }
   }
@@ -61,14 +62,14 @@ public class AutoPlayer extends Player {
     Hand bestHand = HandEvaluator.getBestHands(allHands).get(0).sortHand();
     int handStrength = HandEvaluator.handStrength(bestHand)[0];
     List<Card> exchangeCards = new ArrayList<>();
-    if (handStrength <= HAND_RANK_THRESHOLD) { // if hand strength is less than pair
+    if (handStrength <= HAND_RANK_THRESHOLD) {
       List<Card> handCopy = bestHand.getCards();
       Collections.reverse(handCopy);
       int numberExchanged = 0;
       for (Card card : handCopy) {
         if ((card.getRank() > 0) && (card.getRank() < EXCHANGE_THRESHOLD) && !(numberExchanged
-            == MAX_EXCHANGE)) { // if card rank is lower than threshold to exchange it
-          exchangeCards.add(card); // why does exchange take in a string instead of card??
+            == MAX_EXCHANGE)) {
+          exchangeCards.add(card);
           numberExchanged++;
         }
       }

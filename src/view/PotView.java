@@ -3,8 +3,8 @@ package view;
 
 public class PotView extends PlayerHUDGameObject {
 
-  private double potViewLocationX;
-  private double potViewLocationY;
+  private final double potViewLocationX;
+  private final double potViewLocationY;
 
 
   public PotView(String potAmount, String potImage, int pokerTableX, int pokerTableY) {

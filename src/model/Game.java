@@ -11,14 +11,12 @@ public class Game {
   private final Deck deck;
   private final Dealer dealer;
   private final CommunityCards communityCards;
-  private final JSONReader reader;
 
-  //TODO: Game should be constructed frpm Pot, List of Players, Deck, and Dealer (rather than having them be created here)
   public Game() {
     pot = new Pot();
     this.communityCards = new CommunityCards();
 
-    reader = new JSONReader();
+    JSONReader reader = new JSONReader();
     reader.parse("/cardSettings.json");
 
     deck = new Deck(reader.getSuitNames(), reader.getRankValues());

@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class Pot {
 
-  private IntegerProperty potTotal;
+  private final IntegerProperty potTotal;
 
   public Pot() {
     potTotal = new SimpleIntegerProperty(0);
@@ -13,10 +13,8 @@ public class Pot {
 
   public void addToPot(int amount) {
     potTotal.setValue(potTotal.getValue() + amount);
-    System.out.println("Pot total is: $" + potTotal.getValue());
   }
 
-  //error checking of some sort needed here
   public void dispersePot(Player winner, int potAmount) {
     winner.updateBankroll(potAmount);
   }

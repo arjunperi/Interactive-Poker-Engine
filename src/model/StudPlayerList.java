@@ -13,7 +13,6 @@ public class StudPlayerList extends PlayerList {
 
 
   public void initializeActivePlayers() {
-    //why did we have this line -> so that betting order is reset after all the raise shifts
     removeFoldedPlayers();
     studOrder();
   }

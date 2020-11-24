@@ -36,7 +36,6 @@ public class GameView {
   private static final String CASHOUT_ALERT = ", are you sure you want to cash out? You have $";
   private static final String STARTBOX_ID = "StartBox";
   private static final String HOME_BUTTON_TEXT = "Main Menu";
-  private static final String HOME_BUTTON_ID = "MainMenu";
   private static final String SELECT_BUTTON_TEXT = "Game Select";
   private static final String SELECT_BUTTON_ID = "GameSelect";
   private static final String GRID_ID = "Grid";
@@ -89,9 +88,7 @@ public class GameView {
   private static final String PLAYER_HISTORY_BOX = "playerHistoryList";
 
 
-
-  private Scene scene;
-  private BorderPane root;
+  private final BorderPane root;
   private Group topGroup;
   private Group centerGroup;
   private Group bottomGroup;
@@ -122,10 +119,10 @@ public class GameView {
   }
 
   public Scene setupScene() {
-    scene = new Scene(root, PokerRunner.SCENE_WIDTH, PokerRunner.SCENE_HEIGHT,
+    Scene scene = new Scene(root, PokerRunner.SCENE_WIDTH, PokerRunner.SCENE_HEIGHT,
         PokerRunner.BACKGROUND);
     scene.getStylesheets().add(getClass().getResource(THEME).toExternalForm());
-    return this.scene;
+    return scene;
   }
 
 
@@ -286,21 +283,25 @@ public class GameView {
   public TextInputDialog makeBetPopUp(TextField input, String message) {
     bottomGroup.getChildren().clear();
 
+    return getTextInputDialog(input, message, PROMPT_TEXT, PROMPT_ID, GRIDPANE_ID);
+  }
+
+  private TextInputDialog getTextInputDialog(TextField input, String message, String promptText,
+      String promptId, String gridpaneId) {
     TextInputDialog betBox = new TextInputDialog();
     betBox.setHeaderText(message);
 
-    input.setPromptText(PROMPT_TEXT);
-    input.setId(PROMPT_ID);
+    input.setPromptText(promptText);
+    input.setId(promptId);
 
     GridPane grid = new GridPane();
-    grid.setId(GRIDPANE_ID);
+    grid.setId(gridpaneId);
 
     GridPane.setConstraints(input, 0, 1);
     grid.getChildren().add(input);
     betBox.getDialogPane().setContent(grid);
 
     setDialogOnTop(betBox);
-
 
     return betBox;
   }
@@ -322,25 +323,8 @@ public class GameView {
     dialogStage.setAlwaysOnTop(true);
   }
 
-
-  //maybe combine this with bet screen input
   public TextInputDialog makeBuyInScreen(TextField buyBackInput) {
-    TextInputDialog buyBackBox = new TextInputDialog();
-    buyBackBox.setHeaderText(
-        BUY_IN_HEADER);
-
-    buyBackInput.setPromptText(BUY_IN_TEXT);
-    buyBackInput.setId(BUY_IN_ID);
-
-    GridPane grid = new GridPane();
-    grid.setId(BUY_BACK_PANE);
-
-    GridPane.setConstraints(buyBackInput, 0, 1);
-    grid.getChildren().add(buyBackInput);
-    buyBackBox.getDialogPane().setContent(grid);
-    setDialogOnTop(buyBackBox);
-
-    return buyBackBox;
+    return getTextInputDialog(buyBackInput, BUY_IN_HEADER, BUY_IN_TEXT, BUY_IN_ID, BUY_BACK_PANE);
   }
 
 

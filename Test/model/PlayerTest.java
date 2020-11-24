@@ -168,11 +168,8 @@ public class PlayerTest extends DukeApplicationTest {
     deck.removeAll(player.getHand().getCards());
 
     assertTrue(player.getHand().getCards().contains(testCard));
-    System.out.println(player.getHand().getCards());
     List<Card> cardsToExchange = player.decideExchange();
-    System.out.println(cardsToExchange);
     dealer.exchangeCards(player, cardsToExchange);
-    System.out.println(player.getHand().getCards());
     assertTrue(player.getHand().getCards().contains(testCard));
     assertTrue(player.getHand().getCards().contains(testCard2));
     assertTrue(player.getHand().getCards().contains(testCard3));
@@ -204,11 +201,8 @@ public class PlayerTest extends DukeApplicationTest {
     deck.removeAll(player.getHand().getCards());
 
     assertTrue(player.getHand().getCards().contains(testCard));
-    System.out.println(player.getHand().getCards());
     List<Card> cardsToExchange = player.decideExchange();
-    System.out.println(cardsToExchange);
     dealer.exchangeCards(player, cardsToExchange);
-    System.out.println(player.getHand().getCards());
     assertFalse(player.getHand().getCards().contains(testCard));
   }
 
@@ -235,11 +229,8 @@ public class PlayerTest extends DukeApplicationTest {
     deck.removeAll(player.getHand().getCards());
 
     assertTrue(player.getHand().getCards().contains(testCard));
-    System.out.println(player.getHand().getCards());
     List<Card> cardsToExchange = player.decideExchange();
-    System.out.println(cardsToExchange);
     dealer.exchangeCards(player, cardsToExchange);
-    System.out.println(player.getHand().getCards());
     assertFalse(player.getHand().getCards().contains(testCard));
   }
 
@@ -268,11 +259,8 @@ public class PlayerTest extends DukeApplicationTest {
     assertTrue(player.getHand().getCards().contains(testCard));
     assertTrue(player.getHand().getCards().contains(testCard2));
     assertTrue(player.getHand().getCards().contains(testCard3));
-    System.out.println(player.getHand().getCards());
     List<Card> cardsToExchange = player.decideExchange();
-    System.out.println(cardsToExchange);
     dealer.exchangeCards(player, cardsToExchange);
-    System.out.println(player.getHand().getCards());
     assertFalse(player.getHand().getCards().contains(testCard));
     assertFalse(player.getHand().getCards().contains(testCard2));
     assertFalse(player.getHand().getCards().contains(testCard3));

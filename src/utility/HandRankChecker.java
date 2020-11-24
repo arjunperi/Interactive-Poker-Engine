@@ -21,8 +21,6 @@ public final class HandRankChecker {
     return true;
   }
 
-  //hands need to be sorted in descending order for the booleans
-
   public static boolean isStraightFlush(Hand hand) {
     return isStraight(hand) && isFlush(hand);
   }

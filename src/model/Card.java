@@ -22,8 +22,6 @@ public class Card {
     return (rank + " " + suit);
   }
 
-  //get the associated value of rank
-
 
   @Override
   public boolean equals(Object obj) {

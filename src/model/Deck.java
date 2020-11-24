@@ -19,7 +19,7 @@ public class Deck extends Stack<Card> {
     this.ranks = ranks;
     stringToCardMap = new HashMap<>();
     deck = new Stack<>();
-    createDeck2();
+    createDeck();
 
     Collections.shuffle(deck);
   }
@@ -28,7 +28,7 @@ public class Deck extends Stack<Card> {
     return deck.pop();
   }
 
-  public void createDeck2() {
+  private void createDeck() {
     for (String suit : suits) {
       for (int rank : ranks) {
         Card card = new Card(rank, suit);
@@ -45,7 +45,6 @@ public class Deck extends Stack<Card> {
   public boolean isEmpty() {
     return deck.isEmpty();
   }
-
 
   public Card StringToCard(String cardString) {
     return stringToCardMap.get(cardString);

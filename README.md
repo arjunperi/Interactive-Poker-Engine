@@ -104,4 +104,4 @@ Extra credit:
 
 ### Impressions :thumbsup:
 
-Poker is on its own merit a very complicated and intricate game. Thus, most of the work on this project came during our implementation of the back end logic and progression that make up the model APIs. However, our group came in with a significant amount of background knowledge that helped us to work through the most difficult aspects of the project. This project has given us a new appreciation for and understanding of the amount of time and effort that goes into developing deliverable software. 
+Poker is on its own merit a very complicated and intricate game. Thus, most of the work on this project came during our implementation of the back end logic and progression that make up the pokerModel APIs. However, our group came in with a significant amount of background knowledge that helped us to work through the most difficult aspects of the project. This project has given us a new appreciation for and understanding of the amount of time and effort that goes into developing deliverable software. 
