@@ -128,6 +128,7 @@ public class Player extends CardRecipient {
     moneyAmount.setValue(moneyAmount.getValue() + amount);
   }
 
+
   public void updateTotalHand() {
     totalHand.clear();
     for (Card playerCard : playerHand.getCards()) {
@@ -179,19 +180,30 @@ public class Player extends CardRecipient {
     }
   }
 
+
   public int getTotalBetAmount() {
     return totalBetAmount;
   }
 
+  /**
+   * Clears the current bet amount
+   */
   public void clearBetAmount() {
     totalBetAmount = 0;
     currentBetAmount = 0;
   }
 
+  /**
+   * Player folds in current game
+   */
   public void fold() {
     hasFolded = true;
   }
 
+  /**
+   * Matches the last bet made in the current round
+   * @param lastBet last bet made
+   */
   public void call(int lastBet) {
     int callAmount = lastBet - totalBetAmount;
     if (callAmount >= moneyAmount.getValue()) {
@@ -201,15 +213,27 @@ public class Player extends CardRecipient {
     }
   }
 
+  /**
+   * If the player is the interactive player, returns true
+   * @return Boolean
+   */
   public boolean isInteractive() {
     return !isInteractive;
   }
 
 
+  /**
+   * Returns the player represented as a string of their name
+   * @return String player name
+   */
   public String toString() {
     return playerName;
   }
 
+  /**
+   * adds the card passed in to the player's hand
+   * @param card card to be added to hand
+   */
   public void receiveCard(Card card) {
     if (isInteractive) {
       card.setInteractivePlayerCard();
@@ -219,6 +243,9 @@ public class Player extends CardRecipient {
     updateTotalHand();
   }
 
+  /**
+   * Clears the player's current hand
+   */
   public void clearHand() {
     playerHand.clear();
   }
