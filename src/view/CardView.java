@@ -12,6 +12,11 @@ public class CardView extends PlayerHUDGameObject {
   public static final int CARD_WIDTH = 35;
   public static final int CARD_HEIGHT = 50;
 
+  private static final String NONSELECTED_CARD = "card";
+  private static final String SELECTED_CARD = "cardSelected";
+
+
+
   public CardView(String rankSymbol, String suitImage, String cardBack, boolean isFrontEndVisible) {
     super(rankSymbol, suitImage);
 
@@ -21,7 +26,7 @@ public class CardView extends PlayerHUDGameObject {
 
     isSelected = false;
 
-    this.getStyleClass().add("card");
+    this.getStyleClass().add(NONSELECTED_CARD);
     setFrontEndVisible(isFrontEndVisible);
   }
 
@@ -35,6 +40,7 @@ public class CardView extends PlayerHUDGameObject {
       this.getStyleClass().add("card");
     }
   }
+
 
   public void setFrontEndVisible(boolean isFrontEndVisible) {
     this.isFrontEndVisible = isFrontEndVisible;

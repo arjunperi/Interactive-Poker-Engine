@@ -112,7 +112,7 @@
 }
 
 .hBox {
--fx-spacing: 5;
+  -fx-spacing: 5;
 }
 
 .cardGridHolder {

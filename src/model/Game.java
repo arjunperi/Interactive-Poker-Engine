@@ -74,23 +74,29 @@ public class Game {
    */
   public enum AutoPlayerNames {
 
-    Player1("Johnny"),
-    player2("Cindy"),
-    player3("Jimmy"),
-    player4("Daequan"),
-    player5("Lebron"),
-    player6("Metta World Peace"),
-    player7("Michael Jordan"),
-    player8("Dinna");
+    Player1("Physics", "/arya_roy_player.png"),
+    player2("Big O", "/astrachan_player.png"),
+    player3("Goat", "/coach_k_player.png"),
+    player4("MATLAB", "/gustufson.png"),
+    player5("DUKE", "/mascot_player.png"),
+    player6("Prez", "/price_player.png"),
+    player7("Slizzy Sue", "/sue_player.png"),
+    player8("Bob", "/default-profile-pic.png");
 
-    private final String value;
+    private final String name;
+    private final String image;
 
-    AutoPlayerNames(final String newValue) {
-      value = newValue;
+
+    AutoPlayerNames(final String name, final String image) {
+      this.name = name;
+      this.image = image;
     }
 
-    public String getValue() {
-      return value;
+    public String getName() {
+      return name;
+    }
+    public String getImage() {
+      return image;
     }
   }
 

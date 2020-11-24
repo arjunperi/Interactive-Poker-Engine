@@ -83,6 +83,7 @@ Assumptions or Simplifications:
     - exception is thrown if otherwise
 - Hands are evaulated on a 5-card basis
 - Only one interactive player allowed. 
+- You need to cash out before leaving the game (to simulate a real casino). 
 
 Interesting data files: 
  - HoldemDrawCombo.properties
@@ -93,7 +94,7 @@ Known Bugs:
 - When running all tests, the user needs to let the program run uninterrupted until completion otherwise tests may fail (clicking and entering dialog boxes needs to happen without the mouse moving).
 - When running tests, press cancel once the file chooser pops up.
 - After saving a player's information to a file, the program must be restarted for the save to be updated and accessable in game. We atttempted to debug this issue, but after doing some research we discovered this issue might be inherent because of the way files are read/ written during runtime. 
-- 
+- When using the choice dialog for the action menu (bet check fold call etc), you need to click off the button (i.e if you want to click the "call" button, click on the space next to the text that says "call") in order for the click to register. Research shows that this is a common bug with JavaFX choice dialogs. 
 
 Extra credit:
 - Loading and Saving

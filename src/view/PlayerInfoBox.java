@@ -30,6 +30,8 @@ public class PlayerInfoBox extends GridPane {
   private static final int BANKROLL_COLUMN_WIDTH_PERCENTAGE = 40;
   private static final int AVATAR_COLUMN_WIDTH_PERCENTAGE = 20;
 
+  private static final String PLAYER = "playerInfo";
+
 
 
   public PlayerInfoBox(String name, int bankroll, String avatar) {
@@ -45,6 +47,9 @@ public class PlayerInfoBox extends GridPane {
   private void initializePlayerInfo() {
     playerName = new Text(name);
     playerBankroll = new Text("$" + bankroll);
+    playerName.getStyleClass().add(PLAYER);
+    playerBankroll.getStyleClass().add(PLAYER);
+
     try {
       playerAvatar = new ImageView(
           new Image(PlayerInfoBox.class.getResource(avatar).toExternalForm()));
