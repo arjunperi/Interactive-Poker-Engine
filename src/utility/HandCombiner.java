@@ -6,6 +6,8 @@
 //I believe this class is good design because it adheres strictly to the Single Responsibilty Principle.
 //The class's job is to perform a simple, yet incredibly important task that the rest of the game is dictated by.
 //The class is also efficient in achieving this task with only two methods, one of which is private.
+//This class exemplifies my understanding of class responsibilty that I learned from this class as it only has one task that it completes to perfection,
+//and can be easily implemented by any other classes.
 package utility;
 
 import model.Card;
