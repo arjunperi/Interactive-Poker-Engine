@@ -61,6 +61,9 @@ Chrisitan Welch: Interactive game setup and implementation (player select screen
 
 * The `PlayerList` abstract class is responsible for tracking all the player's movements and actions. The two subclasses (StandardPlayerList and StudPlayerList differ only on initializng the order of the player list).
 
+Interaction of Classes: 
+The view package is responsible for handling front end visuilization for the user interface. The model package is responsible for back-end game flow and logic. The view package is responsible for coordinating changes between the model and view packages. The View package is easy to use because you can see all the aspects on the user interface and if there is an error it would be apparent. The model is easy to use because it is well tested and any errors would present themselves throught the ample testing suite. The controller is easy to use because any error that takes place within the program can be easily debugged within the controller because all interactions between the view and the model will be picked up there. The view hides the specifics of the button initializations from the controller and the model. The model hides the data structures of the card initializations and other more basic building structures from the controller and the view. The controller hides user inputs from the view and the controller and simply gives them the corresponding actions.
+
 ## Assumptions that Affect the Design
   
   
