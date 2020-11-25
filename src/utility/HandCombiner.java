@@ -1,4 +1,11 @@
-// This class is responsible for making every five card hand combination for a hand that consists of five or more cards. This is necessary because there are often times where a player's hand will consist of more than five cards. However, poker is a five card game, meaning the hand that the player uses to determine who has won a game of poker consists of that player's best five cards. In order to determine the best five cards, all of the possible five card hands need to be created and compared to. The hand evaluator class uses this class to dermine which of all the possible combinations is the best hand. I believe this class is good design because it adheres strictly to the Single Responsibilty Principle. The class's job is to perform a simple, yet incredibly important task that the rest of the game is dictated by. The class is also efficient in achieving this task with only two methods, one of which is private.
+// This class is responsible for making every five card hand combination for a hand that consists of five or more cards. 
+//This is necessary because there are often times where a player's hand will consist of more than five cards. 
+//However, poker is a five card game, meaning the hand that the player uses to determine who has won a game of poker consists of that player's best five cards.
+//In order to determine the best five cards, all of the possible five card hands need to be created and compared to.
+//The hand evaluator class uses this class to dermine which of all the possible combinations is the best hand.
+//I believe this class is good design because it adheres strictly to the Single Responsibilty Principle.
+//The class's job is to perform a simple, yet incredibly important task that the rest of the game is dictated by.
+//The class is also efficient in achieving this task with only two methods, one of which is private.
 package utility;
 
 import model.Card;
