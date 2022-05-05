@@ -1,10 +1,9 @@
-FINAL TEAM 6
-Rock SOLID
+Interactive Poker Suite / Game Engine 
 ====
 
-This project implements a poker player for multiple related games.
+This project implements a poker engine for multiple related games.
 
-Names: Noah Besner, Yasser Elmzoudi, Arjun Peri, Christian Welch
+Names: Arjun Peri, Christian Welch, Noah Besner, Yasser Elmzoudi
 
 
 ### Timeline :calendar:
@@ -17,15 +16,10 @@ Hours Spent: 400
 
 ### Primary Roles :pencil:
 
-- Noah Besner : Deep back-end poker game logic (hand evaluation, betting orders and raise seats, etc). 
-- Yasser Elmzoudi: Front-end GUI setup and implementation (`Table`, `CardView`, `PlayerView`, CSS styling, etc).
 - Arjun Peri: Dynamic poker variant implementation and backend-frontend integration (different poker game types, data file configuration, controller, etc).
 - Chrisitan Welch: Interactive game setup and implementation (player select screen, file saving and loading, autoplayer funcionality, etc). 
-
-### Resources Used :books:
-- Class lectures and readings
-- TA's and Professor Duvall's assistance
-- Online resources (Stack OverFlow, GeeksForGeeks, etc.)
+- Noah Besner : Deep back-end poker game logic (hand evaluation, betting orders and raise seats, etc). 
+- Yasser Elmzoudi: Front-end GUI setup and implementation (`Table`, `CardView`, `PlayerView`, CSS styling, etc).
 
 
 ### Running the Program :computer:
@@ -96,7 +90,7 @@ Known Bugs:
 - After saving a player's information to a file, the program must be restarted for the save to be updated and accessable in game. We atttempted to debug this issue, but after doing some research we discovered this issue might be inherent because of the way files are read/ written during runtime. 
 - When using the choice dialog for the action menu (bet check fold call etc), you need to click off the button (i.e if you want to click the "call" button, click on the space next to the text that says "call") in order for the click to register. Research shows that this is a common bug with JavaFX choice dialogs. 
 
-Extra credit:
+Additional Features:
 - Loading and Saving
 - Smart Autoplayer
 - Player Profiles
