@@ -17,7 +17,7 @@ Hours Spent: 400
 ### Primary Roles :pencil:
 
 - Arjun Peri: Dynamic poker variant implementation and backend-frontend integration (different poker game types, data file configuration, controller, etc).
-- Chrisitan Welch: Interactive game setup and implementation (player select screen, file saving and loading, autoplayer funcionality, etc). 
+- Christian Welch: Interactive game setup and implementation (player select screen, file saving and loading, autoplayer funcionality, etc). 
 - Noah Besner : Deep back-end poker game logic (hand evaluation, betting orders and raise seats, etc). 
 - Yasser Elmzoudi: Front-end GUI setup and implementation (`Table`, `CardView`, `PlayerView`, CSS styling, etc).
 
